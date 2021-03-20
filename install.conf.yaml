@@ -4,3 +4,23 @@
       relink: true
 
 - clean: ["~"]
+
+- link:
+    ~/.zsh:
+    ~/.zshrc:
+    ~/.zprofile:
+    ~/.p10k.zsh:
+    ~/.gitconfig:
+    ~/.ssh/config: ssh/config
+     
+- shell:
+    - command: ./fzf/install --bin
+      description: Installing fzf
+      quiet: true
+      stdout: true
+      stderr: true
+    - command: chsh -s $(which zsh)
+      description: Changing default shell to zsh
+      quiet: true
+      stdout: true
+      stderr: false
