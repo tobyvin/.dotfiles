@@ -45,7 +45,6 @@ function r-cut() {
   (( ${+aliases[cb]} )) && printf "$CUTBUFFER" | cb
 }
 
-# Keybinds
 for key     kcap   seq        mode   widget (
     sleft   kLFT   $'\e[1;2D' select   backward-char
     sright  kRIT   $'\e[1;2C' select   forward-char

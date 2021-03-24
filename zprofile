@@ -1,10 +1,11 @@
 # Exports
-export ZSH="${HOME}/.oh-my-zsh"
-export ZSH_CUSTOM="${HOME}/.oh-my-zsh/custom"
-export PATH="${HOME}/.local/bin:${HOME}/.dotnet/tools:$PATH"
+export PATH="$PATH:${HOME}/.local/bin"
+export PATH="$PATH:${HOME}/.dotnet/tools"
+
+export ZSH_BASE="${HOME}/dotfiles"
+export FZF_BASE="${HOME}/dotfiles/fzf"
 
 # Directory hashtable
-hash -d .=${HOME}/dotfiles
+hash -d .=${ZSH_BASE}
 hash -d s=${HOME}/Sync
 hash -d d=${HOME}/docker
-hash -d w=/mnt/c/Users/$USER

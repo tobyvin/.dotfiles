@@ -1,4 +1,5 @@
 export PATH="${HOME}/.local/bin.win:$PATH"
+hash -d w=/mnt/c/Users/$USER
 alias cb=clip.exe
 
 function winget() {
