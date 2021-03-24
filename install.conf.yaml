@@ -8,7 +8,6 @@
 
 - shell:
     - [git submodule update --init --recursive, Installing submodules]
-    - [./fzf/install --no-update-rc, Installing fzf]
 
 - link:
     ~/.zsh:

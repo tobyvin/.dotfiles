@@ -2,22 +2,16 @@
 
 ZSH_BASE=$HOME/dotfiles # Base directory for ZSH configuration
 
+[ -n "${WSL_DISTRO_NAME+1}" ] && source $ZSH_BASE/zsh/wsl.zsh
+
 source $ZSH_BASE/zsh/setopt.zsh
-
 source $ZSH_BASE/zsh/completion.zsh
-[ -f $ZSH_BASE/fzf/shell/completion.zsh ] && source $ZSH_BASE/fzf/shell/completion.zsh
-
 source $ZSH_BASE/zsh/prompt.zsh
 source $ZSH_BASE/zsh/aliases.zsh
 source $ZSH_BASE/zsh/functions.zsh
-
-[ -n "${WSL_DISTRO_NAME+1}" ] && source $ZSH_BASE/zsh/wsl.zsh
-
+source $ZSH_BASE/zsh/fzf.zsh
 source $ZSH_BASE/zsh/keybindings.zsh
-[ -f $ZSH_BASE/fzf/shell/key-bindings.zsh ] && source $ZSH_BASE/fzf/shell/key-bindings.zsh
-
 source $ZSH_BASE/antigen/antigen.zsh # Load Antigen
-
 
 antigen use oh-my-zsh
 antigen bundle git
