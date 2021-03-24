@@ -6,24 +6,16 @@
 
 - clean: ["~"]
 
+- shell:
+    - [git submodule update --init --recursive, Installing submodules]
+    - [./fzf/install --no-update-rc, Installing fzf]
+
 - link:
     ~/.zsh:
     ~/.zshrc:
     ~/.zprofile:
     ~/.p10k.zsh:
     ~/.gitconfig:
-    ~/.ssh/config: 
+    ~/.ssh/config:
       path: ssh/config
       force: false
-     
-- shell:
-    - command: git submodule update --init --recursive
-      description: Installing submodules
-      quiet: true
-      stdout: true
-      stderr: true
-    - command: ./fzf/install --bin
-      description: Installing fzf
-      quiet: true
-      stdout: true
-      stderr: true
