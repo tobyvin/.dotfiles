@@ -2,6 +2,7 @@
     link:
       create: true
       relink: true
+      force: true
 
 - clean: ["~"]
 
@@ -11,16 +12,18 @@
     ~/.zprofile:
     ~/.p10k.zsh:
     ~/.gitconfig:
-    ~/.ssh/config: ssh/config
+    ~/.ssh/config: 
+      path: ssh/config
+      force: false
      
 - shell:
+    - command: git submodule update --init --recursive
+      description: Installing submodules
+      quiet: true
+      stdout: true
+      stderr: true
     - command: ./fzf/install --bin
       description: Installing fzf
       quiet: true
       stdout: true
       stderr: true
-    - command: chsh -s $(which zsh)
-      description: Changing default shell to zsh
-      quiet: true
-      stdout: true
-      stderr: false
