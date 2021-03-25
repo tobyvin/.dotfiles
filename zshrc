@@ -1,5 +1,15 @@
+# Exports
 export ZSH_BASE="${HOME}/dotfiles"
 export FZF_BASE="${HOME}/dotfiles/fzf"
+
+# Path
+export PATH="$PATH:${HOME}/.local/bin"
+export PATH="$PATH:${HOME}/.dotnet/tools"
+
+# Directory hashtable
+hash -d .=${HOME}/dotfiles
+hash -d s=${HOME}/Sync
+hash -d d=${HOME}/docker
 
 [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
