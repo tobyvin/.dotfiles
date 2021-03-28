@@ -13,9 +13,6 @@
 - link:
     ~/.zsh:
     ~/.zshrc:
-    ~/.zprofile:
     ~/.p10k.zsh:
     ~/.gitconfig:
-    ~/.ssh/config:
-      path: ssh/config
-      force: false
+    ~/.ssh/config: "ssh/config"
