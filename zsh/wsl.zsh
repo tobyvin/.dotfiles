@@ -2,10 +2,6 @@ export PATH="${HOME}/.local/bin.win:$PATH"
 hash -d w=/mnt/c/Users/$USER
 alias cb=clip.exe
 
-antigen use oh-my-zsh
-antigen bundle ssh-agent
-antigen apply
-
 function winget() {
   if [[ "$1" == "install" || "$1" == "upgrade" ]]; then
     powershell.exe -NoProfile -c "gsudo.exe 'winget.exe $@'"
