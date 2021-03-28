@@ -13,6 +13,7 @@ hash -d d=${HOME}/docker
 
 [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
+source $ZSH_BASE/zprofile 
 source $ZSH_BASE/antigen/antigen.zsh 
 source $ZSH_BASE/zsh/setopt.zsh
 source $ZSH_BASE/zsh/prompt.zsh
@@ -22,7 +23,6 @@ source $ZSH_BASE/zsh/keybindings.zsh
 
 antigen use oh-my-zsh
 antigen bundle git
-antigen bundle ssh-agent
 antigen bundle fzf
 antigen bundle dotnet
 antigen bundle docker
