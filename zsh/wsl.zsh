@@ -3,11 +3,7 @@ hash -d w=/mnt/c/Users/$USER
 alias cb=clip.exe
 
 function winget() {
-  if [[ "$1" == "install" || "$1" == "upgrade" ]]; then
-    powershell.exe -NoProfile -c "gsudo.exe 'winget.exe $@'"
-  else
-    powershell.exe -NoProfile -c "winget.exe $@"
-  fi
+  powershell.exe -NoProfile -c "winget.exe $@" || powershell.exe -NoProfile -c "gsudo.exe 'winget.exe $@'"
 }
 
 function wt() {
