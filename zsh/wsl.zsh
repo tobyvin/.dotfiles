@@ -3,7 +3,26 @@ hash -d w=/mnt/c/Users/$USER
 alias cb=clip.exe
 
 function winget() {
-  powershell.exe -NoProfile -c "winget.exe $@" || powershell.exe -NoProfile -c "gsudo.exe 'winget.exe $@'"
+  cmd="winget.exe $1"
+  shift # past cmd
+
+  while [[ $# -gt 0 ]]
+  do
+    key="$1"
+    case $key in
+        -*) # key value pair
+        cmd+=" $key '$2'"
+        shift # past argument
+        shift # past value
+        ;;
+        *)    # positional paramert
+        cmd+=" '$1'" # add it to the list
+        shift # past argument
+        ;;
+    esac
+  done
+  
+  powershell.exe -NoProfile -c "$cmd"
 }
 
 function wt() {
