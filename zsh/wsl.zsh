@@ -1,6 +1,8 @@
-export PATH="${HOME}/.local/bin.win:$PATH"
+path=( $path $HOME/.local/bin $HOME/.dotnet/tools )
 hash -d w=/mnt/c/Users/$USER
 alias cb=clip.exe
+alias wsl=wsl.exe
+alias wt=wt.exe
 
 function winget() {
   cmd="winget.exe $1"
@@ -23,10 +25,6 @@ function winget() {
   done
   
   powershell.exe -NoProfile -c "$cmd"
-}
-
-function wt() {
-  powershell.exe -NoProfile -c "wt.exe $@"
 }
 
 function r-copy() {

@@ -1,10 +1,9 @@
+# Path
+path=( $path $HOME/.local/bin $HOME/.dotnet/tools )
+
 # Exports
 export ZSH_BASE="${HOME}/dotfiles"
 export FZF_BASE="${HOME}/dotfiles/fzf"
-
-# Path
-export PATH="$PATH:${HOME}/.local/bin"
-export PATH="$PATH:${HOME}/.dotnet/tools"
 
 # Directory hashtable
 hash -d .=${HOME}/dotfiles
