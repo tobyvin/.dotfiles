@@ -3,7 +3,7 @@
 ### Installation
 
 ```sh
-git clone --recursive https://github.com/tobyvin/dotfiles.git ~/dotfiles && ~/dotfiles/install
+git clone https://github.com/tobyvin/dotfiles.git ~/dotfiles && ~/dotfiles/install
 ```
 
 ## Configs
