@@ -26,3 +26,10 @@ Host mjolnir
     User u0_a382
     HostName mjolnir.asgard
     Port 8022
+
+Host siue
+    User tovince
+    HostName os.cs.siue.edu
+    ForwardAgent yes
+    RemoteCommand zsh -l
+    RequestTTY force
