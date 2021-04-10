@@ -17,7 +17,7 @@ function winget() {
         shift # past argument
         shift # past value
         ;;
-        *)    # positional paramert
+        *)    # positional argument
         cmd+=" '$1'" # add it to the list
         shift # past argument
         ;;
