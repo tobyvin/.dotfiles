@@ -1,15 +1,11 @@
-[credential]
-	helper = /mnt/c/Program\\ Files/Git/mingw64/libexec/git-core/git-credential-manager.exe
 [user]
 	email = tobyv13@gmail.com
 	name = Toby Vincent
 	username = tobyvin
 [url "git@github.com:"]
     pushInsteadOf = "https://github.com/"
-[url "https://github.com/"]
-    insteadOf = "git@github.com:"
 [core]
-	editor = \"C:\\Users\\tobyv\\AppData\\Local\\Programs\\Microsoft VS Code\\Code.exe\" --wait
+	editor = code --wait
 [diff]
     tool = default-difftool
 [difftool "default-difftool"]
