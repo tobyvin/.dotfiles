@@ -3,6 +3,7 @@
 	name = Toby Vincent
 	username = tobyvin
 [url "git@github.com:"]
+    insteadOf = gh:
     pushInsteadOf = "https://github.com/"
 [core]
 	editor = code --wait
