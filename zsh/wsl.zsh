@@ -2,7 +2,8 @@ path=( $path $HOME/.local/bin $HOME/.dotnet/tools )
 hash -d w=/mnt/c/Users/$USER
 alias cb=clip.exe
 alias wsl=wsl.exe
-alias wt=wt.exe
+
+function wt() { powershell.exe -NoProfile -c "wt $@" }
 
 function winget() {
   cmd="winget.exe $1"
