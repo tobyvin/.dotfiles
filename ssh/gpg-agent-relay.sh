@@ -68,7 +68,7 @@ relay() {
 
   "$gpgconnectagent" /bye
 
-  "$wslsshpageant" --systray --winssh ssh-pageant 2>/dev/null &
+  "$wslsshpageant" --winssh ssh-pageant 2>/dev/null &
   # shellcheck disable=SC2034
   WSPPID=$!
 
