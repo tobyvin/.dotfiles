@@ -97,4 +97,7 @@
 	
     # worktree list {{{
     wl = worktree list
+
+    # create git artifacts
 	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@  ;}; gi"
+    attributes = " !ga() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw -o ./.gitattributes ;}; ga"
