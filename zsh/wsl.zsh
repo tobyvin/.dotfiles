@@ -1,9 +1,9 @@
 path=( $path $HOME/.local/bin $HOME/.dotnet/tools )
 hash -d w=/mnt/c/Users/$USER
+
 alias cb=clip.exe
 alias wsl=wsl.exe
 alias ykman="/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe"
-alias gpg-agent-relay=$ZSH_BASE/ssh/gpg-agent-relay.sh
 
 function wt() { powershell.exe -NoProfile -c "wt $@" }
 
