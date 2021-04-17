@@ -8,3 +8,4 @@ alias py=python3
 alias python=python3
 alias pip=pip3
 alias dsh="dce sh"
+alias dps="docker ps"
