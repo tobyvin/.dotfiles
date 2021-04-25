@@ -1,7 +1,4 @@
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
-Host *
-    StrictHostKeyChecking no
-
 Host bifrost
     User tobyv
     HostName bifrost
@@ -9,18 +6,23 @@ Host bifrost
 Host heimdall
     User pi
     HostName heimdall
+    ForwardAgent yes
 
 Host loki
     User pi
     HostName loki.asgard
+    ForwardAgent yes
+    StreamLocalBindUnlink yes
 
 Host odin
     User tobyv
     HostName odin.asgard
+    ForwardAgent yes
 
 Host thor
     User tobyv
     HostName thor.asgard
+    ForwardAgent yes
 
 Host mjolnir
     User u0_a382
