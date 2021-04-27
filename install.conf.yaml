@@ -12,7 +12,7 @@
 
 - link:
     ~/.zshrc:
-    ~/.zprofile:
     ~/.p10k.zsh:
     ~/.gitconfig:
     ~/.ssh/config: "ssh/config"
+    ~/.gnupg/gpg.conf: "gnupg/gpg.conf"
