@@ -14,5 +14,9 @@
     ~/.zshrc:
     ~/.p10k.zsh:
     ~/.gitconfig:
-    ~/.ssh/config: "ssh/config"
-    ~/.gnupg/gpg.conf: "gnupg/gpg.conf"
+    ~/.ssh/: 
+      glob: true
+      path: ssh/*
+    ~/.gnupg/:
+      glob: true
+      path: gnupg/*

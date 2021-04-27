@@ -52,6 +52,8 @@ Configs
   - [wsl2-ssh-pageant](ssh/wsl2-ssh-pageant.exe) - connects SSH/GPG sockets between WSL2 and Windows
 - [gnupg/](gnupg) - GnuPG (GPG) related files
   - [gpg.conf](gnupg/gpg.conf) - GPG configuration
+  - [gpg-agent.conf](gnupg/gpg-agent.conf) - GPG-Agent configuration
+  - [scdaemon.conf](gnupg/scdaemon.conf) - GPG smartcard daemon configuration
   
 Submodules
 ----------
