@@ -71,11 +71,11 @@ fi
 alias gpgrst=gpg-reset
 # Reload
 function gpg-reset() {
-  gpg-connect-agent.exe KILLAGENT /bye
-  rm $HOME/.gnupg/S.gpg-agent*
-  rm $HOME/.ssh/agent.sock
-  pkill socat
-  gpg-connect-agent.exe /bye
+  gpg-connect-agent.exe KILLAGENT /bye &>/dev/null
+  [ -e $GPG_AGENT_SOCK ] && rm $GPG_AGENT_SOCK
+  [ -e $SSH_AUTH_SOCK ] && rm $SSH_AUTH_SOCK
+  pkill -f 'socat.*wsl2-ssh-pageant.exe'
+  gpg-connect-agent.exe /bye &>/dev/null
   (setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$ZSH_BASE/ssh/wsl2-ssh-pageant.exe" &>/dev/null &)
   (setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"$ZSH_BASE/ssh/wsl2-ssh-pageant.exe --gpg S.gpg-agent" &>/dev/null &)
 }
