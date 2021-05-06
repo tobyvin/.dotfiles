@@ -5,6 +5,7 @@ mkln ./gitconfig ~/win/.gitconfig
 mkln ./gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
 mkln ./gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
 mkln ./gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
+show-warnings
 
 mkln() {
     source=$(wslpath -w $1)
@@ -12,8 +13,8 @@ mkln() {
     cmd.exe /c "mklink $target $source"
 }
 
-echo 'In order to use gpg with git for windows, you need to run'
-echo ''
-echo "\tgit.exe config --system gpg.program 'C:\\Program Files (x86)\\GnuPG\\bin\\gpg.exe'"
-echo ''
-echo "from an admin terminal"
+show-warning() {
+    printf "In order to use gpg with git for windows (and still share gitconfigs), you need to run\n"
+    printf "\tgit.exe config --system gpg.program '%s' \n" "$(wslpath -w "$(command -v gpg.exe)")"
+    printf "from an admin terminal"
+}
