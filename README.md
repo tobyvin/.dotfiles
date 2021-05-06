@@ -34,6 +34,7 @@ Configs
 -------
 
 #### Zsh Configuration
+
 - [zshrc](zshrc) - Zsh profile (sources [zsh/*](zsh))
 - [p10k.zsh](p10k.zsh) - p10k theme config 
 - [zsh/](zsh) - Zsh configuration scripts
@@ -54,13 +55,14 @@ Configs
   - [gpg.conf](gnupg/gpg.conf) - GPG configuration
   - [gpg-agent.conf](gnupg/gpg-agent.conf) - GPG-Agent configuration
   - [scdaemon.conf](gnupg/scdaemon.conf) - GPG smartcard daemon configuration
-  
+
 Submodules
 ----------
 
 - ### [Dotbot](https://github.com/anishathalye/dotbot) - A tool that bootstraps your dotfiles ⚡️
 
-#### Zsh:
+#### Zsh
+
 - [antigen](https://github.com/zsh-users/antigen) - The plugin manager for zsh.
 - [fzf](https://github.com/junegunn/fzf) - 🌸 A command-line fuzzy finder
 - [p10k](https://github.com/romkatv/powerlevel10k) - A Zsh theme
