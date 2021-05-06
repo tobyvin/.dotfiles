@@ -2,7 +2,9 @@
 	email = tobyv13@gmail.com
 	name = Toby Vincent
 	username = tobyvin
-	signingkey = 0xC8F6E06F5C8E2634
+	signingkey = 0xA0876F29023F43AF
+[commit]
+	gpgsign = true
 [url "git@github.com:"]
     insteadOf = gh:
     pushInsteadOf = "https://github.com/"

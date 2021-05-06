@@ -11,3 +11,9 @@ mkln() {
     target=$(wslpath -w $(dirname $2))\\$(basename $2)
     cmd.exe /c "mklink $target $source"
 }
+
+echo 'In order to use gpg with git for windows, you need to run'
+echo ''
+echo "\tgit.exe config --system gpg.program 'C:\Program Files (x86)\GnuPG\bin\gpg.exe'"
+echo ''
+echo "from an admin terminal"
