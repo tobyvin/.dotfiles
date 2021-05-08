@@ -32,5 +32,6 @@ Host mjolnir
 Host siue
     User tovince
     HostName os.cs.siue.edu
+    RemoteForward /run/user/1400158178/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
     RemoteCommand zsh -l
     RequestTTY force
