@@ -1,5 +1,8 @@
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
 
+Host *
+    StrictHostKeyChecking no
+
 Host heimdall, loki
     User pi
     ForwardAgent yes
