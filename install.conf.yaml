@@ -15,7 +15,7 @@
     ~/.p10k.zsh:
     ~/.gitconfig:
     ~/.wakeonlan:
-    ~/.ssh/: ssh/config
+    ~/.ssh/config: ssh/config
     ~/.gnupg/:
       glob: true
       path: gnupg/*.conf
