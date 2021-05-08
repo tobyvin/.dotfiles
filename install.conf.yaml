@@ -8,6 +8,7 @@
 
 - shell:
     - [gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634, Getting GPG public key]
+    - [gpg --import-ownertrust gnupg/trustfile.txt, Importing GPG trustfile]
     - [git submodule update --init --recursive, Installing submodules]
     - [yes | ./fzf/install --bin, Installing fzf]
 
@@ -16,9 +17,7 @@
     ~/.p10k.zsh:
     ~/.gitconfig:
     ~/.wakeonlan:
-    ~/.ssh/: 
-      glob: true
-      path: ssh/*
+    ~/.ssh/: ssh/config
     ~/.gnupg/:
       glob: true
-      path: gnupg/*
+      path: gnupg/*.conf
