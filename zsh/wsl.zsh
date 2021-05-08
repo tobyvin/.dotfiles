@@ -68,6 +68,15 @@ if [ $? -ne 0 ]; then
     (setsid nohup socat UNIX-LISTEN:$GPG_AGENT_SOCK,fork EXEC:"$ZSH_BASE/ssh/wsl2-ssh-pageant.exe --gpg S.gpg-agent" &>/dev/null &)
 fi
 
+# GPG Socket
+# Removing Linux GPG Agent extra socket and replacing it by link to wsl2-ssh-pageant GPG socket
+export GPG_EXTRA_SOCK=$HOME/.gnupg/S.gpg-agent.extra
+ss -a | grep -q $GPG_EXTRA_SOCK
+if [ $? -ne 0 ]; then
+    rm -rf $GPG_EXTRA_SOCK
+    (setsid nohup socat UNIX-LISTEN:$GPG_EXTRA_SOCK,fork EXEC:"$ZSH_BASE/ssh/wsl2-ssh-pageant.exe --gpg S.gpg-agent.extra" &>/dev/null &)
+fi
+
 alias gpgrst=gpg-reset
 # Reload
 function gpg-reset() {
