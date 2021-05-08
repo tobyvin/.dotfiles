@@ -7,8 +7,6 @@
 - clean: ["~"]
 
 - shell:
-    - [gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634, Getting GPG public key]
-    - [gpg --import-ownertrust gnupg/trustfile.txt, Importing GPG trustfile]
     - [git submodule update --init --recursive, Installing submodules]
     - [yes | ./fzf/install --bin, Installing fzf]
 
@@ -21,3 +19,7 @@
     ~/.gnupg/:
       glob: true
       path: gnupg/*.conf
+
+- shell:
+    - [gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634, Getting GPG public key]
+    - [gpg --import-ownertrust gnupg/trustfile.txt, Importing GPG trustfile]
