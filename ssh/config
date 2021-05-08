@@ -1,37 +1,25 @@
 # Read more about SSH config files: https://linux.die.net/man/5/ssh_config
-Host *
+
+Host heimdall, loki
+    User pi
     ForwardAgent yes
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
 
-Host bifrost
+Host odin, thor
     User tobyv
-    HostName bifrost
-    
-Host heimdall
-    User pi
-    HostName heimdall
+    ForwardAgent yes
+    StreamLocalBindUnlink yes
+    RemoteForward /home/tobyv/.gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
 
-Host loki
-    User pi
-    HostName loki.asgard
-
-Host odin
+host bifrost
     User tobyv
-    HostName odin.asgard
-
-Host thor
-    User tobyv
-    HostName thor.asgard
-
-Host mjolnir
-    User u0_a382
-    HostName mjolnir.asgard
-    Port 8022
 
 Host siue
     User tovince
     HostName os.cs.siue.edu
+    ForwardAgent yes
+    StreamLocalBindUnlink yes
     RemoteForward /run/user/1400158178/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
-    RemoteCommand zsh -l
+    RemoteCommand rm -f /run/user/1400158178/gnupg/S.gpg-agent && zsh -l
     RequestTTY force
