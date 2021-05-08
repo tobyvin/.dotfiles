@@ -51,6 +51,9 @@ function r-cut() {
 # https://github.com/benpye/wsl-ssh-pageant
 # https://github.com/drduh/YubiKey-Guide#remote-host-configuration
 # https://dev.to/dzerycz/series/11353
+
+export GPG_TTY=$(tty)
+
 # SSH Socket
 # Removing Linux SSH socket and replacing it by link to wsl2-ssh-pageant socket
 export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
