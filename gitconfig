@@ -104,3 +104,6 @@
     # create git artifacts
 	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@  ;}; gi"
     attributes = "!ga() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; ga"
+
+    # create and keep an empty directory at the provided path
+	keep = "!gk() { ([ -f $@/.gitkeep ] || (mkdir -p $@ && curl -sL https://api.ef.gy/fortune > $@/.gitkeep)) && (grep -qsxF '!/**/.gitkeep' .gitignore || echo '!/**/.gitkeep' >> .gitignore) ;}; gk"
