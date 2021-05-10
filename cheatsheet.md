@@ -1,89 +1,86 @@
 My personal cheatsheet of commands for various tools and workflows
 
 - [Git](#git)
-  - [Split out subfolder into new repository](#split-out-subfolder-into-new-repository)
-  - [OLD WAY (git filter-branch)](#old-way-git-filter-branch)
 
 ## Git
 
 ### Split out subfolder into new repository
 
-Run inside the original repo
+<details>
+  <summary>Steps</summary>
 
-```sh
-username=tobyvin-cs340
-subdir=src/Plotter
-newrepo="$(basename $subdir)"
-oldrepo="$(pwd)"
+  - *Be sure you are inside the original repo*
+    ```sh
+    cd <orignal_repository>
+    ```
 
-git subtree split -P $subdir -b $newrepo
+  - Set local variables for use
 
-cd $(mktemp -d)
+    ```sh
+    username=tobyvin-cs340
+    subdir=src/Plotter
+    newrepo="$(basename $subdir)"
+    oldrepo="$(pwd)"
+    ```
 
-git init && git pull $oldrepo $newrepo
+  - Create a new branch containing only the subdir using `git subtree`
 
-cp $oldrepo/.gitignore ./
-cp $oldrepo/.gitattributes ./
+    ```sh
+    git subtree split -P $subdir -b $newrepo
+    ```
 
-git add -A && git commit -m "split out $newrepo into submodule"
+  - Create a temp git repo and pull in the newly created branch
 
-gh repo create $username/$newrepo
+    ```sh
+    cd $(mktemp -d)
 
-git push -u origin master
+    git init && git pull $oldrepo $newrepo
+    ```
 
-cd $oldrepo
+  - Copy over the git artifacts from original repo's root directory
 
-git rm -rf $subdir
+    ```sh
+    cp $oldrepo/.gitignore ./
+    cp $oldrepo/.gitattributes ./
+    ```
 
-rm -rf $subdir
+  - Commit changes
 
-git submodule add git@github.com:$username/$newrepo $subdir
+    ```sh
+    git add -A && git commit -m "split out $newrepo into submodule"
+    ```
 
-git submodule update --init --recursive
+  - Create the repository on a remote (github) and push  
 
-git commit -m "split out $newrepo into submodule"
+    ```sh
+    gh repo create $username/$newrepo
+    git push -u origin master
+    ```
 
-git push -u origin master
-```
+  - Switch back into the original repository
 
-### OLD WAY (git filter-branch)
+    ```sh
+    cd $oldrepo
+    ```
 
-Variables for the original repo and subdirectory you want to split out: 
+  - Remove the subdir from git and the filesystem
 
-```sh
-read -p 'Username: ' username
-read -p 'Repo: ' baserepo
-read -p 'Folder: ' subdir 
-newrepo=$(basename $subdir) 
-```
+    ```sh
+    git rm -rf $subdir
+    rm -rf $subdir
+    ```
 
-Clone the repo locally into the new repo name and switch to it: 
+  - Add the newly created remote repository as a submodule at the subdir's path
 
-```sh
-git clone git@github.com:$username/$baserepo $newrepo
-cd $newrepo
-```
+    ```sh
+    git submodule add git@github.com:$username/$newrepo $subdir
+    git submodule update --init --recursive
+    ```
 
-Filter repository using filter-branch:
+  - Commit the changes to the original repository and push to remote
 
-```sh
-git filter-branch --subdirectory-filter $subdir -- --all
-```
-
-Remove the original remote
-
-```sh
-git remote remove origin
-```
-
-Create and add new github remote
-
-```sh
-gh repo create $username/$newrepo
-```
-
-Push changes to new remote
-
-```sh 
-git push -u origin master
-```
+    ```sh
+    git commit -m "split out $newrepo into submodule"
+    git push -u origin master
+    ```
+</details>
