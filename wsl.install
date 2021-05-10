@@ -1,20 +1,43 @@
 #!/usr/bin/env bash
 
-mkln ./ssh/config ~/win/.ssh/config
-mkln ./gitconfig ~/win/.gitconfig
-mkln ./gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
-mkln ./gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
-mkln ./gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
-show-warnings
+DOTFILES="$(dirname "$(readlink -fm "$0")")"
+force=1
 
 mkln() {
-    source=$(wslpath -w $1)
-    target=$(wslpath -w $(dirname $2))\\$(basename $2)
-    cmd.exe /c "mklink $target $source"
+    dirname="$(dirname $2)"
+    filename="$(basename $2)"
+
+    if ls -la $dirname/ 2>/dev/null | grep -q $filename ; then
+        if [ $force = 1 ]; then
+            rm $2
+        else
+            echo "$filename already exists. Use -f to overwrite."
+            return
+        fi
+    fi
+    source=$(wslpath -w $DOTFILES/$1)
+    target=$(wslpath -w $dirname)\\$filename
+    powershell.exe -c "cd ~; cmd /c mklink $target $source"
 }
 
 show-warning() {
-    printf "In order to use gpg with git for windows (and still share gitconfigs), you need to run\n"
-    printf "\tgit.exe config --system gpg.program '%s' \n" "$(wslpath -w "$(command -v gpg.exe)")"
-    printf "from an admin terminal"
+    gpgpath=$(wslpath -w "$(command -v gpg.exe)")
+    gitgpg=$(git.exe config --system --get gpg.program)
+    if [ "$gitgpg" = "$gpgpath" ]; then
+        return
+    fi
+    printf "\n"
+    printf "In order to use gpg with git for windows \n"
+    printf "(and still share gitconfigs), you need to run\n"
+    printf "the following command from an admin terminal:\n"
+    printf "\n"
+    printf "git.exe config --system gpg.program '%s' \n" "$(wslpath -w "$(command -v gpg.exe)")"
+    printf "\n"
 }
+
+mkln ssh/config ~/win/.ssh/config
+mkln ssh/ssh.bat ~/win/.ssh/ssh.bat
+mkln gitconfig ~/win/.gitconfig
+mkln gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
+mkln gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
+mkln gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
