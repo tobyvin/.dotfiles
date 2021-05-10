@@ -10,7 +10,6 @@ hash -d .=${HOME}/dotfiles
 hash -d s=${HOME}/Sync
 hash -d d=${HOME}/docker
 
-[[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
 source $ZSH_BASE/antigen/antigen.zsh
 source $ZSH_BASE/zsh/setopt.zsh
