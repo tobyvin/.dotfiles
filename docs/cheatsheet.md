@@ -108,9 +108,9 @@ My personal cheatsheet of commands for various tools and workflows
 
     # Path to either wsl-ssh-pageant or wsl-ssh-pageant-gui executable
     $pageant = "$env:SCOOP\apps\wsl-ssh-pageant\current\wsl-ssh-pageant-gui.exe"
+    
+    [System.Environment]::SetEnvironmentVariable('SSH_AUTH_SOCK',"\\.\pipe\$pipe")
     ```
-
-
 
   - Set it to autostart on login
 
