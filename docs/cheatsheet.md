@@ -84,3 +84,74 @@ My personal cheatsheet of commands for various tools and workflows
     git push -u origin master
     ```
 </details>
+
+## WSL2
+
+  ### Windows Enviornment
+
+  ### SSH Agent
+ 
+  - Download [wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant)
+  
+    ```powershell
+    # Using scoop (https://scoop.sh/)
+    scoop install wsl-ssh-pageant
+    ```
+
+  - Set variables
+
+    Note: The version with '-gui', i.e. 'wsl-ssh-pageant-gui', ***has no*** gui/systray, while 'wsl-ssh-pageant' ***has*** a gui/systray. Choose which ever you find most useful
+
+    ```powershell
+    # Can be any name
+    $pipe = "ssh-pageant"
+
+    # Path to either wsl-ssh-pageant or wsl-ssh-pageant-gui executable
+    $pageant = "$env:SCOOP\apps\wsl-ssh-pageant\current\wsl-ssh-pageant-gui.exe"
+    ```
+
+
+
+  - Set it to autostart on login
+
+    ```powershell
+    $path = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
+    $cmdl = "$pageant --winssh $pipe"
+    $key = try {
+        Get-Item -Path $path -ErrorAction Stop
+    }
+    catch {
+        New-Item -Path $path -Force
+    }
+
+    New-ItemProperty -Path $key.PSPath -Name "wsl-ssh-pageant" -Value "$cmdl"
+    ```
+
+
+  ### GPG Agent
+
+    - Download [gpg-bridge](https://github.com/BusyJay/gpg-bridge)
+
+    - Set variables
+
+      ```powershell
+      # Can be any free port
+      $port = 4444
+
+      $bridge = "~/.cargo/bin/gpg-bridge"
+      ```
+
+    - Set it to autostart on login
+
+      ```powershell
+      $path = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
+      $cmdl = "$bridge 127.0.0.1:$port --detach"
+      $key = try {
+          Get-Item -Path $path -ErrorAction Stop
+      }
+      catch {
+          New-Item -Path $path -Force
+      }
+
+      New-ItemProperty -Path $key.PSPath -Name "gpg-bridge" -Value "$cmdl"
+    ```
