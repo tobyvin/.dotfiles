@@ -1,22 +1,15 @@
-# Path
-path=( $path $HOME/.local/bin $HOME/.dotnet/tools )
-
-# Exports
-export ZSH_BASE="${HOME}/dotfiles"
-export FZF_BASE="${HOME}/dotfiles/fzf"
+source "${DOTFILES:="${HOME}/dotfiles"}/shell/profile.sh"
 
 # Directory hashtable
 hash -d .=${HOME}/dotfiles
-hash -d s=${HOME}/Sync
-hash -d d=${HOME}/docker
 
 
-source $ZSH_BASE/antigen/antigen.zsh
-source $ZSH_BASE/zsh/setopt.zsh
-source $ZSH_BASE/zsh/prompt.zsh
-source $ZSH_BASE/zsh/aliases.zsh
-source $ZSH_BASE/zsh/keybindings.zsh
-[ -n "${WSL_DISTRO_NAME+1}" ] && source $ZSH_BASE/zsh/wsl.zsh
+source $DOTFILES/antigen/antigen.zsh
+source $DOTFILES/zsh/setopt.zsh
+source $DOTFILES/zsh/prompt.zsh
+source $DOTFILES/zsh/aliases.zsh
+source $DOTFILES/zsh/keybindings.zsh
+[ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/zsh/wsl.zsh
 
 antigen use oh-my-zsh
 antigen bundle git
