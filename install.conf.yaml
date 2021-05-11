@@ -11,6 +11,7 @@
     - [yes | ./fzf/install --bin, Installing fzf]
 
 - link:
+    ~/.profile:
     ~/.zshrc:
     ~/.p10k.zsh:
     ~/.gitconfig:
@@ -23,3 +24,4 @@
 - shell:
     - [gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634, Getting GPG public key]
     - [gpg --import-ownertrust gnupg/trustfile.txt, Importing GPG trustfile]
+    - ["[ -n \"${WSL_DISTRO_NAME+1}\" ] && ./wsl.install"]

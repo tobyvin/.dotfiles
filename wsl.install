@@ -35,8 +35,7 @@ show-warning() {
     printf "\n"
 }
 
-mkln ssh/config ~/win/.ssh/config
-mkln ssh/ssh.bat ~/win/.ssh/ssh.bat
+mkln ssh/win.config ~/win/.ssh/config
 mkln gitconfig ~/win/.gitconfig
 mkln gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
 mkln gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
