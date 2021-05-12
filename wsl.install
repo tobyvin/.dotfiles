@@ -40,3 +40,4 @@ mkln gitconfig ~/win/.gitconfig
 mkln gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
 mkln gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
 mkln gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
+mkln wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json

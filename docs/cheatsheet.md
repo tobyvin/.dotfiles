@@ -87,10 +87,8 @@ My personal cheatsheet of commands for various tools and workflows
 
 ## WSL2
 
-  ### Windows Enviornment
-
-  ### SSH Agent
- 
+  ### SSH Agent (Windows)
+  
   - Download [wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant)
   
     ```powershell
@@ -128,7 +126,7 @@ My personal cheatsheet of commands for various tools and workflows
     ```
 
 
-  ### GPG Agent
+  ### GPG Agent (Windows)
 
     - Download [gpg-bridge](https://github.com/BusyJay/gpg-bridge)
 
