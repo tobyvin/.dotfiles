@@ -11,7 +11,6 @@
     - [yes | ./fzf/install --bin, Installing fzf]
 
 - link:
-    ~/.profile:
     ~/.zshrc:
     ~/.p10k.zsh:
     ~/.gitconfig:
