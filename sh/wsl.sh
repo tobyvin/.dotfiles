@@ -1,4 +1,4 @@
-export EDITOR=code
+export EDITOR="code --wait"
 
 alias cb=clip.exe
 alias wsl=wsl.exe
