@@ -1,8 +1,7 @@
-source "${DOTFILES:="${HOME}/dotfiles"}/shell/profile.sh"
+source "${DOTFILES:="${HOME}/dotfiles"}/sh/profile.sh"
 
 # Directory hashtable
 hash -d .=${HOME}/dotfiles
-
 
 source $DOTFILES/antigen/antigen.zsh
 source $DOTFILES/zsh/setopt.zsh

@@ -1,1 +1,1 @@
-source "${DOTFILES:="${HOME}/dotfiles"}/shell/aliases.sh"
+source "${DOTFILES:="${HOME}/dotfiles"}/sh/aliases.sh"

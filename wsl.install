@@ -6,18 +6,20 @@ force=1
 mkln() {
     dirname="$(dirname $2)"
     filename="$(basename $2)"
+    source=$(wslpath -w $DOTFILES/$1)
+    target=$(wslpath -w $dirname)\\$filename
+    cmd="cd ~; cmd /c mklink $target $source"
 
-    if ls -la $dirname/ 2>/dev/null | grep -q $filename ; then
+    if ls -la $dirname/ 2>/dev/null | grep -q $filename; then
         if [ $force = 1 ]; then
-            rm $2
+            cmd="cd ~; rm $target; cmd /c mklink $target $source"
         else
             echo "$filename already exists. Use -f to overwrite."
             return
         fi
     fi
-    source=$(wslpath -w $DOTFILES/$1)
-    target=$(wslpath -w $dirname)\\$filename
-    powershell.exe -c "cd ~; cmd /c mklink $target $source"
+    powershell.exe -c "$cmd" &>/dev/null
+    echo "linked $2 --> $1"
 }
 
 show-warning() {

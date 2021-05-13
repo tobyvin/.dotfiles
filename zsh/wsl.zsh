@@ -1,5 +1,5 @@
-source "${DOTFILES:-"${HOME}/dotfiles"}/shell/wsl.sh"
-source "${DOTFILES:-"${HOME}/dotfiles"}/shell/gpg.sh"
+source "${DOTFILES:-"${HOME}/dotfiles"}/sh/wsl.sh"
+source "${DOTFILES:-"${HOME}/dotfiles"}/sh/gpg.sh"
 
 hash -d w=/mnt/c/Users/$USER
 

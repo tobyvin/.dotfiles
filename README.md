@@ -35,20 +35,20 @@ Configs
 
 #### Zsh Configuration
 
-- [zshrc](zshrc) - Zsh profile (sources [profile.sh](shell/profile.sh) & [zsh/*](zsh))
-- [p10k.zsh](p10k.zsh) - p10k theme config 
-- [shell/](shell) - Posix shell configs, shared (sourced) by different shell profiles
-  - [aliases.sh](shell/aliases.sh) - Alias definitions shared between shells
-  - [gpg.sh](shell/gpg.sh) - Sets up the GPG agent bridges between wsl and windows
-  - [profile.sh](shell/profile.sh) - Exports and Path additions shared between shells
-  - [wsl.sh](shell/wsl.sh) - WSL2 specific config (sources [gpg.sh](shell/gpg.sh))
+- [zshrc](zshrc) - Zsh profile (sources [profile.sh](sh/profile.sh) & [zsh/*](zsh))
+- [starship.toml](starship.toml) - [starship](https://starship.rs/) cross-shell theme config 
+- [sh/](sh) - Posix compliant cross-shell configs
+  - [aliases.sh](sh/aliases.sh) - Alias definitions shared between shells
+  - [gpg.sh](sh/gpg.sh) - Sets up the GPG agent bridges between wsl and windows
+  - [profile.sh](sh/profile.sh) - Exports and Path additions shared between shells
+  - [wsl.sh](sh/wsl.sh) - WSL2 specific config (sources [gpg.sh](sh/gpg.sh))
 - [zsh/](zsh) - Zsh configs
   - [aliases.zsh](zsh/aliases.zsh) - Alias definitions (sources [aliases.sh](zsh/aliases.zsh))
   - [antigen.zsh](zsh/antigen.zsh) - Loads Antigen plugins and theme
   - [keybindings.zsh](zsh/keybindings.zsh) - Keybindings and related functions
   - [prompt.zsh](zsh/prompt.zsh) - Prompt configuration and prompt theme settings 
   - [setopt.zsh](zsh/setopt.zsh) - Zsh configuration settings
-  - [wsl.zsh](zsh/wsl.zsh) - WSL2 specific config (sources [wsl.sh](shell/wsl.sh))
+  - [wsl.zsh](zsh/wsl.zsh) - WSL2 specific config (sources [wsl.sh](sh/wsl.sh))
 
 #### Misc
 
