@@ -47,6 +47,9 @@ ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]"
 # undo http://megakemp.com/2016/08/25/git-undo/
 undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 
+# rename branch
+brn = "!f() { git branch -m \"$(git rev-parse --abbrev-ref HEAD)\" $1; git fetch origin; git branch -u origin/$1 $1; git remote set-head origin -a; }; f"
+
 # grep on filename
 f = "!git ls-files | grep -i"
 
