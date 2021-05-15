@@ -1,109 +1,61 @@
 [user]
-	email = tobyv13@gmail.com
-	name = Toby Vincent
-	username = tobyvin
-	signingkey = 0xA0876F29023F43AF
+email = tobyv13@gmail.com
+name = Toby Vincent
+username = tobyvin
+signingkey = 0xA0876F29023F43AF
+
 [commit]
-	gpgsign = true
+gpgsign = true
+
+[init]
+defaultBranch = main
+
 [url "git@github.com:"]
-    insteadOf = gh:
-    pushInsteadOf = "https://github.com/"
+insteadOf = gh:
+pushInsteadOf = "https://github.com/"
+
 [core]
-	editor = code --wait
+editor = code --wait
+
 [diff]
-    tool = default-difftool
+tool = default-difftool
+
 [difftool "default-difftool"]
-    cmd = code --wait --diff $LOCAL $REMOTE
+cmd = code --wait --diff $LOCAL $REMOTE
+
 [alias]
-    ## basic
-    st = status -s
-    cl = clone
-    ci = commit
-    co = checkout
-    br = branch
-    r = reset
-    cp = cherry-pick
-    gr = grep -Ii
+# basic
+st = status -s
+cl = clone
+ci = commit
+co = checkout
+br = branch
+r = reset
+cp = cherry-pick
 
-    # undo http://megakemp.com/2016/08/25/git-undo/
-    undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+# tweak defaults
+grep = grep -Ii
+diff = diff --word-diff
+branch = branch -ra
+ai = add --interactive
 
-	## tweak defaults
-    diff = diff --word-diff
-    branch = branch -ra
-    grep = grep -Ii
-    bra = branch -ra
-    ai = add --interactive
+# log commands
+lg = log --graph --oneline --decorate --all --abbrev-commit
+ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
+ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]" --decorate --numstat
 
-    ## log commands
-    lg = log --graph --oneline --decorate --all
-    lg1 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold green)(%ar)%C(reset) %C(white)%s%C(reset) %C(dim white)- %an%C(reset)%C(bold yellow)%d%C(reset)' --all
-    lg2 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset)%C(bold yellow)%d%C(reset)%n''          %C(white)%s%C(reset) %C(dim white)- %an%C(reset)' --all
-    lg3 = log --graph --abbrev-commit --decorate --format=format:'%C(bold blue)%h%C(reset) - %C(bold cyan)%aD%C(reset) %C(bold green)(%ar)%C(reset) %C(bold cyan)(committed: %cD)%C(reset) %C(auto)%d%C(reset)%n''          %C(white)%s%C(reset)%n''          %C(dim white)- %an <%ae> %C(reset) %C(dim white)(committer: %cn <%ce>)%C(reset)' --all
-    ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
-    ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]" --decorate --numstat
-    lc  = "!f() { git ll "$1"^.."$1"; }; f"
-    lnc = log --pretty=format:"%h\\ %s\\ [%cn]"
-    fl = log -u
-    filelog = log -u
+# undo http://megakemp.com/2016/08/25/git-undo/
+undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
 
-    ## grep on filename
-    f = "!git ls-files | grep -i"
+# grep on filename
+f = "!git ls-files | grep -i"
 
-    ## commit
-    cm = commit -m
-    cma = commit -a -m
-    ca = commit --amend
-    amend = commit --amend
-    caa = commit -a --amend -C HEAD
+# remove submodule
+smrm = "!f(){ git rm --cached \"$1\";rm -r \"$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
 
-    ## diff
-    d = diff --word-diff
-    dc = diff --cached
+# generate git artifacts
+ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@  ;}; gi"
+attributes = "!ga() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; ga"
 
-    ## diff last commit
-    dlc = diff --cached HEAD^
-    dr  = "!f() { git diff -w "$1"^.."$1"; }; f"
-    diffr  = "!f() { git diff "$1"^.."$1"; }; f"
-
-    ## reset commands
-    r1 = reset HEAD^
-    r2 = reset HEAD^^
-    rh = reset --hard
-    rh1 = reset HEAD^ --hard
-    rh2 = reset HEAD^^ --hard
-
-    ## stash
-    sl = stash list
-    sa = stash apply
-    ss = stash save
-
-    ## submodules
-    # remove
-    smrm = "!f(){ git rm --cached \"$1\";rm -r \"$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
-    
-    ## subtree
-    # add
-    sba = "!f() { git subtree add --prefix $2 $1 master --squash; }; f"
-    # update/pull
-    sbu = "!f() { git subtree pull --prefix $2 $1 master --squash; }; f"
-
-    ## last tag created
-    lasttag = describe --tags --abbrev=0
-    lt = describe --tags --abbrev=0
-
-    ## list remotes
-    rem="!git config -l | grep remote.*url | tail -n +2"
-
-    # list all aliases
-    la = "!git config -l | grep alias | cut -c 7-"
-	
-    # worktree list {{{
-    wl = worktree list
-
-    # create git artifacts
-	ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@  ;}; gi"
-    attributes = "!ga() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; ga"
-
-    # create and keep an empty directory at the provided path
-	keep = "!gk() { ([ -f $@/.gitkeep ] || (mkdir -p $@ && curl -sL https://api.ef.gy/fortune > $@/.gitkeep)) && (grep -qsxF '!/**/.gitkeep' .gitignore || echo '!/**/.gitkeep' >> .gitignore) ;}; gk"
+# create and keep an empty directory at the provided path
+keep = "!gk() { ([ -f $@/.gitkeep ] || (mkdir -p $@ && curl -sL https://api.ef.gy/fortune > $@/.gitkeep)) && (grep -qsxF '!/**/.gitkeep' .gitignore || echo '!/**/.gitkeep' >> .gitignore) ;}; gk"
