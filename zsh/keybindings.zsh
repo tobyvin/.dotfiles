@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 function r-delregion() {
   if ((REGION_ACTIVE)) then
     zle kill-region

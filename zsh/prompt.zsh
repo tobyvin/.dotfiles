@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 function set_title() {
   folder=$(sed "s/$USER/~/g" <<<$PWD:t)
 

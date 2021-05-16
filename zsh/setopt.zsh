@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
 HYPHEN_INSENSITIVE="true"

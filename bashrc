@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 source "${DOTFILES:="${HOME}/dotfiles"}/sh/profile.sh"
 
 source $DOTFILES/sh/aliases.sh

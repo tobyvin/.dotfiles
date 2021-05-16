@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 export EDITOR="code --wait"
 
 alias cb=clip.exe

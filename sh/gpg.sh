@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # https://github.com/benpye/wsl-ssh-pageant
 # https://github.com/drduh/YubiKey-Guide#remote-host-configuration
 # https://dev.to/dzerycz/series/11353

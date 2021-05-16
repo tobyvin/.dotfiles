@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Path
 PATH=$PATH:$HOME/.local/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin
 

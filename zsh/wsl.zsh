@@ -1,3 +1,5 @@
+#!/usr/bin/env zsh
+
 source "${DOTFILES:-"${HOME}/dotfiles"}/sh/wsl.sh"
 source "${DOTFILES:-"${HOME}/dotfiles"}/sh/gpg.sh"
 
