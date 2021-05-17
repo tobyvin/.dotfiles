@@ -38,6 +38,7 @@ grep = grep -Ii
 diff = diff --word-diff
 branch = branch -ra
 ai = add --interactive
+recommit = commit --amend -C HEAD
 
 # log commands
 lg = log --graph --oneline --decorate --all --abbrev-commit
@@ -46,6 +47,7 @@ ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]"
 
 # undo http://megakemp.com/2016/08/25/git-undo/
 undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+pop = git reset HEAD~
 
 # rename branch
 brn = "!f() { git branch -m \"$(git rev-parse --abbrev-ref HEAD)\" $1; git fetch origin; git branch -u origin/$1 $1; git remote set-head origin -a; }; f"
@@ -57,8 +59,9 @@ f = "!git ls-files | grep -i"
 smrm = "!f(){ git rm --cached \"$1\";rm -r \"$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
 
 # generate git artifacts
-ignore = "!gi() { curl -sL https://www.toptal.com/developers/gitignore/api/$@  ;}; gi"
-attributes = "!ga() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; ga"
+ignore = "!f() { curl -sL https://www.toptal.com/developers/gitignore/api/$@  ;}; f"
+attributes = "!f() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; f"
+license = "!f() { curl -sH 'Accept: application/vnd.github.v3+json' https://api.github.com/licenses/$1 | (python2 -c \"import sys, json; print json.load(sys.stdin)['body'];\" | sed \"s/\\[year\\]/$(date +'%Y')/\" | sed \"s/\\[fullname\\]/$(git config --get user.name)/\"); }; f"
 
 # create and keep an empty directory at the provided path
-keep = "!gk() { ([ -f $@/.gitkeep ] || (mkdir -p $@ && curl -sL https://api.ef.gy/fortune > $@/.gitkeep)) && (grep -qsxF '!/**/.gitkeep' .gitignore || echo '!/**/.gitkeep' >> .gitignore) ;}; gk"
+keep = "!f() { ([ -f $@/.gitkeep ] || (mkdir -p $@ && curl -sL https://api.ef.gy/fortune > $@/.gitkeep)) && (grep -qsxF '!/**/.gitkeep' .gitignore || echo '!/**/.gitkeep' >> .gitignore) ;}; f"
