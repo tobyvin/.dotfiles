@@ -4,17 +4,8 @@
 # https://github.com/drduh/YubiKey-Guide#remote-host-configuration
 # https://dev.to/dzerycz/series/11353
 
-# SSH Socket
-# Removing Linux SSH socket and replacing it by link to wsl2-ssh-pageant socket
-# export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
-# ss -a | grep -q $SSH_AUTH_SOCK
-# if [ $? -ne 0 ]; then
-#     rm -f $SSH_AUTH_SOCK
-#     (setsid nohup socat UNIX-LISTEN:$SSH_AUTH_SOCK,fork EXEC:"$DOTFILES/ssh/wsl2-ssh-pageant.exe" &>/dev/null &)
-# fi
-
-# GPG Socket
-# Removing Linux GPG Agent socket and replacing it by link to wsl2-ssh-pageant GPG socket
+# GPG & SSH Socket
+# Removing Linux Agent sockets and replace it with wsl2-ssh-pageant socket
 export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
 export GPG_AGENT_SOCK=$HOME/.gnupg/S.gpg-agent
 export SOCKETS=("${SSH_AUTH_SOCK}" "${GPG_AGENT_SOCK}" "${GPG_AGENT_SOCK}.extra")
@@ -37,5 +28,9 @@ function gpg-reset() {
     gpg-init
 }
 
-alias gpgrst=gpg-reset
+# Relearn card serial number
+function gpg-learn {
+    gpg-connect-agent.exe "scd serialno" "learn --force" /bye
+}
+
 gpg-init
