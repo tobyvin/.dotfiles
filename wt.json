@@ -1,13 +1,6 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "confirmCloseAllTabs": false,
-    "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
-    "disabledProfileSources": 
-    [
-        "Windows.Terminal.Azure"
-    ],
-    "experimental.rendering.forceFullRepaint": true,
-    "keybindings": 
+    "actions": 
     [
         {
             "command": 
@@ -18,8 +11,22 @@
             "keys": "ctrl+,"
         },
         {
-            "command": "openSettings",
+            "command": 
+            {
+                "action": "openSettings"
+            },
             "keys": "ctrl+shift+,"
+        },
+        {
+            "command": 
+            {
+                "action": "newTab"
+            },
+            "keys": "ctrl+t"
+        },
+        {
+            "command": "paste",
+            "keys": "ctrl+v"
         },
         {
             "command": 
@@ -30,38 +37,15 @@
             "keys": "ctrl+alt+,"
         },
         {
-            "command": "newTab",
-            "keys": 
-            [
-                "ctrl+t"
-            ]
+            "command": "find",
+            "keys": "ctrl+f"
         },
         {
             "command": "closeTab",
-            "keys": 
-            [
-                "ctrl+w"
-            ]
+            "keys": "ctrl+w"
         },
         {
-            "command": "find",
-            "keys": 
-            [
-                "ctrl+f"
-            ]
-        },
-        {
-            "command": "paste",
-            "keys": 
-            [
-                "ctrl+v"
-            ]
-        },
-        {
-            "command": 
-            {
-                "action": "toggleFocusMode"
-            },
+            "command": "toggleFocusMode",
             "keys": "ctrl+b"
         },
         {
@@ -72,13 +56,24 @@
             "keys": "f1"
         }
     ],
+    "confirmCloseAllTabs": false,
+    "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
+    "disabledProfileSources": 
+    [
+        "Windows.Terminal.Azure"
+    ],
+    "experimental.rendering.forceFullRepaint": true,
     "multiLinePasteWarning": false,
     "profiles": 
     {
         "defaults": 
         {
-            "acrylicOpacity": 0.8,
-            "bellStyle": "visual",
+            "acrylicOpacity": 0.80000000000000004,
+            "bellStyle": 
+            [
+                "window",
+                "taskbar"
+            ],
             "closeOnExit": "always",
             "colorScheme": "vscode-dark",
             "cursorColor": "#D4D4D4",

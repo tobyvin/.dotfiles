@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
 DOTFILES="$(dirname "$(readlink -fm "$0")")"
+WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
 force=1
 
-mkln() {
+function mkln() {
     dirname="$(dirname $2)"
     filename="$(basename $2)"
     source=$(wslpath -w $DOTFILES/$1)
@@ -22,7 +23,7 @@ mkln() {
     echo "linked $2 --> $1"
 }
 
-show-warning() {
+function show-warning() {
     gpgpath=$(wslpath -w "$(command -v gpg.exe)")
     gitgpg=$(git.exe config --system --get gpg.program)
     if [ "$gitgpg" = "$gpgpath" ]; then
@@ -36,6 +37,10 @@ show-warning() {
     printf "git.exe config --system gpg.program '%s' \n" "$(wslpath -w "$(command -v gpg.exe)")"
     printf "\n"
 }
+
+ln -sf $WINHOME ~/win
+ln -sf $WINHOME/Sync ~/win/sync
+ln -sf $WINHOME/siue ~/win/siue
 
 mkln ssh/win.config ~/win/.ssh/config
 mkln gitconfig ~/win/.gitconfig
