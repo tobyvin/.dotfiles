@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+app=$1
+
+if [ "$(which $app)" ]; then
+    current_version=$($app --version | grep -oE "[0-9\.]+")
+    echo "$app: uninstalling $current_version"
+    sudo apt remove $app
+fi

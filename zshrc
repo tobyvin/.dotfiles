@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-source "${DOTFILES:="${HOME}/dotfiles"}/sh/profile.sh"
+source "${DOTFILES:="${HOME}/dotfiles"}/profile"
 
 # Directory hashtable
 hash -d .=${HOME}/dotfiles

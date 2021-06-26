@@ -7,6 +7,7 @@ alias ll='ls -lh'
 alias lla='ls -lA'
 alias lsa='ls -lah'
 alias grep='grep --color'
+alias cat=bat
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf "
 alias py=python3
