@@ -1,16 +1,28 @@
 {
     "$schema": "https://aka.ms/winget-settings.schema.json",
-    // For documentation on these settings, see: https://aka.ms/winget-settings
     "source": {
-       "autoUpdateIntervalInMinutes": 5
+        "autoUpdateIntervalInMinutes": 5
     },
     "visual": {
         "progressBar": "accent"
     },
+    "installBehavior": {
+        "preferences": {
+            "scope": "user",
+            "locale": [
+                "en-US"
+            ]
+        }
+    },
+    "network": {
+        "downloader": "do",
+        "doProgressTimeoutInSeconds": 60
+    },
+    "telemetry": {
+        "disable": true
+    },
     "experimentalFeatures": {
         "experimentalMSStore": true,
-        "list": true,
-        "upgrade": true,
-        "uninstall": true
+        "packagedAPI": true
     }
 }
