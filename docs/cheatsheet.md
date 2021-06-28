@@ -165,7 +165,7 @@ Set variables
 # Can be any free port
 $port = 4444
 
-$bridge = "~/.cargo/bin/gpg-bridge"
+$bridge = "$HOME\.cargo\bin\gpg-bridge.exe"
 ```
 
 Set it to autostart on login
