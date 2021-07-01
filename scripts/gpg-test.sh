@@ -1,5 +1,5 @@
-# NOTE: This requires GNU getopt.  On Mac OS X and FreeBSD, you have to install this
-# separately; see below.
+#!/usr/bin/env bash
+
 TEMP=$(getopt -o hvdsea: --long help,verbose,debug,signature,encryption,authentication \
     -n 'javawrap' -- "$@")
 
@@ -8,10 +8,9 @@ if [ $? != 0 ]; then
     exit 1
 fi
 
-# Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
 
-help() {
+usage() {
     cat <<EOF
 usage: $0 [OPTIONS]
 
@@ -34,7 +33,7 @@ ALL=true
 while true; do
     case "$1" in
     -h | --help)
-        help
+        usage
         exit 0
         ;;
     -v | --verbose)
