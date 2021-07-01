@@ -2,6 +2,7 @@ My personal cheat sheet of commands for various tools and workflows
 
 - [Git](#git)
   - [Split out subfolder into new repository](#split-out-subfolder-into-new-repository)
+    - [(Optional) Migrate original subdir to submodule](#optional-migrate-original-subdir-to-submodule)
 - [WSL2 Yubikey Setup](#wsl2-yubikey-setup)
   - [SSH Agent](#ssh-agent)
     - [In Windows](#in-windows)
@@ -16,16 +17,17 @@ My personal cheat sheet of commands for various tools and workflows
 *Be sure you are inside the original repo*
 
 ```sh
-cd <orignal_repository>
+cd <orignal_repository>/<subdir-to-split>
 ```
 
 Set local variables for use
 
 ```sh
-username=tobyvin-cs340
-subdir=src/Plotter
+username="$(git config user.username)"
+subdir="$(git rev-parse --show-prefix)"
 newrepo="$(basename $subdir)"
-oldrepo="$(pwd)"
+oldrepo="$(git rev-parse --show-toplevel)"
+cd $oldrepo
 ```
 
 Create a new branch containing only the sub-directory using `git subtree`
@@ -45,8 +47,7 @@ git init && git pull $oldrepo $newrepo
 Copy over the git artifacts from original repo's root directory
 
 ```sh
-cp $oldrepo/.gitignore ./
-cp $oldrepo/.gitattributes ./
+cp -rt ./ $oldrepo/.gitignore $oldrepo/.gitattributes $oldrepo/.vscode
 ```
 
 Commit changes
@@ -72,6 +73,8 @@ Push newly created repository to remote
 ```sh
 git push -u origin master
 ```
+
+### (Optional) Migrate original subdir to submodule
 
 Switch back into the original repository
 
