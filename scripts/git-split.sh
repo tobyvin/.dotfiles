@@ -72,7 +72,7 @@ while true; do
         shift
         ;;
     -r | --remote)
-        REMOTE="$2"
+        REMOTE="$(basename $(dirname ${2#"git@github.com:"}))/$(basename ${2#"git@github.com:"})"
         shift 2
         ;;
     --public | --private)
@@ -107,7 +107,7 @@ git init && git pull $REPO $DIRECTORY && git branch -M main
 
 files=(".gitignore" ".gitattributes" ".vscode" "LICENSE")
 for f in "${files[@]}"; do
-    if [ ! -e "./${f}" && -e "${REPO}/${f}" ]; then
+    if [[ ! -e "./${f}" && -e "${REPO}/${f}" ]]; then
         printf '%s\n' "Copying ${f} to new repository..."
         cp -r "${REPO}/${f}" ./
     fi
@@ -120,14 +120,11 @@ if command -v gh &>/dev/null; then
     yes "n" | gh repo create --confirm "${REMOTE}" "${VISIBILITY}"
 else
     printf '%s\n' 'gh cli tool could not be found. Explicitly adding git remote to your local repository.'
+
     git remote add origin https://github.com/${REMOTE}
 fi
 
-if git ls-remote git@github.com:${REMOTE} &>/dev/null; then
-    git push -u origin main
-else
-    printf '%s\n' 'Remote repository not found.'
-fi
+git push -u origin main
 
 if [ $? -ne 0 ]; then
     printf '\n%s\n' 'Verify/create the remote repository and push to it with the following command: '
