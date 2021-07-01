@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-TEMP=$(getopt -o hvdymr: --long help,verbose,debug,submodule,remote:,visibility: \
+TEMP=$(getopt -o hvdymu:r: --long help,verbose,debug,submodule,remote:,username:,visibility: \
     -n 'javawrap' -- "$@")
 
 if [ $? != 0 ]; then
@@ -22,8 +22,8 @@ DEBUG=false
 CONFIRMED=false
 SUBMODULE=false
 REPO=$(git rev-parse --show-toplevel)
-DIRECTORY="$(basename $(git rev-parse --show-prefix))"
-REMOTE="$(basename $DIRECTORY)/$(git config user.username)"
+USERNAME="$(git config user.username)"
+REMOTE=
 VISIBILITY="--public"
 
 read -r -d '' USAGE <<-EOF
@@ -37,8 +37,13 @@ OPTIONS:
     -m, --submodule                     
             Migrate directory in original repository to submodule
 
+    -u, --username=<user/repo>         
+            Github username. Can be used instead of remote to dynamically name 
+            the repositories. If --username and --remote are both ommited, defaults 
+            to $(git config user.username)
+
     -r, --remote=<user/repo>         
-            Github remote, defaults to $(git config user.username)/${directory}
+            Github remote, defaults to ${username}/${directory}
 
         --private                       
             Create the new remote repository as private. It is created 
@@ -48,7 +53,6 @@ ARGS:
     <DIRECTORY>...  Directory to split out of original repository, 
                     defaults to current directory
 EOF
-
 
 while true; do
     case "$1" in
@@ -72,6 +76,10 @@ while true; do
         SUBMODULE=true
         shift
         ;;
+    -u | --username)
+        USERNAME="$2"
+        shift 2
+        ;;
     -r | --remote)
         REMOTE="$(basename $(dirname ${2#"git@github.com:"}))/$(basename ${2#"git@github.com:"})"
         shift 2
@@ -85,18 +93,30 @@ while true; do
         break
         ;;
     *)
-        DIRECTORY="$2"
-        shift
         break
         ;;
     esac
 done
 
-if [[ "$REMOTE" = "$(basename $DIRECTORY)/$(git config user.username)" && $? -ne 0 ]]; then
-    echo "ERROR: No remote provided and user.username was not set." >&2
+DIRECTORY="${1:-$(realpath --relative-to="$REPO" .)}"
+
+if [ ! -d "${REPO}/${DIRECTORY}" ]; then
+    echo "ERROR: Directory does not exist." >&2
     echo "$USAGE"
     exit 1
 fi
+
+if [ -z "$REMOTE" ]; then
+    if [ -z "$USERNAME" ]; then
+        echo "ERROR: No remote provided and user.username was not set." >&2
+        echo "$USAGE"
+        exit 1
+    else
+        REMOTE="${USERNAME}/${DIRECTORY}"
+    fi
+fi
+
+set -e
 
 cd $REPO
 
@@ -123,6 +143,8 @@ else
 
     git remote add origin https://github.com/${REMOTE}
 fi
+
+set +e
 
 git push -u origin main
 
