@@ -16,6 +16,15 @@ fi
 eval set -- "$TEMP"
 
 SCRIPT="$(basename $0)"
+ARTIFACTS=(".gitignore" ".gitattributes" ".vscode" "LICENSE")
+VERBOSE=false
+DEBUG=false
+CONFIRMED=false
+SUBMODULE=false
+REPO=$(git rev-parse --show-toplevel)
+DIRECTORY="$(basename $(git rev-parse --show-prefix))"
+REMOTE="$(basename $DIRECTORY)/$(git config user.username)"
+VISIBILITY="--public"
 
 read -r -d '' USAGE <<-EOF
 USAGE: $SCRIPT [OPTIONS]
@@ -40,14 +49,6 @@ ARGS:
                     defaults to current directory
 EOF
 
-VERBOSE=false
-DEBUG=false
-CONFIRMED=false
-SUBMODULE=false
-REPO=$(git rev-parse --show-toplevel)
-DIRECTORY="$(basename $(git rev-parse --show-prefix))"
-REMOTE="$(basename $DIRECTORY)/$(git config user.username)"
-VISIBILITY="--public"
 
 while true; do
     case "$1" in
@@ -105,8 +106,7 @@ cd "$(mktemp -d)"
 
 git init && git pull $REPO $DIRECTORY && git branch -M main
 
-files=(".gitignore" ".gitattributes" ".vscode" "LICENSE")
-for f in "${files[@]}"; do
+for f in "${ARTIFACTS[@]}"; do
     if [[ ! -e "./${f}" && -e "${REPO}/${f}" ]]; then
         printf '%s\n' "Copying ${f} to new repository..."
         cp -r "${REPO}/${f}" ./
