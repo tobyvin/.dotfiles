@@ -20,7 +20,7 @@ Host aegir
     User tobyv
     ForwardAgent yes
     StreamLocalBindUnlink yes
-    RemoteForward /home/tobyv/.gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
+    RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
 
 host bifrost
     User tobyv
