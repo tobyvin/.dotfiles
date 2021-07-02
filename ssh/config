@@ -9,7 +9,14 @@ Host heimdall loki
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
 
-Host odin thor
+Host odin thor 
+    User tobyv
+    ForwardAgent yes
+    StreamLocalBindUnlink yes
+    RemoteForward /home/tobyv/.gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
+
+Host aegir
+    HostName 147.182.173.135
     User tobyv
     ForwardAgent yes
     StreamLocalBindUnlink yes
