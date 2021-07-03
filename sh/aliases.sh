@@ -24,7 +24,9 @@ if command -v docker &>/dev/null; then
     alias dce="dc exec"
     alias dcps="dc ps"
     alias dcls="dc ls"
-    alias dcdn="dc ls"
+    alias dcdn="dc down"
     alias dcup="dc up"
     alias dcupd="dc up -d"
+    alias dcl="dc logs"
+    alias dclf="dc logs -f"
 fi
