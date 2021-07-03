@@ -17,7 +17,6 @@ antigen bundle git
 antigen bundle fzf
 antigen bundle dotnet
 antigen bundle docker
-antigen bundle docker-compose
 antigen bundle command-not-found
 antigen bundle wakeonlan
 antigen bundle zsh-users/zsh-syntax-highlighting
