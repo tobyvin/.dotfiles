@@ -10,10 +10,18 @@ alias grep='grep --color'
 alias cat=bat
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf "
-alias py=python3
-alias python=python3
-alias pip=pip3
-alias dsh="dce sh"
-alias dps="docker ps"
 alias update="sudo apt update && apt list --upgradable"
 alias upgrade="sudo apt upgrade -y"
+
+if command -v docker &>/dev/null; then
+    if [ -f ~/.docker/cli-plugins/docker-compose ]; then
+        alias dc="docker compose"
+    else
+        alias dc="docker-compose"
+    fi
+    alias doe="docker exec -it"
+    alias dops="docker ps"
+    alias dce="dc exec"
+    alias dcps="dc ps"
+    alias dcls="dc ls"
+fi
