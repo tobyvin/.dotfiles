@@ -19,8 +19,8 @@ if command -v docker &>/dev/null; then
     else
         alias dc="docker-compose"
     fi
-    alias doe="docker exec -it"
-    alias dops="docker ps"
+    alias dexec="docker exec -it"
+    alias dps="docker ps"
     alias dce="dc exec"
     alias dcps="dc ps"
     alias dcls="dc ls"
