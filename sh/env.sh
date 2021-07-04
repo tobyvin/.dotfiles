@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
-# Exports
-export DOTFILES="$(cd $(dirname "$(readlink -fm "$0")"); git rev-parse --show-toplevel)"
 
 # https://github.com/junegunn/fzf#respecting-gitignore
 export FZF_BASE="${DOTFILES}/fzf"
