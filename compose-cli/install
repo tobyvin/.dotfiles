@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if docker compose >&/dev/null; then
+    current_version=0.0.0
+    echo "compose-cli: not installed"
+else
+    current_version=$(docker compoose version | grep -oEm1 '[0-9]+.[0-9\.]+-beta[0-9\.]*')
+    echo "compose-cli: found $current_version"
+fi
+
+version=$(curl -s "https://api.github.com/repos/docker/compose-cli/releases" | grep -oEm1 '[0-9]+.[0-9\.]+-beta[0-9\.]*')
+
+if [[ "$version" == "$current_version" ]]; then
+    echo "compose-cli: up-to-date"
+else
+    echo "compose-cli: new version found $version"
+    echo "compose-cli: downloading..."
+
+    arch="$(dpkg --print-architecture)"
+    arch="${arch/hf/v7}"
+
+    mkdir -p ~/.docker/cli-plugins
+    curl -sSLo ~/.docker/cli-plugins/docker-compose "https://github.com/docker/compose-cli/releases/download/v${version}/docker-compose-linux-${arch}"
+    chmod +x ~/.docker/cli-plugins/docker-compose
+
+    echo "compose-cli: installed"
+fi

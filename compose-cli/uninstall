@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+if rm ~/.docker/cli-plugins/docker-compose; then
+    echo "compose-cli: uninstalled"
+fi
