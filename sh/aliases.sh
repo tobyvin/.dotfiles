@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+alias dbi="$DOTFILES/install"
 alias ls='ls --color=tty'
 alias l='ls -lah'
 alias la='ls -lAh'
