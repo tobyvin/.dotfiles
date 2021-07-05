@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cd "$(cd $(dirname "$(readlink -fm "$0")") && git rev-parse --show-toplevel)"
+
+git pull
+
+if [[ $(git rev-parse HEAD) != $(git rev-parse @{u}) ]]; then
+    ./install
+fi
