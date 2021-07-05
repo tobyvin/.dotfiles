@@ -28,4 +28,4 @@
         Getting GPG public key,
       ]
     - [gpg --import-ownertrust gnupg/trustfile.txt, Importing GPG trustfile]
-    - ['[ -n "${WSL_DISTRO_NAME+1}" ] && ./wsl.install || :']
+    - ['if [ -n "${WSL_DISTRO_NAME+1}" ]; then ./wsl.install; fi']
