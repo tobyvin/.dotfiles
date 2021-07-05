@@ -17,7 +17,6 @@
     ~/.zshrc:
     ~/.p10k.zsh:
     ~/.gitconfig:
-    ~/.wakeonlan:
     ~/.ssh/config: ssh/config
     ~/.gnupg/:
       glob: true

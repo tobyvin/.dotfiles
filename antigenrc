@@ -8,7 +8,6 @@ antigen bundles <<EOBUNDLES
     dotnet
     docker
     command-not-found
-    wakeonlan
     zsh-users/zsh-syntax-highlighting
     zsh-users/zsh-autosuggestions
     memark/zsh-dotnet-completion
