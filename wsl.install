@@ -1,21 +1,20 @@
 #!/usr/bin/env bash
-
-DOTFILES="$(dirname "$(readlink -fm "$0")")"
+DOTFILES="${DOTFILES:-${BASEDIR:-${HOME}/dotfiles}}"
 WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
 force=1
 
 function mkln() {
-    dirname="$(dirname $2)"
-    filename="$(basename $2)"
+    dir="$(dirname $2)"
+    file="$(basename $2)"
     source=$(wslpath -w $DOTFILES/$1)
-    target=$(wslpath -w $dirname)\\$filename
+    target=$(wslpath -w $dir)\\$file
     cmd="cd ~; cmd /c mklink $target $source"
 
-    if ls -la $dirname/ 2>/dev/null | grep -q $filename; then
+    if ls -la $dir/ 2>/dev/null | grep -q $file; then
         if [ $force = 1 ]; then
             cmd="cd ~; rm $target; cmd /c mklink $target $source"
         else
-            echo "$filename already exists. Use -f to overwrite."
+            echo "$file already exists. Use -f to overwrite."
             return
         fi
     fi
@@ -50,5 +49,14 @@ mkln gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
 mkln wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
 mkln winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
 
-gpg.exe --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634
-gpg.exe --import-ownertrust gnupg/trustfile.txt
+if gpg.exe --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
+    echo "gpg key imported"
+else
+    echo "Failed to import gpg key"
+fi
+
+if gpg.exe --import-ownertrust $DOTFILES/gnupg/trustfile.txt; then
+    echo "gpg trust imported"
+else
+    echo "Failed to import gpg trust"
+fi
