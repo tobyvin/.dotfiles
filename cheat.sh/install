@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+if [ ! "$(which cht.sh)" ]; then
+    mkdir -p ~/.local/bin
+    curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh
+    chmod +x ~/.local/bin/cht.sh
+fi
