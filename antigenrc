@@ -1,0 +1,17 @@
+#!/usr/bin/env zsh
+
+antigen use oh-my-zsh
+antigen theme romkatv/powerlevel10k.git
+antigen bundles <<EOBUNDLES
+    git
+    fzf
+    dotnet
+    docker
+    command-not-found
+    wakeonlan
+    zsh-users/zsh-syntax-highlighting
+    zsh-users/zsh-autosuggestions
+    memark/zsh-dotnet-completion
+    https://gitlab.com/noammac/dotfiles plugins/cht.sh
+EOBUNDLES
+antigen apply
