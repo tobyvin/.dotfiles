@@ -4,7 +4,7 @@ if docker compose >&/dev/null; then
     current_version=0.0.0
     echo "compose-cli: not installed"
 else
-    current_version=$(docker compoose version | grep -oEm1 '[0-9]+.[0-9\.]+-beta[0-9\.]*')
+    current_version=$(docker compose version >&/dev/null | grep -oEm1 '[0-9]+.[0-9\.]+-beta[0-9\.]*')
     echo "compose-cli: found $current_version"
 fi
 
