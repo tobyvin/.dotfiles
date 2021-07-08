@@ -1,26 +1,7 @@
 #!/usr/bin/env bash
 DOTFILES="${DOTFILES:-${BASEDIR:-${HOME}/dotfiles}}"
 WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
-force=1
-
-function mkln() {
-    dir="$(dirname $2)"
-    file="$(basename $2)"
-    source=$(wslpath -w $DOTFILES/$1)
-    target=$(wslpath -w $dir)\\$file
-    cmd="cd ~; cmd /c mklink $target $source"
-
-    if ls -la $dir/ 2>/dev/null | grep -q $file; then
-        if [ $force = 1 ]; then
-            cmd="cd ~; rm $target; cmd /c mklink $target $source"
-        else
-            echo "$file already exists. Use -f to overwrite."
-            return
-        fi
-    fi
-    powershell.exe -c "$cmd" &>/dev/null
-    echo "linked $2 --> $1"
-}
+mkln="${DOTFILES}/scripts/mkln.sh -f"
 
 function show-warning() {
     gpgpath=$(wslpath -w "$(command -v gpg.exe)")
@@ -41,13 +22,15 @@ ln -sf $WINHOME ~/win
 ln -sf $WINHOME/Sync ~/win/sync
 ln -sf $WINHOME/siue ~/win/siue
 
-mkln ssh/win.config ~/win/.ssh/config
-mkln gitconfig ~/win/.gitconfig
-mkln gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
-mkln gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
-mkln gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
-mkln wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
-mkln winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
+cd $DOTFILES
+
+$mkln ssh/win.config ~/win/.ssh/config
+$mkln gitconfig ~/win/.gitconfig
+$mkln gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
+$mkln gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
+$mkln gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
+$mkln wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
+$mkln winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
 
 if gpg.exe --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
     echo "gpg key imported"
