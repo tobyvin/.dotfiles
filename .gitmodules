@@ -7,7 +7,3 @@
 [submodule "fzf"]
 	path = fzf
 	url = https://github.com/junegunn/fzf.git
-[submodule "scripts/scripts-common"]
-	path = scripts/scripts-common
-	url = git@gitlab.com:bertrand-benoit/scripts-common.git
-	branch = stable
