@@ -1,0 +1,43 @@
+#!/usr/bin/env bash
+
+app='gh-cli'
+
+current_version=$(gh --version >&/dev/null | grep -oEm1 'v[0-9\.]+')
+current_version=${current_version#v}
+
+if [ -z "$current_version" ]; then
+    current_version=0.0.0
+    echo "$app: not installed"
+else
+    echo "$app: found $current_version"
+fi
+
+version=$(curl -s "https://api.github.com/repos/cli/cli/releases" | grep -oEm1 'v[0-9\.]+')
+version=${version#v}
+
+if [[ "$version" == "$current_version" ]]; then
+    echo "$app: up-to-date"
+else
+    echo "$app: new version found $version"
+
+    arch="$(dpkg --print-architecture)"
+    arch="${arch/hf/v6}"
+
+    tempdir="$(mktemp -d)"
+
+    echo "$app: downloading..."
+
+    curl -sSLo "${tempdir}/gh_${version}_linux_${arch}.deb" "https://github.com/cli/cli/releases/download/v${version}/gh_${version}_linux_${arch}.deb"
+
+    echo "$app: installing..."
+
+    sudo apt-get install "${tempdir}/gh_${version}_linux_${arch}.deb"
+
+    if [ $? -ne 0 ]; then
+        echo "$app: Failed to install"
+    else
+        echo "$app: installed"
+    fi
+
+    rm -rf $tempdir
+fi
