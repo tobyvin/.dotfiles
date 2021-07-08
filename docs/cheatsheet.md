@@ -120,6 +120,11 @@ While I went down this rock filled rabbit hole for the purpose of getting my Yub
 
 ### In Windows
 
+```sh
+# Install depends
+sudo apt install socat iproute2
+```
+
 Download [wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant)
 
 ```powershell
