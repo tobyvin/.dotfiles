@@ -18,6 +18,8 @@ function show-warning() {
     printf "\n"
 }
 
+sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4444|' ssh/config >ssh/win.config
+
 ln -sf $WINHOME ~/win
 ln -sf $WINHOME/Sync ~/win/sync
 ln -sf $WINHOME/siue ~/win/siue
