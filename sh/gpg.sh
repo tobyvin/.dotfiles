@@ -6,24 +6,43 @@
 
 # GPG & SSH Socket
 # Removing Linux Agent sockets and replace it with wsl2-ssh-pageant socket
-export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
-export GPG_AGENT_SOCK=$HOME/.gnupg/S.gpg-agent
+
+export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
 
 function gpg-init() (
-    sockets=("${SSH_AUTH_SOCK}" "${GPG_AGENT_SOCK}" "${GPG_AGENT_SOCK}.extra")
-    wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
-
-    if ! test -x "$wsl2_ssh_pageant_bin"; then
-        echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
-        return
+    if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
+        rm -f "$SSH_AUTH_SOCK"
+        wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
+        if test -x "$wsl2_ssh_pageant_bin"; then
+            (setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin" >/dev/null 2>&1 &)
+        else
+            echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
+        fi
+        unset wsl2_ssh_pageant_bin
     fi
 
-    for socket in "${sockets[@]}"; do
-        if ss -a | grep -q $socket; then
-            rm -rf $socket
-            (setsid nohup socat UNIX-LISTEN:"$socket,fork" EXEC:"$wsl2_ssh_pageant_bin $([ $socket != $SSH_AUTH_SOCK ] && echo "--gpg $(basename $socket)")" >/dev/null 2>&1 &)
+    if ! ss -a | grep -q "$GPG_AGENT_SOCK"; then
+        rm -rf "$GPG_AGENT_SOCK"
+        wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
+        if test -x "$wsl2_ssh_pageant_bin"; then
+            (setsid nohup socat UNIX-LISTEN:"$GPG_AGENT_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin --gpg S.gpg-agent" >/dev/null 2>&1 &)
+        else
+            echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
         fi
-    done
+        unset wsl2_ssh_pageant_bin
+    fi
+
+    if ! ss -a | grep -q "${GPG_AGENT_SOCK}.extra"; then
+        rm -rf "${GPG_AGENT_SOCK}.extra"
+        wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
+        if test -x "$wsl2_ssh_pageant_bin"; then
+            (setsid nohup socat UNIX-LISTEN:"${GPG_AGENT_SOCK}.extra,fork" EXEC:"$wsl2_ssh_pageant_bin --gpg S.gpg-agent.extra" >/dev/null 2>&1 &)
+        else
+            echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
+        fi
+        unset wsl2_ssh_pageant_bin
+    fi
 )
 
 # Reload
