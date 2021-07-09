@@ -82,6 +82,14 @@ source=$(wslpath -w $1)
 target=$(wslpath -w $(dirname $2))\\$(basename $2)
 
 if ls -la "$(dirname $2)/" 2>/dev/null | grep -q "$(basename $2)"; then
+
+    current_path=$(powershell.exe -c "(Get-Item $target).Target")
+
+    if [[ "${current_path/*wsl$/}" == *"${source/*wsl$/}"* ]]; then
+        [ "$VERBOSE" == true ] && echo "$(basename $2) is set correctly. Skipping."
+        exit 0
+    fi
+
     if [ "$FORCE" == true ]; then
         [ "$VERBOSE" == true ] && echo "$(basename $2) exists. Overwriting."
         rm -rf "$2"
