@@ -8,9 +8,9 @@
 # Removing Linux Agent sockets and replace it with wsl2-ssh-pageant socket
 export SSH_AUTH_SOCK=$HOME/.ssh/agent.sock
 export GPG_AGENT_SOCK=$HOME/.gnupg/S.gpg-agent
-export SOCKETS=("${SSH_AUTH_SOCK}" "${GPG_AGENT_SOCK}" "${GPG_AGENT_SOCK}.extra")
 
 function gpg-init() (
+    sockets=("${SSH_AUTH_SOCK}" "${GPG_AGENT_SOCK}" "${GPG_AGENT_SOCK}.extra")
     wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
 
     if ! test -x "$wsl2_ssh_pageant_bin"; then
@@ -18,7 +18,7 @@ function gpg-init() (
         return
     fi
 
-    for socket in "${SOCKETS[@]}"; do
+    for socket in "${sockets[@]}"; do
         if ss -a | grep -q $socket; then
             rm -rf $socket
             (setsid nohup socat UNIX-LISTEN:"$socket,fork" EXEC:"$wsl2_ssh_pageant_bin $([ $socket != $SSH_AUTH_SOCK ] && echo "--gpg $(basename $socket)")" >/dev/null 2>&1 &)
