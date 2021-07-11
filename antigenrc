@@ -12,5 +12,6 @@ antigen bundles <<EOBUNDLES
     zsh-users/zsh-autosuggestions
     memark/zsh-dotnet-completion
     https://gitlab.com/noammac/dotfiles plugins/cht.sh
+    https://github.com/leonhartX/docker-machine-zsh-completion
 EOBUNDLES
 antigen apply

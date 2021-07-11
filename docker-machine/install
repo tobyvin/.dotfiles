@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+SCRIPT="docker-machine-installer"
+
+if docker compose >&/dev/null; then
+    current_version=0.0.0
+    echo "$SCRIPT: not installed"
+else
+    current_version=$(docker-machine --version >&/dev/null | grep -oE '[0-9]+.[0-9\.]+')
+    echo "$SCRIPT: found $current_version"
+fi
+
+# version=$(curl -s "https://api.github.com/repos/docker/machine/releases" | grep -oE '[0-9]+.[0-9\.]+')
+version="0.16.2"
+
+if [[ "$version" == "$current_version" ]]; then
+    echo "$SCRIPT: up-to-date"
+else
+    echo "$SCRIPT: new version found $version"
+    echo "$SCRIPT: downloading..."
+
+    arch="$(uname -s)-$(uname -m)"
+    echo "https://github.com/docker/machine/releases/download/v$version/docker-machine-$arch"
+
+    curl -L "https://github.com/docker/machine/releases/download/v$version/docker-machine-$arch" >/tmp/docker-machine &&
+        chmod +x /tmp/docker-machine &&
+        cp /tmp/docker-machine "${HOME}/.local/bin"
+        
+    echo "$SCRIPT: installed"
+fi
