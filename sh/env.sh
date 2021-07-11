@@ -10,7 +10,3 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # Path
 PATH=$PATH:$HOME/.local/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin:$DOTFILES/scripts
-
-if [ -f "${DOTFILES}/docker-machine/wrapper.sh" ]; then
-    source "${DOTFILES}/docker-machine/wrapper.sh"
-fi
