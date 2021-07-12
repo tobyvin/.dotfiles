@@ -15,12 +15,12 @@ alias untar="tar -zxvf "
 alias update="sudo apt update && apt list --upgradable"
 alias upgrade="sudo apt upgrade -y"
 alias cht="cht.sh"
-alias dc="docker-compose"
-docker compose >&/dev/null && alias dc="docker compose"
-alias dm="docker-machine"
-alias dmu="docker-machine-using"
+# docker
 alias dexec="docker exec -it"
 alias dps="docker ps"
+# docker compose
+alias dc="docker-compose"
+docker compose >&/dev/null && alias dc="docker compose"
 alias dce="dc exec"
 alias dcps="dc ps"
 alias dcls="dc ls"
@@ -29,7 +29,9 @@ alias dcup="dc up"
 alias dcupd="dc up -d"
 alias dcl="dc logs"
 alias dclf="dc logs -f"
-
-function docker-machine-using() {
-    eval $(docker-machine env $1)
-}
+# docker machine
+alias dm="docker-machine"
+alias dma="docker-machine active"
+alias dmi="docker-machine inspect"
+alias dmu="docker-machine-using"
+docker-machine-using() { eval $(docker-machine env ${1:=-u}); }
