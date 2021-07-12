@@ -1,6 +1,11 @@
 #!/usr/bin/env bash
+
 DOTFILES="${DOTFILES:-${BASEDIR:-${HOME}/dotfiles}}"
-WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
+
+# BUG Has issues with a return character?
+# WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
+WINHOME=$(wslpath "c:\Users\\${USER}")
+
 mkln="${DOTFILES}/scripts/mkln.sh -f"
 
 function show-warning() {
@@ -18,7 +23,7 @@ function show-warning() {
     printf "\n"
 }
 
-sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4444|' ssh/config >ssh/win.config
+sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4444|' ${DOTFILES}/ssh/config >${DOTFILES}/ssh/win.config
 
 ln -sf $WINHOME ~/win
 ln -sf $WINHOME/Sync ~/win/sync
