@@ -42,3 +42,6 @@ function winget() {
 
   powershell.exe -NoProfile -c "$cmd"
 }
+
+# https://github.com/validatedev/drop-cache-if-idle
+[ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &> /dev/null
