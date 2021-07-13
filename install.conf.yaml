@@ -10,7 +10,6 @@
     - [git submodule update --init --recursive, Installing submodules]
     - [yes | ./fzf/install --bin, Installing fzf]
     - [./bat/install bat, Installing bat]
-    # - [./gh-cli/install, Installing gh-cli]
     - [./cheat.sh/install, Installing cheat.sh]
 
 - link:
