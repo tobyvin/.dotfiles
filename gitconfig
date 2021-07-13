@@ -52,6 +52,9 @@ pop = git reset HEAD~
 # rename branch
 brn = "!f() { git branch -m \"$(git rev-parse --abbrev-ref HEAD)\" $1; git fetch origin; git branch -u origin/$1 $1; git remote set-head origin -a; }; f"
 
+# squash the last N commits, inclusivly
+squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
+
 # grep on filename
 f = "!git ls-files | grep -i"
 
