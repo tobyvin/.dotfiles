@@ -28,7 +28,7 @@ ln -sf $WINHOME ~/win
 
 # ssh-config
 sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4444|' \
-    ${DOTFILES}/ssh/config >${DOTFILES}/ssh/win.config
+    ${DOTFILES}/ssh/config | sed '/Control/d' >${DOTFILES}/ssh/win.config
 
 # Create windows symlinks to dotfiles
 $mkln ssh/win.config ~/win/.ssh/config
