@@ -101,10 +101,8 @@ fi
 
 mkdir -p "$(dirname $2)"
 
-cmd="cd ~; cmd /c mklink ${args} ${target} ${source}"
-
 if [ "$DEBUG" == true ]; then
-    [ "$QUIET" != true ] && printf '\nCommand: \n%s\n\n' "powershell.exe -c ${cmd} &>/dev/null"
+    [ "$QUIET" != true ] && printf '\nCommand: \n%s\n\n' "powershell.exe -c cd ~; cmd /c mklink ${args} ${target} ${source} &>/dev/null"
 else
-    powershell.exe -c "${cmd}" &>/dev/null
+    powershell.exe -c "cd ~; cmd /c mklink ${args} ${target} ${source}" &>/dev/null
 fi

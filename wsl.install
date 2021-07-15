@@ -5,8 +5,8 @@ DOTFILES="${DOTFILES:-${BASEDIR:-${HOME}/dotfiles}}"
 # BUG Has issues with a return character?
 # WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
 WINHOME=$(wslpath "c:\Users\\${USER}")
-
 mkln="${DOTFILES}/scripts/mkln.sh -f"
+cd $DOTFILES
 
 function show-warning() {
     gpgpath=$(wslpath -w "$(command -v gpg.exe)")
@@ -23,12 +23,14 @@ function show-warning() {
     printf "\n"
 }
 
-sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4444|' ${DOTFILES}/ssh/config >${DOTFILES}/ssh/win.config
-
+# link WINHOME
 ln -sf $WINHOME ~/win
 
-cd $DOTFILES
+# ssh-config
+sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4444|' \
+    ${DOTFILES}/ssh/config >${DOTFILES}/ssh/win.config
 
+# Create windows symlinks to dotfiles
 $mkln ssh/win.config ~/win/.ssh/config
 $mkln gitconfig ~/win/.gitconfig
 $mkln gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
@@ -37,12 +39,14 @@ $mkln gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
 $mkln wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
 $mkln winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
 
+# Import gpg key
 if gpg.exe --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
     echo "gpg key imported"
 else
     echo "Failed to import gpg key"
 fi
 
+# Import gpg trust
 if gpg.exe --import-ownertrust $DOTFILES/gnupg/trustfile.txt; then
     echo "gpg trust imported"
 else
