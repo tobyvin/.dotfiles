@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
-source "${DOTFILES:-"${HOME}/dotfiles"}/sh/wsl.sh"
-source "${DOTFILES:-"${HOME}/dotfiles"}/sh/gpg.sh"
+source "${DOTFILES:-"${HOME}/dotfiles"}/shell/wsl.sh"
+source "${DOTFILES:-"${HOME}/dotfiles"}/shell/gpg.sh"
 
 hash -d w=/mnt/c/Users/$USER
 

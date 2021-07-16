@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-source "${DOTFILES:-"${HOME}/dotfiles"}/sh/aliases.sh"
+source "${DOTFILES:-"${HOME}/dotfiles"}/shell/aliases.sh"
 
 # Command line head / tail shortcuts
 alias -g H='| head'

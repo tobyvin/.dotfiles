@@ -193,6 +193,6 @@ New-ItemProperty -Path $key.PSPath -Name "gpg-bridge" -Value "$cmdl"
 
 ### In WSL2
 
-The only setup needed for getting the YubiKey working in WSL2 is to source/copy-paste [gpg.sh](sh/gpg.sh) in your shell profile. 
+The only setup needed for getting the YubiKey working in WSL2 is to source/copy-paste [gpg.sh](shell/gpg.sh) in your shell profile. 
 
 Along with the initialization code, I wrote a small function the resets all the related agents/sockets. If you do not attempt to access the Yubikey while it is not inserted, in my experience, gpg works great has no issues once reinserting the Yubikey. It is only (inconsistently) when you try to access a Yubikey that you have removed that puts it in a failed state. 
