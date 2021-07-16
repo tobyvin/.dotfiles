@@ -3,6 +3,9 @@
       create: true
       relink: true
       force: true
+    shell:
+      quiet: true
+      stdin: true
 
 - clean: ["~"]
 
@@ -23,9 +26,16 @@
       path: gnupg/*.conf
 
 - shell:
-    - [
-        gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634,
-        Getting GPG public key,
-      ]
-    - [gpg --import-ownertrust gnupg/trustfile.txt, Importing GPG trustfile]
-    - ['if [ -n "${WSL_DISTRO_NAME+1}" ]; then ./wsl.install; fi']
+  # ISSUE #1 Fails to import key inside of WSL2
+    - command: gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634
+      description: Getting GPG public key
+      stdout: true
+      stderr: true
+    - command: gpg --import-ownertrust gnupg/trustfile.txt
+      description: Importing GPG trustfile
+      stdout: true
+      stderr: true
+    - command: if [ -n "${WSL_DISTRO_NAME+1}" ]; then ./wsl.install; fi
+      description: Checking for WSL
+      stdout: true
+      stderr: true

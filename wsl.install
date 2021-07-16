@@ -1,12 +1,20 @@
 #!/usr/bin/env bash
 
 DOTFILES="${DOTFILES:-${BASEDIR:-${HOME}/dotfiles}}"
+cd $DOTFILES
 
 # BUG Has issues with a return character?
 # WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
 WINHOME=$(wslpath "c:\Users\\${USER}")
+
+RESET='\033[0m'
+RED='\033[91m'
+GREEN='\033[92m'
+YELLOW='\033[93m'
+BLUE='\033[94m'
+MAGENTA='\033[95m'
+
 mkln="${DOTFILES}/scripts/mkln.sh -f"
-cd $DOTFILES
 
 function show-warning() {
     gpgpath=$(wslpath -w "$(command -v gpg.exe)")
@@ -14,14 +22,16 @@ function show-warning() {
     if [ "$gitgpg" = "$gpgpath" ]; then
         return
     fi
-    printf "\n"
-    printf "In order to use gpg with git for windows \n"
-    printf "(and still share gitconfigs), you need to run\n"
-    printf "the following command from an admin terminal:\n"
-    printf "\n"
-    printf "git.exe config --system gpg.program '%s' \n" "$(wslpath -w "$(command -v gpg.exe)")"
-    printf "\n"
+    echo
+    echo -e "${BLUE}In order to use gpg with git for windows"
+    echo -e "${BLUE}(and still share gitconfigs), you need to run"
+    echo -e "${BLUE}the following command from an admin terminal:"
+    echo
+    echo "git.exe config --system gpg.program '$(wslpath -w "$(command -v gpg.exe)")'"
+    echo
 }
+
+echo -e "${BLUE}Setting up WSL"
 
 # link WINHOME
 ln -sf $WINHOME ~/win
@@ -41,14 +51,17 @@ $mkln winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8we
 
 # Import gpg key
 if gpg.exe --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
-    echo "gpg key imported"
+    echo -e "${BLUE}gpg key imported"
 else
-    echo "Failed to import gpg key"
+    echo -e "${MAGENTA}Failed to import gpg key"
 fi
 
 # Import gpg trust
 if gpg.exe --import-ownertrust $DOTFILES/gnupg/trustfile.txt; then
-    echo "gpg trust imported"
+    echo -e "${BLUE}gpg trust imported"
 else
-    echo "Failed to import gpg trust"
+    echo -e "${MAGENTA}Failed to import gpg trust"
 fi
+
+
+echo -e "${GREEN}WSL has been set up"
