@@ -3,8 +3,8 @@
 Host *
     StrictHostKeyChecking no
     ControlMaster auto
-    ControlPath ~/.ssh/control-%h-%p-%r
-    ControlPersist yes
+    ControlPath ~/.ssh/%r@%h:%p
+    ControlPersist 2h
 
 Host heimdall loki
     User pi
