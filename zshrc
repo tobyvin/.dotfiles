@@ -5,7 +5,7 @@ export DOTFILES="${HOME}/dotfiles"
 # Directory hashtable
 hash -d .=${HOME}/dotfiles
 source $DOTFILES/shell/env.sh
-source $DOTFILES/antigen/antigen.zsh
+source $DOTFILES/zsh/antigen.zsh
 source $DOTFILES/zsh/setopt.zsh
 source $DOTFILES/zsh/prompt.zsh
 source $DOTFILES/zsh/aliases.zsh

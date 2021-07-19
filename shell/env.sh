@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # https://github.com/junegunn/fzf#respecting-gitignore
-export FZF_BASE="${DOTFILES}/fzf"
+export FZF_BASE="${HOME}/.fzf"
 export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || tree -C {}"
 export FZF_CTRL_T_OPTS="--min-height 30 --preview-window down:60% --preview-window noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
 

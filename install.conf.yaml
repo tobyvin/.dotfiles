@@ -12,8 +12,8 @@
 - shell:
     - command: git submodule update --init --recursive
       description: Installing submodules
-    - command: yes | ./fzf/install --bin
-      description: Installing fzf
+    - command: if [ ! -f "~/.fzf/install" ]; then git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; fi && yes | ~/.fzf/install --bin
+      description: installing fzf
     - command: ./bat/install bat
       description: Installing bat
     - command: ./cheat.sh/install
@@ -30,7 +30,7 @@
       path: gnupg/*.conf
 
 - shell:
-      # ISSUE #1 Fails to import key inside of WSL2
+    # ISSUE #1 Fails to import key inside of WSL2
     - command: gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634
       description: Getting GPG public key
     - command: gpg --import-ownertrust gnupg/trustfile.txt
