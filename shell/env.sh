@@ -10,4 +10,4 @@ export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export GPG_TTY=$(tty)
 
 # Path
-PATH=$PATH:$HOME/.local/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin:$DOTFILES/scripts
+PATH=$PATH:$HOME/.local/bin:$HOME/.go/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin:$DOTFILES/scripts
