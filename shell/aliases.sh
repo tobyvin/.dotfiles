@@ -19,8 +19,7 @@ alias cht="cht.sh"
 alias dexec="docker exec -it"
 alias dps="docker ps"
 # docker compose
-alias dc="docker-compose"
-docker compose >&/dev/null && alias dc="docker compose"
+alias dc="docker compose"
 alias dce="dc exec"
 alias dcps="dc ps"
 alias dcls="dc ls"
@@ -33,5 +32,5 @@ alias dclf="dc logs -f"
 alias dm="docker-machine"
 alias dma="docker-machine active"
 alias dmi="docker-machine inspect"
-alias dmu="docker-machine-using"
-docker-machine-using() { eval $(docker-machine env ${1:=-u}); }
+alias dmu="docker-machine-use"
+docker-machine-use() { eval $(docker-machine env ${1:=-u}); }

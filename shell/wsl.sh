@@ -12,10 +12,19 @@ export XDG_TEMPLATES_DIR="$WINHOME/Templates"
 export XDG_VIDEOS_DIR="$WINHOME/Videos"
 
 export EDITOR="code --wait"
+export DOCKER_HOST=${DOCKER_HOST:-tcp://0.0.0.0:2375}
+export DOCKER_MACHINE_NAME=${DOCKER_MACHINE_NAME:-$HOST}
 
 alias cb=clip.exe
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
+alias dmu="docker-machine-wsl"
+
+function docker-machine-wsl() {
+  docker-machine-use
+  export DOCKER_HOST=${DOCKER_HOST:-tcp://0.0.0.0:2375}
+  export DOCKER_MACHINE_NAME=${DOCKER_MACHINE_NAME:-$HOST}
+}
 
 function wt() {
   powershell.exe -NoProfile -c "wt $@"
@@ -44,4 +53,4 @@ function winget() {
 }
 
 # https://github.com/validatedev/drop-cache-if-idle
-[ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &> /dev/null
+[ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &>/dev/null
