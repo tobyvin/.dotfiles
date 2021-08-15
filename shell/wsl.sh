@@ -21,7 +21,7 @@ alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
 alias dmu="docker-machine-wsl"
 
 function docker-machine-wsl() {
-  docker-machine-use
+  docker-machine-use $@
   export DOCKER_HOST=${DOCKER_HOST:-tcp://0.0.0.0:2375}
   export DOCKER_MACHINE_NAME=${DOCKER_MACHINE_NAME:-$HOST}
 }
