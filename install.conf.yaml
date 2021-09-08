@@ -12,7 +12,7 @@
 - shell:
     - command: git submodule update --init --recursive
       description: Installing submodules
-    - command: if [ ! -f "~/.fzf/install" ]; then git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; fi && yes | ~/.fzf/install --bin
+    - command: if [ ! -f "${HOME}/.fzf/install" ]; then git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; fi && yes | ~/.fzf/install --bin
       description: installing fzf
     - command: ./bat/install bat
       description: Installing bat

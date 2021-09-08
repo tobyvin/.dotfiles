@@ -8,14 +8,14 @@
                 "action": "openSettings",
                 "target": "settingsUI"
             },
-            "keys": "ctrl+,"
+            "keys": "ctrl+comma"
         },
         {
             "command": 
             {
                 "action": "openSettings"
             },
-            "keys": "ctrl+shift+,"
+            "keys": "ctrl+shift+comma"
         },
         {
             "command": 
@@ -34,14 +34,17 @@
                 "action": "openSettings",
                 "target": "defaultsFile"
             },
-            "keys": "ctrl+alt+,"
+            "keys": "ctrl+alt+comma"
         },
         {
             "command": "find",
             "keys": "ctrl+f"
         },
         {
-            "command": "closeTab",
+            "command": 
+            {
+                "action": "closeTab"
+            },
             "keys": "ctrl+w"
         },
         {
@@ -56,6 +59,7 @@
             "keys": "f1"
         }
     ],
+    "alwaysShowTrayIcon": true,
     "confirmCloseAllTabs": false,
     "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
     "disabledProfileSources": 
@@ -78,8 +82,11 @@
             "colorScheme": "vscode-dark",
             "cursorColor": "#D4D4D4",
             "cursorShape": "filledBox",
-            "fontFace": "Fira Code",
-            "fontSize": 11,
+            "font": 
+            {
+                "face": "Fira Code",
+                "size": 11
+            },
             "useAcrylic": true
         },
         "list": 

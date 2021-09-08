@@ -20,9 +20,14 @@ host bifrost
 
 Host siue
     User tovince
-    HostName os.cs.siue.edu
+    HostName home.cs.siue.edu
     ForwardAgent yes
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1400158178/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
     RemoteCommand rm -f /run/user/1400158178/gnupg/S.gpg-agent && zsh -l
     RequestTTY force
+
+Host zone
+    User tovince
+    HostName zone.cs.siue.edu
+    ForwardAgent yes
