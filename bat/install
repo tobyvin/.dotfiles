@@ -38,22 +38,14 @@ else
   echo "$app: new version found $latest_version"
   echo "$app: downloading..."
 
+  arch="$(uname -m)"
+  filename="${app}-v${latest_version}-${arch}-unknown-linux-musl"
+
+  curl -fsSLo "${filename}.tar.gz" "https://github.com/sharkdp/${app}/releases/download/v${latest_version}/${filename}.tar.gz"
+  tar -zxvf "${filename}.tar.gz" "${filename}/${app}"
+
+  mv "${filename}/${app}" "${HOME}/.local/bin/"
   
-  if [ `whoami` != root ]; then
-    arch="$(uname -m)"
-
-    filename="${app}-v${latest_version}-${arch}-unknown-linux-musl"
-    curl -fsSLo "${filename}.tar.gz" "https://github.com/sharkdp/${app}/releases/download/v${latest_version}/${filename}.tar.gz"
-    tar -zxvf "${filename}.tar.gz" "${filename}/${app}"
-    mv "${filename}/${app}" "${HOME}/.local/bin/"
-    rm -r "${filename}"
-    rm "${filename}.tar.gz"
-  else 
-    arch="$(dpkg --print-architecture)"
-
-    filename="${app}_v${latest_version}_${arch}"
-    curl -fsSLo ${filename}.deb "https://github.com/sharkdp/${app}/releases/download/v${latest_version}/${filename}.deb"
-    sudo dpkg -i ${filename}.deb
-    rm ${filename}.deb
-  fi
+  rm -r "${filename}"
+  rm "${filename}.tar.gz"
 fi
