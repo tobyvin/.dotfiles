@@ -26,7 +26,7 @@ else
   echo "$app: found $current_version"
 fi
 
-latest_version=$(curl -s "https://github.com/sharkdp/$app/releases/latest" | grep -oE '[0-9]+.[0-9\.]+')
+latest_version=$(curl -s "https://github.com/sharkdp/${app}/releases/latest" | grep -oE '[0-9]+.[0-9\.]+')
 
 if [ "$2" ]; then
   latest_version=$2
@@ -38,9 +38,22 @@ else
   echo "$app: new version found $latest_version"
   echo "$app: downloading..."
 
-  arch="$(dpkg --print-architecture)"
+  
+  if [ `whoami` != root ]; then
+    arch="$(uname -m)"
 
-  curl -fsSLo ${app}_${arch}.deb "https://github.com/sharkdp/$app/releases/download/v$latest_version/${app}_${latest_version}_${arch}.deb"
-  sudo dpkg -i ${app}_${arch}.deb
-  rm ${app}_${arch}.deb
+    filename="${app}-v${latest_version}-${arch}-unknown-linux-musl"
+    curl -fsSLo "${filename}.tar.gz" "https://github.com/sharkdp/${app}/releases/download/v${latest_version}/${filename}.tar.gz"
+    tar -zxvf "${filename}.tar.gz" "${filename}/${app}"
+    mv "${filename}/${app}" "${HOME}/.local/bin/"
+    rm -r "${filename}"
+    rm "${filename}.tar.gz"
+  else 
+    arch="$(dpkg --print-architecture)"
+
+    filename="${app}_v${latest_version}_${arch}"
+    curl -fsSLo ${filename}.deb "https://github.com/sharkdp/${app}/releases/download/v${latest_version}/${filename}.deb"
+    sudo dpkg -i ${filename}.deb
+    rm ${filename}.deb
+  fi
 fi
