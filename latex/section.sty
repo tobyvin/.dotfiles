@@ -1,0 +1,50 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{section}[2021/09/29 Section style]
+
+% ┌───────────────────────────────────┐   
+% │                   Title: Subtitle │ ──┬─ Header
+% │                            Author │ ──┘
+% │ Title                             │ ──┬─ Title
+% │ Subtitle                          │ ──┘
+% │                                   │ 
+% │ A Section                         │ ──┬─ [Sections]
+% │ ...                               │   │
+% │ 1.1 A Subsection                  │ ──┤
+% │ ...                               │   │
+% │ Another Section                   │ ──┤
+% │ ...                               │   │
+% │ 2.1 A Subsection                  │ ──┤
+% │ ...                               │   │
+% │ 2.2 Another Subsection            │ ──┘
+% │ ...                               │ 
+% │                                   │
+% │                                   │
+% └───────────────────────────────────┘
+
+\RequirePackage{indentfirst}
+% \RequirePackage{titlesec}
+% \titlespacing*{\section}{0pt}{1.1\baselineskip}{\baselineskip}
+
+% Paragraph spacing
+\setlength{\parskip}{1em}
+
+\RedeclareSectionCommand[
+    afterindent=false,
+    beforeskip=.5\baselineskip,
+    afterskip=.5\baselineskip
+]{section}
+
+% Section style - Hides main section numbers
+
+% First section
+% 1.1 First subsection
+% Another section
+% 2.2 Another subsection
+% \renewcommand{\thesection}{}
+% \renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+% \makeatletter
+% \def\@seccntformat#1{\csname #1ignore\expandafter\endcsname\csname the#1\endcsname\quad}
+% \let\sectionignore\@gobbletwo
+% \let\latex@numberline\numberline
+% \def\numberline#1{\if\relax#1\relax\else\latex@numberline{#1}\fi}
+% \makeatother

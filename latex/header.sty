@@ -1,0 +1,34 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{header}[2021/09/29 Header style]
+
+% ┌───────────────────────────────────┐   
+% │                   Title: Subtitle │ ──┬─ [Header]
+% │                            Author │ ──┘
+% │ Title                             │ ──┬─ Title
+% │ Subtitle                          │ ──┘
+% │                                   │ 
+% │ A Section                         │ ──┬─ Sections
+% │ ...                               │   │
+% │ 1.1 A Subsection                  │ ──┤
+% │ ...                               │   │
+% │ Another Section                   │ ──┤
+% │ ...                               │   │
+% │ 2.1 A Subsection                  │ ──┤
+% │ ...                               │   │
+% │ 2.2 Another Subsection            │ ──┘
+% │ ...                               │ 
+% │                                   │
+% │                                   │
+% └───────────────────────────────────┘
+
+\pagestyle{myheadings}
+
+\newsavebox{\headingbox}
+\sbox{\headingbox}{%
+    \begin{minipage}[b]{0.5\textwidth}
+        \begin{flushright}
+            \@title: \@subtitle \\
+            \@author \\
+        \end{flushright}
+    \end{minipage}}
+\markright{\hfill\usebox{\headingbox}}

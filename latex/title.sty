@@ -1,0 +1,29 @@
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{title}[2021/09/29 Title style]
+
+% ┌───────────────────────────────────┐   
+% │                   Title: Subtitle │ ──┬─ Header
+% │                            Author │ ──┘
+% │ Title                             │ ──┬─ [Title]
+% │ Subtitle                          │ ──┘
+% │                                   │ 
+% │ A Section                         │ ──┬─ Sections
+% │ ...                               │   │
+% │ 1.1 A Subsection                  │ ──┤
+% │ ...                               │   │
+% │ Another Section                   │ ──┤
+% │ ...                               │   │
+% │ 2.1 A Subsection                  │ ──┤
+% │ ...                               │   │
+% │ 2.2 Another Subsection            │ ──┘
+% │ ...                               │ 
+% │                                   │
+% │                                   │
+% └───────────────────────────────────┘
+
+\renewcommand{\maketitle}{
+    \begin{flushleft}
+        {\Huge \bfseries \sffamily \@title }\\[2ex]
+        {\Large \sffamily \@subtitle }\\[4ex]
+    \end{flushleft}
+}

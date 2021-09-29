@@ -25,6 +25,7 @@
     ~/.p10k.zsh:
     ~/.gitconfig:
     ~/.ssh/config: ssh/config
+    ~/texmf/tex/latex/local: latex
     ~/.gnupg/:
       glob: true
       path: gnupg/*.conf
