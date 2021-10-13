@@ -50,7 +50,7 @@ $mkln $@ wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8
 $mkln $@ winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
 
 # Import gpg key
-if gpg.exe --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
+if gpg.exe --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
     echo -e "${BLUE}gpg key imported"
 else
     echo -e "${MAGENTA}Failed to import gpg key"
