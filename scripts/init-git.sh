@@ -11,6 +11,7 @@ fi
 
 SCRIPT="$(basename $0)"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
+GITATTRIBUTES_URL="https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw"
 
 SHORT=hvqil:t:
 LONG=help,verbose,quiet,interactive,license:,template:
@@ -91,33 +92,63 @@ done
 
 VALID_TEMPLATES=$(curl -L -s "https://www.toptal.com/developers/gitignore/api/list")
 
-function get-gitignore() {
-    IFS=',' read -ra input <<<"$1"
-    if [ -z "$2" ]; then
-        templates=""
+validate-template() {
+    local template="$1"
+    local templates="$2"
+    if [[ ",$2," == *",$template,"* ]]; then
+        [ "$QUIET" != 1 ] && printf "'%s' is already added.\n" "$template" >&2
+        return 1
+    elif ! [[ $VALID_TEMPLATES =~ "$template" ]]; then
+        [ "$QUIET" != 1 ] && printf "'%s' is not a valid template.\n" "$template" >&2
+        return 1
     else
-        templates="$2,"
+        [ "$VERBOSE" == 1 ] && printf "Added template: %s\n" "$template" >&2
+        return 0
     fi
+}
+
+get-gitignore() {
+    local templates=''
+    IFS=',' read -ra input <<<"$1"
 
     for template in "${input[@]}"; do
-        if [[ ",$templates," == *",$template,"* ]]; then
-            [ "$QUIET" != 1 ] && echo "'${template}' is already added." >&2
-        elif ! [[ $VALID_TEMPLATES =~ "$template" ]]; then
-            [ "$QUIET" != 1 ] && echo "'${template}' is not a valid template." >&2
-        else
+        if validate-template "$template" "$templates"; then
             templates+="${template},"
-            [ "$VERBOSE" == 1 ] && echo "Added template: ${template}" >&2
         fi
     done
 
     echo ${templates%?}
 }
 
-function get-license() {
+get-gitignore-interactive() {
+    local templates=''
+
+    while true; do
+        read -p 'Input gitignore template(s): ' -i "$1" readInput
+        echo ""
+
+        IFS=', ' input=$readInput
+        [ -z "$input" ] && break
+        if [[ "$input" == "list" ]]; then
+            echo "$VALID_TEMPLATES" >&2
+        else
+            for template in $input; do
+                if validate-template "$template" "$templates"; then
+                    templates+="${template},"
+                fi
+            done
+        fi
+        [ "$QUIET" != 1 ] && printf "\nTemplates: %s\n" "${templates%?}" >&2
+    done
+
+    echo "${templates%?}"
+}
+
+get-license() {
     licenseJson="$(curl -sH 'Accept: application/vnd.github.v3+json' https://api.github.com/licenses/$1)"
     # not_found='"message": "Not Found"'
     if [[ $licenseJson =~ '"message": "Not Found"' ]]; then
-        [ "$QUIET" != 1 ] && echo "'${LICENSE}' is not a valid license identifier." >&2
+        [ "$QUIET" != 1 ] && printf "'%s' is not a valid license identifier.\n" "$LICENSE" >&2
     else
         echo $licenseJson | grep -oP '.*"body":\s*"\K.*(?=\s*",)' |
             tr '\n' '\0' | xargs -0 printf '%b\n' |
@@ -126,49 +157,29 @@ function get-license() {
     fi
 }
 
-function interactive() {
-    local templates=''
-
-    while true; do
-        read -p 'Input gitignore template(s): ' -i "$1" input
-        echo ""
-        [ -z "$input" ] && break
-        if [[ "$input" == "list" ]]; then
-            echo "$VALID_TEMPLATES" >&2
-        else
-            for template in $input; do
-                templates="$(get-gitignore $template $templates)"
-            done
-        fi
-        [ "$QUIET" != 1 ] && printf "\nTemplates: %s" "$templates" >&2
-    done
-
-    echo "${templates%?}"
-}
-
 if [[ "$TEMPLATE" == "list" ]]; then
     echo "$VALID_TEMPLATES"
     exit 0
 fi
 
 if [ $INTERACTIVE -eq 0 ]; then
-    cmdtype=get-gitignore
+    gitignore_cmd=get-gitignore
 else
-    cmdtype=interactive
+    gitignore_cmd=get-gitignore-interactive
 fi
 
-TEMPLATES=$($cmdtype $TEMPLATE)
+TEMPLATES=$($gitignore_cmd $TEMPLATE)
 
 # .gitignore
-[ "$VERBOSE" == 1 ] && echo "Creating .gitignore using: ${TEMPLATES}" >&2
+[ "$VERBOSE" == 1 ] && printf "Creating .gitignore using: %s\n" "$TEMPLATES" >&1
 curl -L -s "https://www.toptal.com/developers/gitignore/api/${TEMPLATES}" >.gitignore
 
 # .gitattributes
-[ "$VERBOSE" == 1 ] && echo "Creating .gitattributes" >&2
-curl -sL "https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw" >.gitattributes
+[ "$VERBOSE" == 1 ] && printf "Creating .gitattributes\n" >&1
+curl -sL "$GITATTRIBUTES_URL" >.gitattributes
 
 # LICENSE
-[ "$VERBOSE" == 1 ] && echo "Creating LICENSE using: ${LICENSE}" >&2
+[ "$VERBOSE" == 1 ] && printf "Creating LICENSE using: %s\n" "$LICENSE" >&1
 get-license $LICENSE >LICENSE
 
 echo "$SCRIPT_DIR"
