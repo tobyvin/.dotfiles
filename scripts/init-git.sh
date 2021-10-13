@@ -140,8 +140,7 @@ function interactive() {
                 templates="$(get-gitignore $template $templates)"
             done
         fi
-        echo "" >&2
-        [ "$QUIET" != 1 ] && echo "Templates: ${templates}" >&2
+        [ "$QUIET" != 1 ] && printf "\nTemplates: %s" "$templates" >&2
     done
 
     echo "${templates%?}"

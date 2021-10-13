@@ -15,7 +15,9 @@ alias upgrade="sudo apt upgrade -y"
 # scripts
 alias dfi="$DOTFILES/install"
 alias dfu="$DOTFILES/update"
-alias init="init-script"
+alias initgit="init-git.sh"
+alias inittex="init-latex.sh"
+alias initsrc="init-src.sh"
 alias cht="cht.sh"
 # docker
 alias dexec="docker exec -it"
@@ -36,4 +38,3 @@ alias dma="docker-machine active"
 alias dmi="docker-machine inspect"
 alias dmu="docker-machine-use"
 docker-machine-use() { eval $(docker-machine env ${1:=-u}); }
-init-script() { "$DOTFILES/scripts/${1}-init.sh"; }
