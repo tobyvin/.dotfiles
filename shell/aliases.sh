@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-alias dfi="$DOTFILES/install"
-alias dfu="$DOTFILES/update"
 alias ls='ls --color=tty'
 alias l='ls -lah'
 alias la='ls -lAh'
@@ -14,6 +12,10 @@ alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf "
 alias update="sudo apt update && apt list --upgradable"
 alias upgrade="sudo apt upgrade -y"
+# scripts
+alias dfi="$DOTFILES/install"
+alias dfu="$DOTFILES/update"
+alias init="init-script"
 alias cht="cht.sh"
 # docker
 alias dexec="docker exec -it"
@@ -34,3 +36,4 @@ alias dma="docker-machine active"
 alias dmi="docker-machine inspect"
 alias dmu="docker-machine-use"
 docker-machine-use() { eval $(docker-machine env ${1:=-u}); }
+init-script() { "$DOTFILES/scripts/${1}-init.sh"; }
