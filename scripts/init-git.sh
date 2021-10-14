@@ -1,20 +1,9 @@
 #!/usr/bin/env bash
 
-getopt --test 2>/dev/null
-if [[ $? -ne 4 ]]; then
-    echo "GNU's enhanced getopt is required to run this script"
-    echo "You can usually find this in the util-linux package"
-    echo "On MacOS/OS X see homebrew's package: http://brewformulas.org/Gnu-getopt"
-    echo "For anyone else, build from source: http://frodo.looijaard.name/project/getopt"
-    exit 1
-fi
-
+# Global
 SCRIPT="$(basename $0)"
 SCRIPT_DIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 GITATTRIBUTES_URL="https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw"
-
-SHORT=hvqil:t:
-LONG=help,verbose,quiet,interactive,license:,template:
 
 # Defaults
 VERBOSE=0
@@ -24,32 +13,51 @@ TEMPLATE="visualstudiocode"
 LICENSE="mit"
 
 # Usage output
-read -r -d '' USAGE <<-EOF
+read -r -d '' USAGE <<USAGE
 USAGE: $SCRIPT [OPTIONS] <IGNORE_TEMPLATE>
 
 OPTIONS:
     -h, --help              Show this message
     -v, --verbose           Show more output
     -q, --quiet             Suppress all output
-    -i, --interactive       Add ignore templates interactivly
+    -i, --interactive       Run command interactivly
     
     -l, --license [LICENSE_ID]
-            Specify which license to generate. Defaults to 'mit'
+            Specify which license to generate. Defaults to '$LICENSE'
 
     -t, --template [IGNORE_TEMPLATE,...]
             Project template(s) used when generating the .gitignore file. It 
             can also be a comma seperated list or templates. Use '-t list' to 
-            see available templates.
-EOF
+            see available templates. Defaults to '$TEMPLATE'
+USAGE
 
+# Options
+SHORT=hvqil:t:
+LONG=help,verbose,quiet,interactive,license:,template:
+
+# Test getopt
+getopt --test 2>/dev/null
+if [[ $? -ne 4 ]]; then
+    read -r -d '' message <<EOF
+GNU's enhanced getopt is required to run this script
+You can usually find this in the util-linux package
+On MacOS/OS X see homebrew's package: http://brewformulas.org/Gnu-getopt
+For anyone else, build from source: http://frodo.looijaard.name/project/getopt
+EOF
+    echo "$message" >&2
+    exit 1
+fi
+
+# Parse options
 TEMP=$(getopt \
     --options ${SHORT} \
     --longoptions ${LONG} \
     --name ${SCRIPT} \
     -- "$@")
 
+# Exit on failed getopt
 if [ $? != 0 ]; then
-    echo "Terminating..." >&2
+    echo "Error in getopt. Terminating..." >&2
     exit 1
 fi
 
@@ -182,4 +190,4 @@ curl -sL "$GITATTRIBUTES_URL" >.gitattributes
 [ "$VERBOSE" == 1 ] && printf "Creating LICENSE using: %s\n" "$LICENSE" >&1
 get-license $LICENSE >LICENSE
 
-echo "$SCRIPT_DIR"
+echo "$PWD"
