@@ -7,11 +7,9 @@ alias ll='ls -lh'
 alias lla='ls -lA'
 alias lsa='ls -lah'
 alias grep='grep --color'
-alias cat=bat
+alias cat='bat --paging=never'
 alias ipa="ip -s -c -h a"
-alias untar="tar -zxvf "
-alias update="sudo apt update && apt list --upgradable"
-alias upgrade="sudo apt upgrade -y"
+alias untar="tar -zxvf"
 # scripts
 alias dfi="$DOTFILES/install"
 alias dfu="$DOTFILES/update"

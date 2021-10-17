@@ -6,8 +6,7 @@ My personal cheat sheet of commands for various tools and workflows
 - [WSL2 Yubikey Setup](#wsl2-yubikey-setup)
   - [SSH Agent](#ssh-agent)
     - [In Windows](#in-windows)
-  - [GPG Agent](#gpg-agent)
-    - [Windows](#windows)
+    - [VS Code](#vs-code)
     - [In WSL2](#in-wsl2)
 
 # Git
@@ -160,6 +159,25 @@ catch {
 
 New-ItemProperty -Path $key.PSPath -Name "wsl-ssh-pageant" -Value "$cmdl"
 ``` 
+<!-- Not sure if the following is needed or not. I thought it was but at the time of writing, I realize I did NOT have the .ssh/ssh.BAT file. So it may not be needed.
+
+### VS Code
+
+Due to how VS Code calls ssh, I found it necessary to create a shim for the WSL ssh bin. 
+
+First create the following .bat file somewhere in your Windows fs.
+
+```bat
+
+```
+
+Then, in VS Code, put the following in your settings.JSON,
+
+```json
+{
+  "remote.SSH.path": "C:\\Users\\tobyv\\.ssh\\ssh.BAT",
+}
+``` -->
 
 ## GPG Agent 
 

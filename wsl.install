@@ -41,13 +41,20 @@ sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\11
     ${DOTFILES}/ssh/config | sed '/Control/d' >${DOTFILES}/ssh/win.config
 
 # Create windows symlinks to dotfiles
-$mkln $@ ssh/win.config ~/win/.ssh/config
-$mkln $@ gitconfig ~/win/.gitconfig
-$mkln $@ gnupg/gpg.conf ~/win/AppData/Roaming/gnupg/gpg.conf
-$mkln $@ gnupg/gpg-agent.conf ~/win/AppData/Roaming/gnupg/gpg-agent.conf
-$mkln $@ gnupg/scdaemon.conf ~/win/AppData/Roaming/gnupg/scdaemon.conf
-$mkln $@ wt.json ~/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
-$mkln $@ winget.json ~/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
+$mkln $@ "ssh/win.config" "${HOME}/win/.ssh/config"
+$mkln $@ "gitconfig" "${HOME}/win/.gitconfig"
+$mkln $@ "gnupg/gpg.conf" "${HOME}/win/AppData/Roaming/gnupg/gpg.conf"
+$mkln $@ "gnupg/gpg-agent.conf" "${HOME}/win/AppData/Roaming/gnupg/gpg-agent.conf"
+$mkln $@ "gnupg/scdaemon.conf" "${HOME}/win/AppData/Roaming/gnupg/scdaemon.conf"
+$mkln $@ "wt.json" "${HOME}/win/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json"
+$mkln $@ "winget.json" "${HOME}/win/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
+
+# https://github.com/wslutilities/wslu
+if ! command -v wslview &>/dev/null; then
+    echo "wslu is not installed."
+    echo "wslu (wslview) is needed to open browser windows from linux commands."
+    echo "install instructions: https://github.com/wslutilities/wslu#installation"
+fi
 
 # Import gpg key
 if gpg.exe --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
