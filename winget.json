@@ -22,7 +22,7 @@
         "disable": true
     },
     "experimentalFeatures": {
-        "experimentalMSStore": true,
-        "packagedAPI": true
+        "dependencies": true,
+        "directMSI": true
     }
 }

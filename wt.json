@@ -1,25 +1,21 @@
 {
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
-    [
+    "actions": [
         {
-            "command": 
-            {
+            "command": {
                 "action": "openSettings",
                 "target": "settingsUI"
             },
-            "keys": "ctrl+comma"
+            "keys": "ctrl+,"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "openSettings"
             },
-            "keys": "ctrl+shift+comma"
+            "keys": "ctrl+shift+,"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "newTab"
             },
             "keys": "ctrl+t"
@@ -29,20 +25,18 @@
             "keys": "ctrl+v"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "openSettings",
                 "target": "defaultsFile"
             },
-            "keys": "ctrl+alt+comma"
+            "keys": "ctrl+alt+,"
         },
         {
             "command": "find",
             "keys": "ctrl+f"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "closeTab"
             },
             "keys": "ctrl+w"
@@ -52,8 +46,7 @@
             "keys": "ctrl+b"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "commandPalette"
             },
             "keys": "f1"
@@ -61,21 +54,17 @@
     ],
     "confirmCloseAllTabs": false,
     "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
-    "disabledProfileSources": 
-    [
+    "disabledProfileSources": [
         "Windows.Terminal.Azure"
     ],
     "experimental.rendering.forceFullRepaint": true,
     "initialCols": 120,
     "initialRows": 30,
     "multiLinePasteWarning": false,
-    "profiles": 
-    {
-        "defaults": 
-        {
+    "profiles": {
+        "defaults": {
             "acrylicOpacity": 0.80000000000000004,
-            "bellStyle": 
-            [
+            "bellStyle": [
                 "window",
                 "taskbar"
             ],
@@ -83,15 +72,13 @@
             "colorScheme": "vscode-dark",
             "cursorColor": "#D4D4D4",
             "cursorShape": "filledBox",
-            "font": 
-            {
+            "font": {
                 "face": "Fira Code",
                 "size": 11
             },
             "useAcrylic": true
         },
-        "list": 
-        [
+        "list": [
             {
                 "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
                 "hidden": false,
@@ -112,14 +99,6 @@
                 "name": "Loki"
             },
             {
-                "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
-                "hidden": true
-            },
-            {
-                "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
-                "hidden": true
-            },
-            {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
                 "name": "PowerShell",
@@ -127,8 +106,7 @@
             }
         ]
     },
-    "schemes": 
-    [
+    "schemes": [
         {
             "background": "#0C0C0C",
             "black": "#0C0C0C",
