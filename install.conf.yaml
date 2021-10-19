@@ -12,6 +12,10 @@
 - shell:
     - command: git submodule update --init --recursive
       description: Installing submodules
+    - command: curl -sfL git.io/antibody | sh -s - -b "${HOME}/.local/bin"
+      description: Installing antibody
+    - command: (cd ${HOME}/dotfiles/zsh; antibody bundle < plugins.txt > plugins.zsh)
+      description: Installing zsh plugins
     - command: if [ ! -f "${HOME}/.fzf/install" ]; then git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; fi && yes | ~/.fzf/install --bin
       description: installing fzf
     - command: ./bat/install bat

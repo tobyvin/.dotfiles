@@ -1,0 +1,15 @@
+romkatv/powerlevel10k.git
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions
+memark/zsh-dotnet-completion
+cowboyd/zsh-rust
+pkulev/zsh-rustup-completion
+MenkeTechnologies/zsh-cargo-completion
+leonhartX/docker-machine-zsh-completion
+
+ohmyzsh/ohmyzsh
+ohmyzsh/ohmyzsh path:plugins/git
+ohmyzsh/ohmyzsh path:plugins/fzf
+ohmyzsh/ohmyzsh path:plugins/dotnet
+ohmyzsh/ohmyzsh path:plugins/docker
+ohmyzsh/ohmyzsh path:plugins/command-not-found
