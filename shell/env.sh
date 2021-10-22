@@ -8,6 +8,7 @@ export FZF_CTRL_T_OPTS="--min-height 30 --preview-window down:60% --preview-wind
 export BAT_CONFIG_PATH="${DOTFILES}/bat.conf"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export GPG_TTY=$(tty)
+export BROWSER=wslview
 
 # Path
 PATH=$PATH:$HOME/.local/bin:$HOME/.go/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin:$DOTFILES/scripts

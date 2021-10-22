@@ -22,6 +22,8 @@
       description: Installing bat
     - command: ./cheat.sh/install
       description: Installing cheat.sh
+    - command: curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" > "${HOME}/.local/bin/git-open" && chmod +x "${HOME}/.local/bin/git-open"
+      description: Installing git-open
 
 - link:
     ~/.bashrc:
