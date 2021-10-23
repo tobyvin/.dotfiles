@@ -25,6 +25,8 @@ While I went down this rock filled rabbit hole for the purpose of getting my Yub
 ### In WSL
 
 ```sh
+# Bash
+
 # Install depends
 sudo apt install socat iproute2
 ```
@@ -34,6 +36,8 @@ sudo apt install socat iproute2
 Download [wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant)
 
 ```powershell
+# Powershell
+
 # Using scoop (https://scoop.sh/)
 scoop install wsl-ssh-pageant
 ```
@@ -43,6 +47,8 @@ Set variables
 **Note**  The version with '-gui', i.e. 'wsl-ssh-pageant-gui', ***has no*** gui/tray icon, while 'wsl-ssh-pageant' ***has*** a gui/tray icon. Use which ever you find most useful
 
 ```powershell
+# Powershell
+
 # Can be any name
 $pipe = "ssh-pageant"
 
@@ -55,6 +61,8 @@ $pageant = "$env:SCOOP\apps\wsl-ssh-pageant\current\wsl-ssh-pageant-gui.exe"
 Set it to autostart on login
 
 ```powershell
+# Powershell
+
 $path = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
 $cmdl = "$pageant --winssh $pipe"
 $key = try {
@@ -95,6 +103,8 @@ Download [gpg-bridge](https://github.com/BusyJay/gpg-bridge)
 Set variables
 
 ```powershell
+# Powershell
+
 # Can be any free port
 $port = 4444
 
@@ -104,6 +114,8 @@ $bridge = "$HOME\.cargo\bin\gpg-bridge.exe"
 Set it to autostart on login
 
 ```powershell
+# Powershell
+
 $path = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
 $cmdl = "$bridge 127.0.0.1:$port --detach"
 $key = try {
