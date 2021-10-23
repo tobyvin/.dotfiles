@@ -39,6 +39,7 @@ Download [wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant)
 # Powershell
 
 # Using scoop (https://scoop.sh/)
+scoop bucket add extras
 scoop install wsl-ssh-pageant
 ```
 
