@@ -29,6 +29,13 @@ While I went down this rock filled rabbit hole for the purpose of getting my Yub
 
 # Install depends
 sudo apt install socat iproute2
+
+# Install wsl2-ssh-pageant
+destination="$HOME/.ssh/wsl2-ssh-pageant.exe"
+curl -sL "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe" -o "$destination" 
+# wget -O "$destination" "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe"
+# Set the executable bit.
+chmod +x "$destination"
 ```
 
 ### In Windows
