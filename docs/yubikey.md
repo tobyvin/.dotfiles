@@ -22,12 +22,14 @@ While I went down this rock filled rabbit hole for the purpose of getting my Yub
 
 ## SSH Agent 
 
-### In Windows
+### In WSL
 
 ```sh
 # Install depends
 sudo apt install socat iproute2
 ```
+
+### In Windows
 
 Download [wsl-ssh-pageant](https://github.com/benpye/wsl-ssh-pageant)
 
