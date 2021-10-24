@@ -102,6 +102,8 @@ Then, in VS Code, put the following in your settings.JSON,
 }
 ``` -->
 
+<!-- TODO ssh/git config to use gpnupg -->
+
 ## GPG Agent 
 
 ### Windows
