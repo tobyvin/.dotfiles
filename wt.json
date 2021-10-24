@@ -1,42 +1,49 @@
 {
+    "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": [
+    "actions": 
+    [
         {
-            "command": {
+            "command": 
+            {
                 "action": "openSettings",
                 "target": "settingsUI"
             },
-            "keys": "ctrl+,"
+            "keys": "ctrl+comma"
         },
         {
-            "command": {
+            "command": 
+            {
                 "action": "openSettings"
             },
-            "keys": "ctrl+shift+,"
-        },
-        {
-            "command": {
-                "action": "newTab"
-            },
-            "keys": "ctrl+t"
+            "keys": "ctrl+shift+comma"
         },
         {
             "command": "paste",
             "keys": "ctrl+v"
         },
         {
-            "command": {
-                "action": "openSettings",
-                "target": "defaultsFile"
+            "command": 
+            {
+                "action": "newTab"
             },
-            "keys": "ctrl+alt+,"
+            "keys": "ctrl+t"
         },
         {
             "command": "find",
             "keys": "ctrl+f"
         },
         {
-            "command": {
+            "command": 
+            {
+                "action": "openSettings",
+                "target": "defaultsFile"
+            },
+            "keys": "ctrl+alt+comma"
+        },
+        {
+            "command": 
+            {
                 "action": "closeTab"
             },
             "keys": "ctrl+w"
@@ -46,7 +53,8 @@
             "keys": "ctrl+b"
         },
         {
-            "command": {
+            "command": 
+            {
                 "action": "commandPalette"
             },
             "keys": "f1"
@@ -54,17 +62,20 @@
     ],
     "confirmCloseAllTabs": false,
     "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
-    "disabledProfileSources": [
+    "disabledProfileSources": 
+    [
         "Windows.Terminal.Azure"
     ],
     "experimental.rendering.forceFullRepaint": true,
     "initialCols": 120,
     "initialRows": 30,
     "multiLinePasteWarning": false,
-    "profiles": {
-        "defaults": {
-            "acrylicOpacity": 0.80000000000000004,
-            "bellStyle": [
+    "profiles": 
+    {
+        "defaults": 
+        {
+            "bellStyle": 
+            [
                 "window",
                 "taskbar"
             ],
@@ -72,13 +83,16 @@
             "colorScheme": "vscode-dark",
             "cursorColor": "#D4D4D4",
             "cursorShape": "filledBox",
-            "font": {
+            "font": 
+            {
                 "face": "Fira Code",
                 "size": 11
             },
+            "opacity": 80,
             "useAcrylic": true
         },
-        "list": [
+        "list": 
+        [
             {
                 "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
                 "hidden": false,
@@ -103,10 +117,23 @@
                 "hidden": false,
                 "name": "PowerShell",
                 "source": "Windows.Terminal.PowershellCore"
+            },
+            {
+                "guid": "{5f0bd4e2-63ba-5d40-822f-e79c9ae99ff8}",
+                "hidden": false,
+                "name": "Developer Command Prompt for VS 2019",
+                "source": "Windows.Terminal.VisualStudio"
+            },
+            {
+                "guid": "{92f45ef9-ca99-54ff-b5e3-45e471816592}",
+                "hidden": false,
+                "name": "Developer PowerShell for VS 2019",
+                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },
-    "schemes": [
+    "schemes": 
+    [
         {
             "background": "#0C0C0C",
             "black": "#0C0C0C",
