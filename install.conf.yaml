@@ -37,7 +37,7 @@
 
 - shell:
     # ISSUE #1 Fails to import key inside of WSL2
-    - command: gpg --keyserver hkps://keys.openpgp.org --recv-key 0xC8F6E06F5C8E2634
+    - command: gpg --recv-key 0xC8F6E06F5C8E2634
       description: Getting GPG public key
     - command: gpg --import-ownertrust gnupg/trustfile.txt
       description: Importing GPG trustfile
