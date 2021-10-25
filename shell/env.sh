@@ -11,4 +11,4 @@ export GPG_TTY=$(tty)
 export BROWSER=wslview
 
 # Path
-PATH=$PATH:$HOME/.local/bin:$HOME/.go/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin:$DOTFILES/scripts
+PATH=$PATH:$HOME/.local/bin:$HOME/.go/bin:$HOME/.dotnet/tools:$HOME/.cargo/bin:$DOTFILES/scripts:/usr/local/texlive/2021/bin/x86_64-linux
