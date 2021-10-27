@@ -3,9 +3,11 @@ zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-autosuggestions
 memark/zsh-dotnet-completion
 cowboyd/zsh-rust
-pkulev/zsh-rustup-completion
 MenkeTechnologies/zsh-cargo-completion
-leonhartX/docker-machine-zsh-completion
+
+leonhartX/docker-machine-zsh-completion kind:fpath
+pkulev/zsh-rustup-completion kind:fpath
+srijanshetty/zsh-pandoc-completion kind:fpath
 
 ohmyzsh/ohmyzsh
 ohmyzsh/ohmyzsh path:plugins/git
