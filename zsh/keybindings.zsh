@@ -29,6 +29,10 @@ function r-select-a() {
   r-select end-of-line
 }
 
+function r-undo {
+  zle undo
+}
+
 function r-copy() {
   if ((REGION_ACTIVE)) then
     zle copy-region-as-kill
@@ -79,6 +83,7 @@ for key     kcap   seq        mode   widget (
     del     kdch1   $'\E[3~'  delregion delete-char
     bs      x       $'^?'     delregion backward-delete-char
     
+    cz      x       "^Z"      undo      ""
     cc      x       "^C"      copy      ""
     cx      x       "^X"      cut       ""
     ca      x       "^A"      select-a  "" 
