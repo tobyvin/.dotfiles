@@ -1,71 +1,73 @@
 [user]
-	email = tobyv13@gmail.com
-	name = Toby Vincent
-	username = tobyvin
-	signingkey = 0xA0876F29023F43AF
+email = tobyv13@gmail.com
+name = Toby Vincent
+username = tobyvin
+signingkey = 0xA0876F29023F43AF
 
 [init]
-	defaultBranch = main
+defaultBranch = main
 
 [commit]
-	gpgsign = true
+gpgsign = true
 
 [pull]
-	rebase = true
+rebase = true
+
+[merge]
+ff = no
 
 [fetch]
-	prune = true
+prune = true
 
 [core]
-	editor = code --wait
+editor = code --wait
 
 [diff]
-	tool = default-difftool
+tool = default-difftool
 
 [difftool "default-difftool"]
-	cmd = code --wait --diff $LOCAL $REMOTE
+cmd = code --wait --diff $LOCAL $REMOTE
 
 [alias]
-	# basic
-	st = status -s
-	cl = clone
-	ci = commit
-	co = checkout
-	br = branch
-	r = reset
-	cp = cherry-pick
+# basic
+st = status -s
+cl = clone
+ci = commit
+co = checkout
+br = branch
+r = reset
+cp = cherry-pick
 
-	# tweak defaults
-	grep = grep -Ii
-	diff = diff --word-diff
-	branch = branch -ra
-	ai = add --interactive
-	recommit = commit --amend -C HEAD
+# tweak defaults
+grep = grep -Ii
+diff = diff --word-diff
+branch = branch -ra
+ai = add --interactive
+recommit = commit --amend -C HEAD
 
-	# log commands
-	lg = log --graph --oneline --decorate --all --abbrev-commit
-	ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
-	ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]" --decorate --numstat
+# log commands
+lg = log --graph --oneline --decorate --all --abbrev-commit
+ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
+ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]" --decorate --numstat
+watch = "!f() { watch -c 'git -c color.ui=always lg | sed \"s/\\[m/\\[00m/\"'; }; f"
 
-	# undo http://megakemp.com/2016/08/25/git-undo/
-	undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
-	pop = git reset HEAD~
+# undo http://megakemp.com/2016/08/25/git-undo/
+undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
+pop = git reset HEAD~
 
-	# rename branch
-	brn = "!f() { git branch -m \"$(git rev-parse --abbrev-ref HEAD)\" $1; git fetch origin; git branch -u origin/$1 $1; git remote set-head origin -a; }; f"
+# rename branch
+brn = "!f() { git branch -m \"$(git rev-parse --abbrev-ref HEAD)\" $1; git fetch origin; git branch -u origin/$1 $1; git remote set-head origin -a; }; f"
 
-	# squash the last N commits, inclusivly
-	squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
+# squash the last N commits, inclusivly
+squash = "!f(){ git reset --soft HEAD~${1} && git commit --edit -m\"$(git log --format=%B --reverse HEAD..HEAD@{1})\"; };f"
 
-	# grep on filename
-	f = "!git ls-files | grep -i"
+# grep on filename
+f = "!git ls-files | grep -i"
 
-	# remove submodule
-	smrm = "!f(){ git rm --cached \"$1\";rm -r \"$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
+# remove submodule
+smrm = "!f(){ git rm --cached \"$1\";rm -r \"$1\";git config -f .gitmodules --remove-section \"submodule.$1\";git config -f .git/config --remove-section \"submodule.$1\";git add .gitmodules; }; f"
 
-	# generate git artifacts
-	ignore = "!f() { IFS=\",\"; curl -L -s \"https://www.toptal.com/developers/gitignore/api/$*\" ;}; f"
-	attributes = "!f() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; f"
-	license = "!f() { curl -sH 'Accept: application/vnd.github.v3+json' https://api.github.com/licenses/$1 | grep -oP '.*\"body\":\\s*\"\\K.*(?=\\s*\",)' | tr '\\n' '\\0' | xargs -0 printf '%b\\n' | sed \"s/\\[year\\]/$(date +'%Y')/\" | sed \"s/\\[fullname\\]/$(git config --get user.name)/\"; }; f"
-[merge]
-	ff = no
+# generate git artifacts
+ignore = "!f() { IFS=\",\"; curl -L -s \"https://www.toptal.com/developers/gitignore/api/$*\" ;}; f"
+attributes = "!f() { curl -sL https://gist.githubusercontent.com/tobyvin/70f3671c76016063594ea45edbb97094/raw ;}; f"
+license = "!f() { curl -sH 'Accept: application/vnd.github.v3+json' https://api.github.com/licenses/$1 | grep -oP '.*\"body\":\\s*\"\\K.*(?=\\s*\",)' | tr '\\n' '\\0' | xargs -0 printf '%b\\n' | sed \"s/\\[year\\]/$(date +'%Y')/\" | sed \"s/\\[fullname\\]/$(git config --get user.name)/\"; }; f"
