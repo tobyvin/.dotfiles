@@ -37,6 +37,8 @@ co = checkout
 br = branch
 r = reset
 cp = cherry-pick
+dev = checkout develop
+main = checkout main
 
 # tweak defaults
 grep = grep -Ii
@@ -44,6 +46,7 @@ diff = diff --word-diff
 branch = branch -ra
 ai = add --interactive
 recommit = commit --amend -C HEAD
+redate = rebase --committer-date-is-author-date
 
 # log commands
 lg = log --graph --oneline --decorate --all --abbrev-commit
