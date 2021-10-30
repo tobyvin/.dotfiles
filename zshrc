@@ -1,5 +1,7 @@
 #!/usr/bin/env zsh
 
+[ "$(pwd)" = '/mnt/c/Windows/System32' ] && cd
+
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi

@@ -98,7 +98,7 @@
                 "hidden": false,
                 "name": "Debian",
                 "source": "Windows.Terminal.Wsl",
-                "startingDirectory": "\\\\wsl$\\Debian\\home\\tobyv"
+                "startingDirectory": null
             },
             {
                 "commandline": "ssh heimdall",
@@ -117,18 +117,6 @@
                 "hidden": false,
                 "name": "PowerShell",
                 "source": "Windows.Terminal.PowershellCore"
-            },
-            {
-                "guid": "{5f0bd4e2-63ba-5d40-822f-e79c9ae99ff8}",
-                "hidden": false,
-                "name": "Developer Command Prompt for VS 2019",
-                "source": "Windows.Terminal.VisualStudio"
-            },
-            {
-                "guid": "{92f45ef9-ca99-54ff-b5e3-45e471816592}",
-                "hidden": false,
-                "name": "Developer PowerShell for VS 2019",
-                "source": "Windows.Terminal.VisualStudio"
             }
         ]
     },
