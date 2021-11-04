@@ -60,6 +60,7 @@
             "keys": "f1"
         }
     ],
+    "alwaysShowNotificationIcon": true,
     "confirmCloseAllTabs": false,
     "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
     "disabledProfileSources": 
@@ -353,7 +354,10 @@
             "yellow": "#E5E510"
         }
     ],
+    "startOnUserLogin": false,
     "tabSwitcherMode": "mru",
     "tabWidthMode": "equal",
+    "trimBlockSelection": true,
+    "useAcrylicInTabRow": true,
     "windowingBehavior": "useExisting"
 }
