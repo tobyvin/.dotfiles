@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
-
+WINHOME="/mnt/c/Users/$USER"
+[ "$PWD" = "$WINHOME" ] && cd
 # XDG Specs
 export XDG_DESKTOP_DIR="$WINHOME/Desktop"
 export XDG_DOCUMENTS_DIR="$WINHOME/Documents"
@@ -52,7 +52,7 @@ wsl_cmd_proxy() {
     esac
     args+=" "
   done
-  
+
   powershell.exe -NoProfile -c 'cd $HOME;' "$exe" "$cmd" "$args"
 }
 
