@@ -1,11 +1,5 @@
 #!/usr/bin/env zsh
 
-
-
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
-
 export DOTFILES="${HOME}/dotfiles"
 
 # Directory hashtable
@@ -14,7 +8,8 @@ hash -d .=${HOME}/dotfiles
 source $DOTFILES/shell/env.sh
 source $DOTFILES/zsh/plugins.zsh
 source $DOTFILES/zsh/setopt.zsh
-source $DOTFILES/zsh/prompt.zsh
 source $DOTFILES/zsh/aliases.zsh
 source $DOTFILES/zsh/completions.zsh
 source $DOTFILES/zsh/keybindings.zsh
+
+eval "$(starship init zsh)"

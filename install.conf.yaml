@@ -28,7 +28,7 @@
 - link:
     ~/.bashrc:
     ~/.zshrc:
-    ~/.p10k.zsh:
+    ~/.config/starship.toml: starship.toml
     ~/.gitconfig:
     ~/.ssh/config: ssh/config
     ~/.gnupg/:
