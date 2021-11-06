@@ -13,3 +13,12 @@ source $DOTFILES/zsh/completions.zsh
 source $DOTFILES/zsh/keybindings.zsh
 
 eval "$(starship init zsh)"
+
+function set_win_title() {
+    folder=$(sed "s/$USER/~/g" <<<$PWD:t)
+
+    window_title="\033]0;$USER@$HOST: $folder\007"
+    echo -ne "$window_title"
+}
+
+precmd_functions+=(set_win_title)

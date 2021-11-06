@@ -15,6 +15,7 @@ export EDITOR="code --wait"
 export DOCKER_HOST=${DOCKER_HOST:-tcp://0.0.0.0:2375}
 export DOCKER_MACHINE_NAME=${DOCKER_MACHINE_NAME:-$HOST}
 
+# unalias cb 2>/dev/null
 alias cb=clip.exe
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'

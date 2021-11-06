@@ -12,6 +12,8 @@
 - shell:
     - command: git submodule update --init --recursive
       description: Installing submodules
+    - command: sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir "${HOME}/.local/bin" --yes
+      description: Installing Starship
     - command: curl -sfL git.io/antibody | sh -s - -b "${HOME}/.local/bin"
       description: Installing antibody
     - command: (cd ${HOME}/dotfiles/zsh; antibody bundle < plugins.txt > plugins.zsh)

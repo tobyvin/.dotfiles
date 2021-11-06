@@ -1,0 +1,118 @@
+format = """
+$all\
+"""
+
+add_newline = false
+
+right_format = """
+$cmd_duration \
+$status\
+"""
+
+[fill]
+disabled = true
+symbol = ""
+
+[aws]
+symbol = "  "
+
+[conda]
+symbol = " "
+
+[cmd_duration]
+disabled = true
+format = "[$duration](bold yellow)"
+show_notifications = true
+min_time_to_notify = 1_000
+
+[dart]
+symbol = " "
+
+[directory]
+read_only = " "
+fish_style_pwd_dir_length = 1
+
+[directory.substitutions]
+"~/win" = " ~"
+"/mnt/c/Users/tobyv" = " ~"
+"/mnt/c" = ' C:'
+"/mnt/d" = ' D:'
+"/mnt/e" = ' E:'
+
+[docker_context]
+symbol = " "
+
+[elixir]
+symbol = " "
+
+[elm]
+symbol = " "
+
+[git_branch]
+symbol = " "
+
+[golang]
+symbol = " "
+
+[hg_branch]
+symbol = " "
+
+[java]
+symbol = " "
+
+[julia]
+symbol = " "
+
+[memory_usage]
+symbol = " "
+
+[nim]
+symbol = " "
+
+[nix_shell]
+symbol = " "
+
+[package]
+symbol = " "
+
+[perl]
+symbol = " "
+
+[php]
+symbol = " "
+
+[python]
+symbol = " "
+
+[ruby]
+symbol = " "
+
+[rust]
+symbol = " "
+
+[scala]
+symbol = " "
+
+[shlvl]
+symbol = " "
+
+[status]
+disabled = true
+format = "[$symbol$maybe_int]($style)"
+pipestatus_format = "\\[$pipestatus\\]"
+pipestatus = true
+map_symbol = true
+style = "red"
+symbol = "☓"
+recognize_signal_code = true
+success_symbol = "[✓](bright-green)"
+signal_symbol = "[⚡](bright-yellow)"
+not_executable_symbol = "!"
+not_found_symbol = "?"
+sigint_symbol = ""
+
+# pipestatus_format = "\\[$pipestatus\\]=>[$symbol$common_meaning$signal_name$maybe_int]($style)"
+
+
+[swift]
+symbol = "ﯣ "
