@@ -31,6 +31,7 @@
     ~/.bashrc:
     ~/.zshrc:
     ~/.config/starship.toml: starship.toml
+    ~/.config/alacritty.yml: alacritty.yml
     ~/.gitconfig:
     ~/.ssh/config: ssh/config
     ~/.gnupg/:

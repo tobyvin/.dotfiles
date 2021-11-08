@@ -44,6 +44,7 @@ sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\11
 $mkln $@ "ssh/win.config" "${WINHOME}/.ssh/config"
 $mkln $@ "gitconfig" "${WINHOME}/.gitconfig"
 $mkln $@ "gnupg/gpg.conf" "${WINHOME}/AppData/Roaming/gnupg/gpg.conf"
+$mkln $@ "alacritty.yml" "${WINHOME}/AppData/Roaming/alacritty/alacritty.yml"
 $mkln $@ "gnupg/gpg-agent.conf" "${WINHOME}/AppData/Roaming/gnupg/gpg-agent.conf"
 $mkln $@ "gnupg/scdaemon.conf" "${WINHOME}/AppData/Roaming/gnupg/scdaemon.conf"
 $mkln $@ "wt.json" "${WINHOME}/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json"

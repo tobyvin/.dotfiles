@@ -78,6 +78,8 @@ if [ -d "$1" ]; then
     args='/J'
 fi
 
+mkdir -p $(dirname $2)
+
 source=$(wslpath -w $1)
 target=$(wslpath -w $(dirname $2))\\$(basename $2)
 
