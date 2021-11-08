@@ -49,10 +49,6 @@
             "keys": "ctrl+w"
         },
         {
-            "command": "toggleFocusMode",
-            "keys": "ctrl+b"
-        },
-        {
             "command": 
             {
                 "action": "commandPalette"

@@ -2,6 +2,10 @@
 
 export DOTFILES="${HOME}/dotfiles"
 
+for f in "${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion"; do
+    source $f
+done
+
 source $DOTFILES/shell/env.sh
 source $DOTFILES/shell/aliases.sh
 [ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/wsl.sh

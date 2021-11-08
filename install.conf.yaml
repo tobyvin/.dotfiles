@@ -12,19 +12,26 @@
 - shell:
     - command: git submodule update --init --recursive
       description: Installing submodules
-    - command: sh -c "$(curl -fsSL https://starship.rs/install.sh)" -- --bin-dir "${HOME}/.local/bin" --yes
+      
+    - command: ${HOME}/dotfiles/scripts/install-crate.sh --git starship/starship --no-tag
       description: Installing Starship
+
     - command: curl -sfL git.io/antibody | sh -s - -b "${HOME}/.local/bin"
       description: Installing antibody
-    - command: (cd ${HOME}/dotfiles/zsh; antibody bundle < plugins.txt > plugins.zsh)
+
+    - command: (cd ${HOME}/dotfiles/zsh; antibody bundle <plugins.txt >plugins.zsh)
       description: Installing zsh plugins
+
     - command: if [ ! -f "${HOME}/.fzf/install" ]; then git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; fi && yes | ~/.fzf/install --bin
       description: installing fzf
-    - command: ./bat/install bat
+
+    - command: ${HOME}/dotfiles/scripts/install-crate.sh --git sharkdp/bat
       description: Installing bat
-    - command: ./cheat.sh/install
+
+    - command: curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh && chmod +x ${HOME}/.local/bin/cht.sh
       description: Installing cheat.sh
-    - command: curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" > "${HOME}/.local/bin/git-open" && chmod +x "${HOME}/.local/bin/git-open"
+
+    - command: curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >"${HOME}/.local/bin/git-open" && chmod +x "${HOME}/.local/bin/git-open"
       description: Installing git-open
 
 - link:
@@ -37,6 +44,14 @@
     ~/.gnupg/:
       glob: true
       path: gnupg/*.conf
+
+- shell:
+    - command: mkdir -p ${HOME}/.local/share/zsh/site-functions
+      description: Created zsh completion directory
+    - command: starship completions >${HOME}/.local/share/zsh/site-functions/_starship
+      description: Installing starship completions
+    - command: curl https://cheat.sh/:zsh >${HOME}/.local/share/zsh/site-functions/_cht
+      description: Installing cht.sh completions
 
 - shell:
     # ISSUE #1 Fails to import key inside of WSL2
