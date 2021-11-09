@@ -127,7 +127,7 @@ Set it to autostart on login
 # Powershell
 
 $path = 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Run'
-$cmdl = "$bridge 127.0.0.1:$port --detach"
+$cmdl = "$bridge gpg-bridge --extra 127.0.0.1:$port --ssh \\.\pipe\gpg-bridge-ssh --detach"
 $key = try {
     Get-Item -Path $path -ErrorAction Stop
 }
