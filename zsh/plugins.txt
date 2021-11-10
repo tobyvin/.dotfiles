@@ -1,11 +1,8 @@
 zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-autosuggestions
 memark/zsh-dotnet-completion
-cowboyd/zsh-rust
-MenkeTechnologies/zsh-cargo-completion
 
 leonhartX/docker-machine-zsh-completion kind:fpath
-pkulev/zsh-rustup-completion kind:fpath
 srijanshetty/zsh-pandoc-completion kind:fpath
 
 ohmyzsh/ohmyzsh
@@ -13,4 +10,3 @@ ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/fzf
 ohmyzsh/ohmyzsh path:plugins/dotnet
 ohmyzsh/ohmyzsh path:plugins/docker
-ohmyzsh/ohmyzsh path:plugins/command-not-found

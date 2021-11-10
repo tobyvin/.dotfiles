@@ -4,12 +4,7 @@ source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-zs
 fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-zsh-users-SLASH-zsh-autosuggestions )
 source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-memark-SLASH-zsh-dotnet-completion/zsh-dotnet-completion.plugin.zsh
 fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-memark-SLASH-zsh-dotnet-completion )
-source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-cowboyd-SLASH-zsh-rust/zsh-rust.plugin.zsh
-fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-cowboyd-SLASH-zsh-rust )
-source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-MenkeTechnologies-SLASH-zsh-cargo-completion/zsh-cargo-completion.plugin.zsh
-fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-MenkeTechnologies-SLASH-zsh-cargo-completion )
 fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-leonhartX-SLASH-docker-machine-zsh-completion )
-fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-pkulev-SLASH-zsh-rustup-completion )
 fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-srijanshetty-SLASH-zsh-pandoc-completion )
 source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-ohmyzsh-SLASH-ohmyzsh/oh-my-zsh.sh
 fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-ohmyzsh-SLASH-ohmyzsh )
@@ -20,5 +15,3 @@ fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-
 source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-ohmyzsh-SLASH-ohmyzsh/plugins/dotnet/dotnet.plugin.zsh
 fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-ohmyzsh-SLASH-ohmyzsh/plugins/dotnet )
 
-source /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-ohmyzsh-SLASH-ohmyzsh/plugins/command-not-found/command-not-found.plugin.zsh
-fpath+=( /home/tobyv/.cache/antibody/https-COLON--SLASH--SLASH-github.com-SLASH-ohmyzsh-SLASH-ohmyzsh/plugins/command-not-found )
