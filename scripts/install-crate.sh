@@ -60,13 +60,16 @@ need() {
     fi
 }
 
+is_opt() { case $1 in "--"*) true ;; *) false ;; esac }
+is_arg() { if [ "$1" ] && ! is_opt $1; then true; else false; fi; }
+
 quiet=false
 force=false
 no_tag=false
 completion_bash=false
 completion_zsh=false
 completion_fish=false
-comp_dir_bash="${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion"
+comp_dir_bash="${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions"
 comp_dir_zsh="${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions"
 comp_dir_fish="${XDG_CONFIG_HOME:-$HOME/.config}/fish/completions"
 while test $# -gt 0; do
@@ -110,19 +113,26 @@ while test $# -gt 0; do
         completion_fish=true
         ;;
     --completion-bash)
-        completion-bash=true
-        comp_bash_dir=$2
-        shift
+        completion_bash=true
+        if is_arg $2; then
+            comp_dir_bash=$2
+            shift
+        fi
         ;;
     --completion-zsh)
-        completion-zsh=true
-        comp_zsh_dir=$2
-        shift
+        completion_zsh=true
+        if is_arg $2; then
+            echo "$2"
+            comp_dir_zsh=$2
+            shift
+        fi
         ;;
     --completion-fish)
-        completion-fish=true
-        comp_fish_dir=$2
-        shift
+        completion_fish=true
+        if is_arg $2; then
+            comp_dir_fish=$2
+            shift
+        fi
         ;;
     *) ;;
 
@@ -199,7 +209,7 @@ curl -sL $url | tar -C $td -xz
 for f in $(find "$td" -type f); do
     case $f in
     *".bash")
-        [ $completion_bash ] && install -D $f "$comp_dir_bash/$crate.sh"
+        [ $completion_bash ] && install -D $f "$comp_dir_bash/$crate"
         ;;
     *".zsh")
         [ $completion_zsh ] && install -D $f "$comp_dir_zsh/_$crate"
