@@ -10,7 +10,6 @@ source $DOTFILES/zsh/plugins.zsh
 [ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/gpg.sh
 source $DOTFILES/shell/aliases.sh
 source $DOTFILES/zsh/setopt.zsh
-source $DOTFILES/zsh/completions.zsh
 source $DOTFILES/zsh/keybindings.zsh
 
 eval "$(starship init zsh)"
