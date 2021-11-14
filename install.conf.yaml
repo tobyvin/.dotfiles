@@ -9,30 +9,51 @@
 
 - clean: ["~"]
 
+- create:
+    - ~/.local/share/bash-completion/completions
+    - ~/.local/share/zsh/site-functions
+
 - shell:
-    - command: git submodule update --init --recursive
-      description: Installing submodules
-      
-    - command: ${HOME}/dotfiles/scripts/install-crate.sh --git starship/starship --no-tag
-      description: Installing Starship
+    - description: Installing submodules
+      command: git submodule update --init --recursive
 
-    - command: curl -sfL git.io/antibody | sh -s - -b "${HOME}/.local/bin"
-      description: Installing antibody
+    - description: Installing rust
+      command:
+        curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path && (
+        rustup completions bash >~/.local/share/bash-completion/completions/rustup;
+        rustup completions zsh >~/.local/share/zsh/site-functions/_rustup;
+        rustup completions bash cargo >~/.local/share/bash-completion/completions/cargo;
+        rustup completions zsh cargo >~/.local/share/zsh/site-functions/_cargo)
 
-    - command: (cd ${HOME}/dotfiles/zsh; antibody bundle <plugins.txt >plugins.zsh)
-      description: Installing zsh plugins
+    - description: Installing Starship
+      command: scripts/install-crate.sh --git starship/starship --no-tag && (
+        starship completions bash >~/.local/share/bash-completion/completions/starship;
+        starship completions zsh >~/.local/share/zsh/site-functions/_starship)
 
-    - command: if [ ! -f "${HOME}/.fzf/install" ]; then git clone --depth 1 https://github.com/junegunn/fzf.git ~/.fzf; fi && yes | ~/.fzf/install --bin
-      description: installing fzf
+    - description: Installing antibody
+      command: curl -sfL git.io/antibody | sh -s - -b ~/.local/bin &&
+        (cd zsh; antibody bundle <plugins.txt >plugins.zsh);
 
-    - command: ${HOME}/dotfiles/scripts/install-crate.sh --git sharkdp/bat
-      description: Installing bat
+    - description: Installing fzf
+      command:
+        \[ -f ~/.fzf/install \] || git clone -q --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &&
+        yes | ~/.fzf/install --bin && (
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.bash >~/.local/share/bash-completion/completions/fzf;
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh >~/.local/share/zsh/site-functions/_fzf)
 
-    - command: curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh && chmod +x ${HOME}/.local/bin/cht.sh
-      description: Installing cheat.sh
+    - description: Installing bat
+      command: scripts/install-crate.sh --git sharkdp/bat --completion-bash --completion-zsh ~/.local/share/zsh/site-functions
 
-    - command: curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >"${HOME}/.local/bin/git-open" && chmod +x "${HOME}/.local/bin/git-open"
-      description: Installing git-open
+    - description: Installing cheat.sh
+      command: curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh &&
+        chmod +x ~/.local/bin/cht.sh && (
+        curl https://cht.sh/:bash_completion >~/.local/share/bash-completion/completions/cht;
+        curl https://cheat.sh/:zsh >~/.local/share/zsh/site-functions/_cht)
+
+    - description: Installing git-open
+      command:
+        curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >~/.local/bin/git-open &&
+        chmod +x ~/.local/bin/git-open;
 
 - link:
     ~/.bashrc:
@@ -46,20 +67,14 @@
       path: gnupg/*.conf
 
 - shell:
-    - command: mkdir -p ${HOME}/.local/share/zsh/site-functions
-      description: Created zsh completion directory
-    - command: starship completions >${HOME}/.local/share/zsh/site-functions/_starship
-      description: Installing starship completions
-    - command: curl https://cheat.sh/:zsh >${HOME}/.local/share/zsh/site-functions/_cht
-      description: Installing cht.sh completions
+    # ISSUE #1 Fails to import key inside of WSL2
+    - description: Installing gpg key
+      command: gpg --recv-key 0xC8F6E06F5C8E2634
+    - description: Importing GPG trustfile
+      command: gpg --import-ownertrust gnupg/trustfile.txt
 
 - shell:
-    # ISSUE #1 Fails to import key inside of WSL2
-    - command: gpg --recv-key 0xC8F6E06F5C8E2634
-      description: Getting GPG public key
-    - command: gpg --import-ownertrust gnupg/trustfile.txt
-      description: Importing GPG trustfile
-    - command: if [ -n "${WSL_DISTRO_NAME+1}" ]; then ./wsl.install; fi
-      description: Checking for WSL
+    - description: ""
+      command: if [ -n "${WSL_DISTRO_NAME+1}" ]; then ./wsl.install; fi
       stdout: true
-      stderr: true
+      # stderr: true
