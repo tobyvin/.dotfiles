@@ -5,9 +5,11 @@ export DOTFILES="${HOME}/dotfiles"
 fpath=( "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions" "${fpath[@]}" )
 
 source $DOTFILES/shell/env.sh
-source $DOTFILES/zsh/plugins.zsh
+source ~/plugins.zsh
+
 [ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/wsl.sh
 [ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/gpg.sh
+
 source $DOTFILES/shell/aliases.sh
 source $DOTFILES/zsh/setopt.zsh
 source $DOTFILES/zsh/keybindings.zsh

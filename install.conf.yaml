@@ -34,7 +34,7 @@
 
     - description: Installing antibody
       command: curl -sfL git.io/antibody | sh -s - -b ~/.local/bin &&
-        (cd zsh; antibody bundle <plugins.txt >plugins.zsh);
+        (cd zsh; antibody bundle <plugins.txt >~/.plugins.zsh);
 
     - description: Installing fzf
       command:
