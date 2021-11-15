@@ -1,5 +1,4 @@
 format = """
-($username($hostname) in )\
 $all\
 """
 
@@ -8,12 +7,6 @@ add_newline = false
 [fill]
 disabled = true
 symbol = ""
-
-[username]
-format = "[$user]($style)"
-
-[hostname]
-format =  " on [$hostname]($style)"
 
 [character]
 success_symbol = "[❯](green)"
