@@ -50,6 +50,18 @@
         curl https://cht.sh/:bash_completion >~/.local/share/bash-completion/completions/cht;
         curl https://cheat.sh/:zsh >~/.local/share/zsh/site-functions/_cht)
 
+    - description: Installing gh
+      command: td=$(mktemp -d) &&
+        arch="$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv6/)" &&
+        tag="$(curl -sI https://github.com/cli/cli/releases/latest | grep -Po 'tag\/v?\K(\S+)')" &&
+        name="gh_${tag}_linux_${arch}" &&
+        url="https://github.com/cli/cli/releases/latest/download/${name}.tar.gz" &&
+        curl -sL $url | tar -C $td -xz &&
+        test -x $td/$name/bin/gh &&
+        install -Dm 755 $td/$name/bin/gh ~/.local/bin/gh && (
+        gh completion --shell bash >~/.local/share/bash-completion/completions/gh;
+        gh completion --shell zsh >~/.local/share/zsh/site-functions/_gh)
+
     - description: Installing git-open
       command:
         curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >~/.local/bin/git-open &&
