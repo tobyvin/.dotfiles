@@ -10,8 +10,8 @@ alias grep='grep --color'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
 # scripts
-alias dfi="$DOTFILES/install"
-alias dfu="$DOTFILES/update"
+alias dfi=~/dotfiles/install
+alias dfu=~/dotfiles/update
 # docker
 alias dexec="docker exec -it"
 alias dps="docker ps"

@@ -194,12 +194,16 @@ if [ -z $dest ]; then
     dest="$HOME/.cargo/bin"
 fi
 
-if [ $no_tag = false ]; then
-    crate_tag="-$tag"
+if [ $no_tag = true ]; then
+    crate_tag="$crate"
+elif case $tag in "$crate"*) true ;; *) false ;; esac then
+    crate_tag="$tag"
+else
+    crate_tag="$crate-$tag"
 fi
 
 say_err "Installing to: $dest"
-url="$url/download/$tag/$crate${crate_tag}-$target.tar.gz"
+url="$url/download/$tag/${crate_tag}-$target.tar.gz"
 
 say_err "Downloading: $url"
 
@@ -211,7 +215,7 @@ for f in $(find "$td" -type f); do
     *".bash")
         [ $completion_bash ] && install -D $f "$comp_dir_bash/$crate"
         ;;
-    *".zsh")
+    *".zsh" | *"_$crate")
         [ $completion_zsh ] && install -D $f "$comp_dir_zsh/_$crate"
         ;;
     *".fish")

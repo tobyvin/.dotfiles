@@ -1,5 +1,11 @@
 #!/usr/bin/env zsh
 
+if [ -n "${WSL_DISTRO_NAME+1}" ]; then
+  clip=clip.exe
+else
+  clip=/dev/null
+fi
+
 function r-delregion() {
   if ((REGION_ACTIVE)) then
     zle kill-region
@@ -36,7 +42,7 @@ function r-undo {
 function r-copy() {
   if ((REGION_ACTIVE)) then
     zle copy-region-as-kill
-    (( ${+aliases[cb]} )) && printf "$CUTBUFFER" | cb
+    printf "$CUTBUFFER" | $clip
   else
     zle kill-whole-line
   fi
@@ -48,7 +54,7 @@ function r-cut() {
   else
     zle kill-whole-line
   fi
-  (( ${+aliases[cb]} )) && printf "$CUTBUFFER" | cb
+  printf "$CUTBUFFER" | $clip
 }
 
 for key     kcap   seq        mode   widget (

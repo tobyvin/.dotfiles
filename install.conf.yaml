@@ -54,7 +54,7 @@
     - description: Installing bat
       command:
         target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/armv7/arm/) &&
-        scripts/install-crate.sh --git sharkdp/bat --target $target --completion-bash --completion-zsh ~/.local/share/zsh/site-functions &&
+        scripts/install-crate.sh --git sharkdp/bat --target $target --completion-bash --completion-zsh
 
     - description: Installing cheat.sh
       command: curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh &&
