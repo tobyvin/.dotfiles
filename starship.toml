@@ -1,17 +1,23 @@
 format = """
+($username($hostname) in )\
 $all\
 """
 
 add_newline = false
 
-right_format = """
-$cmd_duration \
-$status\
-"""
-
 [fill]
 disabled = true
 symbol = ""
+
+[username]
+format = "[$user]($style)"
+
+[hostname]
+format =  " on [$hostname]($style)"
+
+[character]
+success_symbol = "[❯](green)"
+error_symbol = "[❯](red)"
 
 [aws]
 symbol = "  "
