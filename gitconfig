@@ -36,6 +36,7 @@ ci = commit
 co = checkout
 br = branch
 r = reset
+rv = remote -v
 cp = cherry-pick
 dev = checkout develop
 main = checkout main

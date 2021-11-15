@@ -12,6 +12,8 @@
 - create:
     - ~/.local/share/bash-completion/completions
     - ~/.local/share/zsh/site-functions
+    - ~/.bash.d
+    - ~/.zsh.d
 
 - shell:
     - description: Installing submodules
@@ -32,16 +34,22 @@
         starship completions bash >~/.local/share/bash-completion/completions/starship;
         starship completions zsh >~/.local/share/zsh/site-functions/_starship)
 
-    - description: Installing antibody
-      command: curl -sfL git.io/antibody | sh -s - -b ~/.local/bin &&
-        (cd zsh; antibody bundle <plugins.txt >~/.plugins.zsh);
-
     - description: Installing fzf
-      command:
-        \[ -f ~/.fzf/install \] || git clone -q --depth 1 https://github.com/junegunn/fzf.git ~/.fzf &&
-        yes | ~/.fzf/install --bin && (
+      command: td=$(mktemp -d) &&
+        arch="$(uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv7/)" &&
+        tag="$(curl -sI https://github.com/junegunn/fzf/releases/latest | grep -Po 'tag\/v?\K(\S+)')" &&
+        name="fzf-${tag}-linux_${arch}" &&
+        url="https://github.com/junegunn/fzf/releases/latest/download/${name}.tar.gz" &&
+        curl -sL $url | tar -C $td -xz &&
+        test -x $td/fzf &&
+        rm -f ~/.local/bin/fzf &&
+        install -Dm 755 $td/fzf ~/.local/bin/fzf &&
+        rm -rf $td && (
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.bash >~/.local/share/bash-completion/completions/fzf;
-        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh >~/.local/share/zsh/site-functions/_fzf)
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh >~/.local/share/zsh/site-functions/_fzf;
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.bash >~/.bash.d/fzf-key-bindings.sh;
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh >~/.zsh.d/fzf-key-bindings.zsh;
+        )
 
     - description: Installing bat
       command:
@@ -62,7 +70,8 @@
         url="https://github.com/cli/cli/releases/latest/download/${name}.tar.gz" &&
         curl -sL $url | tar -C $td -xz &&
         test -x $td/$name/bin/gh &&
-        install -Dm 755 $td/$name/bin/gh ~/.local/bin/gh && (
+        install -Dm 755 $td/$name/bin/gh ~/.local/bin/gh &&
+        rm -rf $td && (
         gh completion --shell bash >~/.local/share/bash-completion/completions/gh;
         gh completion --shell zsh >~/.local/share/zsh/site-functions/_gh)
 
@@ -70,6 +79,42 @@
       command:
         curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >~/.local/bin/git-open &&
         chmod +x ~/.local/bin/git-open;
+
+    - description: Installing git completions
+      command: \! command -v git &> /dev/null ||
+        url=https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion && (
+        curl -sL ${url}.bash >~/.local/share/bash-completion/completions/git;
+        curl -sL ${url}.zsh >~/.local/share/zsh/site-functions/_git)
+
+    - description: Installing dotnet completions
+      command: \! command -v dotnet &> /dev/null ||
+        url=https://raw.githubusercontent.com/dotnet/cli/master/scripts/register-completions && (
+        curl -sL ${url}.bash >~/.local/share/bash-completion/completions/dotnet;
+        curl -sL ${url}.zsh >~/.local/share/zsh/site-functions/_dotnet)
+
+    - description: Installing docker completions
+      command: \! command -v docker &> /dev/null ||
+        url=https://raw.githubusercontent.com/docker/cli/master/contrib/completion && (
+        curl -sL ${url}/bash/docker >~/.local/share/bash-completion/completions/docker;
+        curl -sL ${url}/zsh/_docker >~/.local/share/zsh/site-functions/_docker)
+
+    - description: Installing pandoc completions
+      command: \! command -v pandoc &> /dev/null ||
+        url=https://raw.githubusercontent.com/srijanshetty/zsh-pandoc-completion/master/_pandoc && (
+        pandoc --bash-completion >~/.local/share/bash-completion/completions/docker;
+        curl -sL ${url} >~/.local/share/zsh/site-functions/_pandoc)
+
+    - description: Installing zsh-autosuggestions
+      command: repo=https://github.com/zsh-users/zsh-autosuggestions &&
+        target=~/.zsh.d/zsh-autosuggestions &&
+        rm -rf $target &&
+        git clone $repo $target
+
+    - description: Installing zsh-syntax-highlighting
+      command: repo=https://github.com/zsh-users/zsh-syntax-highlighting
+        target=~/.zsh.d/zsh-syntax-highlighting &&
+        rm -rf $target &&
+        git clone $repo $target
 
 - link:
     ~/.bashrc:

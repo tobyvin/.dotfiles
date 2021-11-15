@@ -2,9 +2,10 @@
 
 export DOTFILES="${HOME}/dotfiles"
 
-for f in "${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion"; do
-    source $f
-done
+comp_dir=${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions
+
+if [ -d "$comp_dir" ]; then for f in "$comp_dir"/*; do source $f; done; fi
+if [ -d "~/.bash.d" ]; then for f in ~/.bash.d/*; do source $f; done; fi
 
 source $DOTFILES/shell/env.sh
 source $DOTFILES/shell/aliases.sh

@@ -1,11 +1,13 @@
 #!/usr/bin/env zsh
 
 export DOTFILES="${HOME}/dotfiles"
+export ZDOTDIR=~/.zsh.d
 
-fpath=( "${XDG_DATA_HOME:-$HOME/.local/share}/zsh/site-functions" "${fpath[@]}" )
+fpath=(~/.local/share/zsh/site-functions "${fpath[@]}")
+
+if [ -d "$ZDOTDIR" ]; then for f in $ZDOTDIR/*; do source $f; done; fi
 
 source $DOTFILES/shell/env.sh
-source ~/plugins.zsh
 
 [ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/wsl.sh
 [ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/gpg.sh
@@ -24,5 +26,9 @@ function set_win_title() {
 }
 
 precmd_functions+=(set_win_title)
+
 autoload -U compinit
 compinit -i
+
+source $ZDOTDIR/zsh-autosuggestions/zsh-autosuggestions.zsh
+source $ZDOTDIR/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
