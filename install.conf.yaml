@@ -26,7 +26,9 @@
         rustup completions zsh cargo >~/.local/share/zsh/site-functions/_cargo)
 
     - description: Installing Starship
-      command: scripts/install-crate.sh --git starship/starship --no-tag && (
+      command:
+        target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/gnu/musl/ | sed s/armv7/arm/) &&
+        scripts/install-crate.sh --git starship/starship --no-tag --target $target && (
         starship completions bash >~/.local/share/bash-completion/completions/starship;
         starship completions zsh >~/.local/share/zsh/site-functions/_starship)
 
@@ -42,7 +44,9 @@
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh >~/.local/share/zsh/site-functions/_fzf)
 
     - description: Installing bat
-      command: scripts/install-crate.sh --git sharkdp/bat --completion-bash --completion-zsh ~/.local/share/zsh/site-functions
+      command:
+        target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/armv7/arm/) &&
+        scripts/install-crate.sh --git sharkdp/bat --target $target --completion-bash --completion-zsh ~/.local/share/zsh/site-functions &&
 
     - description: Installing cheat.sh
       command: curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh &&
