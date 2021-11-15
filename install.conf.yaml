@@ -141,6 +141,7 @@
 
     ~/.config/starship.toml: starship.toml
     ~/.config/alacritty.yml: alacritty.yml
+    ~/.config/bat/config: bat.conf
     ~/.gitconfig:
     ~/.ssh/config: ssh/config
     ~/.gnupg/:
@@ -153,6 +154,11 @@
       command: gpg --recv-key 0xC8F6E06F5C8E2634
     - description: Importing GPG trustfile
       command: gpg --import-ownertrust gnupg/trustfile.txt
+    # ISSUE #1 Fails to import key inside of WSL2
+    - description: Importing gpg key (WSL)
+      command: \! command -v gpg.exe &> /dev/null || gpg.exe --recv-key 0xC8F6E06F5C8E2634 || echo "Failed gpg import (WSL)"
+    - description: Importing gpg trustfile (WSL)
+      command: \! command -v gpg.exe &> /dev/null || gpg.exe --import-ownertrust gnupg/trustfile.txt
 
 - shell:
     - description: ""

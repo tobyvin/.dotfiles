@@ -1,10 +1,7 @@
 #!/usr/bin/env bash
 
-DOTFILES="${DOTFILES:-${BASEDIR:-${HOME}/dotfiles}}"
-cd $DOTFILES
+cd "${BASEDIR:-${HOME}/dotfiles}"
 
-# BUG Has issues with a return character?
-# WINHOME="$(wslpath "$(powershell.exe -NoProfile -c \$HOME)")"
 WINHOME="$(wslpath c:\\Users\\${USER})"
 
 RESET='\033[0m'
@@ -14,7 +11,7 @@ YELLOW='\033[93m'
 BLUE='\033[94m'
 MAGENTA='\033[95m'
 
-mkln="${DOTFILES}/scripts/mkln.sh -f"
+mkln="scripts/mkln.sh -f"
 
 function show-warning() {
     gpgpath=$(wslpath -w "$(command -v gpg.exe)")
@@ -38,7 +35,7 @@ ln -sfn $WINHOME ~/win
 
 # ssh-config
 sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4321|' \
-    ${DOTFILES}/ssh/config | sed '/Control/d' >${DOTFILES}/ssh/win.config
+    ssh/config | sed '/Control/d' >ssh/win.config
 
 # Create windows symlinks to dotfiles
 $mkln $@ "ssh/win.config" "${WINHOME}/.ssh/config"
@@ -61,20 +58,6 @@ if ! command -v wslview &>/dev/null; then
     echo "wslu is not installed."
     echo "wslu (wslview) is needed to open browser windows from linux commands."
     echo "install instructions: https://github.com/wslutilities/wslu#installation"
-fi
-
-# Import gpg key
-if gpg.exe --recv-key 0xC8F6E06F5C8E2634 &>/dev/null; then
-    echo -e "${BLUE}gpg key imported"
-else
-    echo -e "${MAGENTA}Failed to import gpg key"
-fi
-
-# Import gpg trust
-if gpg.exe --import-ownertrust $DOTFILES/gnupg/trustfile.txt; then
-    echo -e "${BLUE}gpg trust imported"
-else
-    echo -e "${MAGENTA}Failed to import gpg trust"
 fi
 
 echo -e "${GREEN}WSL has been set up"

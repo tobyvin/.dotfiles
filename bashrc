@@ -1,12 +1,9 @@
 #!/usr/bin/env bash
 
-source ~/.profile
-
 comp_dir=${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions
 
 if [ -d "$comp_dir" ]; then for f in "$comp_dir"/*; do source $f; done; fi
 if [ -d "~/.bash" ]; then for f in ~/.bash/*; do source $f; done; fi
-
 
 eval "$(starship init bash)"
 
