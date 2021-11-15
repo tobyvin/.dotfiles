@@ -2,14 +2,6 @@
 
 WINHOME="/mnt/c/Users/$USER"
 [ "$PWD" = "$WINHOME" ] && cd
-# XDG Specs
-export XDG_DESKTOP_DIR="$WINHOME/Desktop"
-export XDG_DOCUMENTS_DIR="$WINHOME/Documents"
-export XDG_DOWNLOAD_DIR="$WINHOME/Downloads"
-export XDG_MUSIC_DIR="$WINHOME/Music"
-export XDG_PICTURES_DIR="$WINHOME/Pictures"
-export XDG_TEMPLATES_DIR="$WINHOME/Templates"
-export XDG_VIDEOS_DIR="$WINHOME/Videos"
 
 export EDITOR="code --wait"
 export DOCKER_HOST=${DOCKER_HOST:-tcp://0.0.0.0:2375}

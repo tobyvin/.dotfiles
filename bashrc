@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-export DOTFILES="${HOME}/dotfiles"
+source ~/.profile
 
 comp_dir=${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions
 
 if [ -d "$comp_dir" ]; then for f in "$comp_dir"/*; do source $f; done; fi
-if [ -d "~/.bash.d" ]; then for f in ~/.bash.d/*; do source $f; done; fi
+if [ -d "~/.bash" ]; then for f in ~/.bash/*; do source $f; done; fi
 
-source $DOTFILES/shell/env.sh
-source $DOTFILES/shell/aliases.sh
-[ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/wsl.sh
-[ -n "${WSL_DISTRO_NAME+1}" ] && source $DOTFILES/shell/gpg.sh
 
 eval "$(starship init bash)"
 

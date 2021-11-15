@@ -12,8 +12,8 @@
 - create:
     - ~/.local/share/bash-completion/completions
     - ~/.local/share/zsh/site-functions
-    - ~/.bash.d
-    - ~/.zsh.d
+    - ~/.bash
+    - ~/.zsh
 
 - shell:
     - description: Installing submodules
@@ -47,8 +47,8 @@
         rm -rf $td && (
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.bash >~/.local/share/bash-completion/completions/fzf;
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh >~/.local/share/zsh/site-functions/_fzf;
-        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.bash >~/.bash.d/fzf-key-bindings.sh;
-        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh >~/.zsh.d/fzf-key-bindings.zsh;
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.bash >~/.bash/fzf-key-bindings.sh;
+        curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh >~/.zsh/fzf-key-bindings.zsh;
         )
 
     - description: Installing bat
@@ -106,19 +106,39 @@
 
     - description: Installing zsh-autosuggestions
       command: repo=https://github.com/zsh-users/zsh-autosuggestions &&
-        target=~/.zsh.d/zsh-autosuggestions &&
+        target=~/.zsh/zsh-autosuggestions &&
         rm -rf $target &&
         git clone $repo $target
 
     - description: Installing zsh-syntax-highlighting
       command: repo=https://github.com/zsh-users/zsh-syntax-highlighting
-        target=~/.zsh.d/zsh-syntax-highlighting &&
+        target=~/.zsh/zsh-syntax-highlighting &&
         rm -rf $target &&
         git clone $repo $target
 
 - link:
+    # shell
     ~/.bashrc:
     ~/.zshrc:
+    ~/.bash:
+      glob: true
+      path: bash/*
+    ~/.zsh:
+      glob: true
+      path: zsh/*
+    ~/.zsh/env.sh: bash/env.sh
+    ~/.zsh/aliases.sh: bash/aliases.sh
+
+    # wsl
+    ~/.bash/:
+      glob: true
+      if: '[ -n "${WSL_DISTRO_NAME+1}" ]'
+      path: wsl/*
+    ~/.zsh/:
+      glob: true
+      if: '[ -n "${WSL_DISTRO_NAME+1}" ]'
+      path: wsl/*
+
     ~/.config/starship.toml: starship.toml
     ~/.config/alacritty.yml: alacritty.yml
     ~/.gitconfig:
