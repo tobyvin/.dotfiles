@@ -107,33 +107,34 @@
     - description: Installing zsh-autosuggestions
       command: repo=https://github.com/zsh-users/zsh-autosuggestions &&
         target=~/.zsh/zsh-autosuggestions &&
-        rm -rf $target &&
-        git clone $repo $target
+        git clone $repo $target || 
+        git -C $target pull 
 
     - description: Installing zsh-syntax-highlighting
       command: repo=https://github.com/zsh-users/zsh-syntax-highlighting
         target=~/.zsh/zsh-syntax-highlighting &&
-        rm -rf $target &&
-        git clone $repo $target
+        git clone $repo $target || 
+        git -C $target pull 
+        
 
 - link:
     # shell
     ~/.bashrc:
-    ~/.zshrc:
     ~/.bash:
       glob: true
       path: bash/*
-    ~/.zsh:
-      glob: true
-      path: zsh/*
-    ~/.zsh/env.sh: bash/env.sh
-    ~/.zsh/aliases.sh: bash/aliases.sh
-
-    # wsl
     ~/.bash/:
       glob: true
       if: '[ -n "${WSL_DISTRO_NAME+1}" ]'
       path: wsl/*
+      
+    ~/.zshenv:
+    ~/.zsh/.zshrc: zsh/zshrc
+    ~/.zsh/.zshenv: bash/env.sh
+    ~/.zsh/aliases.sh: bash/aliases.sh
+    ~/.zsh:
+      glob: true
+      path: zsh/*
     ~/.zsh/:
       glob: true
       if: '[ -n "${WSL_DISTRO_NAME+1}" ]'

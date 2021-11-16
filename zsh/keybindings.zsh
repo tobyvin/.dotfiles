@@ -6,7 +6,7 @@ else
   clip=/dev/null
 fi
 
-function r-delregion() {
+r-delregion() {
   if ((REGION_ACTIVE)) then
     zle kill-region
   else 
@@ -16,30 +16,30 @@ function r-delregion() {
   fi
 }
 
-function r-deselect() {
+r-deselect() {
   ((REGION_ACTIVE = 0))
   local widget_name=$1
   shift
   zle $widget_name -- $@
 }
 
-function r-select() {
+r-select() {
   ((REGION_ACTIVE)) || zle set-mark-command
   local widget_name=$1
   shift
   zle $widget_name -- $@
 }
 
-function r-select-a() {
+r-select-a() {
   r-deselect beginning-of-line
   r-select end-of-line
 }
 
-function r-undo {
+r-undo() {
   zle undo
 }
 
-function r-copy() {
+r-copy() {
   if ((REGION_ACTIVE)) then
     zle copy-region-as-kill
     printf "$CUTBUFFER" | $clip
@@ -48,7 +48,7 @@ function r-copy() {
   fi
 }
 
-function r-cut() {
+r-cut() {
   if ((REGION_ACTIVE)) then
     zle kill-region
   else
@@ -101,6 +101,8 @@ for key     kcap   seq        mode   widget (
   bindkey ${terminfo[$kcap]-$seq} key-$key
 }
 
+bindkey '^ ' autosuggest-accept
+bindkey '^[[Z' reverse-menu-complete
 
 # register ctrl+c as interupt 
 function ctrl_c_intr() {
@@ -111,7 +113,6 @@ function ctrl_c_intr() {
 function ctrl_y_intr() {
   stty intr \^Y <$TTY >$TTY
 }
-
 
 # make sure we can register hooks
 autoload -Uz add-zsh-hook || return

@@ -1,18 +1,25 @@
 #!/usr/bin/env zsh
 
-typeset -A ZSH_HIGHLIGHT_STYLES
-ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
 HYPHEN_INSENSITIVE="true"
 DISABLE_UPDATE_PROMPT="true"
 DISABLE_AUTO_TITLE="true"
-setopt HIST_IGNORE_ALL_DUPS
+typeset -A ZSH_HIGHLIGHT_STYLES
+ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
+ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
+
 setopt NO_BEEP
 setopt MENU_COMPLETE
+setopt appendhistory
+# setopt HIST_IGNORE_ALL_DUPS
 
 fpath=(~/.local/share/zsh/site-functions "${fpath[@]}")
 
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
-if [ -d "${HOME}/.zsh" ]; then for f in ~/.zsh/*; do source $f; done; fi
+for f in ~/.zsh/*.*sh; do source $f; done
 
 eval "$(starship init zsh)"
 
@@ -28,4 +35,5 @@ precmd_functions+=(set_win_title)
 autoload -U compinit
 compinit -i
 
+zstyle ':completion:*' menu select
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
