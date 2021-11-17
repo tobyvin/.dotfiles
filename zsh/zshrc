@@ -1,20 +1,25 @@
 #!/usr/bin/env zsh
 
-HISTFILE=~/.zsh_history
-HISTSIZE=10000
-SAVEHIST=10000
 HYPHEN_INSENSITIVE="true"
 DISABLE_UPDATE_PROMPT="true"
 DISABLE_AUTO_TITLE="true"
+HISTFILE=~/.zsh_history
+HISTSIZE=10000
+SAVEHIST=10000
+
+setopt NO_BEEP
+setopt MENU_COMPLETE
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_dups       # ignore duplicated commands history list
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+
 typeset -A ZSH_HIGHLIGHT_STYLES
 ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
 ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
-
-setopt NO_BEEP
-setopt MENU_COMPLETE
-setopt appendhistory
-# setopt HIST_IGNORE_ALL_DUPS
 
 fpath=(~/.local/share/zsh/site-functions "${fpath[@]}")
 
