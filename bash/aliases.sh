@@ -12,6 +12,7 @@ alias untar="tar -zxvf"
 # scripts
 alias dfi=~/dotfiles/install
 alias dfu=~/dotfiles/update
+alias pluto="ssh root@foundry.tobyvin.com /root/foundry/update-plutonium.sh"
 # docker
 alias dexec="docker exec -it"
 alias dps="docker ps"

@@ -19,7 +19,13 @@ Host odin thor
 host bifrost
     User tobyv
 
-host door
+Host aegir
+    User root
+    HostName foundry.tobyvin.com
+    ForwardAgent yes
+    StreamLocalBindUnlink yes
+
+Host door
     User tovince
     HostName door.cs.siue.edu
     ForwardAgent yes

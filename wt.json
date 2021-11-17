@@ -64,7 +64,7 @@
         "Windows.Terminal.Azure"
     ],
     "experimental.rendering.forceFullRepaint": true,
-    "initialCols": 120,
+    "initialCols": 100,
     "initialRows": 30,
     "multiLinePasteWarning": false,
     "profiles": 
@@ -85,6 +85,7 @@
                 "face": "FiraCode NF",
                 "size": 11
             },
+            "padding": "8",
             "useAcrylic": true
         },
         "list": 
