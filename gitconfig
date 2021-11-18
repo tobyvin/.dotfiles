@@ -4,11 +4,11 @@ name = Toby Vincent
 username = tobyvin
 signingkey = 0xA0876F29023F43AF
 
-[init]
-defaultBranch = main
-
 [commit]
 gpgsign = true
+
+[init]
+defaultBranch = main
 
 [pull]
 rebase = true
@@ -18,6 +18,9 @@ ff = no
 
 [fetch]
 prune = true
+
+[advice]
+detachedHead = false
 
 [core]
 editor = code --wait
