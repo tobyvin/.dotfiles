@@ -49,12 +49,25 @@
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh >~/.local/share/zsh/site-functions/_fzf;
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.bash >~/.bash/fzf-key-bindings.sh;
         curl -sL https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh >~/.zsh/fzf-key-bindings.zsh;
+        curl -sL https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236/raw/6e5d520bfc96d6b3e42571a54cb4d1ebc8e2dd84/functions.sh | tee -a  ~/.zsh/fzf-key-bindings.zsh ~/.bash/fzf-key-bindings.sh;
+        curl -sL https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236/raw/6e5d520bfc96d6b3e42571a54cb4d1ebc8e2dd84/key-binding.bash >>~/.bash/fzf-key-bindings.sh;
+        curl -sL https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236/raw/6e5d520bfc96d6b3e42571a54cb4d1ebc8e2dd84/key-binding.zsh  >>~/.bash/fzf-key-bindings.sh;
         )
 
     - description: Installing bat
       command:
         target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/armv7/arm/) &&
         scripts/install-crate.sh --git sharkdp/bat --target $target --completion-bash --completion-zsh
+
+    - description: Installing fd
+      command:
+        target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/armv7/arm/) &&
+        scripts/install-crate.sh --git sharkdp/fd --target $target --completion-bash --completion-zsh
+
+    - description: Installing ripgrep
+      command:
+        target=$(rustc -Vv | grep host | cut -d' ' -f2  | sed s/gnu/musl/ | sed s/armv7/arm/) &&
+        scripts/install-crate.sh --git BurntSushi/ripgrep --target $target --completion-bash --completion-zsh
 
     - description: Installing cheat.sh
       command: curl https://cht.sh/:cht.sh >~/.local/bin/cht.sh &&
@@ -115,6 +128,16 @@
         target=~/.zsh/zsh-syntax-highlighting &&
         git clone $repo $target || 
         git -C $target pull 
+
+    - description: Installing zsh-syntax-highlighting
+      command: repo=https://github.com/nvm-sh/nvm.git
+        target=~/.nvm &&
+        git clone $repo $target || 
+        git -C $target pull;
+        ln -sf $target/nvm.sh .bash/nvm.sh &&
+        ln -sf $target/nvm.sh .zsh/nvm.sh &&
+        ln -sf $target/bash_completion ~/.local/share/bash-completion/completions/nvm &&
+        ln -sf $target/bash_completion .zsh/nvm_completion.sh
         
 
 - link:

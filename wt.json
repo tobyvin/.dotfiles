@@ -26,12 +26,10 @@
             "command": 
             {
                 "action": "newTab"
-            },
-            "keys": "ctrl+t"
+            }
         },
         {
-            "command": "find",
-            "keys": "ctrl+f"
+            "command": "find"
         },
         {
             "command": 
@@ -54,6 +52,14 @@
                 "action": "commandPalette"
             },
             "keys": "f1"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+f"
+        },
+        {
+            "command": "unbound",
+            "keys": "ctrl+t"
         }
     ],
     "alwaysShowNotificationIcon": true,

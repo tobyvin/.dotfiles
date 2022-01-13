@@ -32,6 +32,7 @@ read_only = " "
 # truncation_length = 2
 fish_style_pwd_dir_length = 1
 truncate_to_repo = false
+repo_root_style = "bold purple"
 
 [directory.substitutions]
 "~/win" = " ~"
