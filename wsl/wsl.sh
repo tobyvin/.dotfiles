@@ -3,6 +3,7 @@
 WINHOME="/mnt/c/Users/$USER"
 [ "$PWD" = "$WINHOME" ] && cd
 
+export BROWSER=wslview
 export EDITOR="code --wait"
 
 alias cb=clip.exe

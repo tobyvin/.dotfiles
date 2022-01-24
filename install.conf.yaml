@@ -142,6 +142,7 @@
 
 - link:
     # shell
+    ~/.bash_profile: bash/env.sh
     ~/.bashrc:
     ~/.bash:
       glob: true

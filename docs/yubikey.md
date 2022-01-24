@@ -13,6 +13,7 @@ The following two sections are the result of a painstaking amount of google sear
 
  - [drduh/YubiKey-Guide](https://github.com/drduh/YubiKey-Guide)
  - [The ultimate guide to Yubikey on WSL2](https://dev.to/dzerycz/series/11353)
+ - [Forwarding gpg-agent to a remote system over SSH](https://wiki.gnupg.org/AgentForwarding)
 
 The former is an incredibly detailed guide to setting up GPG keys using YubiKey as a smart card. The amount of information drduh has organized in that repository in immense, so I urge you to go star it if you find anything in this section helpful, as he deserves at least that much.
 
