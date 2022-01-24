@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 export GPG_TTY=$(tty)
-export BROWSER=wslview
 export STARSHIP_LOG="error"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || tree -C {}"
