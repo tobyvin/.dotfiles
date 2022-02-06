@@ -173,16 +173,15 @@
       path: gnupg/*.conf
 
 - shell:
-    # ISSUE #1 Fails to import key inside of WSL2
     - description: Installing gpg key
       command: gpg --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
     - description: Importing GPG trustfile
       command: gpg --import-ownertrust gnupg/trustfile.txt
     # ISSUE #1 Fails to import key inside of WSL2
-    - description: Importing gpg key (WSL)
-      command: \! command -v gpg.exe &> /dev/null || gpg.exe --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
-    - description: Importing gpg trustfile (WSL)
-      command: \! command -v gpg.exe &> /dev/null || gpg.exe --import-ownertrust gnupg/trustfile.txt
+    # - description: Importing gpg key (WSL)
+    #   command: \! command -v gpg.exe &> /dev/null || gpg.exe --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
+    # - description: Importing gpg trustfile (WSL)
+    #   command: \! command -v gpg.exe &> /dev/null || gpg.exe --import-ownertrust gnupg/trustfile.txt
 
 - shell:
     - description: ""
