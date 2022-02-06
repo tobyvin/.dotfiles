@@ -8,6 +8,9 @@ Host heimdall loki
     ForwardAgent yes
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
+    ControlMaster     auto
+    ControlPath       ~/.ssh/control-%C
+    ControlPersist    yes
 
 Host odin thor 
     User tobyv
