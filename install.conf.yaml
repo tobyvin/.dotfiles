@@ -175,12 +175,12 @@
 - shell:
     # ISSUE #1 Fails to import key inside of WSL2
     - description: Installing gpg key
-      command: gpg --recv-key 0xC8F6E06F5C8E2634
+      command: gpg --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
     - description: Importing GPG trustfile
       command: gpg --import-ownertrust gnupg/trustfile.txt
     # ISSUE #1 Fails to import key inside of WSL2
     - description: Importing gpg key (WSL)
-      command: \! command -v gpg.exe &> /dev/null || gpg.exe --recv-key 0xC8F6E06F5C8E2634 || echo "Failed gpg import (WSL)"
+      command: \! command -v gpg.exe &> /dev/null || gpg.exe --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
     - description: Importing gpg trustfile (WSL)
       command: \! command -v gpg.exe &> /dev/null || gpg.exe --import-ownertrust gnupg/trustfile.txt
 
