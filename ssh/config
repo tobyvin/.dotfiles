@@ -2,25 +2,33 @@
 
 Host *
     StrictHostKeyChecking no
+    ServerAliveInterval 300
+    ServerAliveCountMax 2
 
 Host heimdall loki
     User pi
     ForwardAgent yes
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
-    ControlMaster     auto
-    ControlPath       ~/.ssh/control-%C
-    ControlPersist    yes
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlPersist yes
 
-Host odin thor 
+Host odin thor
     User tobyv
     Port 2222
     ForwardAgent yes
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlPersist yes
 
 host bifrost
     User tobyv
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlPersist yes
 
 Host aegir
     User root
@@ -34,6 +42,9 @@ Host door
     ForwardAgent yes
     StreamLocalBindUnlink yes
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
+    ControlMaster auto
+    ControlPath ~/.ssh/controlmasters/%r@%h:%p
+    ControlPersist yes
 
 Host siue
     User tovince
@@ -44,7 +55,12 @@ Host siue
     RemoteCommand rm -f /run/user/1400158178/gnupg/S.gpg-agent && zsh -l
     RequestTTY force
 
-Host zone
+Host zone zone1 zone2
     User tovince
     HostName zone.cs.siue.edu
-    ForwardAgent yes
+
+Host zone1
+    SetEnv INSTANCE=1
+
+Host zone2
+    SetEnv INSTANCE=2
