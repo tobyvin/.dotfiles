@@ -22,9 +22,6 @@ prune = true
 [advice]
 detachedHead = false
 
-[core]
-editor = code --wait
-
 [diff]
 tool = default-difftool
 

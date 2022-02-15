@@ -5,6 +5,7 @@ WINHOME="/mnt/c/Users/$USER"
 
 export BROWSER=wslview
 export EDITOR="code --wait"
+export PATH=$(echo "$PATH" | sed -e 's/:\/mnt\/c\/Users\/tobyv\/.cargo\/bin\(:\|$\)//')
 
 alias cb=clip.exe
 alias wsl=wsl.exe
