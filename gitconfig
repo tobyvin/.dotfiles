@@ -50,7 +50,7 @@ recommit = commit --amend -C HEAD
 redate = rebase --committer-date-is-author-date
 
 # log commands
-lg = log --graph --oneline --decorate --all --abbrev-commit
+lg = log --graph --oneline --decorate --branches --remotes --tags --abbrev-commit
 ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
 ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]" --decorate --numstat
 watch = "!f() { watch -c 'git -c color.ui=always lg | sed \"s/\\[m/\\[00m/\"'; }; f"
