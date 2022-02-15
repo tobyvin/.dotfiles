@@ -53,6 +53,9 @@ symbol = " "
 [git_branch]
 symbol = " "
 
+[git_status]
+format = '([\[$conflicted$deleted$renamed$modified$staged$untracked$ahead_behind\]]($style) )'
+
 [golang]
 symbol = " "
 
