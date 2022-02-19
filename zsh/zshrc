@@ -27,27 +27,26 @@ fpath=(~/.local/share/zsh/site-functions "${fpath[@]}")
 source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 for f in ~/.zsh/*.*sh; do source $f; done
 
-
 # fzf settings
-export FZF_DEFAULT_COMMAND='fd --type f'
+export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-_fzf_compgen_path() {
+command -v fd &>/dev/null && _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
 }
 
-_fzf_compgen_dir() {
+command -v fd &>/dev/null && _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-# starship prompt
-eval "$(starship init zsh)"
+eval "$(starship init zsh 2>/dev/null)"
+eval "$(navi widget zsh 2>/dev/null)"
 
-function set_win_title() {
-    folder=$(sed "s/$USER/~/g" <<<$PWD:t)
+set_win_title() {
+  folder=$(sed "s/$USER/~/g" <<<$PWD:t)
 
-    window_title="\033]0;$USER@$HOST: $folder\007"
-    echo -ne "$window_title"
+  window_title="\033]0;$USER@$HOST: $folder\007"
+  echo -ne "$window_title"
 }
 
 precmd_functions+=(set_win_title)

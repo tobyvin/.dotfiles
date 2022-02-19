@@ -1,19 +1,22 @@
 {
     "$help": "https://aka.ms/terminal-documentation",
     "$schema": "https://aka.ms/terminal-profiles-schema",
-    "actions": 
-    [
+    "actions": [
         {
-            "command": 
-            {
+            "command": {
+                "action": "closeTab"
+            },
+            "keys": "ctrl+w"
+        },
+        {
+            "command": {
                 "action": "openSettings",
                 "target": "settingsUI"
             },
             "keys": "ctrl+comma"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "openSettings"
             },
             "keys": "ctrl+shift+comma"
@@ -23,35 +26,16 @@
             "keys": "ctrl+v"
         },
         {
-            "command": 
-            {
+            "command": {
                 "action": "newTab"
             }
         },
         {
-            "command": "find"
-        },
-        {
-            "command": 
-            {
+            "command": {
                 "action": "openSettings",
                 "target": "defaultsFile"
             },
             "keys": "ctrl+alt+comma"
-        },
-        {
-            "command": 
-            {
-                "action": "closeTab"
-            },
-            "keys": "ctrl+w"
-        },
-        {
-            "command": 
-            {
-                "action": "commandPalette"
-            },
-            "keys": "f1"
         },
         {
             "command": "unbound",
@@ -60,25 +44,30 @@
         {
             "command": "unbound",
             "keys": "ctrl+t"
+        },
+        {
+            "command": "find"
+        },
+        {
+            "command": {
+                "action": "commandPalette"
+            },
+            "keys": "f1"
         }
     ],
     "alwaysShowNotificationIcon": true,
     "confirmCloseAllTabs": false,
     "defaultProfile": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
-    "disabledProfileSources": 
-    [
+    "disabledProfileSources": [
         "Windows.Terminal.Azure"
     ],
     "experimental.rendering.forceFullRepaint": true,
     "initialCols": 100,
     "initialRows": 30,
     "multiLinePasteWarning": false,
-    "profiles": 
-    {
-        "defaults": 
-        {
-            "bellStyle": 
-            [
+    "profiles": {
+        "defaults": {
+            "bellStyle": [
                 "window",
                 "taskbar"
             ],
@@ -86,19 +75,18 @@
             "colorScheme": "vscode-dark",
             "cursorColor": "#D4D4D4",
             "cursorShape": "filledBox",
-            "font": 
-            {
+            "font": {
                 "face": "FiraCode NF",
                 "size": 11
             },
             "padding": "8",
             "useAcrylic": true
         },
-        "list": 
-        [
+        "list": [
             {
                 "guid": "{58ad8b0c-3ef8-5f4d-bc6f-13e4c00f2530}",
                 "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
                 "name": "Debian",
                 "source": "Windows.Terminal.Wsl"
             },
@@ -115,6 +103,13 @@
                 "name": "Loki"
             },
             {
+                "commandline": "C:\\Users\\tobyv\\.ssh\\wsl-ssh.bat door",
+                "guid": "{2d87a771-a5dd-44d5-b32d-ce8688b41f7c}",
+                "hidden": false,
+                "icon": "ms-appx:///ProfileIcons/{9acb9455-ca41-5af7-950f-6bca1bc9722f}.png",
+                "name": "Door"
+            },
+            {
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
                 "name": "PowerShell",
@@ -122,8 +117,7 @@
             }
         ]
     },
-    "schemes": 
-    [
+    "schemes": [
         {
             "background": "#0C0C0C",
             "black": "#0C0C0C",
