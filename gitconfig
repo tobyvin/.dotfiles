@@ -28,6 +28,11 @@ tool = default-difftool
 [difftool "default-difftool"]
 cmd = code --wait --diff $LOCAL $REMOTE
 
+[trailer]
+separators = ":#"
+[trailer "fix"]
+key = "Fix #"
+
 [alias]
 # basic
 st = status -s
