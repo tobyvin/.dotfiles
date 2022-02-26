@@ -4,16 +4,16 @@
     "actions": [
         {
             "command": {
-                "action": "closeTab"
-            },
-            "keys": "ctrl+w"
-        },
-        {
-            "command": {
                 "action": "openSettings",
                 "target": "settingsUI"
             },
             "keys": "ctrl+comma"
+        },
+        {
+            "command": {
+                "action": "closeTab"
+            },
+            "keys": "ctrl+w"
         },
         {
             "command": {
@@ -27,8 +27,10 @@
         },
         {
             "command": {
-                "action": "newTab"
-            }
+                "action": "newTab",
+                "profile": "btm"
+            },
+            "keys": "alt+`"
         },
         {
             "command": {
@@ -44,9 +46,6 @@
         {
             "command": "unbound",
             "keys": "ctrl+t"
-        },
-        {
-            "command": "find"
         },
         {
             "command": {
@@ -114,6 +113,12 @@
                 "hidden": false,
                 "name": "PowerShell",
                 "source": "Windows.Terminal.PowershellCore"
+            },
+            {
+                "commandline": "btm",
+                "guid": "{1a3bcafa-ff3b-46ba-bdf4-582e99ec9dfc}",
+                "hidden": false,
+                "name": "btm"
             }
         ]
     },
