@@ -12,7 +12,7 @@ Host heimdall loki
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
     ControlMaster auto
     ControlPath ~/.ssh/controlmasters/%r@%h:%p
-    ControlPersist yes
+    ControlPersist 30m
 
 Host odin thor
     User tobyv
@@ -22,13 +22,13 @@ Host odin thor
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
     ControlMaster auto
     ControlPath ~/.ssh/controlmasters/%r@%h:%p
-    ControlPersist yes
+    ControlPersist 30m
 
 host bifrost
     User tobyv
     ControlMaster auto
     ControlPath ~/.ssh/controlmasters/%r@%h:%p
-    ControlPersist yes
+    ControlPersist 30m
 
 Host aegir
     User root
@@ -44,7 +44,7 @@ Host door
     RemoteForward /run/user/1000/gnupg/S.gpg-agent /home/tobyv/.gnupg/S.gpg-agent.extra
     ControlMaster auto
     ControlPath ~/.ssh/controlmasters/%r@%h:%p
-    ControlPersist yes
+    ControlPersist 30m
 
 Host siue
     User tovince
