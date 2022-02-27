@@ -34,11 +34,10 @@ echo -e "${BLUE}Setting up WSL"
 ln -sfn $WINHOME ~/win
 
 # ssh-config
-sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4321|' \
-    ssh/config | sed '/Control/d' >ssh/win.config
+sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4321|' ssh/config |
+    sed '/Control/d' >"${WINHOME}/.ssh/config"
 
 # Create windows symlinks to dotfiles
-$mkln $@ "ssh/win.config" "${WINHOME}/.ssh/config"
 $mkln $@ "gitconfig" "${WINHOME}/.gitconfig"
 $mkln $@ "gnupg/gpg.conf" "${WINHOME}/AppData/Roaming/gnupg/gpg.conf"
 $mkln $@ "alacritty.yml" "${WINHOME}/AppData/Roaming/alacritty/alacritty.yml"
