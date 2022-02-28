@@ -9,6 +9,7 @@ alias lsa='ls -lah'
 alias grep='grep --color'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
+alias td=". td.sh"
 # scripts
 alias dfi=~/dotfiles/install
 alias dfu=~/dotfiles/update
