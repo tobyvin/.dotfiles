@@ -5,7 +5,6 @@ WINHOME="/mnt/c/Users/$USER"
 
 export BROWSER=wslview
 export EDITOR="code --wait"
-export PATH=$(echo "$PATH" | sed -e 's/:\/mnt\/c\/Users\/tobyv\/.cargo\/bin\(:\|$\)//')
 
 alias cb=clip.exe
 alias wsl=wsl.exe
@@ -43,6 +42,7 @@ wsl_cmd_proxy() {
 
 function winget { wsl_cmd_proxy "winget.exe" "$@"; }
 function scoop { wsl_cmd_proxy "scoop" "$@"; }
+function alacritty { wsl_cmd_proxy "alacritty.exe" "$@"; }
 
 # https://github.com/validatedev/drop-cache-if-idle
 [ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &>/dev/null
