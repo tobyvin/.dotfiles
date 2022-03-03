@@ -103,6 +103,7 @@ for key     kcap   seq        mode   widget (
 
 bindkey '^ ' autosuggest-accept
 bindkey '^[[Z' reverse-menu-complete
+bindkey -s ^f "tmux-sessionizer\n"
 
 # register ctrl+c as interupt 
 function ctrl_c_intr() {

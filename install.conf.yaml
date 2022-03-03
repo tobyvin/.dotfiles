@@ -54,10 +54,11 @@
         curl -sL https://gist.github.com/junegunn/8b572b8d4b5eddd8b85e5f4d40f17236/raw/6e5d520bfc96d6b3e42571a54cb4d1ebc8e2dd84/key-binding.zsh  >>~/.bash/fzf-key-bindings.sh;
         )
 
-    - description: Installing bat
-      command:
-        target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/armv7/arm/) &&
-        scripts/install-crate.sh --git sharkdp/bat --target $target --completion-bash --completion-zsh
+    # Install manually with cargo see https://github.com/sharkdp/bat/issues/2106
+    # - description: Installing bat
+    #   command:
+    #     target=$(rustc -Vv | grep host | cut -d' ' -f2 | sed s/armv7/arm/) &&
+    #     scripts/install-crate.sh --git sharkdp/bat --target $target --completion-bash --completion-zsh
 
     - description: Installing fd
       command:
@@ -120,25 +121,14 @@
     - description: Installing zsh-autosuggestions
       command: repo=https://github.com/zsh-users/zsh-autosuggestions &&
         target=~/.zsh/zsh-autosuggestions &&
-        git clone $repo $target || 
-        git -C $target pull 
+        git clone $repo $target ||
+        git -C $target pull
 
     - description: Installing zsh-syntax-highlighting
       command: repo=https://github.com/zsh-users/zsh-syntax-highlighting
         target=~/.zsh/zsh-syntax-highlighting &&
-        git clone $repo $target || 
-        git -C $target pull 
-
-    - description: Installing zsh-syntax-highlighting
-      command: repo=https://github.com/nvm-sh/nvm.git
-        target=~/.nvm &&
-        git clone $repo $target || 
-        git -C $target pull;
-        ln -sf $target/nvm.sh .bash/nvm.sh &&
-        ln -sf $target/nvm.sh .zsh/nvm.sh &&
-        ln -sf $target/bash_completion ~/.local/share/bash-completion/completions/nvm &&
-        ln -sf $target/bash_completion .zsh/nvm_completion.sh
-        
+        git clone $repo $target ||
+        git -C $target pull
 
 - link:
     # shell
@@ -150,7 +140,7 @@
       glob: true
       if: '[ -n "${WSL_DISTRO_NAME+1}" ]'
       path: wsl/*
-      
+
     ~/.zshenv:
     ~/.zsh/.zshrc: zsh/zshrc
     ~/.zsh/.zshenv: bash/env.sh
@@ -168,9 +158,15 @@
     ~/.config/bat/config: bat.conf
     ~/.gitconfig:
     ~/.ssh/config: ssh/config
+    ~/.tmux.conf:
+      path: /dev/null
+      if: "! ln -f tmux.conf ~/.tmux.conf"
     ~/.gnupg/:
       glob: true
       path: gnupg/*.conf
+    ~/.local/bin:
+      glob: true
+      path: bin/*
 
 - shell:
     - description: Installing gpg key

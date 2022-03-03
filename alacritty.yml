@@ -14,14 +14,14 @@
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
 # set by alacritty itself.
-#env:
+env:
 # TERM variable
 #
 # This value is used to set the `$TERM` environment variable for
 # each instance of Alacritty. If it is not present, alacritty will
 # check the local terminfo database and use `alacritty` if it is
 # available, otherwise `xterm-256color` is used.
-#TERM: alacritty
+  TERM: alacritty
 
 #window:
 # Window dimensions (changes require restart)
@@ -81,7 +81,7 @@
 #startup_mode: Windowed
 
 # Window title
-#title: Alacritty
+title: Alacritty
 
 # Allow terminal applications to change Alacritty's window title.
 #dynamic_title: true
@@ -99,13 +99,13 @@
 # and `light`. Set this to `None` to use the default theme variant.
 #gtk_theme_variant: None
 
-#scrolling:
+scrolling:
 # Maximum number of lines in the scrollback buffer.
 # Specifying '0' will disable scrolling.
-#history: 10000
+  history: 10000
 
 # Scrolling distance multiplier.
-#multiplier: 3
+  multiplier: 3
 
 # Font configuration
 font:
@@ -348,7 +348,7 @@ font:
 
 # Duration of the visual bell flash in milliseconds. A `duration` of `0` will
 # disable the visual bell animation.
-#duration: 0
+duration: 100
 
 # Visual bell animation color.
 #color: '#ffffff'
@@ -366,13 +366,13 @@ font:
 #
 #command: None
 
-#selection:
+selection:
 # This string contains all characters that are used as separators for
 # "semantic words" in Alacritty.
 #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
 
 # When set to `true`, selected text will be copied to the primary clipboard.
-#save_to_clipboard: false
+  save_to_clipboard: false
 
 #cursor:
 # Cursor style

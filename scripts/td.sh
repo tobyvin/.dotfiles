@@ -1,6 +1,16 @@
 #!/bin/sh
+TEMP=$(getopt -o hf --long help,force \
+    -n 'javawrap' -- "$@")
+
+if [ $? != 0 ]; then
+    echo "Terminating..." >&2
+    exit 1
+fi
+
+eval set -- "$TEMP"
 
 SCRIPT="$(basename $0)"
+ENV_CACHE="${HOME}/.cache/td/.env"
 
 help() {
     cat <<-EOF
@@ -43,22 +53,6 @@ echo_err() {
     echo >&2 "$SCRIPT: $@"
 }
 
-rm_args="-r"
-while test $# -gt 0; do
-    case $1 in
-    --help | -h)
-        help
-        return 0
-        ;;
-    --force | -f)
-        rm_args="-rf"
-        shift
-        ;;
-    *) break ;;
-
-    esac
-done
-
 show() {
     if [ ! -n "$TD" ]; then
         echo_err "Not set"
@@ -82,6 +76,7 @@ remove() {
         cd "$TD_ORIGIN"
     fi
 
+    rm "$ENV_CACHE" -rf
     unset TD
     unset TD_ORIGIN
 }
@@ -92,21 +87,53 @@ create() {
     td=$(mktemp -d)
 
     export TD="$td"
-    export TD_ORIGIN="$PWD"
+    update-origin
 
     echo "created $TD"
     cd "$TD"
+}
+
+update-origin() {
+    export TD_ORIGIN="$PWD"
+    cat >$ENV_CACHE <<-EOF
+TD=$TD
+TD_ORIGIN=$TD_ORIGIN
+EOF
 }
 
 toggle() {
     if [ "$PWD" = "$TD" ]; then
         cd "$TD_ORIGIN"
     elif [ -n "$TD" ]; then
+        update-origin
         cd "$TD"
     else
         create
     fi
 }
+
+if [ -f "$ENV_CACHE" ]; then
+    export $(cat "$ENV_CACHE" | xargs)
+fi
+
+rm_args="-r"
+while test $# -gt 0; do
+    case $1 in
+    --help | -h)
+        help
+        return 0
+        ;;
+    --force | -f)
+        rm_args="-rf"
+        shift
+        ;;
+    --)
+        shift
+        break
+        ;;
+    *) break ;;
+    esac
+done
 
 case $1 in
 ls | list | show)
