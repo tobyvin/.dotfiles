@@ -43,10 +43,17 @@ eval "$(starship init zsh 2>/dev/null)"
 eval "$(navi widget zsh 2>/dev/null)"
 
 set_win_title() {
-  folder=$(sed "s/$USER/~/g" <<<$PWD:t)
+  local prefix
 
-  window_title="\033]0;$USER@$HOST: $folder\007"
-  echo -ne "$window_title"
+  if [ "$USER" != "tobyv" ]; then
+    prefix="${USER} in "
+  fi
+
+  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+    prefix="${prefix/in/on}${HOSTNAME} in "
+  fi
+
+  echo -ne "\033]0;${prefix}${PWD/$HOME/~}\007"
 }
 
 precmd_functions+=(set_win_title)
