@@ -15,7 +15,7 @@ set_win_title() {
   fi
 
   if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    prefix="${prefix/in/on}${HOSTNAME} in "
+    prefix="${prefix/in/on}${HOST} in "
   fi
 
   echo -ne "\033]0;${prefix}${PWD/$HOME/~}\007"
