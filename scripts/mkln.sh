@@ -74,8 +74,8 @@ fi
 [ "$VERBOSE" == true ] && echo "linking $2 -> $1"
 
 if [ -d "$1" ]; then
-    [ "$VERBOSE" == true ] && echo "$1 is a directory. Creating junction."
-    args='/J'
+    [ "$VERBOSE" == true ] && echo "$1 is a directory. Creating symbolic link."
+    args='/D'
 fi
 
 mkdir -p $(dirname $2)
@@ -107,5 +107,9 @@ cmd="cd ~; cmd /c mklink ${args} ${target} ${source}"
 if [ "$DEBUG" == true ]; then
     [ "$QUIET" != true ] && printf '\nCommand: \n%s\n\n' "powershell.exe -c ${cmd} &>/dev/null"
 else
-    powershell.exe -c "${cmd}" &>/dev/null
+    if $QUIET; then
+        powershell.exe -c "${cmd}" &>/dev/null
+    else
+        powershell.exe -c "${cmd}"
+    fi
 fi

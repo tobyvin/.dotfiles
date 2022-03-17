@@ -40,15 +40,22 @@ sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\11
 # Create windows symlinks to dotfiles
 $mkln $@ "gitconfig" "${WINHOME}/.gitconfig"
 $mkln $@ "gnupg/gpg.conf" "${WINHOME}/AppData/Roaming/gnupg/gpg.conf"
-$mkln $@ "alacritty.yml" "${WINHOME}/AppData/Roaming/alacritty/alacritty.yml"
+$mkln $@ "alacritty" "${WINHOME}/AppData/Roaming/alacritty"
 $mkln $@ "gnupg/gpg-agent.conf" "${WINHOME}/AppData/Roaming/gnupg/gpg-agent.conf"
 $mkln $@ "gnupg/scdaemon.conf" "${WINHOME}/AppData/Roaming/gnupg/scdaemon.conf"
 $mkln $@ "wt.json" "${WINHOME}/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json"
 $mkln $@ "winget.json" "${WINHOME}/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json"
 
+# install xclip/xsel
+curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xclip"
+curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xsel"
+chmod +x "${HOME}/.local/bin/xclip"
+chmod +x "${HOME}/.local/bin/xsel"
+
 # install hotkeys.exe
 install_dir="${WINHOME}/AppData/Local/Programs/hotkeys"
 mkdir -p "${install_dir}"
+rm -f "${install_dir}/hotkeys.exe"
 curl -sL "https://github.com/tobyvin/hotkeys/releases/latest/download/hotkeys.exe" >"${install_dir}/hotkeys.exe"
 
 # https://github.com/wslutilities/wslu

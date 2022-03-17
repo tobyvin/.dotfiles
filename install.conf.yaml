@@ -154,7 +154,7 @@
       path: wsl/*
 
     ~/.config/starship.toml: starship.toml
-    ~/.config/alacritty.yml: alacritty.yml
+    ~/.config/alacritty: alacritty
     ~/.config/bat/config: bat.conf
     ~/.gitconfig:
     ~/.ssh/config: ssh/config
