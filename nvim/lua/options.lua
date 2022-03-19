@@ -1,12 +1,17 @@
 local g = vim.g -- global variables
-local cmd = vim.cmd -- execute Vim commands
 local opt = vim.opt -- vim options
 local exec = vim.api.nvim_exec -- execute Vimscript
 
+g.mapleader = ' '
+
+-- set colorscheme
 g.vscode_style = "dark"
 g.vscode_transparent = 1
 g.vscode_italic_comment = 1
 g.vscode_disable_nvimtree_bg = true 
+
+vim.cmd('colorscheme vscode') 
+
 g.tex_flavor = "latex";
 
 -- global options
@@ -30,7 +35,7 @@ local options = {
   undofile = true,
   undodir = vim.fn.stdpath("config") .. "/undo",
   clipboard = opt.clipboard + "unnamedplus", -- copy & paste
-  shortmess = opt.shortmess + "c"
+  shortmess = opt.shortmess + "c",
   wrap = false, -- don't automatically wrap on load
   showmatch = true, -- show the matching part of the pair for [] {} and ()
   cursorline = true, -- highlight current line
@@ -47,7 +52,7 @@ local options = {
   updatetime = 500, -- CursorHold interval
   expandtab = true,
   softtabstop = 4,
-  et.textwidth = 100,
+  textwidth = 100,
   shiftwidth = 4, -- spaces per tab (when shifting), when using the >> or << commands, shift lines by 4 spaces
   tabstop = 4, -- spaces per tab
   smarttab = true, -- <tab>/<BS> indent/dedent in leading whitespace
@@ -68,42 +73,3 @@ local options = {
 for k, v in pairs(options) do
   vim.opt[k] = v
 end
-
--- highlight on yank
-exec([[
-  augroup YankHighlight
-    autocmd!
-    autocmd TextYankPost * silent! lua vim.highlight.on_yank{higroup="IncSearch", timeout=500, on_visual=true}
-  augroup end
-]], false)
-
--- to Show whitespace, MUST be inserted BEFORE the colorscheme command
-cmd 'autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=grey'
-
--- set colorscheme
-cmd 'colorscheme vscode'
-
--- jump to the last position when reopening a file
-cmd [[
-if has("autocmd")
-  au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal! g`\"" | endif
-endif
-]]
-
--- remove whitespace on save
-cmd [[au BufWritePre * :%s/\s\+$//e]]
-
--- don't auto commenting new lines
-cmd [[au BufEnter * set fo-=c fo-=r fo-=o]]
-
--- 2 spaces for selected filetypes
-cmd [[ autocmd FileType xml,html,xhtml,css,scss,javascript,lua,dart setlocal shiftwidth=2 tabstop=2 ]]
-
--- json
-cmd [[ au BufEnter *.json set ai expandtab shiftwidth=2 tabstop=2 sta fo=croql ]]
-
---- latex
-cmd [[ autocmd FileType latex,tex,plaintex set wrap linebreak ]]
-
--- markdown
-cmd [[ autocmd BufNewFile,BufRead *.mdx set filetype=markdown ]]

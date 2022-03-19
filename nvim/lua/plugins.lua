@@ -43,6 +43,7 @@ return packer.startup(function(use)
   -- My plugins here
 
   -- Have packer manage itself
+
   use "wbthomason/packer.nvim"
 
   use {
@@ -52,12 +53,8 @@ return packer.startup(function(use)
   }
 
   use 'lewis6991/impatient.nvim'
-
   use 'andweeb/presence.nvim'
-
-  use 'Iron-E/nvim-cartographer'
-
-  use 'Mofiqul/vscode.nvim'
+  use 'Mofiqul/vscode.nvim' -- vscode theme
 
   use {
     'tpope/vim-dispatch',
@@ -69,34 +66,30 @@ return packer.startup(function(use)
     }
   }
 
-  use {
-    -- A collection of common configurations for Neovim's built-in language server client
-    'neovim/nvim-lspconfig',
-    config = [[require('plugins/lspconfig')]],
+  use { 
+    'neovim/nvim-lspconfig', 
+    config = [[require('plugins/lspconfig')]] 
   }
 
-  use {
-    "williamboman/nvim-lsp-installer",
-    config = [[require('plugins/lsp-installer')]],
+  use { 
+    "williamboman/nvim-lsp-installer", 
+    config = [[require('plugins/lsp-installer')]] 
   }
 
   use 'nvim-lua/lsp_extensions.nvim'
   use 'simrat39/rust-tools.nvim'
-  use 'folke/trouble.nvim'
-  use 'ray-x/lsp_signature.nvim'
   use 'simrat39/symbols-outline.nvim'
-  use 'kosayoda/nvim-lightbulb'
 
-  use {
-    -- vscode-like pictograms for neovim lsp completion items Topics
-    "onsails/lspkind-nvim",
-    config = [[require('plugins/lspkind')]]
+  use { 
+    "folke/trouble.nvim", 
+    cmd = "TroubleToggle" 
   }
 
   use {
-      -- A completion plugin for neovim coded in Lua.
     'hrsh7th/nvim-cmp',
     requires = {
+      { "onsails/lspkind-nvim", config = [[require('plugins/lspkind')]] }, -- vscode-like pictograms for cmp
+      'ray-x/lsp_signature.nvim',
       'hrsh7th/cmp-nvim-lsp', -- nvim-cmp source for neovim builtin LSP client
       'hrsh7th/cmp-nvim-lua', -- nvim-cmp source for nvim lua
       'hrsh7th/cmp-buffer', -- nvim-cmp source for buffer words.
@@ -108,41 +101,31 @@ return packer.startup(function(use)
     config = [[require('plugins/cmp')]],
   }
 
-  use { 'nvim-telescope/telescope-dap.nvim' }
-
-  use {
-    'nvim-telescope/telescope-fzf-native.nvim',
-    run = 'make',
-  }
-
-
-  use {
-    "nvim-telescope/telescope-frecency.nvim",
-    requires = {
-      "tami5/sqlite.lua"
-    }
-  }
-
   use {
     'nvim-telescope/telescope.nvim',
     requires = {
       'nvim-lua/plenary.nvim',
       'BurntSushi/ripgrep',
+      'nvim-telescope/telescope-dap.nvim',
+      { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+      { "nvim-telescope/telescope-frecency.nvim", requires = "tami5/sqlite.lua" },
     },
     config = [[require('plugins/telescope')]],
   }
 
   use {
-    -- Snippet Engine for Neovim written in Lua.
+    "jose-elias-alvarez/null-ls.nvim",
+    requires = "nvim-lua/plenary.nvim",
+    config = [[require('plugins/null-ls')]]
+  }
+
+  use {
     "L3MON4D3/LuaSnip",
-    requires = {
-      "rafamadriz/friendly-snippets" -- Snippets collection
-    },
+    requires = "rafamadriz/friendly-snippets",
     config = [[require('plugins/luasnip')]]
   }
 
   use {
-    -- Nvim Treesitter configurations and abstraction layer
     "nvim-treesitter/nvim-treesitter",
     run = ":TSUpdate",
     requires = {
@@ -152,22 +135,17 @@ return packer.startup(function(use)
     config = [[require('plugins/treesitter')]]
   }
 
-  use {
-    "lukas-reineke/indent-blankline.nvim",
-    config = [[require('plugins/blankline')]]
+  use { 
+    "lukas-reineke/indent-blankline.nvim", 
+    config = [[require('plugins/blankline')]] 
   }
 
-  use {
-    "tpope/vim-eunuch"
-  }
+  use "tpope/vim-eunuch"
 
   use {
     "nvim-lualine/lualine.nvim",
     requires = {
-      {
-        "kyazdani42/nvim-web-devicons",
-        opt = true
-      },
+      { "kyazdani42/nvim-web-devicons" },
     },
     config = [[require('plugins/lualine')]]
   }
@@ -186,7 +164,8 @@ return packer.startup(function(use)
 
   use {
     'lewis6991/gitsigns.nvim',
-    requires = { 'nvim-lua/plenary.nvim' },
+    requires = 'nvim-lua/plenary.nvim',
+    config = [[require('plugins/gitsigns')]],
   }
 
   use {
@@ -194,12 +173,12 @@ return packer.startup(function(use)
     cmd = 'Neogit',
     config = [[require('neogit').setup {disable_commit_confirmation = true, disable_signs = true}]]
   }
+
   use 'kdheepak/lazygit.nvim'
 
-  use {
-    "kyazdani42/nvim-tree.lua",
-    requires = "kyazdani42/nvim-web-devicons",
-    config = [[require('plugins/nvim-tree')]]
+  use { 
+    "f-person/git-blame.nvim", 
+    config = [[require('plugins/git-blame')]] 
   }
 
   use {
@@ -208,51 +187,60 @@ return packer.startup(function(use)
     config = [[vim.g.undotree_SetFocusWhenToggle = 1]],
   }
 
-  use {
-      "folke/which-key.nvim",
-      config = [[require("which-key").setup({})]],
+  use { 
+    "ThePrimeagen/git-worktree.nvim", 
+    config = [[require('plugins/git-worktree')]] 
+  }
+
+  use { 
+    'ThePrimeagen/refactoring.nvim', 
+    opt = true 
   }
 
   use {
-    'Pocco81/DAPInstall.nvim',
-    config = [[require("dap-install").config("chrome", {})]],
+    "ahmedkhalf/project.nvim",
+    config = [[require('plugins/project')]] 
+  }
+
+  use { 
+    "folke/which-key.nvim", 
+    config = [[require('plugins/which-key')]] 
   }
 
   use {
     'mfussenegger/nvim-dap',
+    requires = {
+      "theHamsta/nvim-dap-virtual-text",
+      "rcarriga/nvim-dap-ui",
+      "Pocco81/DAPInstall.nvim",
+    },
     config = [[require('plugins/dap')]],
-    module = 'dap',
+  }
+
+  use 'rcarriga/nvim-notify'
+  use "antoinemadec/FixCursorHold.nvim"
+  use "nacro90/numb.nvim"
+  use "Shatur/neovim-session-manager"
+  use 'ThePrimeagen/harpoon'
+  use "b0o/SchemaStore.nvim"
+  use 'windwp/nvim-spectre'
+  
+  use { 
+    'goolord/alpha-nvim', 
+    config = [[require('plugins/alpha')]] 
+  }
+
+  use { 
+    "filipdutescu/renamer.nvim", 
+    config = [[require('plugins/renamer')]] 
+  }
+
+  use { 
+    'numToStr/Comment.nvim', 
+    config = [[require('Comment').setup()]] 
   }
 
   use {
-    'puremourning/vimspector',
-    requires = 'nvim-dap',
-    after = 'nvim-dap',
-    setup = [[vim.g.vimspector_enable_mappings = 'HUMAN']],
-  }
-
-  use {
-    'rcarriga/nvim-dap-ui',
-    requires = 'nvim-dap',
-    disable = true,
-    after = 'nvim-dap',
-    config = [[require('dapui').setup()]],
-  }
-
-  use {
-    "ThePrimeagen/git-worktree.nvim",
-    config = [[require('plugins/git-worktree')]]
-  }
-
-  use {
-    'ThePrimeagen/refactoring.nvim',
-    opt = true
-    -- Can't get to work...
-    -- config = [[require('telescope').load_extension('refactoring')]],
-  }
-
-  use {
-    -- Highlight colors
     'norcalli/nvim-colorizer.lua',
     ft = {
       'css',
@@ -263,11 +251,24 @@ return packer.startup(function(use)
     config = [[require('colorizer').setup {'css', 'javascript', 'vim', 'html'}]],
   }
 
-    -- Buffer management
   use {
     'akinsho/nvim-bufferline.lua',
     requires = 'kyazdani42/nvim-web-devicons',
     config = [[require('plugins/bufferline')]],
+  }
+
+  use "moll/vim-bbye"
+  use 'SmiteshP/nvim-gps'
+
+  use {
+    "kyazdani42/nvim-tree.lua",
+    requires = {
+      {
+        'yamatsum/nvim-nonicons',
+        requires = 'kyazdani42/nvim-web-devicons'
+      },
+    },
+    config = [[require('plugins/nvim-tree')]]
   }
 
   -- Automatically set up your configuration after cloning packer.nvim

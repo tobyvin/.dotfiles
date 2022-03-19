@@ -26,6 +26,9 @@ selection:
 cursor:
   blinking: On
 
+mouse:
+  hide_when_typing: true
+
 live_config_reload: true
 
 shell:

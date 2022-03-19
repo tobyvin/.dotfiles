@@ -1,20 +1,7 @@
-
-local dap = require("dap");
-
-dap.configurations.typescriptreact = { -- change to typescript if needed
-    {
-        type = "chrome",
-        request = "attach",
-        program = "${file}",
-        cwd = vim.fn.getcwd(),
-        sourceMaps = true,
-        protocol = "inspector",
-        port = 9222,
-        webRoot = "${workspaceFolder}"
-    }
-}
-
-require('dap.ext.vscode').load_launchjs()
+local status_ok, dap = pcall(require, "dap")
+if not status_ok then
+	return
+end
 
 -- Debugpy
 dap.adapters.python = {
@@ -93,3 +80,10 @@ dap.configurations.rust = dap.configurations.cpp
 vim.cmd [[command! BreakpointToggle lua require('dap').toggle_breakpoint()]]
 vim.cmd [[command! Debug lua require('dap').continue()]]
 vim.cmd [[command! DapREPL lua require('dap').repl.open()]]
+
+local tele_status_ok, telescope = pcall(require, "telescope")
+if not tele_status_ok then
+	return
+end
+
+telescope.load_extension('dap')

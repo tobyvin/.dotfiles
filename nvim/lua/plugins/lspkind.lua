@@ -1,4 +1,9 @@
-require('lspkind').init({
+local status_ok, lspkind = pcall(require, "lspkind")
+if not status_ok then
+	return
+end
+
+lspkind.init({
     -- enables text annotations (default: 'default')
     -- default symbol map can be either 'default' or 'codicons' for codicon preset (requires vscode-codicons font installed)
     preset = 'codicons',

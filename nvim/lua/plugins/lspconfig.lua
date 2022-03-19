@@ -1,3 +1,8 @@
+local status_ok, lspconfig = pcall(require, "lspconfig")
+if not status_ok then
+	return
+end
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -9,7 +14,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
     virtual_text = {
         true,
         spacing = 6,
-        --severity_limit='Error'  -- Only show virtual text on error
+        severity_limit='Error'  -- Only show virtual text on error
     },
   }
 )
@@ -32,19 +37,11 @@ local function config(_config)
 	}, _config or {})
 end
 
-require("lspconfig").tsserver.setup(config())
+lspconfig.tsserver.setup(config())
 
-require("lspconfig").ccls.setup(config())
+lspconfig.ccls.setup(config())
 
-require("lspconfig").jedi_language_server.setup(config())
-
-require("lspconfig").svelte.setup(config())
-
-require("lspconfig").solang.setup(config())
-
-require("lspconfig").cssls.setup(config())
-
-require("lspconfig").gopls.setup(config({
+lspconfig.gopls.setup(config({
 	cmd = { "gopls", "serve" },
 	settings = {
 		gopls = {
@@ -72,8 +69,11 @@ local rustopts = {
     server = {
         settings = {
             ["rust-analyzer"] = {
+                cargo = {
+                    allFeatures = "true",
+                },
                 checkOnSave = {
-                    command = "clippy"
+                    command = "clippy",
                 },
             }
         }

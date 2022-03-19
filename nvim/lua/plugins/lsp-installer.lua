@@ -1,4 +1,7 @@
-local lsp_installer = require("nvim-lsp-installer")
+local status_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
+if not status_ok then
+  print("Failed to require nvim-lsp-installer")
+end
 
 -- Provide settings first!
 lsp_installer.settings {

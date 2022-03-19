@@ -1,4 +1,9 @@
-require('telescope').setup {
+local status_ok, telescope = pcall(require, "telescope")
+if not status_ok then
+	return
+end
+
+telescope.setup {
   defaults = {
     file_ignore_patterns = {"node_modules", ".git", "dist"},
     vimgrep_arguments = {
@@ -46,6 +51,5 @@ require('telescope').setup {
 }
 
 -- Extensions
-require('telescope').load_extension('frecency')
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('dap')
+telescope.load_extension('frecency')
+telescope.load_extension('fzf')

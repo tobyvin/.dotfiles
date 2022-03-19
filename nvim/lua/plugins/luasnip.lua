@@ -1,13 +1,18 @@
-require("luasnip").config.set_config({
+local status_ok, luasnip = pcall(require, "luasnip")
+if not status_ok then
+	return
+end
+
+luasnip.config.set_config({
     history = true,
     updateevents = "TextChanged,TextChangedI"
 })
 
-require("luasnip").snippets = {all = {}, html = {}}
+luasnip.snippets = {all = {}, html = {}}
 
-require("luasnip").snippets.javascript = require("luasnip").snippets.html
-require("luasnip").snippets.javascriptreact = require("luasnip").snippets.html
-require("luasnip").snippets.typescriptreact = require("luasnip").snippets.html
-require("luasnip/loaders/from_vscode").load({include = {"html"}})
+luasnip.snippets.javascript = luasnip.snippets.html
+luasnip.snippets.javascriptreact = luasnip.snippets.html
+luasnip.snippets.typescriptreact = luasnip.snippets.html
+require("luasnip.loaders.from_vscode").load({include = {"html"}})
 
-require('luasnip/loaders/from_vscode').lazy_load()
+require('luasnip.loaders.from_vscode').lazy_load()

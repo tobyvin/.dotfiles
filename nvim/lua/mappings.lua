@@ -1,87 +1,193 @@
-local map = require('cartographer')
-
-vim.g.mapleader = ' '
-
--- wrap
-map.n.nore['<Leader>w'] = ':set wrap! linebreak!<CR>'
-map.n.nore['j'] = 'gj'
-map.n.nore['k'] = 'gk'
-
--- navigation
---- behave like other capitals
-map.n.nore['Y'] = 'y$'
-
---- keeping it centered
-map.n.nore['n'] = 'nzzzv'
-map.n.nore['N'] = 'Nzzzv'
-map.n.nore['J'] = 'mzJ`z'
-
---- moving text
-map.v.nore['J'] = [[:m '>+1<CR>gv=gv]]
-map.v.nore['K'] = [[:m '<-2<CR>gv=gv]]
-map.n.nore['<leader>k'] = ':m .-2<CR>=='
-map.n.nore['<leader>j'] = ':m .+1<CR>=='
-
--- telescope
-map.n.nore.silent['<C-a>'] = [[<Cmd>Telescope buffers show_all_buffers=true theme=get_dropdown<CR>]]
-map.n.nore.silent['<C-e>'] = [[<Cmd>Telescope frecency theme=get_dropdown<CR>]]
-map.n.nore.silent['<C-h>'] = [[<Cmd>Telescope git_files theme=get_dropdown<CR>]]
-map.n.nore.silent['<C-d>'] = [[<Cmd>Telescope find_files theme=get_dropdown<CR>]]
-map.n.nore.silent['<C-g>'] = [[<Cmd>Telescope live_grep theme=get_dropdown<CR>]]
--- map.v.nore.silent["<leader>rr"] = [[:lua require('telescope').extensions.refactoring.refactors()<CR>]]
-
--- refactoring
-map.v.nore.silent['<leader>re'] = [[:lua require("refactoring").refactor(106)<CR>]]
-map.n.nore.silent['<leader>ri'] = [[:lua require("refactoring").refactor(123)<CR>]]
-map.n.nore.silent['<leader>dh'] = [[:lua print(vim.inspect(require("refactoring").debug.get_path()))<CR>]]
-map.n.nore.silent['<leader>dg'] = [[:lua require("refactoring").debug.printf({below = false})<CR>]]
-map.n.nore.silent['<leader>dm'] = [[:lua require("refactoring").debug.printf({below = true})<CR>]]
-map.n.nore.silent['<leader>df'] = [[:lua require("refactoring").debug.print_var({below = false})<CR>]]
-map.n.nore.silent['<leader>db'] = [[:lua require("refactoring").debug.print_var({below = true})<CR>]]
-
---- quicklist
-map.n.nore['<leader>qn'] = '<Cmd>:cnext<CR>'
-map.n.nore['<leader>qp'] = '<Cmd>:cprev<CR>'
-map.n.nore['<leader>qo'] = '<Cmd>:copen<CR>'
-
--- lua tree
-require'nvim-tree'.setup {}
-map.nore['<C-b>'] = '<Cmd>NvimTreeToggle<CR>'
-map.n.nore['<Leader>tf'] = '<Cmd>NvimTreeFindFileToggle<CR>'
-map.n.nore['<Leader>tr'] = '<Cmd>NvimTreeRefresh<CR>'
-
--- language server
-map.n.nore['<Leader>vd'] = '<Cmd>lua vim.lsp.buf.definition()<CR>'
-map.n.nore['<Leader>vi'] = '<Cmd>lua vim.lsp.buf.implementation()<CR>'
-map.n.nore['<Leader>vsh'] = '<Cmd>lua vim.lsp.buf.signature_help()<CR>'
-map.n.nore['<Leader>vrr'] = '<Cmd>lua vim.lsp.buf.references()<CR>'
-map.n.nore['<Leader>vrn'] = '<Cmd>lua vim.lsp.buf.rename()<CR>'
-map.n.nore['<Leader>vh'] = '<Cmd>lua vim.lsp.buf.hover()<CR>'
-map.n.nore['<Leader>vca'] = '<Cmd>lua vim.lsp.buf.code_action()<CR>'
-map.n.nore['<Leader>vsd'] = '<Cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>'
-map.n.nore['<Leader>vn'] = '<Cmd>lua vim.lsp.diagnostic.goto_next()<CR>'
-map.n.nore['<Leader>vp'] = '<Cmd>lua vim.lsp.diagnostic.goto_prev()<CR>'
-map.n.nore['<Leader>vf'] = '<Cmd>Format<CR>'
-
--- debug
-map.n.nore['<F5>'] = [[<Cmd>lua require('dap').continue()<CR>]]
-map.n.nore['<F10>'] = [[<Cmd>lua require('dap').step_over()<CR>]]
-map.n.nore['<F11>'] = [[<Cmd>lua require('dap').step_into()<CR>]]
-map.n.nore['<F12>'] = [[<Cmd>lua require('dap').step_out()<CR>]]
-
--- git
-local function git_branches()
-	require("telescope.builtin").git_branches({
-        attach_mappings = function(_, map)
-			map("i", "<C-d>", actions.git_delete_branch)
-			map("n", "<C-d>", actions.git_delete_branch)
-			return true
-		end,
-	})
+local status_ok, which_key = pcall(require, "which-key")
+if not status_ok then
+	return
 end
 
-map.n.nore['<leader>gb'] = git_branches
-map.n.nore['<Leader>go'] = '<Cmd>Neogit<CR>'
-map.n.nore['<Leader>gc'] = '<Cmd>Neogit commit<CR>'
-map.n.nore['<Leader>gws'] = [[<Cmd>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>]]
-map.n.nore['<Leader>gwc'] = [[<Cmd>:lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>]]
+local opts = {
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
+	noremap = true, -- use `noremap` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
+}
+
+local mappings = {
+	-- Ctrl maps
+	["<C-s>"] = { "<cmd>w!<CR>", "Save" },
+	["<C-b>"] = { "<Cmd>NvimTreeToggle<CR>", "Explorer" },
+}
+
+local nopts = {
+	mode = "n", -- NORMAL mode
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
+	noremap = true, -- use `noremap` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
+}
+
+local nmappings = {
+	-- Ctrl maps
+	["<C-/>"] = { "<cmd>lua require('Comment.api').toggle_current_linewise()<CR>", "Comment" },
+
+	-- Prefix "<leader>"
+	["<leader>"] = {
+		a = { "<cmd>Alpha<cr>", "Alpha" },
+		c = { "<cmd>Bdelete!<CR>", "Close Buffer" },
+		q = { "<cmd>q!<CR>", "Quit" },
+		R = { "<cmd>lua require('renamer').rename()<cr>", "Rename" },
+		w = { "<cmd>w!<CR>", "Save" },
+		W = { ":set wrap! linebreak!<CR>", "Toggle Line Wrap" },
+		z = { "<cmd>ZenMode<cr>", "Zen" },
+		["/"] = { "<cmd>lua require('Comment.api').toggle_current_linewise()<CR>", "Comment" },
+
+		f = {
+			name = "Find",
+			b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+			c = { "<cmd>Telescope colorscheme<cr>", "Colorscheme" },
+			C = { "<cmd>Telescope commands<cr>", "Commands" },
+			e = { "<cmd>Telescope frecency theme=get_dropdown<cr>", "Frecency" },
+			f = { "<cmd>Telescope find_files theme=get_dropdown<cr>", "Find files" },
+			g = { "<cmd>Telescope live_grep theme=ivy<cr>", "Find Text" },
+			h = { "<cmd>Telescope help_tags<cr>", "Help" },
+			i = { "<cmd>lua require('telescope').extensions.media_files.media_files()<cr>", "Media" },
+			k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
+			l = { "<cmd>Telescope resume<cr>", "Last Search" },
+			m = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
+			p = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
+			r = { "<cmd>Telescope oldfiles<cr>", "Recent File" },
+			R = { "<cmd>Telescope registers<cr>", "Registers" },
+			t = { "<cmd>Telescope buffers show_all_buffers=true theme=get_dropdown<cr>", "Buffers" },
+		},
+
+		g = {
+			name = "Git",
+			b = { "<cmd>Telescope git_branches<cr>", "Checkout branch" },
+			c = { "<cmd>Telescope git_commits<cr>", "Checkout commit" },
+			d = { "<cmd>Gitsigns diffthis HEAD<cr>", "Diff" },
+			g = { "<cmd>LazyGit<CR>", "Lazygit" },
+			j = { "<cmd>lua require 'gitsigns'.next_hunk()<cr>", "Next Hunk" },
+			k = { "<cmd>lua require 'gitsigns'.prev_hunk()<cr>", "Prev Hunk" },
+			l = { "<cmd>GitBlameToggle<cr>", "Blame" },
+			o = { "<cmd>Telescope git_status<cr>", "Open changed file" },
+			p = { "<cmd>lua require 'gitsigns'.preview_hunk()<cr>", "Preview Hunk" },
+			r = { "<cmd>lua require 'gitsigns'.reset_hunk()<cr>", "Reset Hunk" },
+			R = { "<cmd>lua require 'gitsigns'.reset_buffer()<cr>", "Reset Buffer" },
+			s = { "<cmd>lua require 'gitsigns'.stage_hunk()<cr>", "Stage Hunk" },
+			u = { "<cmd>lua require 'gitsigns'.undo_stage_hunk()<cr>", "Undo Stage Hunk" },
+			w = {
+				name = "Worktree",
+				s = { [[<Cmd>lua require('telescope').extensions.git_worktree.git_worktrees()<CR>]], "Switch" },
+				c = { [[<Cmd>lua require('telescope').extensions.git_worktree.create_git_worktree()<CR>]], "Create" },
+			},
+		},
+
+		l = {
+			name = "LSP",
+			a = { "<cmd>lua vim.lsp.buf.code_action()<cr>", "Code Action" },
+			d = { "<cmd>TroubleToggle<cr>", "Diagnostics" },
+			f = { "<cmd>lua vim.lsp.buf.formatting()<cr>", "Format" },
+			-- F = { "<cmd>LspToggleAutoFormat<cr>", "Toggle Autoformat" },
+			g = {
+				name = "Goto",
+				d = { "<cmd>lua vim.lsp.buf.definition()<CR>", "Definition" },
+				D = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "Declaration" },
+				i = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "Implementation" },
+				r = { "<cmd>lua vim.lsp.buf.references()<CR>", "References" },
+			},
+			h = { "<Cmd>lua vim.lsp.buf.hover()<CR>", "Hover" },
+			H = { "<Cmd>lua vim.lsp.buf.signature_help()<CR>", "Signature Help" },
+			i = { "<cmd>LspInfo<cr>", "Info" },
+			I = { "<cmd>LspInstallInfo<cr>", "Installer Info" },
+			j = { "<cmd>lua vim.diagnostic.goto_next({buffer=0})<CR>", "Next Diagnostic" },
+			k = { "<cmd>lua vim.diagnostic.goto_prev({buffer=0})<cr>", "Prev Diagnostic" },
+			l = { "<cmd>lua vim.lsp.codelens.run()<cr>", "CodeLens Action" },
+			o = { "<cmd>SymbolsOutline<cr>", "Outline" },
+			q = { "<cmd>lua vim.lsp.diagnostic.set_loclist()<cr>", "Quickfix" },
+			r = { "<cmd>lua vim.lsp.buf.rename()<cr>", "Rename" },
+			R = { "<cmd>TroubleToggle lsp_references<cr>", "References" },
+			s = { "<cmd>Telescope lsp_document_symbols<cr>", "Document Symbols" },
+			S = { "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", "Workspace Symbols" },
+			w = { "<cmd>Telescope lsp_workspace_diagnostics<cr>", "Workspace Diagnostics" },
+		},
+
+		p = {
+			name = "Packer",
+			c = { "<cmd>PackerCompile<cr>", "Compile" },
+			i = { "<cmd>PackerInstall<cr>", "Install" },
+			s = { "<cmd>PackerSync<cr>", "Sync" },
+			S = { "<cmd>PackerStatus<cr>", "Status" },
+			u = { "<cmd>PackerUpdate<cr>", "Update" },
+		},
+
+		r = {
+			name = "Replace",
+			f = { "<cmd>lua require('spectre').open_file_search()<cr>", "Replace Buffer" },
+			r = { "<cmd>lua require('spectre').open()<cr>", "Replace" },
+			w = { "<cmd>lua require('spectre').open_visual({select_word=true})<cr>", "Replace Word" },
+		},
+
+		s = {
+			name = "Surround",
+			["."] = { "<cmd>lua require('surround').repeat_last()<cr>", "Repeat" },
+			a = { "<cmd>lua require('surround').surround_add(true)<cr>", "Add" },
+			b = { "<cmd>lua require('surround').toggle_brackets()<cr>", "Brackets" },
+			d = { "<cmd>lua require('surround').surround_delete()<cr>", "Delete" },
+			q = { "<cmd>lua require('surround').toggle_quotes()<cr>", "Quotes" },
+			r = { "<cmd>lua require('surround').surround_replace()<cr>", "Replace" },
+		},
+
+		t = {
+			name = "Terminal",
+			["1"] = { ":1ToggleTerm<cr>", "1" },
+			["2"] = { ":2ToggleTerm<cr>", "2" },
+			["3"] = { ":3ToggleTerm<cr>", "3" },
+			["4"] = { ":4ToggleTerm<cr>", "4" },
+			f = { "<cmd>ToggleTerm direction=float<cr>", "Float" },
+			h = { "<cmd>ToggleTerm size=10 direction=horizontal<cr>", "Horizontal" },
+			v = { "<cmd>ToggleTerm size=80 direction=vertical<cr>", "Vertical" },
+		},
+
+		T = {
+			name = "Treesitter",
+			h = { "<cmd>TSHighlightCapturesUnderCursor<cr>", "Highlight" },
+			p = { "<cmd>TSPlaygroundToggle<cr>", "Playground" },
+		},
+	},
+	-- Prefix "m"
+	m = {
+		a = { "<cmd>BookmarkAnnotate<cr>", "Annotate" },
+		c = { "<cmd>BookmarkClear<cr>", "Clear" },
+		h = { '<cmd>lua require("harpoon.mark").add_file()<cr>', "Harpoon" },
+		j = { "<cmd>BookmarkNext<cr>", "Next" },
+		k = { "<cmd>BookmarkPrev<cr>", "Prev" },
+		m = { "<cmd>BookmarkToggle<cr>", "Toggle" },
+		s = {
+			"<cmd>lua require('telescope').extensions.vim_bookmarks.all({ hide_filename=false, prompt_title=\"bookmarks\", shorten_path=false })<cr>",
+			"Show",
+		},
+		u = { '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>', "Harpoon UI" },
+		x = { "<cmd>BookmarkClearAll<cr>", "Clear All" },
+	},
+}
+
+local vopts = {
+	mode = "v", -- VISUAL mode
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
+	noremap = true, -- use `noremap` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
+}
+
+local vmappings = {
+	-- Ctrl maps
+	["<C-/>"] = { "<ESC><CMD>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", "Comment" },
+	
+	-- Prefix "<leader>"
+	["<leader>"] = {
+
+		["/"] = { "<ESC><CMD>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", "Comment" },
+	}
+}
+
+which_key.register(mappings, opts)
+which_key.register(nmappings, nopts)
+which_key.register(vmappings, vopts)
