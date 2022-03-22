@@ -3,8 +3,12 @@
 WINHOME="/mnt/c/Users/$USER"
 [ "$PWD" = "$WINHOME" ] && cd
 
+mkdir -p /tmp/xdg
+
 export BROWSER=wslview
 export EDITOR="code --wait"
+export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0
+export XDG_RUNTIME_DIR=/tmp/xdg
 
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
