@@ -141,9 +141,8 @@
       if: '[ -n "${WSL_DISTRO_NAME+1}" ]'
       path: wsl/*
 
-    ~/.zshenv:
-    ~/.zsh/.zshrc: zsh/zshrc
-    ~/.zsh/.zshenv: bash/env.sh
+    ~/.zshrc:
+    ~/.zshenv: bash/env.sh
     ~/.zsh/aliases.sh: bash/aliases.sh
     ~/.zsh:
       glob: true

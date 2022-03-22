@@ -98,15 +98,6 @@ for key     kcap   seq        mode   widget (
 bindkey '^ ' autosuggest-accept
 bindkey '^[[Z' reverse-menu-complete
 
-sessionizer () { 
-  tmux-sessionizer
-  zle redisplay 
-}
-
-zle -N sessionizer
-bindkey '^F' sessionizer
-# bindkey -s ^f "tmux-sessionizer\n"
-
 # register ctrl+c as interupt 
 function ctrl_c_intr() {
   stty intr \^C <$TTY >$TTY 

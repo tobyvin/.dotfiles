@@ -35,7 +35,7 @@ shell:
   program: C:\WINDOWS\system32\wsl.exe
   args:
     - -e
-    - '/bin/zsh -lc "tmux new -As main"'
+    - '/bin/zsh -lc "source ~/.zshrc; tmux new -As main"'
 
 working_directory: '\\wsl$\Debian\home\tobyv'
 
