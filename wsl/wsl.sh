@@ -12,6 +12,12 @@ export XDG_RUNTIME_DIR=/tmp/xdg
 
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
+# python
+alias pip2="DISPLAY= pip2"
+alias pip3="DISPLAY= pip3"
+alias pip3.7="DISPLAY= pip3.7"
+alias pip3.10="DISPLAY= pip3.10"
+alias pip="DISPLAY= pip3"
 
 wt() {
   powershell.exe -NoProfile -c "wt $@"

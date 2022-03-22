@@ -15,6 +15,9 @@ alias vim=nvim
 alias dfi=~/dotfiles/install
 alias dfu=~/dotfiles/update
 alias pluto="ssh root@foundry.tobyvin.com /root/foundry/update-plutonium.sh"
+#python
+alias pip=pip3
+alias python=python3
 # docker
 alias dexec="docker exec -it"
 alias dps="docker ps"
