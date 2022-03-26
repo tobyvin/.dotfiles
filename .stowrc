@@ -1,0 +1,4 @@
+--verbose
+--no-folding
+--ignore=install
+--ignore=install.sh

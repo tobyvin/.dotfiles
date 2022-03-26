@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-cd "${BASEDIR:-${HOME}/dotfiles}"
+cd "${BASEDIR:-${HOME}/.dotfiles}"
 
 WINHOME="$(wslpath c:\\Users\\${USER})"
 

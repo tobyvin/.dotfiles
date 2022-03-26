@@ -1,5 +1,3 @@
-#!/usr/bin/env bash
-
 alias ls='ls --color=tty'
 alias l='ls -lah'
 alias la='ls -lAh'
@@ -11,10 +9,6 @@ alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
 alias td=". td.sh"
 alias vim=nvim
-# scripts
-alias dfi=~/dotfiles/install
-alias dfu=~/dotfiles/update
-alias pluto="ssh root@foundry.tobyvin.com /root/foundry/update-plutonium.sh"
 #python
 alias pip=pip3
 alias python=python3

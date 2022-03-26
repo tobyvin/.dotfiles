@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(cat <(fd . ~/src ~/dkr --exact-depth 1 -td) <(echo $HOME/dotfiles) | sort |
+    selected=$(cat <(fd . ~/src ~/dkr --exact-depth 1 -td) <(echo $HOME/.dotfiles) | sort |
         fzf -d/ --with-nth 3.. --preview="tree -a -C -L 1 {}")
 fi
 

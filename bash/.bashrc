@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
-comp_dir=${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions
+export BASHDOTDIR=${XDG_CONFIG_HOME:-$HOME/.config}/bash
+export BASHCOMPDIR=${XDG_DATA_HOME:-$HOME/.local/share}/bash-completion/completions
 
-if [ -d "~/.bash" ]; then for f in ~/.bash/*; do source $f; done; fi
-if [ -d "$comp_dir" ]; then for f in "$comp_dir"/*; do source $f; done; fi
+if [ -d "$BASHDOTDIR" ]; then for f in $BASHDOTDIR/*; do source $f; done; fi
+if [ -d "$BASHCOMPDIR" ]; then for f in $BASHCOMPDIR/*; do source $f; done; fi
 
 command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
 
