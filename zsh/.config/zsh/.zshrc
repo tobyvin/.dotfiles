@@ -17,19 +17,38 @@ setopt hist_verify            # show command with history expansion to user befo
 setopt share_history          # share command history data
 
 # Exports
-export ZDOTDIR=${XDG_CONFIG_HOME:-$HOME/.config}/zsh
-export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || tree -C {}"
-export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS="--min-height 30 --preview-window down:60% --preview-window noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
-export GOPATH=$HOME/.go
 typeset -A ZSH_HIGHLIGHT_STYLES
 export ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 
-# Load ZDOTDIR
-for f in $ZDOTDIR/*.*sh; do source $f; done
+# Aliases
+alias ls='ls --color=tty'
+alias l='ls -lah'
+alias la='ls -lAh'
+alias ll='ls -lh'
+alias lla='ls -lA'
+alias lsa='ls -lah'
+alias grep='grep --color'
+alias ipa="ip -s -c -h a"
+alias untar="tar -zxvf"
+alias td=". td.sh"
+alias vim=nvim
+alias pip=pip3
+alias python=python3
+alias dexec="docker exec -it"
+alias dps="docker ps"
+alias dc="docker compose"
+alias dce="docker compose exec"
+alias dcps="docker compose ps"
+alias dcls="docker compose ls"
+alias dcdn="docker compose down"
+alias dcup="docker compose up"
+alias dcupd="docker compose up -d"
+alias dcl="docker compose logs"
+alias dclf="docker compose logs -f"
+alias dct="docker context"
+alias dcu="docker context use"
 
 # Misc
 command -v fd &>/dev/null && _fzf_compgen_path() {

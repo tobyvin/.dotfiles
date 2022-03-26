@@ -1,1 +1,0 @@
-/home/tobyv/dotfiles/zsh/.config/zsh/env.sh
