@@ -36,22 +36,22 @@ wsl: # Run WSL install script
 
 cargo rust: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Install rust
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
-	rustup completions bash >$(BASH_COMP_DIR)/rustup;
-	rustup completions zsh >$(ZSH_COMP_DIR)/_rustup;
-	rustup completions bash cargo >$(BASH_COMP_DIR)/cargo;
-	rustup completions zsh cargo >$(ZSH_COMP_DIR)/_cargo)
+	rustup completions bash >$(BASH_COMP_DIR)/rustup
+	rustup completions zsh >$(ZSH_COMP_DIR)/_rustup
+	rustup completions bash cargo >$(BASH_COMP_DIR)/cargo
+	rustup completions zsh cargo >$(ZSH_COMP_DIR)/_cargo
 
 cargo-quickinstall: cargo # Attempts to install prebuilt binaries, using cargo install as a fallback 
 	cargo install cargo-quickinstall
 
 starship: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Cross shell prompt, written in rust
 	cargo quickinstall starship
-	starship completions bash >$(BASH_COMP_DIR)/starship;
+	starship completions bash >$(BASH_COMP_DIR)/starship
 	starship completions zsh >$(ZSH_COMP_DIR)/_starship
 
 sheldon: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Cross shell prompt, written in rust
 	cargo quickinstall sheldon
-	sheldon completions --shell bash >$(BASH_COMP_DIR)/sheldon;
+	sheldon completions --shell bash >$(BASH_COMP_DIR)/sheldon
 	sheldon completions --shell zsh >$(ZSH_COMP_DIR)/_sheldon
 
 bat: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Better cat, written in rust
@@ -75,7 +75,7 @@ chtsh: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # CLI for https://cht.sh
 
 git-open: # Open git remotes in the browser
 	curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >$(HOME)/.local/bin/git-open &&
-	chmod +x $(HOME)/.local/bin/git-open;
+	chmod +x $(HOME)/.local/bin/git-open
 
 gh: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # CLI for github API
 	$(eval TEMP := $(shell mktemp -d))
