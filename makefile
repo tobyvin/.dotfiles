@@ -5,7 +5,13 @@ ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/ar
 
 .PHONY: interactive stow unstow clean gpg wsl
 
-interactive: fzf # Interactive target runner
+$(ZSH_COMP_DIR):
+	mkdir -p $(ZSH_COMP_DIR)
+
+$(BASH_COMP_DIR):
+	mkdir -p $(BASH_COMP_DIR)
+
+interactive: fzf rg # Interactive target runner
 	@rg '^(\w+):(?:.*#\s*(.*)|.*)$$' 'makefile' --color always --line-number --no-heading -H --smart-case -r '$$1:$$2' \
 	| fzf -0 -1 --ansi --tac --multi -d':' --with-nth 3 --header="Select target(s)" \
 	--color "hl:-1:underline,hl+:-1:underline:reverse" \
@@ -28,7 +34,7 @@ gpg: # Install GPG keys
 wsl: # Run WSL install script
 	./wsl/install.sh
 
-cargo rust: # Install rust
+cargo rust: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Install rust
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
 	rustup completions bash >$(BASH_COMP_DIR)/rustup;
 	rustup completions zsh >$(ZSH_COMP_DIR)/_rustup;
@@ -38,30 +44,30 @@ cargo rust: # Install rust
 cargo-quickinstall: cargo # Attempts to install prebuilt binaries, using cargo install as a fallback 
 	cargo install cargo-quickinstall
 
-starship: cargo-quickinstall # Cross shell prompt, written in rust
+starship: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Cross shell prompt, written in rust
 	cargo quickinstall starship
 	starship completions bash >$(BASH_COMP_DIR)/starship;
 	starship completions zsh >$(ZSH_COMP_DIR)/_starship
 
-sheldon: cargo-quickinstall # Cross shell prompt, written in rust
+sheldon: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Cross shell prompt, written in rust
 	cargo quickinstall sheldon
 	sheldon completions --shell bash >$(BASH_COMP_DIR)/sheldon;
 	sheldon completions --shell zsh >$(ZSH_COMP_DIR)/_sheldon
 
-bat: cargo-quickinstall # Better cat, written in rust
+bat: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Better cat, written in rust
 	cargo quickinstall bat --target $(arch())-unknown-$(os())-mus
 	curl -sL https://raw.githubusercontent.com/sharkdp/bat/master/assets/completions/bat.bash.in >$(BASH_COMP_DIR)/bat
 	curl -sL https://raw.githubusercontent.com/sharkdp/bat/master/assets/completions/bat.zsh.in >$(ZSH_COMP_DIR)/_bat
 
-fd: cargo-quickinstall # Better cat, written in rust
+fd: cargo-quickinstall $(ZSH_COMP_DIR) # Better cat, written in rust
 	cargo quickinstall fd-find
 	curl -sL https://raw.githubusercontent.com/sharkdp/fd/master/contrib/completion/_fd >$(ZSH_COMP_DIR)/_fd
 
-rg: cargo-quickinstall # Better grep, written in rust
+rg: cargo-quickinstall $(ZSH_COMP_DIR) # Better grep, written in rust
 	cargo quickinstall ripgrep
 	curl -sL https://raw.githubusercontent.com/BurntSushi/ripgrep/master/complete/_rg >$(ZSH_COMP_DIR)/_rg
 
-chtsh: # CLI for https://cht.sh
+chtsh: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # CLI for https://cht.sh
 	curl https://cht.sh/:cht.sh >$(HOME)/.local/bin/cht.sh
 	chmod +x $(HOME)/.local/bin/cht.sh
 	curl https://cht.sh/:bash_completion >$(BASH_COMP_DIR)/cht
@@ -71,7 +77,7 @@ git-open: # Open git remotes in the browser
 	curl -sL "https://raw.githubusercontent.com/paulirish/git-open/master/git-open" >$(HOME)/.local/bin/git-open &&
 	chmod +x $(HOME)/.local/bin/git-open;
 
-gh: # CLI for github API
+gh: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # CLI for github API
 	$(eval TEMP := $(shell mktemp -d))
 	$(eval TAG := $(shell curl -sI https://github.com/cli/cli/releases/latest | grep -Po 'tag\/v?\K(\S+)'))
 	curl -sL https://github.com/cli/cli/releases/latest/download/gh_$(TAG)_linux_$(ARCH).tar.gz | tar -C $(TEMP) -xz
