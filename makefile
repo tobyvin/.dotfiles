@@ -3,9 +3,9 @@ ZSH_COMP_DIR := $(HOME)/.local/share/zsh/site-functions
 BASH_COMP_DIR := $(HOME)/.local/share/bash-completion/completions
 ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv6/)
 
-.PHONY: interactive clean gpg wsl
+.PHONY: interactive stow unstow clean gpg wsl
 
-interactive:
+interactive: fzf # Interactive target runner
 	@rg '^(\w+):(?:.*#\s*(.*)|.*)$$' 'makefile' --color always --line-number --no-heading -H --smart-case -r '$$1:$$2' \
 	| fzf -0 -1 --ansi --tac --multi -d':' --with-nth 3 --header="Select target(s)" \
 	--color "hl:-1:underline,hl+:-1:underline:reverse" \
@@ -19,7 +19,7 @@ unstow: # Uninstall configuration files
 	stow --target=$(HOME) --delete */
 
 clean: # Remove all broken symbolic links from $HOME (recursivly)
-	find $(HOME) -type l -exec sh -c 'for x; do [ -e "$x" ] || rm "$x"; done' _ {} 
+	find $(HOME) -type l -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
 
 gpg: # Install GPG keys
 	gpg --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
