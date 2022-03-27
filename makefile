@@ -82,7 +82,7 @@ gh: # CLI for github API
 	gh completion --shell zsh >$(ZSH_COMP_DIR)/_gh
 
 fzf: # Fuzzy finder, written in go
-	TEMP=$(mktemp -d)
+	$(eval TEMP := $(shell mktemp -d))
 	$(eval TAG := $(shell curl -sI https://github.com/junegunn/fzf/releases/latest | grep -Po 'tag\/v?\K(\S+)'))
 	curl -sL https://github.com/junegunn/fzf/releases/latest/download/fzf-${TAG}-linux_$(ARCH).tar.gz | tar -C $(TEMP) -xz
 	test -x $(TEMP)/fzf
