@@ -1,0 +1,45 @@
+[plugins]
+
+[plugins.zsh-defer]
+github = 'romkatv/zsh-defer'
+
+[templates]
+defer = { value = 'zsh-defer source "{{ file }}"', each = true }
+comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file }}" "$XDG_DATA_HOME/zsh/site-functions/_{{ name }}"', each = true }
+
+[plugins.fast-syntax-highlighting]
+github = "zdharma-continuum/fast-syntax-highlighting"
+apply = ["defer"]
+
+[plugins.zsh-shift-select]
+github = "jirutka/zsh-shift-select"
+apply = ["defer"]
+
+[plugins.fzf-tab]
+github = "Aloxaf/fzf-tab"
+apply = ["defer"]
+
+[plugins.zsh-fzf-history-search]
+github = "joshskidmore/zsh-fzf-history-search"
+apply = ["defer"]
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+
+[plugins.zsh-pandoc-completion]
+github = "srijanshetty/zsh-pandoc-completion"
+
+[plugins.dotnet]
+remote = "https://raw.githubusercontent.com/dotnet/cli/master/scripts/register-completions.zsh"
+apply = ["comp"]
+
+[plugins.docker]
+remote = "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker"
+apply = ["comp"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+use = ["{{ name }}.zsh"]
+
+[plugins.compinit]
+inline = 'autoload -Uz compinit && zsh-defer compinit'

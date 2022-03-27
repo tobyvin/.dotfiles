@@ -1,3 +1,5 @@
+#!/usr/bin/bash
+
 # Aliases
 alias ls='ls --color=tty'
 alias l='ls -lah'
@@ -26,26 +28,10 @@ alias dclf="docker compose logs -f"
 alias dct="docker context"
 alias dcu="docker context use"
 
-if [ $PS1 && -d "$BASHCOMPDIR" ]; then
-  for f in $BASHCOMPDIR/*; do
-    source $f
+if [[ $- == *i* ]] && [ -d "$BASHCOMPDIR" ]; then
+  for f in "$BASHCOMPDIR"/*; do
+    source "$f"
   done
 fi
 
-command -v starship >/dev/null 2>&1 && eval "$(starship init bash)"
-
-set_win_title() {
-  local prefix
-
-  if [ "$USER" != "tobyv" ]; then
-    prefix="${USER} in "
-  fi
-
-  if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-    prefix="${prefix/in/on}${HOST} in "
-  fi
-
-  echo -ne "\033]0;${prefix}${PWD/$HOME/~}\007"
-}
-
-starship_precmd_user_func="set_win_title"
+command -v starship >/dev/null 2>&1 && source <(starship init bash)
