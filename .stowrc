@@ -1,4 +1,6 @@
 --verbose
+--dotfiles
 --no-folding
+--target=$HOME
 --ignore=install
 --ignore=install.sh

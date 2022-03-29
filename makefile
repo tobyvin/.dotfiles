@@ -1,7 +1,11 @@
 VPATH = $(PATH)
+
+ROOT_DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 ZSH_COMP_DIR := $(HOME)/.local/share/zsh/site-functions
 BASH_COMP_DIR := $(HOME)/.local/share/bash-completion/completions
+
 ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv6/)
+
 
 .PHONY: interactive stow unstow clean gpg wsl
 
@@ -19,10 +23,10 @@ interactive: fzf rg # Interactive target runner
 	--preview-window '80%,border-bottom,+{2}+3/3,~3'
 
 stow: # Install configuration files
-	stow --target=$(HOME) */
+	stow */
 
 unstow: # Uninstall configuration files
-	stow --target=$(HOME) --delete */
+	stow --delete */
 
 clean: # Remove all broken symbolic links from $HOME (recursivly)
 	find $(HOME) -type l -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
