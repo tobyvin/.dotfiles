@@ -6,9 +6,10 @@ HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000
 
-setopt NO_BEEP
-setopt MENU_COMPLETE
+setopt no_beep
+setopt menu_complete
 setopt auto_pushd             # auto push to the directory stack on cd
+setopt auto_cd                # cd without args
 setopt extended_history       # record timestamp of command in HISTFILE
 setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
 setopt hist_ignore_dups       # ignore duplicated commands history list
@@ -57,8 +58,11 @@ command -v fd &>/dev/null && _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
+# Keybinds
+bindkey -e
 bindkey '^ ' autosuggest-accept
 bindkey '^[[Z' reverse-menu-complete
 
+# Prompt/plugins
 command -v starship &>/dev/null && source <(starship init zsh)
 command -v sheldon &>/dev/null && source <(sheldon source)

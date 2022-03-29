@@ -4,6 +4,7 @@
 github = 'romkatv/zsh-defer'
 
 [templates]
+disable = ""
 defer = { value = 'zsh-defer source "{{ file }}"', each = true }
 comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file }}" "$XDG_DATA_HOME/zsh/site-functions/_{{ name }}"', each = true }
 
@@ -11,16 +12,16 @@ comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file 
 local = '~/.local/share/zsh-wsl'
 apply = ["defer"]
 
-[plugins.fast-syntax-highlighting]
-github = "zdharma-continuum/fast-syntax-highlighting"
+[plugins.zsh-syntax-highlighting]
+github = "zsh-users/zsh-syntax-highlighting"
 apply = ["defer"]
+
+[plugins.zsh-vi-mode]
+github = "jeffreytse/zsh-vi-mode"
+apply = ["disable"]
 
 [plugins.zsh-shift-select]
 github = "jirutka/zsh-shift-select"
-apply = ["defer"]
-
-[plugins.fzf-tab]
-github = "Aloxaf/fzf-tab"
 apply = ["defer"]
 
 [plugins.zsh-fzf-history-search]
