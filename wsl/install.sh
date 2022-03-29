@@ -4,8 +4,6 @@ DOTFILES="${HOME}/.dotfiles"
 
 WINHOME="$(wslpath c:\\Users\\"${USER}")"
 
-mkln="${DOTFILES}/scripts/.scripts/mkln.sh -f"
-
 echo "Setting up WSL"
 
 # link WINHOME
@@ -16,13 +14,13 @@ sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\11
 sed '/Control/d' >"${WINHOME}/.ssh/config"
 
 # Create windows symlinks to dotfiles
-$mkln "$@" "${DOTFILES}"/git/.gitconfig "${WINHOME}"/.gitconfig
-$mkln "$@" "${DOTFILES}"/gnupg/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
-$mkln "$@" "${DOTFILES}"/gnupg/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
-$mkln "$@" "${DOTFILES}"/gnupg/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
-$mkln "$@" "${DOTFILES}"/alacritty/.config/alacritty "${WINHOME}"/AppData/Roaming/alacritty
-$mkln "$@" "${DOTFILES}"/wsl/install/wt.json "${WINHOME}"/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
-$mkln "$@" "${DOTFILES}"/wsl/install/winget.json "${WINHOME}"/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
+mkln.sh -f "$@" "${DOTFILES}"/git/.gitconfig "${WINHOME}"/.gitconfig
+mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
+mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
+mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
+mkln.sh -f "$@" "${DOTFILES}"/alacritty/.config/alacritty "${WINHOME}"/AppData/Roaming/alacritty
+mkln.sh -f "$@" "${DOTFILES}"/wsl/install/wt.json "${WINHOME}"/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
+mkln.sh -f "$@" "${DOTFILES}"/wsl/install/winget.json "${WINHOME}"/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
 
 # install xclip/xsel
 curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xclip"

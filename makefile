@@ -36,6 +36,7 @@ gpg: # Install GPG keys
 	gpg --import-ownertrust $(HOME)/.gnupg/trustfile.txt
 
 wsl: # Run WSL install script
+	stow wsl
 	./wsl/install.sh
 
 cargo rust: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Install rust

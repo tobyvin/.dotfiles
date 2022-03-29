@@ -4,7 +4,6 @@
 github = 'romkatv/zsh-defer'
 
 [templates]
-disable = ""
 defer = { value = 'zsh-defer source "{{ file }}"', each = true }
 comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file }}" "$XDG_DATA_HOME/zsh/site-functions/_{{ name }}"', each = true }
 
@@ -15,10 +14,6 @@ apply = ["defer"]
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
 apply = ["defer"]
-
-[plugins.zsh-vi-mode]
-github = "jeffreytse/zsh-vi-mode"
-apply = ["disable"]
 
 [plugins.zsh-shift-select]
 github = "jirutka/zsh-shift-select"
