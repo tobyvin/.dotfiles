@@ -14,7 +14,6 @@ export VISUAL="code --wait"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 export GOPATH="$HOME"/.go
-export GPG_TTY=$( tty )
 export STARSHIP_LOG="error"
 export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || tree -C {}"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."

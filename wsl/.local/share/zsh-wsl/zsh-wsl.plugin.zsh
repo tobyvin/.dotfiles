@@ -13,6 +13,7 @@ export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0
 export XDG_RUNTIME_DIR=/tmp/xdg
 export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
 export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
+export GPG_TTY=$( tty )
 
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
@@ -91,7 +92,7 @@ gpg-init() (
     fi
 )
 
-start-pageant() {
+_start-pageant() {
     # TODO: WIP
     if ! ss -a | grep -q "${GPG_AGENT_SOCK}.extra"; then
         rm -rf "${GPG_AGENT_SOCK}.extra"
@@ -120,5 +121,4 @@ gpg-learn() {
 
 gpg-init
 
-# https://github.com/validatedev/drop-cache-if-idle
-[ -z "$(ps -ef | grep cron | grep -v grep)" ] && sudo /etc/init.d/cron start &>/dev/null
+unset -f _start-pageant
