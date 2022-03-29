@@ -19,8 +19,6 @@ mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming
 mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
 mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
 mkln.sh -f "$@" "${DOTFILES}"/alacritty/.config/alacritty "${WINHOME}"/AppData/Roaming/alacritty
-mkln.sh -f "$@" "${DOTFILES}"/wsl/install/wt.json "${WINHOME}"/AppData/Local/Packages/Microsoft.WindowsTerminalPreview_8wekyb3d8bbwe/LocalState/settings.json
-mkln.sh -f "$@" "${DOTFILES}"/wsl/install/winget.json "${WINHOME}"/AppData/Local/Packages/Microsoft.DesktopAppInstaller_8wekyb3d8bbwe/LocalState/settings.json
 
 # install xclip/xsel
 curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xclip"

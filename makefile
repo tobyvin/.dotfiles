@@ -37,7 +37,7 @@ gpg: # Install GPG keys
 
 wsl: # Run WSL install script
 	stow wsl
-	./wsl/install.sh
+	./wsl/.local/bin/wsl-installer.sh
 
 cargo rust: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Install rust
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
