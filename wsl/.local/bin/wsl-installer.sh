@@ -18,19 +18,14 @@ mkln.sh -f "$@" "${DOTFILES}"/git/.gitconfig "${WINHOME}"/.gitconfig
 mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
 mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
 mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
-mkln.sh -f "$@" "${DOTFILES}"/alacritty/.config/alacritty "${WINHOME}"/AppData/Roaming/alacritty
+mkln.sh -f "$@" "${DOTFILES}"/wsl/.config/wsl "${WINHOME}"/AppData/Roaming/alacritty
+mkln.sh -f "$@" "${DOTFILES}"/alacritty/.config/alacritty "${WINHOME}"/.config/alacritty
 
 # install xclip/xsel
 curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xclip"
 curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xsel"
 chmod +x "${HOME}/.local/bin/xclip"
 chmod +x "${HOME}/.local/bin/xsel"
-
-# install hotkeys.exe
-install_dir="${WINHOME}/AppData/Local/Programs/hotkeys"
-mkdir -p "${install_dir}"
-rm -f "${install_dir}/hotkeys.exe"
-curl -sL "https://github.com/tobyvin/hotkeys/releases/latest/download/hotkeys.exe" >"${install_dir}/hotkeys.exe"
 
 # https://github.com/wslutilities/wslu
 command -v wslview &>/dev/null || cat <<-EOF

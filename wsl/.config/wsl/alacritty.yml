@@ -1,0 +1,4 @@
+import:
+  - ~/.config/alacritty/alacritty.yml
+
+working_directory: '\\wsl$\Arch\home\tobyv'

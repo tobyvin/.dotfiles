@@ -1,8 +1,6 @@
 import:
   - ~/.config/alacritty/colors.yml
   - ~/.config/alacritty/fonts.yml
-  - ~/AppData/Roaming/alacritty/colors.yml
-  - ~/AppData/Roaming/alacritty/fonts.yml
 
 env:
   TERM: alacritty
@@ -20,7 +18,6 @@ scrolling:
   multiplier: 3
 
 selection:
-  semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
   save_to_clipboard: false
 
 cursor:
@@ -36,8 +33,6 @@ shell:
   args:
     - -e
     - '/bin/zsh -lc "source ~/.config/zsh/.zshrc; tmux new -As main"'
-
-working_directory: '\\wsl$\Debian\home\tobyv'
 
 key_bindings:
   - { key: Space, mods: Control, chars: "\x00" }
