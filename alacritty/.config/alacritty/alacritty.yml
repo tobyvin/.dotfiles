@@ -1,40 +1,12 @@
 import:
+  - ~/.config/alacritty/font.yml
   - ~/.config/alacritty/colors.yml
-  - ~/.config/alacritty/fonts.yml
-
-env:
-  TERM: alacritty
-
-window:
-  dimensions:
-    columns: 120
-    lines: 40
-  dynamic_padding: false
-  decorations: full
-  title: Alacritty
-
-scrolling:
-  history: 10000
-  multiplier: 3
-
-selection:
-  save_to_clipboard: false
-
-cursor:
-  blinking: On
-
-mouse:
-  hide_when_typing: true
-
-live_config_reload: true
+  - ~/.config/alacritty/options.yml
+  - ~/.config/alacritty/key_bindings.yml
 
 shell:
-  program: C:\WINDOWS\system32\wsl.exe
+  program: /bin/zsh
   args:
-    - -e
-    - '/bin/zsh -lc "source ~/.config/zsh/.zshrc; tmux new -As main"'
-
-key_bindings:
-  - { key: Space, mods: Control, chars: "\x00" }
-  - { key: T, mods: Control|Shift, action: CreateNewWindow }
-  - { key: F, mods: Control|Shift, mode: ~Search, action: ReceiveChar }
+    - -l
+    - -c
+    - tmux new -As main

@@ -1,0 +1,4 @@
+key_bindings:
+  - { key: Space, mods: Control, chars: "\x00" }
+  - { key: T, mods: Control|Shift, action: CreateNewWindow }
+  - { key: F, mods: Control|Shift, mode: ~Search, action: ReceiveChar }

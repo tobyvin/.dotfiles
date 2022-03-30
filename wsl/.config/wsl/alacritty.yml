@@ -1,4 +1,12 @@
 import:
-  - ~/.config/alacritty/alacritty.yml
+  - ~/.config/alacritty/font.yml
+  - ~/.config/alacritty/colors.yml
+  - ~/.config/alacritty/options.yml
+  - ~/.config/alacritty/key_bindings.yml
+
+shell:
+  program: C:\WINDOWS\system32\wsl.exe
+  args:
+    - "tmux new -As main"
 
 working_directory: '\\wsl$\Arch\home\tobyv'
