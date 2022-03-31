@@ -148,8 +148,8 @@ bindsym $mod+Shift+0 move container to workspace number 10
 
 # Splitting direction
 bindsym $mod+b split toggle
-bindsym $mod+- splith
-bindsym $mod+\ splitv
+bindsym $mod+minus splith
+bindsym $mod+backslash splitv
 
 # Make current focus fullscreen
 bindsym $mod+f fullscreen
