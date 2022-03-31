@@ -10,7 +10,8 @@ export BASH_COMPLETION_USER_DIR="$XDG_DATA_HOME"/bash-completion/completions
 
 # Misc
 export EDITOR="$( command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi )"
-export VISUAL="code --wait"
+export BROWSER="firefox"
+export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 export GOPATH="$HOME"/.go
