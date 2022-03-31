@@ -2,7 +2,7 @@
 export XDG_CONFIG_HOME="$HOME"/.config
 export XDG_CACHE_HOME="$HOME"/.cache
 export XDG_DATA_HOME="$HOME"/.local/share
-export XDG_RUNTIME_DIR="$HOME"/.xdg
+export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/"$UID"}
 
 # Shell
 export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
@@ -14,7 +14,6 @@ export VISUAL="code --wait"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
 export GOPATH="$HOME"/.go
-export GPG_TTY=$( tty )
 export STARSHIP_LOG="error"
 export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || tree -C {}"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
