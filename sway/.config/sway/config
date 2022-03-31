@@ -176,7 +176,7 @@ mode 'resize' {
 # Status Bar
 #
 bar {
-    swaybar_command i3status-rs
+    status_command i3status-rs
 }
 
 # Hide window title bars and borders
