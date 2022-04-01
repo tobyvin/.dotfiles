@@ -1,13 +1,13 @@
 font:
   normal:
-    family: FiraCode NF
+    family: Fira Code Nerd Font
     style: Regular
   bold:
-    family: FiraCode NF
+    family: Fira Code Nerd Font
     style: Bold
   italic:
-    family: FiraCode NF
+    family: Fira Code Nerd Font
     style: Italic
   bold_italic:
-    family: FiraCode NF
+    family: Fira Code Nerd Font
     style: Bold Italic

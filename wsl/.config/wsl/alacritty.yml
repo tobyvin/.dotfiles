@@ -1,8 +1,21 @@
 import:
-  - ~/.config/alacritty/font.yml
   - ~/.config/alacritty/colors.yml
   - ~/.config/alacritty/options.yml
   - ~/.config/alacritty/key_bindings.yml
+
+font:
+  normal:
+    family: FiraCode NF
+    style: Regular
+  bold:
+    family: FiraCode NF
+    style: Bold
+  italic:
+    family: FiraCode NF
+    style: Italic
+  bold_italic:
+    family: FiraCode NF
+    style: Bold Italic
 
 shell:
   program: C:\WINDOWS\system32\wsl.exe
