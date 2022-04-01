@@ -8,6 +8,11 @@ export XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR:-/run/user/"$UID"}
 export ZDOTDIR="$XDG_CONFIG_HOME"/zsh
 export BASH_COMPLETION_USER_DIR="$XDG_DATA_HOME"/bash-completion/completions
 
+# GPG/SSH
+export GPG_TTY="$(tty)"
+export GPG_AGENT_SOCK=$(gpgconf --list-dirs agent-socket)
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
+
 # Misc
 export EDITOR="$( command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi )"
 export BROWSER="firefox"

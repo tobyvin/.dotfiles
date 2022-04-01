@@ -11,9 +11,6 @@ export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0
 export VISUAL="code --wait"
 export BROWSER=wslview
 export XDG_RUNTIME_DIR=/tmp/xdg
-export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
-export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
-export GPG_TTY=$( tty )
 
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
