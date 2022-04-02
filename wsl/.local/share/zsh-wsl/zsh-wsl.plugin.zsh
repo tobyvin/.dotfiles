@@ -11,6 +11,9 @@ export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0
 export VISUAL="code --wait"
 export BROWSER=wslview
 export XDG_RUNTIME_DIR=/tmp/xdg
+export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
+export GPG_TTY="$(tty)"
 
 alias wsl=wsl.exe
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
@@ -55,6 +58,8 @@ scoop() { wsl_cmd_proxy "scoop" "$@"; }
 alacritty() { wsl_cmd_proxy "alacritty.exe" "$@"; }
 
 gpg-init() (
+    echo "$SSH_AUTH_SOCK"
+    echo "$GPG_AGENT_SOCK"
     if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
         rm -f "$SSH_AUTH_SOCK"
         wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"

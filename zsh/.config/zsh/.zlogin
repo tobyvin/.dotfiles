@@ -1,9 +1,5 @@
-export DISPLAY=':0'
-export WAYLAND_DISPLAY=0
-export XDG_SESSION_TYPE=wayland
 
-systemctl --user import-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE
-
-if command -v dbus-update-activation-environment >/dev/null 2>&1; then
-  dbus-update-activation-environment DISPLAY WAYLAND_DISPLAY XDG_SESSION_TYPE
-fi
+# GPG/SSH
+export GPG_TTY="$(tty)"
+export GPG_AGENT_SOCK=$(gpgconf --list-dirs agent-socket)
+export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
