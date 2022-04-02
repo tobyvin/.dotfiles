@@ -1,12 +1,33 @@
 import:
   - ~/.config/alacritty/font.yml
   - ~/.config/alacritty/colors.yml
-  - ~/.config/alacritty/options.yml
   - ~/.config/alacritty/key_bindings.yml
+  - ~/.config/alacritty/shell.yml
 
-shell:
-  program: /bin/zsh
-  args:
-    - -l
-    - -c
-    - tmux new -As main
+env:
+  TERM: alacritty
+
+window:
+  dimensions:
+    columns: 120
+    lines: 40
+  dynamic_padding: false
+  decorations: full
+  title: Alacritty
+
+scrolling:
+  history: 10000
+  multiplier: 3
+
+selection:
+  save_to_clipboard: false
+
+cursor:
+  blinking: On
+
+mouse:
+  hide_when_typing: true
+
+live_config_reload: true
+
+persistent_logging: false

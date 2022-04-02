@@ -14,12 +14,15 @@ sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\11
 sed '/Control/d' >"${WINHOME}/.ssh/config"
 
 # Create windows symlinks to dotfiles
-mkln.sh -f "$@" "${DOTFILES}"/git/.gitconfig "${WINHOME}"/.gitconfig
-mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
-mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
-mkln.sh -f "$@" "${DOTFILES}"/gnupg/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
-mkln.sh -f "$@" "${DOTFILES}"/wsl/.config/wsl "${WINHOME}"/AppData/Roaming/alacritty
-mkln.sh -f "$@" "${DOTFILES}"/alacritty/.config/alacritty "${WINHOME}"/.config/alacritty
+mkln.sh "$@" "$HOME"/.gitconfig "${WINHOME}"/.gitconfig
+mkln.sh "$@" "$HOME"/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
+mkln.sh "$@" "$HOME"/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
+mkln.sh "$@" "$HOME"/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
+mkln.sh "$@" "$HOME"/.config/alacritty/alacritty.yml "${WINHOME}"/AppData/Roaming/alacritty/alacritty.yml
+
+for f in "$HOME"/.config/alacritty/*; do
+  mkln.sh "$@" "$f" "${WINHOME}"/.config/alacritty/"$(basename "$f")"
+done
 
 # install xclip/xsel
 curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xclip"

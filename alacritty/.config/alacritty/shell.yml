@@ -1,0 +1,6 @@
+shell:
+  program: /bin/zsh
+  args:
+    - -l
+    - -c
+    - tmux new -As main

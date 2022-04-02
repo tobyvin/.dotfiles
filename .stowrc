@@ -2,3 +2,5 @@
 --dotfiles
 --no-folding
 --target=$HOME
+--override=.gnupg/gpg-agent.conf
+--override=.config/alacritty/*
