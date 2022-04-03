@@ -10,21 +10,21 @@ ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/ar
 
 # TODO https://github.com/andrewsardone/dotfiles/blob/master/Makefile
 stow: # Install configuration files
-	stow alacritty
-	stow bash
-	stow bat
-	stow git
-	stow gnupg
-	stow lazygit
-	stow nvim
-	stow scripts
-	stow sheldon
-	stow ssh
-	stow starship
-	stow sway
-	stow tmux
-	stow zsh
-	if [ -n "$$WSL_DISTRO_NAME" ]; then stow wsl --override=/*; fi
+	@stow alacritty --defer=/*
+	@stow bash
+	@stow bat
+	@stow git
+	@stow gnupg --defer=/*
+	@stow lazygit
+	@stow nvim
+	@stow scripts
+	@stow sheldon
+	@stow ssh
+	@stow starship
+	@stow sway
+	@stow tmux
+	@stow zsh
+	@if [ -n "$$WSL_DISTRO_NAME" ]; then stow wsl --override=/*; fi
 
 unstow: # Uninstall configuration files
 	stow --delete */
