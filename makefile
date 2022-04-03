@@ -6,7 +6,7 @@ BASH_COMP_DIR := $(HOME)/.local/share/bash-completion/completions
 
 ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv6/)
 
-.PHONY: interactive stow_all unstow clean gpg wsl
+.PHONY: interactive stow unstow clean gpg wsl
 
 # TODO https://github.com/andrewsardone/dotfiles/blob/master/Makefile
 stow: # Install configuration files
