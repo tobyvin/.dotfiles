@@ -6,8 +6,38 @@ BASH_COMP_DIR := $(HOME)/.local/share/bash-completion/completions
 
 ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv6/)
 
+.PHONY: interactive stow_all unstow clean gpg wsl
 
-.PHONY: interactive stow unstow clean gpg wsl
+# TODO https://github.com/andrewsardone/dotfiles/blob/master/Makefile
+stow: # Install configuration files
+	stow alacritty
+	stow bash
+	stow bat
+	stow git
+	stow gnupg
+	stow lazygit
+	stow nvim
+	stow scripts
+	stow sheldon
+	stow ssh
+	stow starship
+	stow sway
+	stow tmux
+	stow zsh
+	if [ -n "$$WSL_DISTRO_NAME" ]; then stow wsl --override=/*; fi
+
+unstow: # Uninstall configuration files
+	stow --delete */
+
+clean: # Remove all broken symbolic links from $HOME (recursivly)
+	find $(HOME) -type l -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
+
+wsl: stow # Run WSL install script
+	./wsl/.local/bin/wsl-installer.sh
+
+gpg: # Install GPG keys
+	gpg --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
+	gpg --import-ownertrust $(HOME)/.gnupg/trustfile.txt
 
 $(ZSH_COMP_DIR):
 	mkdir -p $(ZSH_COMP_DIR)
@@ -21,23 +51,6 @@ interactive: fzf rg # Interactive target runner
 	--color "hl:-1:underline,hl+:-1:underline:reverse" \
 	--preview 'echo; echo {3} "-" {4}; echo; bat --style=auto --color=always {..1} --highlight-line {2}' \
 	--preview-window '80%,border-bottom,+{2}+3/3,~3'
-
-stow: # Install configuration files
-	stow */
-
-unstow: # Uninstall configuration files
-	stow --delete */
-
-clean: # Remove all broken symbolic links from $HOME (recursivly)
-	find $(HOME) -type l -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
-
-gpg: # Install GPG keys
-	gpg --auto-key-locate keyserver --locate-keys tobyv13@gmail.com
-	gpg --import-ownertrust $(HOME)/.gnupg/trustfile.txt
-
-wsl: # Run WSL install script
-	stow wsl
-	./wsl/.local/bin/wsl-installer.sh
 
 cargo rust: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Install rust
 	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y --no-modify-path
