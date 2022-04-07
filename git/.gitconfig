@@ -23,9 +23,9 @@ prune = true
 detachedHead = false
 
 [diff]
-tool = default-difftool
+tool = vscode
 
-[difftool "default-difftool"]
+[difftool "vscode"]
 cmd = code --wait --diff $LOCAL $REMOTE
 
 [trailer]

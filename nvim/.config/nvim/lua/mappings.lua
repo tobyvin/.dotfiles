@@ -13,7 +13,7 @@ local opts = {
 local mappings = {
 	-- Ctrl maps
 	["<C-s>"] = { "<cmd>w!<CR>", "Save" },
-	["<C-b>"] = { "<Cmd>NvimTreeToggle<CR>", "Explorer" },
+	["<C-b>"] = { "<Cmd>Neotree focus toggle<CR>", "Explorer" },
 }
 
 local nopts = {
@@ -112,6 +112,7 @@ local nmappings = {
 		p = {
 			name = "Packer",
 			c = { "<cmd>PackerCompile<cr>", "Compile" },
+			C = { "<cmd>PackerClean<cr>", "Clean" },
 			i = { "<cmd>PackerInstall<cr>", "Install" },
 			s = { "<cmd>PackerSync<cr>", "Sync" },
 			S = { "<cmd>PackerStatus<cr>", "Status" },
@@ -180,14 +181,77 @@ local vopts = {
 local vmappings = {
 	-- Ctrl maps
 	["<C-/>"] = { "<ESC><CMD>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", "Comment" },
-	
+
 	-- Prefix "<leader>"
 	["<leader>"] = {
 
 		["/"] = { "<ESC><CMD>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", "Comment" },
-	}
+	},
+}
+
+local iopts = {
+	mode = "i", -- INSERT mode
+	buffer = nil, -- Global mappings. Specify a buffer number for buffer local mappings
+	silent = true, -- use `silent` when creating keymaps
+	noremap = true, -- use `noremap` when creating keymaps
+	nowait = true, -- use `nowait` when creating keymaps
+}
+
+local imappings = {
+	-- Ctrl maps
+	["<C-h>"] = { "<left>", "Left" },
+	["<C-j>"] = { "<up>", "Up" },
+	["<C-k>"] = { "<down>", "Down" },
+	["<C-l>"] = { "<right>", "Right" },
 }
 
 which_key.register(mappings, opts)
 which_key.register(nmappings, nopts)
 which_key.register(vmappings, vopts)
+which_key.register(imappings, iopts)
+
+function WhichKeyNeoTree(bufNumber)
+	local status_ok, which_key = pcall(require, "which-key")
+	if not status_ok then
+		return
+	end
+
+	vim.g.maplocalleader = " "
+	vim.g.mapleader = ""
+
+	local nopts = {
+		mode = "n",
+		buffer = vim.api.nvim_get_current_buf(),
+		silent = true,
+		noremap = true,
+		nowait = true,
+	}
+
+	local nmappings = {
+		["<2-LeftMouse>"] = { "<cmd> lua require('neo-tree').open()<cr>", "Open" },
+		["<cr>"] = { "<cmd> lua require('neo-tree').open()<cr>", "Open" },
+		["<localleader>"] = {
+			S = { "<cmd> lua require('neo-tree').open_split()<cr>", "HSplit" },
+			s = { "<cmd> lua require('neo-tree').open_vsplit()<cr>", "VSplit" },
+			t = { "<cmd> lua require('neo-tree').open_tabnew()<cr>", "New Tab" },
+			C = { "<cmd> lua require('neo-tree').close_node()<cr>", "Collapse" },
+			z = { "<cmd> lua require('neo-tree').close_all_nodes()<cr>", "Collapse All" },
+			R = { "<cmd> lua require('neo-tree').refresh()<cr>", "Refresh" },
+			a = { "<cmd> lua require('neo-tree').add()<cr>", "Add" },
+			A = { "<cmd> lua require('neo-tree').add_directory()<cr>", "Add Dir" },
+			d = { "<cmd> lua require('neo-tree').delete()<cr>", "Delete" },
+			r = { "<cmd> lua require('neo-tree').rename()<cr>", "Rename" },
+			y = { "<cmd> lua require('neo-tree').copy_to_clipboard()<cr>", "Copy" },
+			x = { "<cmd> lua require('neo-tree').cut_to_clipboard()<cr>", "Cut" },
+			p = { "<cmd> lua require('neo-tree').paste_from_clipboard()<cr>", "Paste" },
+			c = { "<cmd> lua require('neo-tree').copy()<cr>", "Copy To" },
+			m = { "<cmd> lua require('neo-tree').move()<cr>", "Move To" },
+			q = { "<cmd> lua require('neo-tree').close_window()<cr>", "Close" },
+		},
+	}
+	which_key.register(nmappings, nopts)
+end
+
+local bufNo = vim.api.nvim_get_current_buf()
+
+vim.cmd("autocmd FileType neo-tree lua WhichKeyNeoTree(" .. bufNo .. ")")
