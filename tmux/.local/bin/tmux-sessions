@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+[[ -n "$TMUX" ]] && change="switch-client" || change="attach-session"
+
+session=$(tmux list-sessions -F "#{session_name}" 2>/dev/null |
+    fzf-tmux -p -- --reverse --exit-0 --preview='tmux-tree {} | bat --style plain') &&
+    tmux $change -t "$session" || exit 0
+
