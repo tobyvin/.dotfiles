@@ -24,11 +24,16 @@ for f in "$HOME"/.config/alacritty/*; do
   mkln.sh "$@" "$f" "${WINHOME}"/.config/alacritty/"$(basename "$f")"
 done
 
+# install wsl2-ssh-pageant
+rm -f "${HOME}"/.ssh/wsl2-ssh-pageant.exe
+curl -sL "https://github.com/BlackReloaded/wsl2-ssh-pageant/releases/latest/download/wsl2-ssh-pageant.exe" >"${HOME}"/.ssh/wsl2-ssh-pageant.exe
+chmod +x "${HOME}"/.ssh/wsl2-ssh-pageant.exe
+
 # install xclip/xsel
-curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xclip"
-curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}/.local/bin/xsel"
-chmod +x "${HOME}/.local/bin/xclip"
-chmod +x "${HOME}/.local/bin/xsel"
+curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}"/.local/bin/xclip
+curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}"/.local/bin/xsel
+chmod +x "${HOME}"/.local/bin/xclip
+chmod +x "${HOME}"/.local/bin/xsel
 
 # https://github.com/wslutilities/wslu
 command -v wslview &>/dev/null || cat <<-EOF
