@@ -31,6 +31,7 @@ local nmappings = {
 	-- Prefix "<leader>"
 	["<leader>"] = {
 		a = { "<cmd>Alpha<cr>", "Alpha" },
+		f = { "<cmd>Telescope buffers show_all_buffers=true theme=get_dropdown<cr>", "Buffers" },
 		c = { "<cmd>Bdelete!<CR>", "Close Buffer" },
 		q = { "<cmd>q!<CR>", "Quit" },
 		R = { "<cmd>lua require('renamer').rename()<cr>", "Rename" },
@@ -55,6 +56,7 @@ local nmappings = {
 			p = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
 			r = { "<cmd>Telescope oldfiles<cr>", "Recent File" },
 			R = { "<cmd>Telescope registers<cr>", "Registers" },
+			s = { "<cmd>Telescope session-lens search_session<cr>", "Sessions" },
 			t = { "<cmd>Telescope buffers show_all_buffers=true theme=get_dropdown<cr>", "Buffers" },
 		},
 

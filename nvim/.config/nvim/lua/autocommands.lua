@@ -1,6 +1,6 @@
 -- to Show whitespace, MUST be inserted BEFORE the colorscheme command
 vim.cmd [[
-  augroup _general_settings
+  augroup general_settings
     autocmd!
     autocmd FileType qf,help,man,lspinfo,spectre_panel nnoremap <silent> <buffer> q :close<CR>
     autocmd TextYankPost * silent!lua require('vim.highlight').on_yank({higroup = 'Visual', timeout = 200})
@@ -17,6 +17,12 @@ vim.cmd [[
     autocmd!
     autocmd BufWritePre * lua vim.lsp.buf.formatting()
   augroup end
+
+   augroup auto_search_highlighting
+    autocmd!
+    autocmd CmdlineEnter /,\? set hlsearch
+    autocmd CmdlineLeave /,\? set nohlsearch
+  augroup END
 
   augroup _git
     autocmd!

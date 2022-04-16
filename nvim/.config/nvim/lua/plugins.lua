@@ -62,6 +62,12 @@ return packer.startup(function(use)
 	})
 
 	use({
+		"rmagatti/session-lens",
+		requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
+		config = [[require("plugins/session-lens").setup()]],
+	})
+
+	use({
 		"tpope/vim-dispatch",
 		cmd = {
 			"Dispatch",
@@ -225,7 +231,6 @@ return packer.startup(function(use)
 	use("rcarriga/nvim-notify")
 	use("antoinemadec/FixCursorHold.nvim")
 	use("nacro90/numb.nvim")
-	use("Shatur/neovim-session-manager")
 	use("ThePrimeagen/harpoon")
 	use("b0o/SchemaStore.nvim")
 	use("windwp/nvim-spectre")

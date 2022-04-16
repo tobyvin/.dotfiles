@@ -20,6 +20,12 @@ lsp_installer.settings {
 
 ---------------------------------------------------
 local enhance_server_opts = {
+  ["sumneko_lua"] = function(opts)
+    opts.on_attach = function(client)
+        client.resolved_capabilities.document_formatting = false
+        client.resolved_capabilities.document_range_formatting = false
+    end
+  end,
   ["eslintls"] = function(opts)
     opts.settings = {
       format = {
@@ -28,8 +34,8 @@ local enhance_server_opts = {
     }
   end,
   ["gopls"] = function(opts)
-    opts.cmd = { 
-      "gopls", 
+    opts.cmd = {
+      "gopls",
       "serve",
     }
     opts.settings = {
