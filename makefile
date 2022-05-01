@@ -20,6 +20,7 @@ stow: # Install configuration files
 	@stow paru
 	@stow scripts
 	@stow sheldon
+	@stow spotify
 	@stow ssh
 	@stow starship
 	@stow sway
@@ -60,7 +61,7 @@ cargo rust: $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Install rust
 	rustup completions bash cargo >$(BASH_COMP_DIR)/cargo
 	rustup completions zsh cargo >$(ZSH_COMP_DIR)/_cargo
 
-cargo-quickinstall: cargo # Attempts to install prebuilt binaries, using cargo install as a fallback 
+cargo-quickinstall: cargo # Attempts to install prebuilt binaries, using cargo install as a fallback
 	cargo install cargo-quickinstall
 
 starship: cargo-quickinstall $(ZSH_COMP_DIR) $(BASH_COMP_DIR) # Cross shell prompt, written in rust

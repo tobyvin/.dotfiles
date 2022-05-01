@@ -1,0 +1,5 @@
+behavior:
+  volume_increment: 5
+  # The lower the number the higher the "frames per second". You can decrease this number so that the audio visualisation is smoother but this can be expensive!
+  tick_rate_milliseconds: 50
+
