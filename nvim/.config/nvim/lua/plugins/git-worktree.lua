@@ -3,8 +3,7 @@ if not status_ok then
 	return
 end
 
-git_worktree.setup({
-})
+git_worktree.setup({})
 
 local status_ok, telescope = pcall(require, "telescope")
 if not status_ok then

@@ -6,18 +6,16 @@ end
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-  vim.lsp.diagnostic.on_publish_diagnostics, {
-    underline = true,
-    signs = true,
-    update_in_insert = true,
-    virtual_text = {
-        true,
-        spacing = 6,
-        severity_limit='Error'  -- Only show virtual text on error
-    },
-  }
-)
+vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+	underline = true,
+	signs = true,
+	update_in_insert = true,
+	virtual_text = {
+		true,
+		spacing = 6,
+		severity_limit = "Error",  -- Only show virtual text on error
+	},
+})
 
 local function config(_config)
 	return vim.tbl_deep_extend("force", {
@@ -54,30 +52,30 @@ lspconfig.gopls.setup(config({
 }))
 
 local rustopts = {
-    tools = {
-        autoSetHints = true,
-        hover_with_actions = true,
-        runnables = {
-            use_telescope = true
-        },
-        inlay_hints = {
-            show_parameter_hints = false,
-            parameter_hints_prefix = "",
-            other_hints_prefix = "",
-        },
-    },
-    server = {
-        settings = {
-            ["rust-analyzer"] = {
-                cargo = {
-                    allFeatures = "true",
-                },
-                checkOnSave = {
-                    command = "clippy",
-                },
-            }
-        }
-    },
+	tools = {
+		autoSetHints = true,
+		hover_with_actions = true,
+		runnables = {
+			use_telescope = true,
+		},
+		inlay_hints = {
+			show_parameter_hints = false,
+			parameter_hints_prefix = "",
+			other_hints_prefix = "",
+		},
+	},
+	server = {
+		settings = {
+			["rust-analyzer"] = {
+				cargo = {
+					allFeatures = "true",
+				},
+				checkOnSave = {
+					command = "clippy",
+				},
+			},
+		},
+	},
 }
 
 require("rust-tools").setup(rustopts)

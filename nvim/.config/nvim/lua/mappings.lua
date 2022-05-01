@@ -185,7 +185,6 @@ local vmappings = {
 
 	-- Prefix "<leader>"
 	["<leader>"] = {
-
 		["/"] = { "<ESC><CMD>lua require('Comment.api').toggle_linewise_op(vim.fn.visualmode())<CR>", "Comment" },
 	},
 }

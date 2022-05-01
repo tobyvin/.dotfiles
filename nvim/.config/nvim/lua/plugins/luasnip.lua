@@ -4,15 +4,15 @@ if not status_ok then
 end
 
 luasnip.config.set_config({
-    history = true,
-    updateevents = "TextChanged,TextChangedI"
+	history = true,
+	updateevents = "TextChanged,TextChangedI",
 })
 
-luasnip.snippets = {all = {}, html = {}}
+luasnip.snippets = { all = {}, html = {} }
 
 luasnip.snippets.javascript = luasnip.snippets.html
 luasnip.snippets.javascriptreact = luasnip.snippets.html
 luasnip.snippets.typescriptreact = luasnip.snippets.html
-require("luasnip.loaders.from_vscode").load({include = {"html"}})
+require("luasnip.loaders.from_vscode").load({ include = { "html" } })
 
-require('luasnip.loaders.from_vscode').lazy_load()
+require("luasnip.loaders.from_vscode").lazy_load()
