@@ -209,11 +209,6 @@ return packer.startup(function(use)
 	})
 
 	use({
-		"ahmedkhalf/project.nvim",
-		config = [[require('plugins/project')]],
-	})
-
-	use({
 		"folke/which-key.nvim",
 		config = [[require('plugins/which-key')]],
 	})

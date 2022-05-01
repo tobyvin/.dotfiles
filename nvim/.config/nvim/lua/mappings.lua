@@ -53,7 +53,6 @@ local nmappings = {
 			k = { "<cmd>Telescope keymaps<cr>", "Keymaps" },
 			l = { "<cmd>Telescope resume<cr>", "Last Search" },
 			m = { "<cmd>Telescope man_pages<cr>", "Man Pages" },
-			p = { "<cmd>lua require('telescope').extensions.projects.projects()<cr>", "Projects" },
 			r = { "<cmd>Telescope oldfiles<cr>", "Recent File" },
 			R = { "<cmd>Telescope registers<cr>", "Registers" },
 			s = { "<cmd>Telescope session-lens search_session<cr>", "Sessions" },
