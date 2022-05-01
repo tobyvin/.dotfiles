@@ -54,7 +54,7 @@ return packer.startup(function(use)
 
 	use("lewis6991/impatient.nvim")
 	use("andweeb/presence.nvim")
-	use("Mofiqul/vscode.nvim") -- vscode theme
+	use("eddyekofo94/gruvbox-flat.nvim")
 
 	use({
 		"rmagatti/auto-session",

@@ -4,18 +4,14 @@ local exec = vim.api.nvim_exec -- execute Vimscript
 
 g.mapleader = " "
 
--- set colorscheme
-g.vscode_style = "dark"
-g.vscode_transparent = 1
-g.vscode_italic_comment = 1
-g.vscode_disable_nvimtree_bg = true
-
-vim.cmd("colorscheme vscode")
+vim.g.gruvbox_flat_style = "hard"
+vim.cmd([[colorscheme gruvbox-flat]])
 
 g.tex_flavor = "latex"
 
 -- global options
 local options = {
+	background = "dark",
 	termguicolors = true, -- Enable GUI colors for the terminal to get truecolor
 	list = false, -- show whitespace
 	listchars = {
