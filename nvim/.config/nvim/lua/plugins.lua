@@ -231,11 +231,6 @@ return packer.startup(function(use)
 	use("windwp/nvim-spectre")
 
 	use({
-		"goolord/alpha-nvim",
-		config = [[require('plugins/alpha')]],
-	})
-
-	use({
 		"filipdutescu/renamer.nvim",
 		config = [[require('plugins/renamer')]],
 	})

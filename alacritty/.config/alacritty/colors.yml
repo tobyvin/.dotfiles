@@ -1,60 +1,91 @@
 schemes:
-  codelight: &light
+  vscode_light: &vscode_light
     primary:
-      background: '#ffffff'
-      foreground: '#1e1e1e'
+      background: "#ffffff"
+      foreground: "#1e1e1e"
 
     cursor:
-      text: '#d4d4d4'
-      cursor: '#d4d4d4'
+      text: "#d4d4d4"
+      cursor: "#d4d4d4"
 
     normal:
-      black:   '#1e1e1e'
-      red:     '#c72e0f'
-      green:   '#009000'
-      yellow:  '#795e25'
-      blue:    '#007acc'
-      magenta: '#af00db'
-      cyan:    '#56b6c2'
-      white:   '#d4d4d4'
+      black: "#1e1e1e"
+      red: "#c72e0f"
+      green: "#009000"
+      yellow: "#795e25"
+      blue: "#007acc"
+      magenta: "#af00db"
+      cyan: "#56b6c2"
+      white: "#d4d4d4"
 
     bright:
-      black:   '#1e1e1e'
-      red:     '#c72e0f'
-      green:   '#009000'
-      yellow:  '#795e25'
-      blue:    '#007acc'
-      magenta: '#af00db'
-      cyan:    '#56b6c2'
-      white:   '#d4d4d4'
+      black: "#1e1e1e"
+      red: "#c72e0f"
+      green: "#009000"
+      yellow: "#795e25"
+      blue: "#007acc"
+      magenta: "#af00db"
+      cyan: "#56b6c2"
+      white: "#d4d4d4"
 
-  codedark: &dark
+  vscode_dark: &vscode_dark
     primary:
-      background: '#1e1e1e'
-      foreground: '#d4d4d4'
+      background: "#1e1e1e"
+      foreground: "#d4d4d4"
 
     cursor:
-      text: '#d4d4d4'
-      cursor: '#d4d4d4'
+      text: "#d4d4d4"
+      cursor: "#d4d4d4"
 
     normal:
-      black:   '#1e1e1e'
-      red:     '#f44747'
-      green:   '#608b4e'
-      yellow:  '#dcdcaa'
-      blue:    '#569cd6'
-      magenta: '#c678dd'
-      cyan:    '#56b6c2'
-      white:   '#d4d4d4'
+      black: "#1e1e1e"
+      red: "#f44747"
+      green: "#608b4e"
+      yellow: "#dcdcaa"
+      blue: "#569cd6"
+      magenta: "#c678dd"
+      cyan: "#56b6c2"
+      white: "#d4d4d4"
 
     bright:
-      black:   '#545454'
-      red:     '#f44747'
-      green:   '#608b4e'
-      yellow:  '#dcdcaa'
-      blue:    '#569cd6'
-      magenta: '#c678dd'
-      cyan:    '#56b6c2'
-      white:   '#d4d4d4'
+      black: "#545454"
+      red: "#f44747"
+      green: "#608b4e"
+      yellow: "#dcdcaa"
+      blue: "#569cd6"
+      magenta: "#c678dd"
+      cyan: "#56b6c2"
+      white: "#d4d4d4"
 
-colors: *dark
+  gruvbox: &gruvbox # Default colors
+    primary:
+      background: "0x1d2021"
+      foreground: "0xd4be98"
+
+    # Normal colors
+    normal:
+      black: "0x544b3c"
+      red: "0xea6962"
+      green: "0xa9b665"
+      yellow: "0xd8a657"
+      blue: "0x7daea3"
+      magenta: "0xd3869b"
+      aqua: "0x89b482"
+      white: "0xd4be98"
+
+    # Bright colors
+    bright:
+      black: "0x4f4738"
+      red: "0xea6962"
+      green: "0xa9b665"
+      yellow: "0xd8a657"
+      blue: "0x7daea3"
+      magenta: "0xd3869b"
+      aqua: "0x89b482"
+      white: "0xd4be98"
+
+    indexed_colors:
+      - { index: 16, color: "0xe78a4e" }
+      - { index: 17, color: "0xc14a4a" }
+
+colors: *gruvbox
