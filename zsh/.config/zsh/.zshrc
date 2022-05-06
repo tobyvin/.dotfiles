@@ -22,6 +22,9 @@ typeset -A ZSH_HIGHLIGHT_STYLES
 export ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
+# https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4738"
+
 
 # Aliases
 alias ls='ls --color=tty'

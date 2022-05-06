@@ -64,7 +64,8 @@ schemes:
 
     # Normal colors
     normal:
-      black: "0x544b3c"
+      # alt-normal-black: "0x544b3c"
+      black: "0x171A1A"
       red: "0xea6962"
       green: "0xa9b665"
       yellow: "0xd8a657"
@@ -75,7 +76,8 @@ schemes:
 
     # Bright colors
     bright:
-      black: "0x4f4738"
+      # alt-bright-black: "0x4f4738"
+      black: "0x17191a"
       red: "0xea6962"
       green: "0xa9b665"
       yellow: "0xd8a657"
