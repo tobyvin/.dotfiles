@@ -1,6 +1,6 @@
-#!/usr/bin/env bash
+#!/usr/bin/env zsh
 
-[ -n "${WSL_DISTRO_NAME+1}" ] || return 0
+# [ -n "${WSL_DISTRO_NAME+1}" ] || return 0
 
 WINHOME="/mnt/c/Users/$USER"
 [ "$PWD" = "$WINHOME" ] && cd
@@ -8,7 +8,6 @@ WINHOME="/mnt/c/Users/$USER"
 mkdir -p /tmp/xdg
 
 export DISPLAY=$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}'):0
-export EDITOR="$( command -v code &>/dev/null | echo 'code --wait' || echo $EDITOR )"
 export BROWSER=wslview
 export XDG_RUNTIME_DIR=/tmp/xdg
 export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
@@ -30,10 +29,10 @@ wt() {
 wsl_cmd_proxy() {
   exe="$1"
   shift # past exe
-  
+
   cmd=" ${1}"
   shift # past cmd
-  
+
   args=""
   while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -49,7 +48,7 @@ wsl_cmd_proxy() {
     esac
     args+=" "
   done
-  
+
   powershell.exe -NoProfile -c 'cd $HOME;' "$exe" "$cmd" "$args"
 }
 
@@ -69,7 +68,7 @@ gpg-init() (
     fi
     unset wsl2_ssh_pageant_bin
   fi
-  
+
   if ! ss -a | grep -q "$GPG_AGENT_SOCK"; then
     rm -rf "$GPG_AGENT_SOCK"
     wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
@@ -81,7 +80,7 @@ gpg-init() (
     fi
     unset wsl2_ssh_pageant_bin
   fi
-  
+
   if ! ss -a | grep -q "${GPG_AGENT_SOCK}.extra"; then
     rm -rf "${GPG_AGENT_SOCK}.extra"
     wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
@@ -112,7 +111,7 @@ _start-pageant() {
 # Reload
 gpg-reset() {
   gpg-connect-agent.exe KILLAGENT /bye &>/dev/null
-  
+
   rm -rf "$GPG_AGENT_SOCK"
   rm -rf "$GPG_AGENT_SOCK".extra
   pkill -f 'socat.*wsl2-ssh-pageant.exe'
