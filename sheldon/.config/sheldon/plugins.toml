@@ -25,9 +25,11 @@ apply = ["defer"]
 
 [plugins.zsh-completions]
 github = "zsh-users/zsh-completions"
+apply = ["defer"]
 
 [plugins.zsh-pandoc-completion]
 github = "srijanshetty/zsh-pandoc-completion"
+apply = ["defer"]
 
 [plugins.dotnet]
 remote = "https://raw.githubusercontent.com/dotnet/cli/master/scripts/register-completions.zsh"
@@ -42,4 +44,5 @@ github = "zsh-users/zsh-autosuggestions"
 use = ["{{ name }}.zsh"]
 
 [plugins.compinit]
-inline = 'autoload -Uz compinit && zsh-defer compinit'
+inline = 'mkdir -p $XDG_CACHE_HOME/zsh && autoload -Uz compinit && zsh-defer compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION'
+
