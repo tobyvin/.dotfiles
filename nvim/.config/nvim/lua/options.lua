@@ -6,6 +6,7 @@ g.mapleader = " "
 
 vim.g.gruvbox_colors = { bg_statusline = "#3c3836" }
 vim.g.gruvbox_flat_style = "hard"
+vim.g.gruvbox_transparent = true
 vim.cmd([[colorscheme gruvbox-flat]])
 
 g.tex_flavor = "latex"

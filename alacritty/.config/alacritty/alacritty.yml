@@ -13,7 +13,7 @@ window:
     lines: 40
   dynamic_padding: false
   decorations: full
-  title: Alacritty
+  opacity: 0.9
 
 scrolling:
   history: 10000
