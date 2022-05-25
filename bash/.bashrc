@@ -1,5 +1,7 @@
 #!/usr/bin/bash
 
+export HISTFILE=$XDG_STATE_HOME/bash/history
+
 # Aliases
 alias ls='ls --color=tty'
 alias l='ls -lah'
@@ -27,9 +29,9 @@ alias dct="docker context"
 alias dcu="docker context use"
 
 if [[ $- == *i* ]] && [ -d "$BASHCOMPDIR" ]; then
-  for f in "$BASHCOMPDIR"/*; do
-    source "$f"
-  done
+	for f in "$BASHCOMPDIR"/*; do
+		source "$f"
+	done
 fi
 
 command -v starship >/dev/null 2>&1 && source <(starship init bash)
