@@ -3,14 +3,18 @@ if not status_ok then
 	return
 end
 
-local get_enabled = function()
-	-- disable completion in comments
+enabled = function()
 	local context = require("cmp.config.context")
-	-- keep command mode completion enabled when cursor is in a comment
-	if vim.api.nvim_get_mode().mode == "c" then
+
+	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
+		-- disable completion in prompts
+		return false
+	elseif vim.api.nvim_get_mode().mode == "c" then
+		-- keep command mode completion enabled when cursor is in a comment
 		return true
 	else
-		return not context.in_treesitter_capture("comment") and not context.in_syntax_group("Comment")
+		-- disable completion in comments
+		return not (context.in_treesitter_capture("comment") == true or context.in_syntax_group("Comment"))
 	end
 end
 
@@ -19,7 +23,7 @@ local get_snippets = function(args)
 end
 
 cmp.setup({
-	enabled = get_enabled,
+	enabled = enabled,
 	completion = {
 		completeopt = "menu,menuone,noinsert",
 	},
@@ -42,7 +46,7 @@ cmp.setup({
 		}),
 	},
 	formatting = {
-		format = lspkind.cmp_format({
+		format = require("lspkind").cmp_format({
 			mode = "symbol_text",
 			menu = {
 				nvim_lsp = "[LSP]",

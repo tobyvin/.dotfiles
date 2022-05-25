@@ -10,7 +10,6 @@ local formatting = null_ls.builtins.formatting
 null_ls.setup({
 	sources = {
 
-		require("null-ls").builtins.formatting.stylua,
 		-- Code Actions
 		code_actions.gitsigns,
 		code_actions.shellcheck,

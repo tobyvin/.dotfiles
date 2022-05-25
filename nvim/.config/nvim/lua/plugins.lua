@@ -81,11 +81,11 @@ return packer.startup(function(use)
 		"neovim/nvim-lspconfig",
 		config = [[require('plugins/lspconfig')]],
 	})
-
-	use({
-		"williamboman/nvim-lsp-installer",
-		config = [[require('plugins/lsp-installer')]],
-	})
+	use({ "lukas-reineke/virt-column.nvim", config = [[require("virt-column").setup()]] })
+	-- use({
+	-- 	"williamboman/nvim-lsp-installer",
+	-- 	config = [[require('plugins/lsp-installer')]],
+	-- })
 
 	use("nvim-lua/lsp_extensions.nvim")
 	use("simrat39/rust-tools.nvim")
@@ -121,7 +121,7 @@ return packer.startup(function(use)
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
 			{ "nvim-telescope/telescope-frecency.nvim", requires = "tami5/sqlite.lua" },
 		},
-		config = [[require('plugins/telescope')]],
+		config = [[require('plugins/telescope').setup()]],
 	})
 
 	use({
@@ -170,7 +170,6 @@ return packer.startup(function(use)
 			"Gpush",
 			"Gpull",
 		},
-		disable = true,
 	})
 
 	use({
@@ -262,16 +261,16 @@ return packer.startup(function(use)
 	use("moll/vim-bbye")
 	use("SmiteshP/nvim-gps")
 
-	use({
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v2.x",
-		requires = {
-			"nvim-lua/plenary.nvim",
-			"kyazdani42/nvim-web-devicons",
-			"MunifTanjim/nui.nvim",
-		},
-		config = [[require('plugins/neo-tree')]],
-	})
+	-- use({
+	-- 	"nvim-neo-tree/neo-tree.nvim",
+	-- 	branch = "v2.x",
+	-- 	requires = {
+	-- 		"nvim-lua/plenary.nvim",
+	-- 		"kyazdani42/nvim-web-devicons",
+	-- 		"MunifTanjim/nui.nvim",
+	-- 	},
+	-- 	config = [[require('plugins/neo-tree')]],
+	-- })
 
 	-- use({
 	-- 	"kyazdani42/nvim-tree.lua",

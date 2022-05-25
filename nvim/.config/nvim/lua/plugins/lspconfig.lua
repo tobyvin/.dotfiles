@@ -13,25 +13,13 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 	virtual_text = {
 		true,
 		spacing = 6,
-		severity_limit = "Error",  -- Only show virtual text on error
+		severity_limit = "Error", -- Only show virtual text on error
 	},
 })
 
 local function config(_config)
 	return vim.tbl_deep_extend("force", {
 		capabilities = require("cmp_nvim_lsp").update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-		on_attach = function()
-			Nnoremap("gd", ":lua vim.lsp.buf.definition()<CR>")
-			Nnoremap("K", ":lua vim.lsp.buf.hover()<CR>")
-			Nnoremap("<leader>vws", ":lua vim.lsp.buf.workspace_symbol()<CR>")
-			Nnoremap("<leader>vd", ":lua vim.diagnostic.open_float()<CR>")
-			Nnoremap("[d", ":lua vim.lsp.diagnostic.goto_next()<CR>")
-			Nnoremap("]d", ":lua vim.lsp.diagnostic.goto_prev()<CR>")
-			Nnoremap("<leader>vca", ":lua vim.lsp.buf.code_action()<CR>")
-			Nnoremap("<leader>vrr", ":lua vim.lsp.buf.references()<CR>")
-			Nnoremap("<leader>vrn", ":lua vim.lsp.buf.rename()<CR>")
-			Inoremap("<C-h>", "<cmd>lua vim.lsp.buf.signature_help()<CR>")
-		end,
 	}, _config or {})
 end
 
@@ -51,6 +39,29 @@ lspconfig.gopls.setup(config({
 	},
 }))
 
+lspconfig.sumneko_lua.setup({
+	settings = {
+		Lua = {
+			diagnostics = {
+				globals = { "vim" },
+			},
+			format = {
+				enable = false,
+				-- Put format options here
+				-- NOTE: the value should be STRING!!
+				-- defaultConfig = {
+				-- 	indent_style = "space",
+				-- 	indent_size = "2",
+				-- },
+			},
+		},
+	},
+	on_attach = function(client)
+		client.resolved_capabilities.document_formatting = false
+		client.resolved_capabilities.document_range_formatting = false
+	end,
+})
+
 local rustopts = {
 	tools = {
 		autoSetHints = true,
@@ -68,7 +79,7 @@ local rustopts = {
 		settings = {
 			["rust-analyzer"] = {
 				cargo = {
-					allFeatures = "true",
+					allFeatures = true,
 				},
 				checkOnSave = {
 					command = "clippy",
