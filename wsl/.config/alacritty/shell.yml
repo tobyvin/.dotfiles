@@ -1,6 +1,6 @@
 shell:
   program: C:\WINDOWS\system32\wsl.exe
   args:
-    - "tmux new -As main"
+    - "tmux new -As home"
 
 working_directory: '\\wsl$\Arch\home\tobyv'
