@@ -1,0 +1,11 @@
+player=mpv.exe
+player-args=--load-osd-console
+title=twitch.tv/{author} - {game} - {title}
+retry-open=1
+retry-streams=1
+default-stream=best
+hls-live-edge=5
+stream-segment-threads=4
+twitch-disable-hosting
+twitch-disable-ads
+twitch-low-latency

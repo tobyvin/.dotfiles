@@ -23,6 +23,7 @@ stow: # Install configuration files
 	@stow spotify
 	@stow ssh
 	@stow starship
+	@stow streamlink
 	@stow sway
 	@stow tmux
 	@stow zsh
