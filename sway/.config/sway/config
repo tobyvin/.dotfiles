@@ -2,7 +2,15 @@
 
 # Set logo key as main modifier
 set $mod Mod4
+
+# Terminal
+set $term $TERMINAL
+
+# Menu
 set $menu yofi apps | xargs swaymsg exec --
+set $menu_all yofi binapps | xargs swaymsg exec --
+# set $menu exec app-launcher | xargs swaymsg exec --
+# set $menu j4-dmenu-desktop | wofi --show drun -i | xargs swaymsg exec --
 
 # Home row direction keys, like vim
 set $left h
@@ -13,9 +21,10 @@ set $right l
 # Colors
 set $foreground #c0caf5
 set $highlight #bb9af7
-# set $wallpaper @datadir@/backgrounds/sway/Sway_Wallpaper_Blue_1920x1080.png
-# set $lock_cmd swaylock --daemonize --image $wallpaper
-set $lock_cmd swaylock --daemonize
+set $wallpaper ~/img/3840x2160-dark-archlinux.png
+
+# System commands
+set $lock_cmd ~/.local/bin/lock
 set $sleep_cmd systemctl suspend
 
 # Set color for focused window
@@ -24,8 +33,8 @@ client.focused $highlight $highlight $foreground
 ### Output configuration
 
 # Set wallpaper
-# output * bg $wallpaper fill
-
+output * bg $wallpaper fill
+# output * bg `find $wallpapers -type f | shuf -n 1` fill
 ### Idle configuration
 
 # Lock the screen after 300 seconds of inactivity, then turn off
@@ -41,6 +50,9 @@ exec swayidle -w \
 
 # Inhibit idle if a window is in fullscreen
 for_window [shell=".*"] inhibit_idle fullscreen
+
+# Set launcher window to floating
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
 
 ### Input configuration
 
@@ -68,7 +80,8 @@ input type:keyboard {
 bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
 
 # App launcher
-bindsym $mod+space exec $menu 
+bindsym $mod+space exec $menu
+bindsym $mod+shift+space exec $menu_all
 
 # Launch terminal
 bindsym $mod+Return exec $TERMINAL
@@ -163,7 +176,7 @@ mode 'resize' {
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
-    
+
     bindsym Left resize shrink width 10px
     bindsym Down resize grow height 10px
     bindsym Up resize shrink height 10px
@@ -185,7 +198,7 @@ default_border pixel
 hide_edge_borders smart
 
 # Start notification daemon
-# exec mako
+exec mako
 
 # Start display management daemon
 # exec kanshi
@@ -194,8 +207,8 @@ hide_edge_borders smart
 # exec gammastep -l '46.95:7.45'
 
 # Clipboard manager
-# exec wl-paste --type text --watch clipman store
-# bindsym $mod+v exec clipman pick --tool wofi
+exec wl-paste --type text --watch clipman store --no-persist
+bindsym $mod+v exec clipman pick --tool=CUSTOM --tool-args='yofi dialog'
 
 
 include @sysconfdir@/sway/config.d/*

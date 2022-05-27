@@ -1,3 +1,5 @@
+# theme = "gruvbox-dark"
+
 [[block]]
 block = "disk_space"
 path = "/"
@@ -27,10 +29,21 @@ format = "{1m}"
 block = "sound"
 
 [[block]]
-block = "time"
-interval = 5
-format = "%a %d/%m %R"
+block = "battery"
+device = "/sys/class/power_supply/BAT0"
+if_command = "test -e /sys/class/power_supply/BAT0"
 
 [[block]]
 block = "battery"
-if_command = "test -e /sys/class/power_supply/BAT0"
+device = "/sys/class/power_supply/BAT1"
+if_command = "test -e /sys/class/power_supply/BAT1"
+
+[[block]]
+block = "battery"
+device = "/sys/class/power_supply/BAT2"
+if_command = "test -e /sys/class/power_supply/BAT2"
+
+[[block]]
+block = "time"
+interval = 5
+format = "%a %d/%m %R"
