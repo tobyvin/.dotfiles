@@ -16,6 +16,7 @@ stow: # Install configuration files
 	@stow git
 	@stow gnupg --defer=/*
 	@stow lazygit
+	@stow mpv
 	@stow nvim
 	@stow paru
 	@stow scripts
