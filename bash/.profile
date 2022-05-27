@@ -12,8 +12,8 @@ export BASH_COMPLETION_USER_DIR=$XDG_DATA_HOME/bash-completion/completions
 export LESSHISTFILE=$XDG_STATE_HOME/lesshst
 export WGETRC=$XDG_CONFIG_HOME/wgetrc
 
-export EDITOR="$(command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi)"
-export BROWSER="firefox"
+export EDITOR="$( command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi )"
+export BROWSER="$( command -v chromium 2>/dev/null || command -v firefox )"
 export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
