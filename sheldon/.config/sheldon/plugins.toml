@@ -8,7 +8,7 @@ defer = { value = 'zsh-defer source "{{ file }}"', each = true }
 comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file }}" "$XDG_DATA_HOME/zsh/site-functions/_{{ name }}"', each = true }
 
 [plugins.zsh-wsl]
-inline = 'test -f ~/.local/share/zsh-wsl && zsh-defer source ~/.local/share/zsh-wsl'
+inline = 'test -f ~/.local/share/zsh-wsl/zsh-wsl.plugin.zsh && zsh-defer source ~/.local/share/zsh-wsl/zsh-wsl.plugin.zsh'
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
