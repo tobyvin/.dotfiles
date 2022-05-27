@@ -3,6 +3,13 @@ if not status_ok then
 	return
 end
 
+local installer_ok, installer = pcall(require, "nvim-lsp-installer")
+if installer_ok then
+	require("nvim-lsp-installer").setup({
+		automatic_installation = true, -- automatically detect which servers to install (based on which servers are set up via lspconfig)
+	})
+end
+
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
@@ -47,12 +54,6 @@ lspconfig.sumneko_lua.setup({
 			},
 			format = {
 				enable = false,
-				-- Put format options here
-				-- NOTE: the value should be STRING!!
-				-- defaultConfig = {
-				-- 	indent_style = "space",
-				-- 	indent_size = "2",
-				-- },
 			},
 		},
 	},
@@ -62,7 +63,7 @@ lspconfig.sumneko_lua.setup({
 	end,
 })
 
-local rustopts = {
+require("rust-tools").setup({
 	tools = {
 		autoSetHints = true,
 		hover_with_actions = true,
@@ -87,9 +88,7 @@ local rustopts = {
 			},
 		},
 	},
-}
-
-require("rust-tools").setup(rustopts)
+})
 
 local opts = {
 	-- whether to highlight the currently hovered symbol

@@ -81,14 +81,10 @@ return packer.startup(function(use)
 		"neovim/nvim-lspconfig",
 		config = [[require('plugins/lspconfig')]],
 	})
-	use({ "lukas-reineke/virt-column.nvim", config = [[require("virt-column").setup()]] })
-	-- use({
-	-- 	"williamboman/nvim-lsp-installer",
-	-- 	config = [[require('plugins/lsp-installer')]],
-	-- })
+	use("williamboman/nvim-lsp-installer")
 
 	use("nvim-lua/lsp_extensions.nvim")
-	use("simrat39/rust-tools.nvim")
+	use({ "simrat39/rust-tools.nvim", branch = "modularize_and_inlay_rewrite" })
 	use("simrat39/symbols-outline.nvim")
 
 	use({
@@ -151,6 +147,7 @@ return packer.startup(function(use)
 		config = [[require('plugins/blankline')]],
 	})
 
+	use({ "lukas-reineke/virt-column.nvim", config = [[require("virt-column").setup()]] })
 	use("tpope/vim-eunuch")
 
 	use({
