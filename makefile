@@ -34,7 +34,7 @@ unstow: # Uninstall configuration files
 	stow --delete */
 
 clean: # Remove all broken symbolic links from $HOME (recursivly)
-	find $(HOME) -type l -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
+	find $(HOME) -type l -not -path '$(HOME)/.cache' -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
 
 wsl: stow # Run WSL install script
 	./wsl/.local/bin/wsl-installer.sh
