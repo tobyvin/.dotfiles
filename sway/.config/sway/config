@@ -7,8 +7,8 @@ set $mod Mod4
 set $term $TERMINAL
 
 # Menu
-set $menu yofi apps | xargs swaymsg exec --
-set $menu_all yofi binapps | xargs swaymsg exec --
+set $menu exec rofi -modi "run,drun" -show drun -show-icons
+set $menu_all exec rofi -modi "run,drun" -show run -show-icons
 # set $menu exec app-launcher | xargs swaymsg exec --
 # set $menu j4-dmenu-desktop | wofi --show drun -i | xargs swaymsg exec --
 
@@ -24,7 +24,7 @@ set $highlight #bb9af7
 set $wallpaper ~/img/3840x2160-dark-archlinux.png
 
 # System commands
-set $lock_cmd ~/.local/bin/lock
+set $lock_cmd swaylock --grace 10 --fade-in 1
 set $sleep_cmd systemctl suspend
 
 # Set color for focused window
@@ -208,7 +208,7 @@ exec mako
 
 # Clipboard manager
 exec wl-paste --type text --watch clipman store --no-persist
-bindsym $mod+v exec clipman pick --tool=CUSTOM --tool-args='yofi dialog'
+bindsym $mod+v exec clipman pick --tool=rofi
 
 
 include @sysconfdir@/sway/config.d/*

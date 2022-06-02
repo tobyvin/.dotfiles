@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 swaylock \
-    --daemonize \
+	--daemonize \
 	--screenshots \
 	--clock \
 	--indicator \
@@ -16,4 +16,3 @@ swaylock \
 	--separator-color 00000000 \
 	--grace 10 \
 	--fade-in 1
-
