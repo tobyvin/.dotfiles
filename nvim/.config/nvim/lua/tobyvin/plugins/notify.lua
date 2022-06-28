@@ -1,3 +1,4 @@
+local utils = require("tobyvin.utils")
 local M = {}
 
 M.setup = function()
@@ -12,6 +13,13 @@ M.setup = function()
 	})
 
 	vim.notify = notify
+
+	local telescope_ok, telescope = pcall(require, "telescope")
+	if telescope_ok then
+		telescope.load_extension("notify")
+		local nmap = utils.create_map_group("n", "<leader>f", "Find")
+		nmap("n", telescope.extensions.notify.notify, { desc = "Notifications" })
+	end
 end
 
 return M

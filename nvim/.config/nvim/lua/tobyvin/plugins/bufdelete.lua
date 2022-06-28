@@ -1,6 +1,5 @@
-local M = {
-	augroup = vim.api.nvim_create_augroup("bufdelete", { clear = true }),
-}
+local utils = require("tobyvin.utils")
+local M = {}
 
 M.get_listed_buffers = function()
 	local buffers = {}
@@ -16,29 +15,35 @@ M.get_listed_buffers = function()
 end
 
 M.setup = function()
-	vim.api.nvim_create_autocmd("User", {
-		pattern = "BDeletePre",
-		group = M.augroup,
-		callback = function(event)
-			local found_non_empty_buffer = false
-			local buffers = M.get_listed_buffers()
+	local status_ok, bufdelete = pcall(require, "bufdelete")
+	if not status_ok then
+		vim.notify("Failed to load module 'bufdelete'", "error")
+		return
+	end
 
-			for _, bufnr in ipairs(buffers) do
-				if not found_non_empty_buffer then
+	local nmap = utils.create_map_group("n", "<leader>")
+	nmap("c", bufdelete.bufdelete, { desc = "Close buffer" })
+
+	local alpha_ok, alpha = pcall(require, "alpha")
+	if alpha_ok then
+		local augroup = vim.api.nvim_create_augroup("BufDeleteAlpha", { clear = true })
+
+		vim.api.nvim_create_autocmd("User", {
+			pattern = "BDeletePre",
+			group = augroup,
+			callback = function(event)
+				local buffers = M.get_listed_buffers()
+				for _, bufnr in ipairs(buffers) do
 					local name = vim.api.nvim_buf_get_name(bufnr)
 					local ft = vim.api.nvim_buf_get_option(bufnr, "filetype")
-
 					if bufnr ~= event.buf and name ~= "" and ft ~= "Alpha" then
-						found_non_empty_buffer = true
+						return
 					end
+					alpha.start()
 				end
-			end
-
-			if not found_non_empty_buffer then
-				vim.cmd([[:Alpha]])
-			end
-		end,
-	})
+			end,
+		})
+	end
 end
 
 return M

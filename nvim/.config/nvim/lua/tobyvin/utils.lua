@@ -4,7 +4,7 @@ M.create_map_group = function(mode, prefix, name, g_opts)
 	g_opts = g_opts or {}
 
 	local status_ok, which_key = pcall(require, "which-key")
-	if status_ok then
+	if status_ok and name then
 		which_key.register({ [prefix] = { name = name } }, vim.tbl_extend("force", { mode = mode }, g_opts))
 	end
 

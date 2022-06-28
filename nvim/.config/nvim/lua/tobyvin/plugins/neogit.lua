@@ -8,9 +8,14 @@ M.setup = function()
 		return
 	end
 
-	neogit.setup({ disable_commit_confirmation = true, disable_signs = true })
+	neogit.setup({
+		disable_commit_confirmation = true,
+		disable_signs = true,
+		integrations = {
+			diffview = true,
+		},
+	})
 
-	vim.notify("Loading neogit")
 	local nmap = utils.create_map_group("n", "<leader>g", "git")
 	nmap("g", neogit.open, { desc = "Neogit" })
 end
