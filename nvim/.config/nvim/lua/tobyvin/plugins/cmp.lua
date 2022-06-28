@@ -3,7 +3,7 @@ if not status_ok then
 	return
 end
 
-enabled = function()
+local enabled = function()
 	local context = require("cmp.config.context")
 
 	if vim.api.nvim_buf_get_option(0, "buftype") == "prompt" then
@@ -54,6 +54,7 @@ cmp.setup({
 				nvim_lua = "[Lua]",
 				buffer = "[Buffer]",
 				path = "[Path]",
+				crates = "[Crates]",
 			},
 		}),
 	},
@@ -63,5 +64,6 @@ cmp.setup({
 		{ name = "path" },
 		{ name = "luasnip" },
 		{ name = "buffer", keyword_length = 1 },
+		{ name = "crates" },
 	},
 })

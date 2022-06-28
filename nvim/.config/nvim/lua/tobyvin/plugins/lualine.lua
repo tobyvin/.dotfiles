@@ -9,11 +9,7 @@ end
 
 local nvim_gps = function()
 	local status_gps_ok, gps = pcall(require, "nvim-gps")
-	if not status_gps_ok then
-		return
-	end
-	local gps_location = gps.get_location()
-	if gps_location == "error" then
+	if not status_gps_ok or gps.get_location() == "error" then
 		return ""
 	else
 		return gps.get_location()
@@ -25,7 +21,6 @@ local hide_in_width = function()
 end
 
 lualine.setup({
-
 	options = {
 		component_separators = { left = "", right = "" },
 		section_separators = { left = "", right = "" },
