@@ -5,11 +5,12 @@ ZSH_COMP_DIR := $(HOME)/.local/share/zsh/site-functions
 BASH_COMP_DIR := $(HOME)/.local/share/bash-completion/completions
 
 ARCH := $(shell uname -m | sed s/aarch64/arm64/ | sed s/x86_64/amd64/ | sed s/armv7l/armv6/)
+FD := $(shell command -v fd 2> /dev/null)
 
 .PHONY: interactive stow unstow clean gpg wsl
 
 # TODO https://github.com/andrewsardone/dotfiles/blob/master/Makefile
-stow: # Install configuration files
+stow: # Install configs
 	@stow alacritty --defer=/*
 	@stow bash
 	@stow bat
@@ -34,7 +35,11 @@ unstow: # Uninstall configuration files
 	stow --delete */
 
 clean: # Remove all broken symbolic links from $HOME (recursivly)
-	find $(HOME) -type l -not -path '$(HOME)/.cache' -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
+	ifndef FD
+		fd . $(HOME) --hidden --exclude $(XDG_CACHE_HOME) --type l --exec sh -c '[ -e "{}" ] || echo "rm -v {}"' || \
+	else
+		find $(HOME) -type l -not -path '$(HOME)/.cache' -exec sh -c 'for x; do [ -e "$$x" ] || rm -v "$$x"; done' _ {} +
+	endif
 
 wsl: stow # Run WSL install script
 	./wsl/.local/bin/wsl-installer.sh
