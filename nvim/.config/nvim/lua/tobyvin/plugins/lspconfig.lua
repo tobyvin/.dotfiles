@@ -30,19 +30,25 @@ M.setup = function()
 	lspconfig.ltex.setup(lsp.config())
 
 	lspconfig.texlab.setup(lsp.config({
+		init_options = { documentFormatting = true },
 		settings = {
 			texlab = {
 				build = {
+					args = {"-pdf", "-interaction=nonstopmode", "-synctex=1", "-auxdir=../aux", "-outdir=../", "-emulate-aux-dir", "%f"},
 					onSave = true,
 				},
 				chktex = {
 					onEdit = true,
 					onOpenAndSave = true,
 				},
+				latexindent = {
+					modifyLineBreaks = true,
+				},
+				auxDirectory = "../aux",
 			},
 		},
 		on_attach = function(client, bufnr)
-			vim.b.tex_flavor = "latex"
+			vim.g.tex_flavor = "latex"
 			lsp.on_attach(client, bufnr)
 		end,
 	}))

@@ -1,5 +1,28 @@
 local M = {}
 
+M.diagnostic_signs = {
+	error = { text = " ", texthl = "DiagnosticSignError" },
+	warn = { text = " ", texthl = "DiagnosticSignWarn" },
+	info = { text = " ", texthl = "DiagnosticSignInfo" },
+	hint = { text = "", texthl = "DiagnosticSignHint" },
+}
+
+setmetatable(M.diagnostic_signs, {
+	__index = function()
+		return M.diagnostic_signs.info
+	end,
+})
+
+M.close_buffer = function(bufnr)
+	bufnr = bufnr or 0
+	local status_ok, bufdelete = pcall(require, "bufdelete")
+	if status_ok then
+		bufdelete.bufdelete(bufnr, true)
+	else
+		vim.cmd("bdelete " .. bufnr)
+	end
+end
+
 M.create_map_group = function(mode, prefix, name, g_opts)
 	g_opts = g_opts or {}
 
@@ -53,6 +76,22 @@ M.popup = function(file_path)
 	vim.api.nvim_buf_set_option(buf, "modifiable", true)
 	vim.api.nvim_command("$read" .. file_path)
 	vim.api.nvim_buf_set_option(0, "modifiable", false)
+end
+
+--- count existing buffers
+---@param filter function predicate used to filter counted buffers
+---@return table
+M.count_bufs_by_type = function(filter)
+	local count = { normal = 0, acwrite = 0, help = 0, nofile = 0, nowrite = 0, quickfix = 0, terminal = 0, prompt = 0 }
+	local buftypes = vim.api.nvim_list_bufs()
+	for _, bufname in pairs(buftypes) do
+		if filter == nil or filter(bufname) then
+			local buftype = vim.api.nvim_buf_get_option(bufname, "buftype")
+			buftype = buftype ~= "" and buftype or "normal"
+			count[buftype] = count[buftype] + 1
+		end
+	end
+	return count
 end
 
 M.file_exists = function(file)

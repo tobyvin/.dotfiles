@@ -1,3 +1,4 @@
+local lsp = require("tobyvin.lsp")
 local M = {}
 
 M.setup = function()
@@ -22,6 +23,7 @@ M.setup = function()
 			diagnostics.markdownlint,
 			-- diagnostics.luacheck,
 			diagnostics.shellcheck,
+			diagnostics.checkmake,
 
 			-- Formatting
 			formatting.prettier,
@@ -31,6 +33,11 @@ M.setup = function()
 			formatting.stylua,
 			formatting.shfmt,
 		},
+    on_attach = lsp.on_attach
+		-- on_attach = function(client, bufnr)
+		-- 	client.server_capabilities.documentFormattingProvider = client.supports_method("textDocument/formatting")
+		-- 	lsp.on_attach(client, bufnr)
+		-- end,
 	})
 end
 

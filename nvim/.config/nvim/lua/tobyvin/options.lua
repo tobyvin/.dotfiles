@@ -1,7 +1,13 @@
+local utils = require("tobyvin.utils")
 local M = {}
 
 M.setup = function()
 	vim.g.mapleader = " "
+
+	vim.fn.sign_define("DiagnosticSignError", utils.diagnostic_signs.error)
+	vim.fn.sign_define("DiagnosticSignWarn", utils.diagnostic_signs.warn)
+	vim.fn.sign_define("DiagnosticSignInfo", utils.diagnostic_signs.info)
+	vim.fn.sign_define("DiagnosticSignHint", utils.diagnostic_signs.hint)
 
 	vim.opt.termguicolors = true
 	vim.opt.laststatus = 3

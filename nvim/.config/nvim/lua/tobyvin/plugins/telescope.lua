@@ -17,6 +17,7 @@ M.setup = function()
 					["<C-h>"] = "which_key",
 				},
 			},
+      file_ignore_patterns = { "^.git/" },
 			vimgrep_arguments = {
 				"rg",
 				"--color=never",

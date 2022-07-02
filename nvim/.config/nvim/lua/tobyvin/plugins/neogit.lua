@@ -14,6 +14,7 @@ M.setup = function()
 		integrations = {
 			diffview = true,
 		},
+		-- kind = "replace",
 	})
 
 	local nmap = utils.create_map_group("n", "<leader>g", "git")

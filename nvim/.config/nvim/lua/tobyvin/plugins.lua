@@ -188,6 +188,7 @@ M.plugins = function(use)
 
 	use({
 		"TimUntersberger/neogit",
+		requires = { "sindrets/diffview.nvim" },
 		config = [[require("tobyvin.plugins.neogit").setup()]],
 	})
 
@@ -209,6 +210,7 @@ M.plugins = function(use)
 	use({
 		"sindrets/diffview.nvim",
 		requires = "nvim-lua/plenary.nvim",
+		config = [[require("tobyvin.plugins.diffview")]],
 	})
 
 	use({
@@ -254,12 +256,7 @@ M.plugins = function(use)
 	use({
 		"akinsho/nvim-bufferline.lua",
 		requires = "kyazdani42/nvim-web-devicons",
-		config = [[require("tobyvin.plugins.bufferline")]],
-	})
-	use({
-		"goolord/alpha-nvim",
-		requires = { "kyazdani42/nvim-web-devicons" },
-		config = [[require("alpha").setup(require("alpha.themes.theta").config)]],
+		config = [[require("tobyvin.plugins.bufferline").setup()]],
 	})
 
 	use("SmiteshP/nvim-gps")

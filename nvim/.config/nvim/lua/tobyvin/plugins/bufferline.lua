@@ -1,33 +1,43 @@
-local status_ok, bufferline = pcall(require, "bufferline")
-if not status_ok then
-	return
+local utils = require("tobyvin.utils")
+local M = {}
+
+M.diagnostic_signs = function(name)
+	name = name:gsub("warning", "warn")
+	return utils.diagnostic_signs[name]
 end
 
-local diagnostics_signs = {
-	["error"] = "",
-	warning = "",
-	default = "",
-}
+M.diagnostics_indicator = function(count, level, errors, ctx)
+	local s = " "
+	for e, n in pairs(errors) do
+		local sign = utils.diagnostic_signs[e:gsub("warning", "warn")].text
+		s = s .. (#s > 1 and " " or "") .. sign .. n
+	end
+	return s
+end
 
-require("bufferline").setup({
-	options = {
-		indicator_icon = " ",
-		buffer_close_icon = "",
-		modified_icon = "●",
-		close_icon = "",
-		close_command = "Bdelete! %d",
-		right_mouse_command = "Bdelete! %d",
-		always_show_bufferline = false,
-		diagnostics = "nvim_lsp",
-		diagnostics_indicator = function(count, level, diagnostics_dict, context)
-			local s = " "
-			for e, n in pairs(diagnostics_dict) do
-				local sym = diagnostics_signs[e] or diagnostics_signs.default
-				s = s .. (#s > 1 and " " or "") .. sym .. " " .. n
-			end
-			return s
-		end,
-		show_tab_indicators = true,
-		show_close_icon = false,
-	},
-})
+M.setup = function()
+	local status_ok, bufferline = pcall(require, "bufferline")
+	if not status_ok then
+		vim.notify("failed to load module 'bufferline'", "error")
+		return
+	end
+
+	bufferline.setup({
+		options = {
+			close_command = utils.close_buffer,
+			right_mouse_command = "buffer %d",
+			always_show_bufferline = false,
+			diagnostics = "nvim_lsp",
+			diagnostics_indicator = M.diagnostics_indicator,
+			-- show_tab_indicators = true,
+			show_close_icon = false,
+      left_trunc_marker = "<",
+      right_trunc_marker = ">",
+		},
+	})
+
+	local nmap = utils.create_map_group("n", "<leader>b", "Buffers")
+	nmap("g", bufferline.pick_buffer, { desc = "Pick Buffer" })
+end
+
+return M
