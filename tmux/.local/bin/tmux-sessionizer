@@ -5,9 +5,10 @@ if [ "$#" -eq 1 ]; then
 else
 	selected=$(
 		find ~/src ~/.dotfiles -maxdepth 2 -type d,f -path '*/.git' -printf '%h\n' -prune |
-			xargs -I{} sh -c 'git -C "{}" rev-parse HEAD &>/dev/null &&
+            xargs -I{} sh -c 'stat -c %Y:"{}" $XDG_DATA_HOME/nvim/sessions/$(echo "{}" | sed "s|/|%|g").vim ||
+            (git -C "{}" rev-parse HEAD &>/dev/null &&
                 git -C "{}" --no-pager log -1 --all --format="%at:{}" 2>/dev/null ||
-                stat -c %Y:"{}" "{}"/.git' | sort -r | cut -d':' -f2- |
+                stat -c %Y:"{}" "{}"/.git)' | sort -r | cut -d':' -f2- |
 			fzf-tmux -p -- -d/ --with-nth -2.. --preview="exa --tree --icons --git-ignore {}"
 	)
 fi
