@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 DOTFILES="${HOME}/.dotfiles"
 
@@ -11,7 +11,7 @@ ln -sfn "$WINHOME" ~/win
 
 # ssh-config
 sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4321|' "${DOTFILES}"/ssh/.ssh/config |
-sed '/Control/d' >"${WINHOME}/.ssh/config"
+	sed '/Control/d' >"${WINHOME}/.ssh/config"
 
 # Create windows symlinks to dotfiles
 mkln.sh "$@" "$HOME"/.gitconfig "${WINHOME}"/.gitconfig
@@ -21,7 +21,10 @@ mkln.sh "$@" "$HOME"/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scd
 mkln.sh "$@" "$HOME"/.config/alacritty/alacritty.yml "${WINHOME}"/AppData/Roaming/alacritty/alacritty.yml
 
 for f in "$HOME"/.config/alacritty/*; do
-  mkln.sh "$@" "$f" "${WINHOME}"/.config/alacritty/"$(basename "$f")"
+	case "$f" in
+	*shell.yml) echo "Skipping $f" ;;
+	*) mkln.sh "$@" "$f" "${WINHOME}"/.config/alacritty/"$(basename "$f")" ;;
+	esac
 done
 
 # install wsl2-ssh-pageant
@@ -36,10 +39,10 @@ chmod +x "${HOME}"/.local/bin/xclip
 chmod +x "${HOME}"/.local/bin/xsel
 
 # https://github.com/wslutilities/wslu
-command -v wslview &>/dev/null || cat <<-EOF
-    wslu is not installed.
-    wslu (wslview) is needed to open browser windows from linux commands.
-    install instructions: https://github.com/wslutilities/wslu#installation
+command -v wslview >&/dev/null || cat <<-EOF
+	    wslu is not installed.
+	    wslu (wslview) is needed to open browser windows from linux commands.
+	    install instructions: https://github.com/wslutilities/wslu#installation
 EOF
 
 echo "WSL has been set up"

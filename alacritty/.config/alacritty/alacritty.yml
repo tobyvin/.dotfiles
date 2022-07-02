@@ -3,17 +3,11 @@ import:
   - ~/.config/alacritty/colors.yml
   - ~/.config/alacritty/key_bindings.yml
   - ~/.config/alacritty/shell.yml
+  - ~/.config/alacritty/window.yml
+  - ~/.config/alacritty/local.yml
 
 env:
   TERM: alacritty
-
-window:
-  dimensions:
-    columns: 120
-    lines: 40
-  dynamic_padding: false
-  decorations: full
-  opacity: 0.9
 
 scrolling:
   history: 10000

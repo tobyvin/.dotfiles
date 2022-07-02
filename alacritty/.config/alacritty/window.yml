@@ -1,0 +1,7 @@
+window:
+  dimensions:
+    columns: 120
+    lines: 40
+  dynamic_padding: false
+  decorations: full
+  opacity: 0.9
