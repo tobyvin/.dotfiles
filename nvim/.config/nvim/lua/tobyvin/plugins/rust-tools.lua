@@ -1,22 +1,15 @@
-local M = {}
+local lsp = require("tobyvin.lsp")
+local M = {
+	codelldb = "/usr/lib/codelldb/adapter/codelldb",
+	liblldb = "/usr/lib/codelldb/lldb/lib/liblldb.so",
+}
 
-M._dap_adapter = function()
-	local ext_path = vim.env.HOME .. "/usr/lib/codelldb/"
-	local codelldb_path = ext_path .. "adapter/codelldb"
-	local liblldb_path = ext_path .. "lldb/lib/liblldb.so"
-
-	if not require("tobyvin.utils").isdir(ext_path) then
-		vim.notify(
-			"[DAP] Failed to find codelldb, falling back to default DAP adapter.",
-			"warn",
-			{ title = "[rust-tools] codelldb not found" }
-		)
-		return {}
+M.dap_adapter = function()
+	if vim.fn.executable(M.codelldb) ~= 0 then
+		return {
+			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),
+		}
 	end
-
-	return {
-		adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-	}
 end
 
 M.setup = function()
@@ -25,8 +18,6 @@ M.setup = function()
 		vim.notify("Failed to load module 'rust-tools'", "error")
 		return
 	end
-
-	local lsp = require("tobyvin.lsp")
 
 	rust_tools.setup({
 		tools = {
@@ -52,8 +43,18 @@ M.setup = function()
 					},
 				},
 			},
+			on_attach = function(client, bufnr)
+				if vim.fn.executable(M.codelldb) == 0 then
+					vim.notify(
+						"[DAP] Failed to find codelldb, falling back to default DAP adapter.",
+						"warn",
+						{ title = "[rust-tools] codelldb not found" }
+					)
+				end
+				lsp.on_attach(client, bufnr)
+			end,
 		}),
-		dap = M._dap_adapter(),
+		dap = M.dap_adapter(),
 	})
 end
 
