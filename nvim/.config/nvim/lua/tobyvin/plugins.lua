@@ -108,6 +108,7 @@ M.plugins = function(use)
 	use({
 		"folke/trouble.nvim",
 		cmd = "TroubleToggle",
+		config = [[require("tobyvin.plugins.trouble").setup()]],
 	})
 
 	use({
@@ -192,26 +193,26 @@ M.plugins = function(use)
 		config = [[require("tobyvin.plugins.neogit").setup()]],
 	})
 
-	if vim.fn.executable("gh") == 1 then
-		use("pwntester/octo.nvim")
-	end
+	use({
+		"sindrets/diffview.nvim",
+		requires = "nvim-lua/plenary.nvim",
+		config = [[require("tobyvin.plugins.diffview").setup()]],
+	})
+
+	use({
+		"akinsho/git-conflict.nvim",
+		config = [[require("tobyvin.plugins.git-conflict").setup()]],
+	})
 
 	use({
 		"lewis6991/gitsigns.nvim",
 		requires = "nvim-lua/plenary.nvim",
-		config = [[require("tobyvin.plugins.gitsigns")]],
+		config = [[require("tobyvin.plugins.gitsigns").setup()]],
 	})
 
-	use({
-		"f-person/git-blame.nvim",
-		config = [[require("tobyvin.plugins.git-blame")]],
-	})
-
-	use({
-		"sindrets/diffview.nvim",
-		requires = "nvim-lua/plenary.nvim",
-		config = [[require("tobyvin.plugins.diffview")]],
-	})
+	if vim.fn.executable("gh") == 1 then
+		use("pwntester/octo.nvim")
+	end
 
 	use({
 		"mbbill/undotree",
@@ -249,10 +250,9 @@ M.plugins = function(use)
 
 	use({
 		"numToStr/Comment.nvim",
-		config = [[require("Comment").setup()]],
+		config = [[require("tobyvin.plugins.comment").setup()]],
 	})
 
-	use({ "famiu/bufdelete.nvim", config = [[require("tobyvin.plugins.bufdelete").setup()]] })
 	use({
 		"akinsho/nvim-bufferline.lua",
 		requires = "kyazdani42/nvim-web-devicons",

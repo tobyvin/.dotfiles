@@ -6,7 +6,7 @@ M.diagnostic_signs = function(name)
 	return utils.diagnostic_signs[name]
 end
 
-M.diagnostics_indicator = function(count, level, errors, ctx)
+M.diagnostics_indicator = function(_, _, errors, _)
 	local s = " "
 	for e, n in pairs(errors) do
 		local sign = utils.diagnostic_signs[e:gsub("warning", "warn")].text
@@ -24,20 +24,20 @@ M.setup = function()
 
 	bufferline.setup({
 		options = {
-			close_command = utils.close_buffer,
 			right_mouse_command = "buffer %d",
 			always_show_bufferline = false,
 			diagnostics = "nvim_lsp",
 			diagnostics_indicator = M.diagnostics_indicator,
 			-- show_tab_indicators = true,
 			show_close_icon = false,
-      left_trunc_marker = "<",
-      right_trunc_marker = ">",
+			left_trunc_marker = "<",
+			right_trunc_marker = ">",
 		},
 	})
 
 	local nmap = utils.create_map_group("n", "<leader>b", "Buffers")
-	nmap("g", bufferline.pick_buffer, { desc = "Pick Buffer" })
+	nmap("c", bufferline.close_with_pick, { desc = "Close Buffer" })
+	nmap("b", bufferline.pick_buffer, { desc = "Pick Buffer" })
 end
 
 return M

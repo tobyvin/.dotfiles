@@ -13,16 +13,6 @@ setmetatable(M.diagnostic_signs, {
 	end,
 })
 
-M.close_buffer = function(bufnr)
-	bufnr = bufnr or 0
-	local status_ok, bufdelete = pcall(require, "bufdelete")
-	if status_ok then
-		bufdelete.bufdelete(bufnr, true)
-	else
-		vim.cmd("bdelete " .. bufnr)
-	end
-end
-
 M.create_map_group = function(mode, prefix, name, g_opts)
 	g_opts = g_opts or {}
 
