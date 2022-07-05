@@ -9,12 +9,8 @@ M.setup = function()
 	require("tobyvin.options").setup()
 	require("tobyvin.plugins").setup()
 	require("tobyvin.lsp").setup()
-
-	-- deferred execution makes the editor feel more responsive
-	vim.defer_fn(function()
-		require("tobyvin.autocommands")
-		require("tobyvin.mappings")
-	end, 0)
+	require("tobyvin.autocommands").setup()
+	require("tobyvin.mappings").setup()
 end
 
 return M
