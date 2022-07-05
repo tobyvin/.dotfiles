@@ -61,8 +61,8 @@ M.setup = function()
 	})
 
 	local nmap = utils.create_map_group("n", "<leader>l", "LSP")
-	nmap("<leader>li", "<cmd>LspInfo<cr>", { desc = "LSP info" })
-	nmap("<leader>lI", "<cmd>LspInstallInfo<cr>", { desc = "LSP installer info" })
+	nmap("i", "<cmd>LspInfo<cr>", { desc = "LSP info" })
+	nmap("I", "<cmd>LspInstallInfo<cr>", { desc = "LSP installer info" })
 end
 
 return M
