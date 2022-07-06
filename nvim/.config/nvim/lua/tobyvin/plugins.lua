@@ -15,7 +15,10 @@ M.plugins = function(use)
 	use({ "rcarriga/nvim-notify", config = [[require("tobyvin.plugins.notify").setup()]] })
 	use("stevearc/dressing.nvim")
 
-	use("andweeb/presence.nvim")
+	use({
+		"andweeb/presence.nvim",
+		config = [[require("tobyvin.plugins.presence").setup()]],
+	})
 
 	use({ "eddyekofo94/gruvbox-flat.nvim", config = [[require("tobyvin.plugins.gruvbox-flat").setup()]] })
 
