@@ -1,5 +1,7 @@
 local M = {}
 
+M.spinner_frames = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }
+
 M.diagnostic_signs = {
 	error = { text = " ", texthl = "DiagnosticSignError" },
 	warn = { text = " ", texthl = "DiagnosticSignWarn" },

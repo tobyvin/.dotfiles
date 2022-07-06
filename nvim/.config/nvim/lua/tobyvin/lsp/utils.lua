@@ -1,7 +1,6 @@
-local M = {
-	client_notifs = {},
-	spinner_frames = { "⣾", "⣽", "⣻", "⢿", "⡿", "⣟", "⣯", "⣷" },
-}
+local M = {}
+
+M.spinner_frames = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }
 
 M.get_notif_data = function(client_id, token)
 	if not M.client_notifs[client_id] then

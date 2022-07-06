@@ -24,9 +24,10 @@ M.on_attach = function(client, bufnr)
 	nmap_goto("i", vim.lsp.buf.implementation, { desc = "Implementation" })
 	nmap_goto("r", vim.lsp.buf.references, { desc = "References" })
 
-  -- disabled in favor of https://github.com/nvim-treesitter/nvim-treesitter-refactor#highlight-definitions
+	-- disabled in favor of https://github.com/nvim-treesitter/nvim-treesitter-refactor#highlight-definitions
 	-- require("tobyvin.lsp.highlighting").on_attach(client, bufnr)
 	require("tobyvin.lsp.formatting").on_attach(client, bufnr)
+	require("tobyvin.lsp.symbol").on_attach(client, bufnr)
 	require("lsp_signature").on_attach()
 end
 
@@ -35,10 +36,10 @@ M.config = function(config)
 	capabilities.textDocument.completion.completionItem.snippetSupport = true
 	capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
-	return vim.tbl_deep_extend("force", {
+	return vim.tbl_deep_extend("keep", config or {}, {
 		capabilities = capabilities,
 		on_attach = M.on_attach,
-	}, config or {})
+	})
 end
 
 M.setup = function()

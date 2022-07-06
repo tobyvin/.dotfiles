@@ -8,9 +8,9 @@ M.setup = function()
 		end
 
 		if vim.tbl_islist(result) then
-			vim.lsp.util.jump_to_location(result[1], "utf-8")
+			vim.lsp.util.jump_to_location(result[1], "utf-8", true)
 		else
-			vim.lsp.util.jump_to_location(result, "utf-8")
+			vim.lsp.util.jump_to_location(result, "utf-8", true)
 		end
 	end
 

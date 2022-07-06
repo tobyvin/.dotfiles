@@ -45,19 +45,6 @@ cmp.setup({
 			select = true,
 		}),
 	},
-	formatting = {
-		format = require("lspkind").cmp_format({
-			mode = "symbol_text",
-			menu = {
-				nvim_lsp = "[LSP]",
-				luasnip = "[LuaSnip]",
-				nvim_lua = "[Lua]",
-				buffer = "[Buffer]",
-				path = "[Path]",
-				crates = "[Crates]",
-			},
-		}),
-	},
 	sources = {
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lua" },

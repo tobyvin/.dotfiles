@@ -48,6 +48,7 @@ M.plugins = function(use)
 		requires = {
 			"williamboman/nvim-lsp-installer",
 			"ray-x/lsp_signature.nvim",
+			"SmiteshP/nvim-navic",
 		},
 		config = [[require("tobyvin.plugins.lspconfig").setup()]],
 	})
@@ -93,7 +94,6 @@ M.plugins = function(use)
 	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
-			{ "onsails/lspkind-nvim", config = [[require("tobyvin.plugins.lspkind")]] },
 			"ray-x/lsp_signature.nvim",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lua",
@@ -105,6 +105,8 @@ M.plugins = function(use)
 		},
 		config = [[require("tobyvin.plugins.cmp")]],
 	})
+
+	use({ "onsails/lspkind-nvim", config = [[require("tobyvin.plugins.lspkind").setup()]] })
 
 	use({ "simrat39/symbols-outline.nvim", config = [[require("symbols-outline").setup()]] })
 
@@ -185,9 +187,17 @@ M.plugins = function(use)
 	use({
 		"nvim-lualine/lualine.nvim",
 		requires = {
-			{ "kyazdani42/nvim-web-devicons" },
+			"kyazdani42/nvim-web-devicons",
+			"arkav/lualine-lsp-progress",
+			"SmiteshP/nvim-navic",
 		},
-		config = [[require("tobyvin.plugins.lualine")]],
+		config = [[require("tobyvin.plugins.lualine").setup()]],
+	})
+
+	use({
+		"SmiteshP/nvim-navic",
+		requires = "onsails/lspkind-nvim",
+		config = [[require("tobyvin.plugins.lualine").setup()]],
 	})
 
 	use({
@@ -319,6 +329,7 @@ M.setup = function()
 	nmap("c", packer.compile, { desc = "Compile" })
 	nmap("C", packer.clean, { desc = "Clean" })
 	nmap("i", packer.install, { desc = "Install" })
+	nmap("p", packer.profile_output, { desc = "Profile" })
 	nmap("s", packer.sync, { desc = "Sync" })
 	nmap("S", packer.status, { desc = "Status" })
 	nmap("u", packer.update, { desc = "Update" })
