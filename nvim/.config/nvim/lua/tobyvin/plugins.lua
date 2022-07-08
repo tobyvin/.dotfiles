@@ -55,7 +55,9 @@ M.plugins = function(use)
 
 	use({
 		"jose-elias-alvarez/null-ls.nvim",
-		requires = "nvim-lua/plenary.nvim",
+		requires = {
+			"nvim-lua/plenary.nvim",
+		},
 		config = [[require("tobyvin.plugins.null-ls").setup()]],
 	})
 
@@ -69,6 +71,7 @@ M.plugins = function(use)
 
 	use({
 		"simrat39/rust-tools.nvim",
+    after = "nvim-lspconfig",
 		branch = "modularize_and_inlay_rewrite",
 		requires = {
 			"neovim/nvim-lspconfig",
@@ -85,25 +88,52 @@ M.plugins = function(use)
 		config = [[require("grammar-guard").init()]],
 	})
 
-	-- use({
-	-- 	"saecki/crates.nvim",
-	-- 	requires = { "nvim-lua/plenary.nvim" },
-	-- 	config = [[require("crates").setup()]],
-	-- })
-
 	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
-			"ray-x/lsp_signature.nvim",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lua",
-			"hrsh7th/cmp-buffer",
 			"hrsh7th/cmp-path",
+			"hrsh7th/cmp-buffer",
+			"hrsh7th/cmp-cmdline",
+			"dmitmel/cmp-cmdline-history",
 			"hrsh7th/cmp-calc",
-			"saadparwaiz1/cmp_luasnip",
+			"ray-x/lsp_signature.nvim",
 			"hrsh7th/cmp-nvim-lsp-signature-help",
+			"rcarriga/cmp-dap",
+			"petertriho/cmp-git",
+			"Dosx001/cmp-commit",
+			"davidsierradz/cmp-conventionalcommits",
+			"saadparwaiz1/cmp_luasnip",
+			"saecki/crates.nvim",
+      "kdheepak/cmp-latex-symbols",
 		},
-		config = [[require("tobyvin.plugins.cmp")]],
+		config = [[require("tobyvin.plugins.cmp").setup()]],
+	})
+
+	use({
+		"petertriho/cmp-git",
+		requires = "nvim-lua/plenary.nvim",
+		config = [[require("tobyvin.plugins.cmp-git").setup()]],
+	})
+
+	use({
+		"David-Kunz/cmp-npm",
+		event = { "BufRead package.json" },
+		requires = {
+			"nvim-lua/plenary.nvim",
+		},
+		config = [[require("tobyvin.plugins.cmp-npm").setup()]],
+	})
+
+	use({
+		"saecki/crates.nvim",
+		event = { "BufRead Cargo.toml" },
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+		config = [[require("tobyvin.plugins.crates").setup()]],
 	})
 
 	use({ "onsails/lspkind-nvim", config = [[require("tobyvin.plugins.lspkind").setup()]] })
@@ -142,8 +172,11 @@ M.plugins = function(use)
 
 	use({
 		"L3MON4D3/LuaSnip",
-		requires = "rafamadriz/friendly-snippets",
-		config = [[require("tobyvin.plugins.luasnip")]],
+		requires = {
+			"rafamadriz/friendly-snippets",
+      "molleweide/LuaSnip-snippets.nvim",
+		},
+		config = [[require("tobyvin.plugins.luasnip").setup()]],
 	})
 
 	use({
@@ -208,7 +241,10 @@ M.plugins = function(use)
 
 	use({
 		"sindrets/diffview.nvim",
-		requires = "nvim-lua/plenary.nvim",
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"kyazdani42/nvim-web-devicons",
+		},
 		config = [[require("tobyvin.plugins.diffview").setup()]],
 	})
 
@@ -318,7 +354,7 @@ M.setup = function()
 		group = augroup_packer,
 		pattern = "plugins.lua",
 		callback = function()
-			utils.reload("tobyvin.plugins")
+			-- utils.reload("tobyvin.plugins")
 			packer.sync()
 		end,
 		desc = "Reload packer config on write",

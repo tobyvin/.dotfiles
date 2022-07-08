@@ -13,6 +13,12 @@ M.setup = function()
 
 	lspconfig.tsserver.setup(lsp.config())
 
+	lspconfig.cssls.setup(lsp.config())
+
+	lspconfig.cssmodules_ls.setup(lsp.config())
+
+	lspconfig.stylelint_lsp.setup(lsp.config())
+
 	lspconfig.ccls.setup(lsp.config())
 
 	lspconfig.gopls.setup(lsp.config({
@@ -34,7 +40,15 @@ M.setup = function()
 		settings = {
 			texlab = {
 				build = {
-					args = {"-pdf", "-interaction=nonstopmode", "-synctex=1", "-auxdir=../aux", "-outdir=../", "-emulate-aux-dir", "%f"},
+					args = {
+						"-pdf",
+						"-interaction=nonstopmode",
+						"-synctex=1",
+						"-auxdir=../aux",
+						"-outdir=../",
+						"-emulate-aux-dir",
+						"%f",
+					},
 					onSave = true,
 				},
 				chktex = {

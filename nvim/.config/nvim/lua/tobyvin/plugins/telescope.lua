@@ -74,6 +74,7 @@ M.setup = function()
 
 	local nmap_find = require("tobyvin.utils").create_map_group("n", "<leader>f", "Find")
 	nmap_find("b", builtins.buffers, { desc = "Buffers" })
+	nmap_find("c", builtins.command_history, { desc = "Command History" })
 	nmap_find("C", builtins.commands, { desc = "Commands" })
 	nmap_find("f", builtins.find_files, { desc = "Find files" })
 	nmap_find("g", builtins.live_grep, { desc = "Find Text" })
