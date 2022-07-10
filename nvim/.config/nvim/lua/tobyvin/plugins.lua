@@ -49,6 +49,7 @@ M.plugins = function(use)
 			"williamboman/nvim-lsp-installer",
 			"ray-x/lsp_signature.nvim",
 			"SmiteshP/nvim-navic",
+			"barreiroleo/ltex-extra.nvim",
 		},
 		config = [[require("tobyvin.plugins.lspconfig").setup()]],
 	})
@@ -71,7 +72,7 @@ M.plugins = function(use)
 
 	use({
 		"simrat39/rust-tools.nvim",
-    after = "nvim-lspconfig",
+		after = "nvim-lspconfig",
 		branch = "modularize_and_inlay_rewrite",
 		requires = {
 			"neovim/nvim-lspconfig",
@@ -106,7 +107,7 @@ M.plugins = function(use)
 			"davidsierradz/cmp-conventionalcommits",
 			"saadparwaiz1/cmp_luasnip",
 			"saecki/crates.nvim",
-      "kdheepak/cmp-latex-symbols",
+			"kdheepak/cmp-latex-symbols",
 		},
 		config = [[require("tobyvin.plugins.cmp").setup()]],
 	})
@@ -174,7 +175,7 @@ M.plugins = function(use)
 		"L3MON4D3/LuaSnip",
 		requires = {
 			"rafamadriz/friendly-snippets",
-      "molleweide/LuaSnip-snippets.nvim",
+			"molleweide/LuaSnip-snippets.nvim",
 		},
 		config = [[require("tobyvin.plugins.luasnip").setup()]],
 	})
@@ -190,6 +191,12 @@ M.plugins = function(use)
 			"mfussenegger/nvim-ts-hint-textobject",
 		},
 		config = [[require("tobyvin.plugins.treesitter").setup()]],
+	})
+
+	use({
+ 		"lewis6991/spellsitter.nvim",
+ 		requires = {"nvim-treesitter/nvim-treesitter"},
+ 		config = [[require("tobyvin.plugins.spellsitter").setup()]],
 	})
 
 	use({
