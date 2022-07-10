@@ -142,6 +142,15 @@ M.plugins = function(use)
 	use({ "simrat39/symbols-outline.nvim", config = [[require("symbols-outline").setup()]] })
 
 	use({
+		"kevinhwang91/nvim-bqf",
+		requires = {
+			"nvim-treesitter",
+			"junegunn/fzf",
+		},
+		ft = "qf",
+	})
+
+	use({
 		"folke/trouble.nvim",
 		cmd = "TroubleToggle",
 		config = [[require("tobyvin.plugins.trouble").setup()]],
@@ -296,6 +305,7 @@ M.plugins = function(use)
 		config = [[require("tobyvin.plugins.dap").setup()]],
 	})
 
+	use({ "ellisonleao/glow.nvim" })
 	use({ "antoinemadec/FixCursorHold.nvim", config = [[vim.g.curshold_updatime = 1000]] })
 	use("nacro90/numb.nvim")
 	use("ThePrimeagen/harpoon")
