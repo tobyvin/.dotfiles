@@ -11,6 +11,8 @@ M.setup = function()
 		return
 	end
 
+	lspconfig.taplo.setup(lsp.config())
+
 	lspconfig.tsserver.setup(lsp.config())
 
 	lspconfig.cssls.setup(lsp.config())
