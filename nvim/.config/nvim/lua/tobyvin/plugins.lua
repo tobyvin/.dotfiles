@@ -7,30 +7,48 @@ M.plugins = function(use)
 	use({
 		"dstein64/vim-startuptime",
 		cmd = "StartupTime",
-		config = [[vim.g.startuptime_tries = 3]],
+		config = function()
+			vim.g.startuptime_tries = 3
+		end,
 	})
 
 	use("lewis6991/impatient.nvim")
 
-	use({ "rcarriga/nvim-notify", config = [[require("tobyvin.plugins.notify").setup()]] })
+	use({
+		"rcarriga/nvim-notify",
+		config = function()
+			require("tobyvin.plugins.notify").setup()
+		end,
+	})
 	use("stevearc/dressing.nvim")
 
 	use({
 		"andweeb/presence.nvim",
-		config = [[require("tobyvin.plugins.presence").setup()]],
+		config = function()
+			require("tobyvin.plugins.presence").setup()
+		end,
 	})
 
-	use({ "eddyekofo94/gruvbox-flat.nvim", config = [[require("tobyvin.plugins.gruvbox-flat").setup()]] })
+	use({
+		"eddyekofo94/gruvbox-flat.nvim",
+		config = function()
+			require("tobyvin.plugins.gruvbox-flat").setup()
+		end,
+	})
 
 	use({
 		"rmagatti/auto-session",
-		config = [[require("auto-session").setup()]],
+		config = function()
+			require("auto-session").setup()
+		end,
 	})
 
 	use({
 		"rmagatti/session-lens",
 		requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
-		config = [[require("tobyvin.plugins.session-lens").setup()]],
+		config = function()
+			require("tobyvin.plugins.session-lens").setup()
+		end,
 	})
 
 	use({
@@ -51,7 +69,9 @@ M.plugins = function(use)
 			"SmiteshP/nvim-navic",
 			"barreiroleo/ltex-extra.nvim",
 		},
-		config = [[require("tobyvin.plugins.lspconfig").setup()]],
+		config = function()
+			require("tobyvin.plugins.lspconfig").setup()
+		end,
 	})
 
 	use({
@@ -59,7 +79,9 @@ M.plugins = function(use)
 		requires = {
 			"nvim-lua/plenary.nvim",
 		},
-		config = [[require("tobyvin.plugins.null-ls").setup()]],
+		config = function()
+			require("tobyvin.plugins.null-ls").setup()
+		end,
 	})
 
 	use({
@@ -67,7 +89,9 @@ M.plugins = function(use)
 		requires = {
 			"neovim/nvim-lspconfig",
 		},
-		config = [[require("tobyvin.plugins.lua-dev").setup()]],
+		config = function()
+			require("tobyvin.plugins.lua-dev").setup()
+		end,
 	})
 
 	use({
@@ -77,7 +101,9 @@ M.plugins = function(use)
 		requires = {
 			"neovim/nvim-lspconfig",
 		},
-		config = [[require("tobyvin.plugins.rust-tools").setup()]],
+		config = function()
+			require("tobyvin.plugins.rust-tools").setup()
+		end,
 	})
 
 	use({
@@ -86,7 +112,9 @@ M.plugins = function(use)
 			"neovim/nvim-lspconfig",
 			"williamboman/nvim-lsp-installer",
 		},
-		config = [[require("grammar-guard").init()]],
+		config = function()
+			require("grammar-guard").init()
+		end,
 	})
 
 	use({
@@ -109,13 +137,17 @@ M.plugins = function(use)
 			"saecki/crates.nvim",
 			"kdheepak/cmp-latex-symbols",
 		},
-		config = [[require("tobyvin.plugins.cmp").setup()]],
+		config = function()
+			require("tobyvin.plugins.cmp").setup()
+		end,
 	})
 
 	use({
 		"petertriho/cmp-git",
 		requires = "nvim-lua/plenary.nvim",
-		config = [[require("tobyvin.plugins.cmp-git").setup()]],
+		config = function()
+			require("tobyvin.plugins.cmp-git").setup()
+		end,
 	})
 
 	use({
@@ -124,7 +156,9 @@ M.plugins = function(use)
 		requires = {
 			"nvim-lua/plenary.nvim",
 		},
-		config = [[require("tobyvin.plugins.cmp-npm").setup()]],
+		config = function()
+			require("tobyvin.plugins.cmp-npm").setup()
+		end,
 	})
 
 	use({
@@ -134,12 +168,24 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 			"jose-elias-alvarez/null-ls.nvim",
 		},
-		config = [[require("tobyvin.plugins.crates").setup()]],
+		config = function()
+			require("tobyvin.plugins.crates").setup()
+		end,
 	})
 
-	use({ "onsails/lspkind-nvim", config = [[require("tobyvin.plugins.lspkind").setup()]] })
+	use({
+		"onsails/lspkind-nvim",
+		config = function()
+			require("tobyvin.plugins.lspkind").setup()
+		end,
+	})
 
-	use({ "simrat39/symbols-outline.nvim", config = [[require("symbols-outline").setup()]] })
+	use({
+		"simrat39/symbols-outline.nvim",
+		config = function()
+			require("symbols-outline").setup()
+		end,
+	})
 
 	use({
 		"kevinhwang91/nvim-bqf",
@@ -153,7 +199,9 @@ M.plugins = function(use)
 	use({
 		"folke/trouble.nvim",
 		cmd = "TroubleToggle",
-		config = [[require("tobyvin.plugins.trouble").setup()]],
+		config = function()
+			require("tobyvin.plugins.trouble").setup()
+		end,
 	})
 
 	use({
@@ -168,7 +216,9 @@ M.plugins = function(use)
 			{ "nvim-telescope/telescope-smart-history.nvim", requires = { "tami5/sqlite.lua", module = "sqlite" } },
 			{ "nvim-telescope/telescope-frecency.nvim", requires = { "tami5/sqlite.lua", module = "sqlite" } },
 		},
-		config = [[require("tobyvin.plugins.telescope").setup()]],
+		config = function()
+			require("tobyvin.plugins.telescope").setup()
+		end,
 	})
 
 	use({
@@ -177,7 +227,9 @@ M.plugins = function(use)
 			{ "tami5/sqlite.lua", module = "sqlite" },
 			{ "nvim-telescope/telescope.nvim" },
 		},
-		config = [[require("tobyvin.plugins.neoclip").setup()]],
+		config = function()
+			require("tobyvin.plugins.neoclip").setup()
+		end,
 	})
 
 	use({
@@ -186,7 +238,9 @@ M.plugins = function(use)
 			"rafamadriz/friendly-snippets",
 			"molleweide/LuaSnip-snippets.nvim",
 		},
-		config = [[require("tobyvin.plugins.luasnip").setup()]],
+		config = function()
+			require("tobyvin.plugins.luasnip").setup()
+		end,
 	})
 
 	use({
@@ -199,13 +253,17 @@ M.plugins = function(use)
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			"mfussenegger/nvim-ts-hint-textobject",
 		},
-		config = [[require("tobyvin.plugins.treesitter").setup()]],
+		config = function()
+			require("tobyvin.plugins.treesitter").setup()
+		end,
 	})
 
 	use({
 		"lewis6991/spellsitter.nvim",
 		requires = { "nvim-treesitter/nvim-treesitter" },
-		config = [[require("tobyvin.plugins.spellsitter").setup()]],
+		config = function()
+			require("tobyvin.plugins.spellsitter").setup()
+		end,
 	})
 
 	use({
@@ -214,23 +272,34 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 			"nvim-treesitter/nvim-treesitter",
 		},
-		config = [[require("tobyvin.plugins.refactoring").setup()]],
+		config = function()
+			require("tobyvin.plugins.refactoring").setup()
+		end,
 	})
 
 	use({
 		"danymat/neogen",
 		requires = "nvim-treesitter/nvim-treesitter",
-		config = [[require("tobyvin.plugins.neogen").setup()]],
+		config = function()
+			require("tobyvin.plugins.neogen").setup()
+		end,
 	})
 
 	use("norcalli/nvim-colorizer.lua")
 
 	use({
 		"lukas-reineke/indent-blankline.nvim",
-		config = [[require("tobyvin.plugins.blankline")]],
+		config = function()
+			require("tobyvin.plugins.indent_blankline")
+		end,
 	})
 
-	use({ "lukas-reineke/virt-column.nvim", config = [[require("virt-column").setup()]] })
+	use({
+		"lukas-reineke/virt-column.nvim",
+		config = function()
+			require("virt-column").setup()
+		end,
+	})
 	use("tpope/vim-eunuch")
 
 	use({
@@ -240,19 +309,25 @@ M.plugins = function(use)
 			"arkav/lualine-lsp-progress",
 			"SmiteshP/nvim-navic",
 		},
-		config = [[require("tobyvin.plugins.lualine").setup()]],
+		config = function()
+			require("tobyvin.plugins.lualine").setup()
+		end,
 	})
 
 	use({
 		"SmiteshP/nvim-navic",
 		requires = "onsails/lspkind-nvim",
-		config = [[require("tobyvin.plugins.lualine").setup()]],
+		config = function()
+			require("tobyvin.plugins.lualine").setup()
+		end,
 	})
 
 	use({
 		"TimUntersberger/neogit",
 		requires = { "sindrets/diffview.nvim" },
-		config = [[require("tobyvin.plugins.neogit").setup()]],
+		config = function()
+			require("tobyvin.plugins.neogit").setup()
+		end,
 	})
 
 	use({
@@ -261,18 +336,24 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 			"kyazdani42/nvim-web-devicons",
 		},
-		config = [[require("tobyvin.plugins.diffview").setup()]],
+		config = function()
+			require("tobyvin.plugins.diffview").setup()
+		end,
 	})
 
 	use({
 		"akinsho/git-conflict.nvim",
-		config = [[require("tobyvin.plugins.git-conflict").setup()]],
+		config = function()
+			require("tobyvin.plugins.git-conflict").setup()
+		end,
 	})
 
 	use({
 		"lewis6991/gitsigns.nvim",
 		requires = "nvim-lua/plenary.nvim",
-		config = [[require("tobyvin.plugins.gitsigns").setup()]],
+		config = function()
+			require("tobyvin.plugins.gitsigns").setup()
+		end,
 	})
 
 	if vim.fn.executable("gh") == 1 then
@@ -282,17 +363,23 @@ M.plugins = function(use)
 	use({
 		"mbbill/undotree",
 		cmd = "UndotreeToggle",
-		config = [[vim.g.undotree_SetFocusWhenToggle = 1]],
+		config = function()
+			vim.g.undotree_SetFocusWhenToggle = 1
+		end,
 	})
 
 	use({
 		"ThePrimeagen/git-worktree.nvim",
-		config = [[require("tobyvin.plugins.git-worktree")]],
+		config = function()
+			require("tobyvin.plugins.git-worktree")
+		end,
 	})
 
 	use({
 		"folke/which-key.nvim",
-		config = [[require("tobyvin.plugins.which-key").setup()]],
+		config = function()
+			require("tobyvin.plugins.which-key").setup()
+		end,
 	})
 
 	use({
@@ -302,27 +389,45 @@ M.plugins = function(use)
 			"rcarriga/nvim-dap-ui",
 			"Pocco81/DAPInstall.nvim",
 		},
-		config = [[require("tobyvin.plugins.dap").setup()]],
+		config = function()
+			require("tobyvin.plugins.dap").setup()
+		end,
 	})
 
 	use({ "ellisonleao/glow.nvim" })
-	use({ "antoinemadec/FixCursorHold.nvim", config = [[vim.g.curshold_updatime = 1000]] })
 	use("nacro90/numb.nvim")
 	use("ThePrimeagen/harpoon")
 	use("b0o/SchemaStore.nvim")
 	use("windwp/nvim-spectre")
 	use("ggandor/lightspeed.nvim")
-	use({ "ur4ltz/surround.nvim", config = [[require("surround").setup({mappings_style = "surround"})]] })
+
+	use({
+		"ur4ltz/surround.nvim",
+		config = function()
+			require("surround").setup({ mappings_style = "surround" })
+		end,
+	})
+
+	use({
+		"antoinemadec/FixCursorHold.nvim",
+		config = function()
+			vim.g.curshold_updatime = 500
+		end,
+	})
 
 	use({
 		"numToStr/Comment.nvim",
-		config = [[require("tobyvin.plugins.comment").setup()]],
+		config = function()
+			require("tobyvin.plugins.comment").setup()
+		end,
 	})
 
 	use({
 		"akinsho/nvim-bufferline.lua",
 		requires = "kyazdani42/nvim-web-devicons",
-		config = [[require("tobyvin.plugins.bufferline").setup()]],
+		config = function()
+			require("tobyvin.plugins.bufferline").setup()
+		end,
 	})
 
 	use("SmiteshP/nvim-gps")
@@ -338,7 +443,7 @@ end
 
 M.setup = function()
 	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-	if vim.fn.empty(vim.fn.glob(install_path, nil, nil, nil)) > 0 then
+	if vim.fn.empty(vim.fn.glob(install_path, nil, false, nil)) > 0 then
 		PackerBootstrap = vim.fn.system({
 			"git",
 			"clone",
