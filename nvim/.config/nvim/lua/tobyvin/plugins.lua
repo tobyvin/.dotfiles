@@ -203,9 +203,9 @@ M.plugins = function(use)
 	})
 
 	use({
- 		"lewis6991/spellsitter.nvim",
- 		requires = {"nvim-treesitter/nvim-treesitter"},
- 		config = [[require("tobyvin.plugins.spellsitter").setup()]],
+		"lewis6991/spellsitter.nvim",
+		requires = { "nvim-treesitter/nvim-treesitter" },
+		config = [[require("tobyvin.plugins.spellsitter").setup()]],
 	})
 
 	use({
@@ -363,14 +363,20 @@ M.setup = function()
 				return require("packer.util").float({ border = "rounded" })
 			end,
 		},
-		autoremove = false,
 	})
 
 	local augroup_packer = vim.api.nvim_create_augroup("Packer", { clear = true })
 	vim.api.nvim_create_autocmd("BufWritePost", {
 		group = augroup_packer,
 		pattern = "plugins.lua",
-		callback = function()
+		callback = function(args)
+			local dotfiles = vim.env.HOME .. "/.dotfiles"
+			local realpath = vim.fn.system({ "realpath", args.match })
+
+			if vim.fn.match(realpath, dotfiles) == -1 then
+				return
+			end
+
 			-- utils.reload("tobyvin.plugins")
 			packer.sync()
 		end,
