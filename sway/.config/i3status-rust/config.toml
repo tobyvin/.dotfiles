@@ -1,4 +1,20 @@
-# theme = "gruvbox-dark"
+# base16-i3status-rust (https://github.com/mystfox/base16-i3status-rust)
+# Gruvbox dark, hard by Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
+
+[theme]
+name = "semi-native"
+
+[theme.overrides]
+idle_bg = "#1d2021"
+idle_fg = "#d5c4a1"
+info_bg = "#8ec07c"
+info_fg = "#1d2021"
+good_bg = "#b8bb26"
+good_fg = "#1d2021"
+warning_bg = "#fabd2f"
+warning_fg = "#1d2021"
+critical_bg = "#fb4934"
+critical_fg = "#1d2021"
 
 [[block]]
 block = "disk_space"
@@ -20,10 +36,10 @@ format_swap = "{swap_used_percents}"
 block = "cpu"
 interval = 1
 
-[[block]]
-block = "load"
-interval = 1
-format = "{1m}"
+# [[block]]
+# block = "nvidia_gpu"
+# show_memory = false
+# show_clocks = true
 
 [[block]]
 block = "sound"
