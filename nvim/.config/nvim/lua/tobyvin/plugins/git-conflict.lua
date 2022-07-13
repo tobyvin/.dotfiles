@@ -7,7 +7,13 @@ M.setup = function()
 		return
 	end
 
-	git_conflict.setup()
+	git_conflict.setup({
+		disable_diagnostics = true,
+		highlights = {
+			incoming = "diffText",
+			current = "diffAdd",
+		},
+	})
 end
 
 return M

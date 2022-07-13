@@ -31,11 +31,11 @@ prune = true
 [advice]
 detachedHead = false
 
-[diff]
-tool = vscode
+[merge]
+tool = nvimdiff
 
-[difftool "vscode"]
-cmd = code --wait --diff $LOCAL $REMOTE
+[mergetool "nvimdiff"]
+layout = "MERGED"
 
 [trailer]
 separators = ":#"

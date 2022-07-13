@@ -16,11 +16,13 @@ M.setup = function()
 		sources = {
 
 			-- Code Actions
+			code_actions.gitrebase,
 			code_actions.gitsigns,
 			code_actions.shellcheck,
 
 			-- Diagnostics
 			diagnostics.markdownlint,
+			diagnostics.gitlint,
 			-- diagnostics.luacheck,
 			diagnostics.shellcheck,
 			diagnostics.checkmake,
@@ -33,7 +35,7 @@ M.setup = function()
 			formatting.stylua,
 			formatting.shfmt,
 		},
-    on_attach = lsp.on_attach
+		on_attach = lsp.on_attach,
 		-- on_attach = function(client, bufnr)
 		-- 	client.server_capabilities.documentFormattingProvider = client.supports_method("textDocument/formatting")
 		-- 	lsp.on_attach(client, bufnr)
