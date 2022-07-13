@@ -17,7 +17,7 @@ M.setup = function()
 					["<C-h>"] = "which_key",
 				},
 			},
-      file_ignore_patterns = { "^.git/" },
+			file_ignore_patterns = { "^.git/" },
 			vimgrep_arguments = {
 				"rg",
 				"--color=never",
@@ -76,17 +76,18 @@ M.setup = function()
 	nmap_find("b", builtins.buffers, { desc = "Buffers" })
 	nmap_find("c", builtins.command_history, { desc = "Command History" })
 	nmap_find("C", builtins.commands, { desc = "Commands" })
-	nmap_find("f", builtins.find_files, { desc = "Find files" })
-	nmap_find("g", builtins.live_grep, { desc = "Find Text" })
+	nmap_find("f", builtins.find_files, { desc = "Files" })
+	nmap_find("g", builtins.live_grep, { desc = "Grep" })
 	nmap_find("h", builtins.help_tags, { desc = "Help" })
 	nmap_find("k", builtins.keymaps, { desc = "Keymaps" })
-	nmap_find("l", builtins.resume, { desc = "Last Search" })
+	nmap_find("r", builtins.resume, { desc = "Resume" })
 	nmap_find("m", builtins.man_pages, { desc = "Man Pages" })
-	nmap_find("r", builtins.oldfiles, { desc = "Recent File" })
-	nmap_find("R", builtins.registers, { desc = "Registers" })
+	nmap_find("o", builtins.oldfiles, { desc = "Old Files" })
+	nmap_find("'", builtins.registers, { desc = "Registers" })
 	nmap_find("t", builtins.colorscheme, { desc = "Colorscheme" })
-	nmap_find("e", telescope.extensions.frecency.frecency, { desc = "Frecency" })
 	nmap_find("p", telescope.extensions.packer.packer, { desc = "Packer" })
+	-- TODO: Improve layout of frecency and make default
+	nmap_find("e", telescope.extensions.frecency.frecency, { desc = "Frecency" })
 
 	local nmap_git = require("tobyvin.utils").create_map_group("n", "<leader>g", { name = "Git" })
 	nmap_git("b", builtins.git_branches, { desc = "Checkout branch" })
