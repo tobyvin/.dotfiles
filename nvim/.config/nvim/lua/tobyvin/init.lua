@@ -7,10 +7,10 @@ M.setup = function()
 	-- end
 
 	require("tobyvin.options").setup()
+	require("tobyvin.mappings").setup()
 	require("tobyvin.plugins").setup()
 	require("tobyvin.lsp").setup()
 	require("tobyvin.autocommands").setup()
-	require("tobyvin.mappings").setup()
 end
 
 return M

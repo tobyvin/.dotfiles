@@ -1,4 +1,10 @@
-local M = {}
+local bdelete = require("tobyvin.utils.bdelete")
+bdelete.setup()
+
+local M = {
+	bdelete = bdelete.bdelete,
+	bwipeout = bdelete.bwipeout,
+}
 
 M.spinner_frames = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }
 

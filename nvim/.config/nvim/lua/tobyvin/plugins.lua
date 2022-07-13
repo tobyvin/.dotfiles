@@ -29,6 +29,7 @@ M.plugins = function(use)
 		end,
 	})
 
+	-- TODO: implement custom hls using base-16-gruvbox and remove this
 	use({
 		"eddyekofo94/gruvbox-flat.nvim",
 		config = function()
@@ -443,7 +444,8 @@ end
 
 M.setup = function()
 	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-	if vim.fn.empty(vim.fn.glob(install_path, nil, false, nil)) > 0 then
+	---@diagnostic disable-next-line: missing-parameter
+	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 		PackerBootstrap = vim.fn.system({
 			"git",
 			"clone",
@@ -470,6 +472,7 @@ M.setup = function()
 		},
 	})
 
+	-- TODO: either remove this or improve it to properly reload the file before syncing
 	local augroup_packer = vim.api.nvim_create_augroup("Packer", { clear = true })
 	vim.api.nvim_create_autocmd("BufWritePost", {
 		group = augroup_packer,

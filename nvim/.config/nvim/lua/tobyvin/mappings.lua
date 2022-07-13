@@ -18,11 +18,13 @@ M.write_force = function()
 end
 
 M.close = function()
-	vim.cmd("bdelete")
+	utils.bdelete()
+	-- vim.cmd("bdelete")
 end
 
 M.close_force = function()
-	vim.cmd("bdelete!")
+	utils.bdelete(true)
+	-- vim.cmd("bdelete!")
 end
 
 M.setup = function()
