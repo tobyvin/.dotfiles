@@ -10,7 +10,7 @@ M.setup = function()
 
 	diffview.setup()
 
-	local nmap = utils.create_map_group("n", "<leader>g", "Git")
+	local nmap = utils.create_map_group("n", "<leader>g", { name = "Git" })
 	nmap("d", diffview.open, { desc = "Diffview" })
 end
 

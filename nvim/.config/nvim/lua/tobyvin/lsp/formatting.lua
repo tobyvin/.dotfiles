@@ -8,8 +8,7 @@ M.toggle_format = function()
 end
 
 M.on_attach = function(client, bufnr)
-	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>l", "LSP", { buffer = bufnr })
-	local vmap = require("tobyvin.utils").create_map_group("v", "<leader>l", "LSP", { buffer = bufnr })
+	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>l", { name = "LSP", buffer = bufnr })
 
 	if client.server_capabilities.documentFormattingProvider then
 		vim.b.auto_format = true
@@ -37,6 +36,8 @@ M.on_attach = function(client, bufnr)
 			desc = "Auto-format",
 		})
 	end
+
+	local vmap = require("tobyvin.utils").create_map_group("v", "<leader>l", { name = "LSP", buffer = bufnr })
 
 	if client.server_capabilities.documentRangeFormattingProvider then
 		vim.api.nvim_buf_create_user_command(

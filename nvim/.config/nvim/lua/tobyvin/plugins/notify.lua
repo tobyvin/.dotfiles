@@ -17,7 +17,7 @@ M.setup = function()
 	local telescope_ok, telescope = pcall(require, "telescope")
 	if telescope_ok then
 		telescope.load_extension("notify")
-		local nmap = utils.create_map_group("n", "<leader>f", "Find")
+		local nmap = utils.create_map_group("n", "<leader>f", { name = "Find" })
 		nmap("n", telescope.extensions.notify.notify, { desc = "Notifications" })
 	end
 end

@@ -7,7 +7,7 @@ M.setup = function()
 		return
 	end
 
-	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>g", "Git")
+	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>g", { name = "Git" })
 
 	gitsigns.setup({
 		signs = {

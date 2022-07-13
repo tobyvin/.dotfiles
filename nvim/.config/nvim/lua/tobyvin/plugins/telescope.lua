@@ -72,7 +72,7 @@ M.setup = function()
 
 	local builtins = require("telescope.builtin")
 
-	local nmap_find = require("tobyvin.utils").create_map_group("n", "<leader>f", "Find")
+	local nmap_find = require("tobyvin.utils").create_map_group("n", "<leader>f", { name = "Find" })
 	nmap_find("b", builtins.buffers, { desc = "Buffers" })
 	nmap_find("c", builtins.command_history, { desc = "Command History" })
 	nmap_find("C", builtins.commands, { desc = "Commands" })
@@ -88,16 +88,16 @@ M.setup = function()
 	nmap_find("e", telescope.extensions.frecency.frecency, { desc = "Frecency" })
 	nmap_find("p", telescope.extensions.packer.packer, { desc = "Packer" })
 
-	local nmap_git = require("tobyvin.utils").create_map_group("n", "<leader>g", "Git")
+	local nmap_git = require("tobyvin.utils").create_map_group("n", "<leader>g", { name = "Git" })
 	nmap_git("b", builtins.git_branches, { desc = "Checkout branch" })
 	nmap_git("c", builtins.git_commits, { desc = "Checkout commit" })
 	nmap_git("o", builtins.git_status, { desc = "Open changed file" })
 
-	local nmap_git_wt = require("tobyvin.utils").create_map_group("n", "<leader>gw", "Worktree")
+	local nmap_git_wt = require("tobyvin.utils").create_map_group("n", "<leader>gw", { name = "Worktree" })
 	nmap_git_wt("s", telescope.extensions.git_worktree.git_worktrees, { desc = "Switch worktree" })
 	nmap_git_wt("c", telescope.extensions.git_worktree.create_git_worktree, { desc = "Create worktree" })
 
-	local nmap_git_gh = require("tobyvin.utils").create_map_group("n", "<leader>gG", "Github")
+	local nmap_git_gh = require("tobyvin.utils").create_map_group("n", "<leader>gG", { name = "Github" })
 	nmap_git_gh("i", telescope.extensions.gh.issues, { desc = "Issues" })
 	nmap_git_gh("p", telescope.extensions.gh.pull_request, { desc = "Pull request" })
 	nmap_git_gh("g", telescope.extensions.gh.gist, { desc = "Gist" })

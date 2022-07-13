@@ -1,8 +1,7 @@
 local M = {}
 
 M.on_attach = function(client, bufnr)
-	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>l", "LSP", { buffer = bufnr })
-	local nmap_goto = require("tobyvin.utils").create_map_group("n", "<leader>lg", "Goto", { buffer = bufnr })
+	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>l", { name = "LSP", buffer = bufnr })
 
 	nmap("a", vim.lsp.buf.code_action, { desc = "Code Action" })
 	nmap("d", "<cmd>TroubleToggle document_diagnostics<cr>", { desc = "Document Diagnostics" })
@@ -19,6 +18,8 @@ M.on_attach = function(client, bufnr)
 	nmap("s", "<cmd>Telescope lsp_document_symbols<cr>", { desc = "Document Symbols" })
 	nmap("S", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", { desc = "Workspace Symbols" })
 	nmap("w", "<cmd>Telescope lsp_workspace_diagnostics<cr>", { desc = "Workspace Diagnostics" })
+
+	local nmap_goto = require("tobyvin.utils").create_map_group("n", "<leader>lg", { name = "Goto", buffer = bufnr })
 	nmap_goto("d", vim.lsp.buf.definition, { desc = "Definition" })
 	nmap_goto("D", vim.lsp.buf.declaration, { desc = "Declaration" })
 	nmap_goto("i", vim.lsp.buf.implementation, { desc = "Implementation" })

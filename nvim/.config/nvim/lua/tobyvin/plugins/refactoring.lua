@@ -10,7 +10,7 @@ M.setup = function()
 
 	refactoring.setup()
 
-	local nmap = utils.create_map_group("n", "<leader>r", "Refactor")
+	local nmap = utils.create_map_group("n", "<leader>r", { name = "Refactor" })
 	nmap("b", function()
 		refactoring.refactor("Extract Block")
 	end, { desc = "Extract Block" })
@@ -21,7 +21,8 @@ M.setup = function()
 		refactoring.refactor("Inline Variable")
 	end, { desc = "Inline Variable" })
 
-	local vmap = utils.create_map_group("v", "<leader>r", "Refactor")
+  -- TODO: Fix needing to exit visual mode
+	local vmap = utils.create_map_group("v", "<leader>r", { name = "Refactor" })
 	vmap("e", function()
 		refactoring.refactor("Extract Function")
 	end, { desc = "Extract Function" })

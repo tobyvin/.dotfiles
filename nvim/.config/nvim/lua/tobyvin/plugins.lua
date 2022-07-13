@@ -488,7 +488,7 @@ M.setup = function()
 		desc = "Reload packer config on write",
 	})
 
-	local nmap = utils.create_map_group("n", "<leader>p", "Packer")
+	local nmap = utils.create_map_group("n", "<leader>p", { name = "Packer" })
 
 	nmap("c", packer.compile, { desc = "Compile" })
 	nmap("C", packer.clean, { desc = "Clean" })

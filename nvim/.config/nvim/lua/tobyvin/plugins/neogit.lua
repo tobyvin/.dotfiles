@@ -17,7 +17,7 @@ M.setup = function()
 		-- kind = "replace",
 	})
 
-	local nmap = utils.create_map_group("n", "<leader>g", "git")
+	local nmap = utils.create_map_group("n", "<leader>g", { name = "git" })
 	nmap("g", neogit.open, { desc = "Neogit" })
 end
 
