@@ -1,6 +1,20 @@
 local utils = require("tobyvin.utils")
 local M = {}
 
+M.file_history = function()
+	require("diffview").file_history(nil, vim.fn.bufname())
+end
+
+M.workspace_history = function()
+	require("diffview").file_history()
+end
+
+M.selection_history = function()
+	local first = vim.api.nvim_buf_get_mark(0, "<")[1]
+	local last = vim.api.nvim_buf_get_mark(0, ">")[1]
+	require("diffview").file_history({ first, last })
+end
+
 M.setup = function()
 	local status_ok, diffview = pcall(require, "diffview")
 	if not status_ok then
@@ -12,6 +26,11 @@ M.setup = function()
 
 	local nmap = utils.create_map_group("n", "<leader>g", { name = "Git" })
 	nmap("d", diffview.open, { desc = "Diffview" })
+	nmap("h", M.file_history, { desc = "File History" })
+	nmap("H", M.workspace_history, { desc = "Workspace History" })
+
+	local vmap = utils.create_map_group("v", "<leader>g", { name = "Git" })
+	vmap("h", M.selection_history, { desc = "Selection History" })
 end
 
 return M
