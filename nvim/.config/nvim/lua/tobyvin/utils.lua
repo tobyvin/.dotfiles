@@ -80,13 +80,21 @@ end
 
 -- TODO: add autocommand/keymap to reload current open file/module
 M.reload = function(name)
-	local status_ok, plenary_reload = pcall(require, "plenary.reload")
+	local notify_opts = { title = string.format("[utils] reload module: '%s'", name) }
+	local status_ok, result = pcall(require, "plenary.reload")
 	if status_ok then
-		plenary_reload.reload_module(name)
-		vim.notify("[utils.reload] '" .. name .. "' reloaded", "info", { title = "[utils] Reload" })
+		status_ok, result = pcall(result.reload_module, name)
 	end
 
-	require(name)
+	if status_ok then
+		status_ok, result = pcall(require, name)
+	end
+
+	if status_ok then
+		vim.notify("Successfully reloaded module", vim.log.levels.INFO, { title = "[utils]" })
+	else
+		vim.notify(string.format("Failed to reload module: %s", result), vim.log.levels.ERROR, notify_opts)
+	end
 end
 
 M.popup = function(file_path)
