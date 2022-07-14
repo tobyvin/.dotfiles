@@ -7,7 +7,6 @@ M.setup = function()
 		return
 	end
 
-vim.opt.timeoutlen = 1500
 	which_key.setup({
 		plugins = {
 			spelling = {

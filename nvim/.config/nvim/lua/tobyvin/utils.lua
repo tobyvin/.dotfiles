@@ -34,6 +34,7 @@ M.bdelete = function(opts)
 	if not opts.force and vim.bo[opts.bufnr].modified then
 		return vim.ui.select({ "write", "discard", "abort" }, {
 			prompt = string.format("No write since last change for buffer %d:", opts.bufnr),
+			kind = "select_normal",
 		}, function(_, idx)
 			if idx == 1 then
 				vim.cmd("write")

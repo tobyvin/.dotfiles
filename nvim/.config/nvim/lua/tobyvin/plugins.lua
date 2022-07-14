@@ -20,7 +20,13 @@ M.plugins = function(use)
 			require("tobyvin.plugins.notify").setup()
 		end,
 	})
-	use("stevearc/dressing.nvim")
+
+	use({
+		"stevearc/dressing.nvim",
+		config = function()
+			require("tobyvin.plugins.dressing").setup()
+		end,
+	})
 
 	use({
 		"andweeb/presence.nvim",
