@@ -26,7 +26,15 @@ M.bdelete = function(opts)
 		end)
 	end
 
-	local cmd = opts.wipeout and "wipeout" or "bdelete" .. opts.force and "!" or ""
+	local cmd = "bdelete"
+
+	if opts.wipeout then
+		cmd = "bwipeout"
+	end
+
+	if opts.force then
+		cmd = cmd .. "!"
+	end
 
 	vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre", data = opts })
 
