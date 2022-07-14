@@ -23,7 +23,7 @@ defaultBranch = main
 rebase = true
 
 [merge]
-ff = no
+ff = only
 
 [fetch]
 prune = true
