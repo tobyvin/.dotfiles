@@ -1,5 +1,22 @@
 local M = {}
 
+M.escape = function()
+	local key = "<ESC>"
+	vim.api.nvim_replace_termcodes(key, true, false, true)
+	vim.api.nvim_feedkeys(key, "x", true)
+	-- vim.api.nvim_input("<ESC>")
+	-- vim.wait(100, function()
+	-- 	return "n" == vim.fn.mode()
+	-- end)
+end
+
+M.get_visual_range = function()
+	local start_pos = vim.fn.getpos("v")
+	local end_pos = vim.fn.getcurpos()
+	return { start_pos[2], end_pos[2] }
+	-- return { { line = start_pos[2], col = start_pos[3] }, { line = end_pos[2], col = end_pos[3] } }
+end
+
 --- Wrapper for bdelete/bwipeout to add a write/discard modified selection and fire autocmd event
 ---@param opts ?BdeleteOpts
 ---@return nil
