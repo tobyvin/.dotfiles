@@ -308,7 +308,6 @@ M.plugins = function(use)
 			require("virt-column").setup()
 		end,
 	})
-	use("tpope/vim-eunuch")
 
 	use({
 		"nvim-lualine/lualine.nvim",
