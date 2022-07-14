@@ -15,14 +15,17 @@ M.bdelete = function(opts)
 	end
 
 	if not opts.force and vim.bo[opts.bufnr].modified then
-		vim.ui.select({ "write", "discard", "abort" }, {
+		return vim.ui.select({ "write", "discard", "abort" }, {
 			prompt = string.format("No write since last change for buffer %d:", opts.bufnr),
-		}, function(n)
-			if n == 1 then
+		}, function(_, idx)
+			if idx == 1 then
 				vim.cmd("write")
-			elseif n == 2 then
+			elseif idx == 2 then
 				opts.force = true
+			else
+				return
 			end
+			M.bdelete(opts)
 		end)
 	end
 
