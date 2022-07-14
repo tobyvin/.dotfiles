@@ -1,6 +1,40 @@
 local M = {}
 
 M.setup = function()
+	local augroup_user = vim.api.nvim_create_augroup("Default", { clear = true })
+
+	vim.api.nvim_create_autocmd("User", {
+		group = augroup_user,
+		pattern = "BDeletePre",
+		callback = function(opts)
+			local windows = vim.tbl_filter(function(win)
+				return vim.api.nvim_win_get_buf(win) == opts.bufnr
+			end, vim.api.nvim_list_wins())
+
+			local buffers = vim.tbl_filter(function(buf)
+				return vim.api.nvim_buf_is_valid(buf) and vim.bo[buf].buflisted
+			end, vim.api.nvim_list_bufs())
+
+			if buffers ~= nil and #buffers > 1 then
+				local next_buffer = vim.fn.winbufnr(vim.fn.winnr("#"))
+
+				if not next_buffer then
+					for i, v in ipairs(buffers) do
+						if v == opts.bufnr then
+							next_buffer = buffers[i % #buffers + 1]
+							break
+						end
+					end
+				end
+
+				for _, win in ipairs(windows) do
+					vim.api.nvim_win_set_buf(win, next_buffer)
+				end
+			end
+		end,
+		desc = "BDeletePre",
+	})
+
 	local augroup_default = vim.api.nvim_create_augroup("Default", { clear = true })
 
 	vim.api.nvim_create_autocmd("TextYankPost", {

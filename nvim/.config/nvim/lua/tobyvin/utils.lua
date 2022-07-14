@@ -1,10 +1,40 @@
-local bdelete = require("tobyvin.utils.bdelete")
-bdelete.setup()
+local M = {}
 
-local M = {
-	bdelete = bdelete.bdelete,
-	bwipeout = bdelete.bwipeout,
-}
+--- Wrapper for bdelete/bwipeout to add a write/discard modified selection and fire autocmd event
+---@param opts ?BdeleteOpts
+---@return nil
+M.bdelete = function(opts)
+	---@class BdeleteOpts
+	---@field bufnr number Number of the buffer to target
+	---@field force boolean Discard modified buffer
+	---@field wipeout boolean Wipeout buffer
+	opts = opts or {}
+
+	if opts.bufnr == nil or opts.bufnr == 0 then
+		opts.bufnr = vim.api.nvim_get_current_buf()
+	end
+
+	if not opts.force and vim.bo[opts.bufnr].modified then
+		vim.ui.select({ "write", "discard", "abort" }, {
+			prompt = string.format("No write since last change for buffer %d:", opts.bufnr),
+		}, function(n)
+			if n == 1 then
+				vim.cmd("write")
+			elseif n == 2 then
+				opts.force = true
+			end
+		end)
+	end
+
+	local cmd = opts.wipeout and "wipeout" or "bdelete" .. opts.force and "!" or ""
+
+	vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre", data = opts })
+
+	if vim.api.nvim_buf_is_valid(opts.bufnr) then
+		vim.cmd(string.format("%s %d", cmd, opts.bufnr))
+		vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePost", data = opts })
+	end
+end
 
 M.spinner_frames = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }
 

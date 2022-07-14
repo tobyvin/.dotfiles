@@ -23,7 +23,7 @@ M.close = function()
 end
 
 M.close_force = function()
-	utils.bdelete(true)
+	utils.bdelete({ force = true })
 	-- vim.cmd("bdelete!")
 end
 
