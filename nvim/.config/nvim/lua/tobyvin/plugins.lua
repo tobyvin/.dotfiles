@@ -257,6 +257,7 @@ M.plugins = function(use)
 			"nvim-treesitter/nvim-treesitter-refactor",
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			"nvim-treesitter/nvim-treesitter-context",
+			"RRethy/nvim-treesitter-textsubjects",
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			"mfussenegger/nvim-ts-hint-textobject",
 		},
@@ -411,7 +412,7 @@ M.plugins = function(use)
 	use({
 		"ur4ltz/surround.nvim",
 		config = function()
-			require("surround").setup({ mappings_style = "surround" })
+			require("tobyvin.plugins.surround").setup()
 		end,
 	})
 

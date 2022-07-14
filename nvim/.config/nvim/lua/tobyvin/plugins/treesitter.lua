@@ -29,9 +29,16 @@ M.setup = function()
 				keymaps = {
 					["af"] = "@function.outer",
 					["if"] = "@function.inner",
-					["ac"] = "@class.outer",
-					["ic"] = "@class.inner",
 				},
+			},
+		},
+		textsubjects = {
+			enable = true,
+			prev_selection = ",", -- (Optional) keymap to select the previous selection
+			keymaps = {
+				["."] = "textsubjects-smart",
+				["ac"] = "textsubjects-container-outer",
+				["ic"] = "textsubjects-container-inner",
 			},
 		},
 	})
