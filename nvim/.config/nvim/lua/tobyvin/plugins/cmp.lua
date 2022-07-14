@@ -30,6 +30,8 @@ M.complete = function(fallback)
 	end
 end
 
+-- TODO: make this work more idiomatically with luasnip. Currently, a completion item must be accepted in order to
+-- expand/jump to next snippet item
 M.next_item = function(fallback)
 	local cmp = require("cmp")
 	local luasnip = require("luasnip")
@@ -56,6 +58,7 @@ M.prev_item = function(fallback)
 	end
 end
 
+-- TODO: wipe the luasnip expandable/jumpable list on close
 M.close = function(fallback)
 	local cmp = require("cmp")
 	cmp.close()

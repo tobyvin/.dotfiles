@@ -1,6 +1,7 @@
 local M = {}
 
 M.on_attach = function(client, bufnr)
+	vim.keymap.set("n", "<C-Space>", vim.lsp.buf.code_action, { desc = "Code Action" })
 	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>l", { name = "LSP", buffer = bufnr })
 
 	nmap("a", vim.lsp.buf.code_action, { desc = "Code Action" })
