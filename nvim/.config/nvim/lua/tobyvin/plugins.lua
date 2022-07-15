@@ -298,7 +298,7 @@ M.plugins = function(use)
 	use({
 		"lukas-reineke/indent-blankline.nvim",
 		config = function()
-			require("tobyvin.plugins.indent_blankline")
+			require("tobyvin.plugins.indent_blankline").setup()
 		end,
 	})
 

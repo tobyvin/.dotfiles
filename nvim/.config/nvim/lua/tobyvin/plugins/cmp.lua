@@ -123,6 +123,7 @@ M.setup = function()
 		},
 	})
 
+  -- TODO: fix the default completion menu from showing on the cmdline
 	cmp.setup.cmdline(":", {
 		sources = {
 			{ name = "cmdline_history", max_item_count = 10 },
