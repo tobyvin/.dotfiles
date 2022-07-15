@@ -9,8 +9,6 @@ set $term $TERMINAL
 # Menu
 set $menu exec rofi -modi "run,drun" -show drun -show-icons
 set $menu_all exec rofi -modi "run,drun" -show run -show-icons
-# set $menu exec app-launcher | xargs swaymsg exec --
-# set $menu j4-dmenu-desktop | wofi --show drun -i | xargs swaymsg exec --
 
 # Home row direction keys, like vim
 set $left h
@@ -41,16 +39,16 @@ client.background       $base07
 
 # Set wallpaper
 output * bg $wallpaper fill
-# output * bg `find $wallpapers -type f | shuf -n 1` fill
+
 ### Idle configuration
 
-# Lock the screen after 300 seconds of inactivity, then turn off
-# all displays after another 300 seconds, and turn the screens back on when
-# resumed. It will also lock the screen before the computer goes to sleep.
 exec swayidle -w \
-    timeout 900 '$lock_cmd' \
+    # lock: 10 min
+    timeout 600 '$lock_cmd' \
+    # display: 20 min
     timeout 1200 'swaymsg "output * dpms off"' \
     resume 'swaymsg "output * dpms on"' \
+    # sleep: 30 min
     timeout 1800 '$sleep_cmd' \
     before-sleep '$lock_cmd' \
     lock '$lock_cmd'
@@ -58,26 +56,17 @@ exec swayidle -w \
 # Inhibit idle if a window is in fullscreen
 for_window [shell=".*"] inhibit_idle fullscreen
 
-# Set launcher window to floating
-for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
-
 ### Input configuration
 
-# Mouse
 # Hide mouse cursor when not used
 seat * hide_cursor 8000
 
-# Touchpad
 input type:touchpad {
     tap enabled
     natural_scroll enabled
 }
 
-# Keyboard
 input type:keyboard {
-    # Map caps lock to escape and use right alt as compose key to create umlauts
-    # To actually create them, type the following keys in a sequence:
-    # ralt + " + u --> ü
     xkb_options caps:hyper
 }
 
@@ -220,15 +209,11 @@ hide_edge_borders smart
 # Start notification daemon
 exec mako
 
-# Start display management daemon
-# exec kanshi
-
-# Adjust color temperature to reduce eye strain
-# exec gammastep -l '46.95:7.45'
-
 # Clipboard manager
 exec wl-paste --type text --watch clipman store --no-persist
 bindsym $mod+v exec clipman pick --tool=rofi
 
+# float launcher window
+for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
 
 include @sysconfdir@/sway/config.d/*
