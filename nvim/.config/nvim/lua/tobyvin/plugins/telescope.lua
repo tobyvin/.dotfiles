@@ -14,7 +14,7 @@ M.setup = function()
 			mappings = {
 				i = {
 					["<esc>"] = actions.close,
-					["<C-h>"] = "which_key",
+					["<C-h>"] = actions.which_key,
 				},
 			},
 			file_ignore_patterns = { "^.git/" },
