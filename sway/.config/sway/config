@@ -17,7 +17,8 @@ set $up k
 set $right l
 
 # Colors
-set $wallpaper ~/img/3840x2160-dark-archlinux.png
+set $bg_1 $XDG_DATA_DIR/swaybg/gruvbox_sway.png
+set $bg_2 $XDG_DATA_DIR/swaybg/gruvbox_arch.png
 
 # System commands
 set $lock_cmd swaylock --grace 10 --fade-in 1
