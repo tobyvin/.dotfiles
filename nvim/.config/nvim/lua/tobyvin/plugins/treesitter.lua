@@ -16,6 +16,7 @@ M.setup = function()
 			enable = true,
 			additional_vim_regex_highlighting = false,
 		},
+		-- TODO: add navagation with lsp fallback, requires setting keybinds for module manually
 		refactor = {
 			highlight_definitions = {
 				enable = true,

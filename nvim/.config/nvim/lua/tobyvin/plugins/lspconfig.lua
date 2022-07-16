@@ -86,6 +86,7 @@ M.setup = function()
 		},
 		on_attach = function(client, bufnr)
 			vim.g.tex_flavor = "latex"
+			vim.opt.spell = true
 			lsp.on_attach(client, bufnr)
 		end,
 	}))

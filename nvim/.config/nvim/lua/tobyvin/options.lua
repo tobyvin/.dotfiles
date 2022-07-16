@@ -52,7 +52,6 @@ M.setup = function()
 	vim.opt.wildignore = vim.opt.wildignore + { "*.o", "*.rej", "*.so" }
 	vim.opt.lazyredraw = true
 	vim.opt.completeopt = { "menuone", "noselect", "noinsert" }
-	vim.opt.spell = true
 	vim.opt.spelllang = "en_us"
 	vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
 	vim.opt.sessionoptions = {
