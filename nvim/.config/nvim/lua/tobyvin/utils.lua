@@ -1,5 +1,67 @@
 local M = {}
 
+---@param retry fun(force:boolean?):nil
+M.modified_prompt_retry = function(retry)
+	local bufname = vim.fn.bufname(vim.fn.bufname())
+
+	vim.ui.select({ "write", "discard", "abort" }, {
+		prompt = string.format("No write since last change for buffer %s:", bufname),
+		kind = "select_normal",
+	}, function(_, idx)
+		if idx == 1 then
+			vim.cmd("write")
+			retry()
+		elseif idx == 2 then
+			retry(true)
+		else
+			vim.notify(
+				string.format("No write since last change for buffer %d", bufname),
+				vim.log.levels.ERROR,
+				{ title = "Aborting..." }
+			)
+		end
+	end)
+end
+
+---@param cmd string vim command
+---@param force boolean
+M.win_buf_kill = function(cmd, force)
+	local winid = vim.fn.win_getid()
+	local bufnr = vim.fn.winbufnr(winid)
+
+	if not force and vim.bo[bufnr].modified then
+		return M.modified_prompt_retry(M[cmd])
+	end
+
+	vim.api.nvim_exec_autocmds("User", { pattern = cmd })
+
+	if (string.sub(cmd, 1, 1) == "b" and vim.api.nvim_buf_is_valid(bufnr)) or vim.api.nvim_win_is_valid(winid) then
+		vim.cmd(cmd .. (force and "!" or ""))
+	end
+
+	vim.api.nvim_exec_autocmds("User", { pattern = cmd })
+end
+
+---@param force boolean
+M.bdelete = function(force)
+	M.win_buf_kill("bdelete", force)
+end
+
+---@param force boolean
+M.bwipeout = function(force)
+	M.win_buf_kill("bwipeout", force)
+end
+
+---@param force boolean
+M.close = function(force)
+	M.win_buf_kill("close", force)
+end
+
+---@param force boolean
+M.quit = function(force)
+	M.win_buf_kill("quit", force)
+end
+
 M.escape = function()
 	local key = "<ESC>"
 	vim.api.nvim_replace_termcodes(key, true, false, true)
@@ -15,54 +77,6 @@ M.get_visual_range = function()
 	local end_pos = vim.fn.getcurpos()
 	return { start_pos[2], end_pos[2] }
 	-- return { { line = start_pos[2], col = start_pos[3] }, { line = end_pos[2], col = end_pos[3] } }
-end
-
---- Wrapper for bdelete/bwipeout to add a write/discard modified selection and fire autocmd event
----@param opts ?BdeleteOpts
----@return nil
-M.bdelete = function(opts)
-	---@class BdeleteOpts
-	---@field bufnr number Number of the buffer to target
-	---@field force boolean Discard modified buffer
-	---@field wipeout boolean Wipeout buffer
-	opts = opts or {}
-
-	if opts.bufnr == nil or opts.bufnr == 0 then
-		opts.bufnr = vim.api.nvim_get_current_buf()
-	end
-
-	if not opts.force and vim.bo[opts.bufnr].modified then
-		return vim.ui.select({ "write", "discard", "abort" }, {
-			prompt = string.format("No write since last change for buffer %d:", opts.bufnr),
-			kind = "select_normal",
-		}, function(_, idx)
-			if idx == 1 then
-				vim.cmd("write")
-			elseif idx == 2 then
-				opts.force = true
-			else
-				return
-			end
-			M.bdelete(opts)
-		end)
-	end
-
-	local cmd = "bdelete"
-
-	if opts.wipeout then
-		cmd = "bwipeout"
-	end
-
-	if opts.force then
-		cmd = cmd .. "!"
-	end
-
-	vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre", data = opts })
-
-	if vim.api.nvim_buf_is_valid(opts.bufnr) then
-		vim.cmd(string.format("%s %d", cmd, opts.bufnr))
-		vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePost", data = opts })
-	end
 end
 
 M.spinner_frames = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }

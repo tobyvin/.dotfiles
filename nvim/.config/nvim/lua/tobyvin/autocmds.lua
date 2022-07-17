@@ -5,7 +5,7 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("User", {
 		group = augroup_user,
-		pattern = "BDeletePre",
+		pattern = "bdelete",
 		callback = function(opts)
 			local windows = vim.tbl_filter(function(win)
 				return vim.api.nvim_win_get_buf(win) == opts.bufnr
@@ -32,7 +32,7 @@ M.setup = function()
 				end
 			end
 		end,
-		desc = "BDeletePre",
+		desc = "Sets the window to the alternate buffer for bdelete",
 	})
 
 	local augroup_default = vim.api.nvim_create_augroup("Default", { clear = true })
