@@ -24,7 +24,7 @@ M.setup = function()
 			"IndentBlanklineIndent6",
 		},
 		show_current_context = true,
-		show_current_context_start = true,
+		-- show_current_context_start = true,
 		-- show_end_of_line = true,
 		use_treesitter = true,
 		use_treesitter_scope = true,
