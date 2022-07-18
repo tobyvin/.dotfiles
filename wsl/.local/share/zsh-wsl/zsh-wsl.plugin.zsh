@@ -110,13 +110,18 @@ _start-pageant() {
 
 # Reload
 gpg-reset() {
-  gpg-connect-agent.exe KILLAGENT /bye &>/dev/null
+  # gpg-connect-agent.exe KILLAGENT /bye &>/dev/null
+  #
+  # rm -rf "$GPG_AGENT_SOCK"
+  # rm -rf "$GPG_AGENT_SOCK".extra
+  # pkill -f 'socat.*wsl2-ssh-pageant.exe'
+  # gpg-connect-agent.exe /bye &>/dev/null
+  # gpg-init
 
-  rm -rf "$GPG_AGENT_SOCK"
-  rm -rf "$GPG_AGENT_SOCK".extra
-  pkill -f 'socat.*wsl2-ssh-pageant.exe'
-  gpg-connect-agent.exe /bye &>/dev/null
-  gpg-init
+    socket-relay.sh stop --ssh
+    socket-relay.sh restart --gpg
+    socket-relay.sh --gpg-extra
+    socket-relay.sh --ssh
 }
 
 # Relearn card serial number
@@ -124,6 +129,11 @@ gpg-learn() {
   gpg-connect-agent.exe "scd serialno" "learn --force" /bye
 }
 
-gpg-init
+# gpg-reset
+
+# socket-relay.sh stop --gpg
+socket-relay.sh --gpg
+socket-relay.sh --gpg-extra
+socket-relay.sh --ssh
 
 unset -f _start-pageant

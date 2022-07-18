@@ -1,5 +1,5 @@
 #!/usr/bin/env sh
-set -euo pipefail
+set -e
 
 OPTS=$(getopt -o hvs:a:x: --long help,verbose,sock:,args:,exec:,ssh,gpg,gpg-extra,discord -n 'javawrap' -- "$@")
 
@@ -32,11 +32,14 @@ help() {
 		    --gpg-extra             Relay the gpg agent's extra socket
 
 		ARGS:
+		            status
+		                Check the status of the socat process
 		    start (default)
 		        Start the socat process
-
 		    stop
 		        Kill the socat process
+		            restart
+		                Same as $($SCRIPT stop && $SCRIPT start)
 	EOF
 }
 
@@ -63,9 +66,9 @@ err() {
 }
 
 need() {
-	for cmd in "$@"; do
-		if ! command -v $cmd >/dev/null 2>&1; then
-			err "need $cmd (command not found)"
+	for need_cmd in "$@"; do
+		if ! command -v "$need_cmd" >/dev/null 2>&1; then
+			err "need $need_cmd (command not found)"
 		fi
 	done
 }
@@ -73,16 +76,23 @@ need() {
 start() {
 	say_verbose "SOCKET: $sock"
 	say_verbose "ARGS: $args"
-	say_verbose "EXEC: $cmd"
+	say_verbose "EXEC: $exec"
 
-	if $gpg; then
-		say_verbose "gpg-connect-agent KILLAGENT"
-		gpg-connect-agent.exe KILLAGENT /bye >"$v_stdout" 2>"$v_stderr"
+	if [ -z "$exec" ]; then
+		err "No EXEC provided. Must supply either one of the preset options, or provide an explicit value with --exec"
 	fi
 
-	if ! ss -a | grep -q "$sock"; then
+	if [ -z "$sock" ]; then
+		err "No socket provided."
+	fi
+
+	if ! command -v "$relay" >/dev/null 2>&1; then
+		err "$relay is not executable."
+	fi
+
+	if ! pgrep -fa "socat.*$sock.*$relay,"; then
 		rm -rf "$sock"
-		(setsid nohup socat UNIX-LISTEN:"${sock},${args}" EXEC:"$cmd" >/dev/null 2>&1 &)
+		(setsid nohup socat UNIX-LISTEN:"${sock},${args}" EXEC:"$exec" >/dev/null 2>&1 &)
 	fi
 
 	if $gpg; then
@@ -91,21 +101,36 @@ start() {
 }
 
 stop() {
+	if [ -z "$sock" ]; then
+		err "No socket provided."
+	fi
+
+	if [ -z "$relay" ]; then
+		err "No exec provided"
+	fi
+
 	if $gpg; then
 		gpg-connect-agent.exe KILLAGENT /bye >"$v_stdout" 2>"$v_stderr"
 	fi
 
 	pkill -fe "socat.*$sock.*$relay" >"$v_stdout"
+
+	rm -rf "$sock"
 }
 
-check() {
-	pgrep -fa "socat.*$sock.*$relay"
+status() {
+	proc="socat.*${sock:-}.*${relay:-}"
+
+	if ! pgrep -fa "$proc"; then
+		say_err "No process found"
+		return 1
+	fi
 }
 
 quiet=false
 verbose=false
 sock=""
-cmd=""
+exec=""
 gpg=false
 ssh=false
 extra=false
@@ -139,7 +164,7 @@ while test $# -gt 0; do
 		shift
 		;;
 	-x | --exec)
-		cmd=$2
+		exec=$2
 		shift
 		shift
 		;;
@@ -177,56 +202,38 @@ need socat
 if $ssh; then
 	need "$PAGEANT"
 
-	sock="${sock:-$SSH_AUTH_SOCK}"
-	args="${args:-fork}"
-	cmd="${cmd:-$PAGEANT}"
+	sock="${ssh_sock:-$SSH_AUTH_SOCK}"
+	args="${ssh_args:-fork}"
+	exec="${ssh_exec:-$PAGEANT}"
 elif $gpg; then
 	need "$PAGEANT"
 	need "gpg-connect-agent.exe"
 
-	sock="${sock:-$GPG_AGENT_SOCK}"
-	args="${args:-fork}"
-	cmd="${cmd:-$PAGEANT --gpg $(basename "$sock")}"
-	if $extra; then
-		sock=sock+".extra"
-	fi
+	config_path="C\:/Users/$USER/AppData/Local/gnupg"
+	sock="${gpg_sock:-$GPG_AGENT_SOCK}$(if $extra; then echo ".extra"; fi)"
+	args="${gpg_args:-fork}"
+	exec="${gpg_exec:-$PAGEANT --gpgConfigBasepath ${config_path} --gpg $(basename "$sock")}"
 elif $discord; then
 	need "$NPIPE"
 
 	sock="${DISCORD_IPC_SOCK:-/var/run/discord-ipc-0}"
-	cmd="$NPIPE -ep -s //./pipe/$(basename "$sock")"
+	exec="$NPIPE -ep -s //./pipe/$(basename "$sock")"
 	args="fork,group=discord,umask=007"
 fi
 
-relay="$(echo "$cmd" | head -n1 | awk '{print $1;}')"
-
-if [ -z "$cmd" ]; then
-	err "No EXEC provided. Must supply either one of the preset options, or provide an explicit value with --exec"
-fi
-
-if [ -z "$sock" ]; then
-	err "No socket provided."
-fi
-
-if ! [ -x "$relay" ]; then
-	err "WARNING: $relay is not executable."
-fi
+relay="$(echo "$exec" | head -n1 | awk '{print $1;}')"
 
 case ${1:-'start'} in
-check)
-	shift
-	check
+status)
+	status
 	;;
 start)
-	shift
 	start
 	;;
 stop)
-	shift
 	stop
 	;;
 restart)
-	shift
 	stop
 	start
 	;;
