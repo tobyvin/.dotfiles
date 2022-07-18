@@ -18,6 +18,7 @@ mkln.sh "$@" "$HOME"/.gitconfig "${WINHOME}"/.gitconfig
 mkln.sh "$@" "$HOME"/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
 mkln.sh "$@" "$HOME"/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
 mkln.sh "$@" "$HOME"/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
+mkln.sh "$@" "$HOME"/.config/wezterm/wezterm.lua "${WINHOME}"/.config/wezterm/wezterm.lua
 mkln.sh "$@" "$HOME"/.config/alacritty/alacritty.yml "${WINHOME}"/AppData/Roaming/alacritty/alacritty.yml
 
 for f in "$HOME"/.config/alacritty/*; do
@@ -39,7 +40,7 @@ chmod +x "${HOME}"/.local/bin/xclip
 chmod +x "${HOME}"/.local/bin/xsel
 
 # https://github.com/wslutilities/wslu
-command -v wslview >&/dev/null || cat <<-EOF
+command -v wslview >/dev/null 2>&1 || cat <<-EOF
 	    wslu is not installed.
 	    wslu (wslview) is needed to open browser windows from linux commands.
 	    install instructions: https://github.com/wslutilities/wslu#installation
