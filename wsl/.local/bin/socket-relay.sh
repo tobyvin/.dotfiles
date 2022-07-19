@@ -1,12 +1,13 @@
 #!/usr/bin/env sh
 set -e
 
-OPTS=$(getopt -o hvs:a:x: --long help,verbose,sock:,args:,exec:,ssh,gpg,gpg-extra,discord -n 'javawrap' -- "$@")
+OPTS=$(getopt -o hvs:a:x: --long help,verbose,sock:,args:,exec:,ssh,gpg,gpg-extra,gpg-ssh,gpg-browser,discord -n 'javawrap' -- "$@")
 
 eval set -- "$OPTS"
 
-SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-$HOME/.ssh/agent.sock}"
 GPG_AGENT_SOCK="${GPG_AGENT_SOCK:-$HOME/.gnupg/S.gpg-agent}"
+# SSH_AUTH_SOCK="${SSH_AUTH_SOCK:-$HOME/.ssh/agent.sock}"
+SSH_AUTH_SOCK="$GPG_AGENT_SOCK.ssh"
 DISCORD_IPC_SOCK="${DISCORD_IPC_SOCK:-/var/run/discord-ipc-0}"
 PAGEANT="$HOME/.ssh/wsl2-ssh-pageant.exe"
 NPIPE="$(command -v npiperelay.exe)"
@@ -132,8 +133,10 @@ verbose=false
 sock=""
 exec=""
 gpg=false
+gpg_extra=false
+gpg_ssh=false
+gpg_browser=false
 ssh=false
-extra=false
 discord=false
 v_stdout=/dev/null
 v_stderr=/dev/null
@@ -178,7 +181,17 @@ while test $# -gt 0; do
 		;;
 	--gpg-extra)
 		gpg=true
-		extra=true
+		gpg_extra=true
+		shift
+		;;
+	--gpg-ssh)
+		gpg=true
+		gpg_ssh=true
+		shift
+		;;
+	--gpg-browser)
+		gpg=true
+		gpg_browser=true
 		shift
 		;;
 	--discord)
@@ -210,7 +223,20 @@ elif $gpg; then
 	need "gpg-connect-agent.exe"
 
 	config_path="C\:/Users/$USER/AppData/Local/gnupg"
-	sock="${gpg_sock:-$GPG_AGENT_SOCK}$(if $extra; then echo ".extra"; fi)"
+	case ${1:-'start'} in
+	"$gpg_extra")
+		sock="${gpg_sock:-$GPG_AGENT_SOCK}.extra"
+		;;
+	"$gpg_ssh")
+		sock="${gpg_sock:-$GPG_AGENT_SOCK}.ssh"
+		;;
+	"$gpg_browser")
+		sock="${gpg_sock:-$GPG_AGENT_SOCK}.browser"
+		;;
+	*)
+		sock="${gpg_sock:-$GPG_AGENT_SOCK}"
+		;;
+	esac
 	args="${gpg_args:-fork}"
 	exec="${gpg_exec:-$PAGEANT --gpgConfigBasepath ${config_path} --gpg $(basename "$sock")}"
 elif $discord; then
