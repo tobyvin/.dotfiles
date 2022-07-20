@@ -16,10 +16,6 @@ set $down j
 set $up k
 set $right l
 
-# Colors
-set $bg_1 $XDG_DATA_DIR/swaybg/gruvbox_sway.png
-set $bg_2 $XDG_DATA_DIR/swaybg/gruvbox_arch.png
-
 # System commands
 set $lock_cmd swaylock --grace 10 --fade-in 1
 set $sleep_cmd systemctl suspend
@@ -39,17 +35,17 @@ client.background       $base07
 ### Output configuration
 
 # Set wallpaper
-output * bg $wallpaper fill
+output * bg ~/.local/share/swaybg/gruvbox_sway.png fill
 
 ### Idle configuration
 
+# lock: 10 min
+# display: 20 min
+# sleep: 30 min
 exec swayidle -w \
-    # lock: 10 min
     timeout 600 '$lock_cmd' \
-    # display: 20 min
     timeout 1200 'swaymsg "output * dpms off"' \
     resume 'swaymsg "output * dpms on"' \
-    # sleep: 30 min
     timeout 1800 '$sleep_cmd' \
     before-sleep '$lock_cmd' \
     lock '$lock_cmd'
