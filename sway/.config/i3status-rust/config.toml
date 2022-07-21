@@ -17,6 +17,11 @@ critical_bg = "#fb4934"
 critical_fg = "#1d2021"
 
 [[block]]
+block = "music"
+player = "spotify"
+buttons = ["prev", "play", "next"]
+
+[[block]]
 block = "disk_space"
 path = "/"
 alias = "/"
