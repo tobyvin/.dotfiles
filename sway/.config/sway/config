@@ -154,7 +154,7 @@ bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
 # Splitting direction
-bindsym $mod+b split toggle
+bindsym $mod+Shift+backslash split toggle
 bindsym $mod+minus splith
 bindsym $mod+backslash splitv
 
@@ -209,6 +209,7 @@ exec mako
 # Clipboard manager
 exec wl-paste --type text --watch clipman store --no-persist
 bindsym $mod+v exec clipman pick --tool=rofi
+bindsym $mod+b exec rofi-rbw
 
 # float launcher window
 for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
