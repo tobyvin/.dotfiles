@@ -13,7 +13,7 @@ export DISPLAY="$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')":0
 export BROWSER=wslview
 export XDG_RUNTIME_DIR=/tmp/xdg
 export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
-export SSH_AUTH_SOCK="$GPG_AGENT_SOCK.ssh"
+export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
 export GPG_TTY="$(tty)"
 
 alias wsl=wsl.exe
@@ -71,7 +71,7 @@ gpg_init() (
 
 		if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
 			rm -f "$SSH_AUTH_SOCK"
-			(setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin --gpgConfigBasepath ${config_path} -gpg S.gpg-agent.ssh" >/dev/null 2>&1 &)
+			(setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin --gpgConfigBasepath ${config_path}" >/dev/null 2>&1 &)
 		fi
 
 		if ! ss -a | grep -q "$GPG_AGENT_SOCK"; then
