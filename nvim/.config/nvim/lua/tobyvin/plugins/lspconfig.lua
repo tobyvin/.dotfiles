@@ -13,6 +13,24 @@ M.setup = function()
 
 	lspconfig.taplo.setup(lsp.config())
 
+	lspconfig.yamlls.setup(lsp.config({
+		settings = {
+			yaml = {
+				editor = {
+					formatOnType = true,
+				},
+				format = {
+					enable = true,
+				},
+			},
+			redhat = {
+				telemetry = {
+					enabled = false,
+				},
+			},
+		},
+	}))
+
 	lspconfig.tsserver.setup(lsp.config())
 
 	lspconfig.cssls.setup(lsp.config())
@@ -68,7 +86,7 @@ M.setup = function()
 						"-interaction=nonstopmode",
 						"-synctex=1",
 						"-auxdir=../aux",
-						"-outdir=../",
+						"-outdir=../out",
 						"-emulate-aux-dir",
 						"%f",
 					},
