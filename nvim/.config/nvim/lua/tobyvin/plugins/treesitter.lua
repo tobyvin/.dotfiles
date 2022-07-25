@@ -8,19 +8,42 @@ M.setup = function()
 	end
 
 	treesitter.setup({
-		ensure_installed = { "c", "lua", "rust", "latex" },
+		ensure_installed = "all",
 		indent = {
 			enable = true,
 		},
 		highlight = {
 			enable = true,
-			additional_vim_regex_highlighting = false,
+			additional_vim_regex_highlighting = { "latex" },
+			disable = function(_, bufnr)
+				return vim.api.nvim_buf_line_count(bufnr) > 2500
+			end,
 		},
-		-- TODO: add navagation with lsp fallback, requires setting keybinds for module manually
+		incremental_selection = {
+			enable = true,
+			keymaps = {
+				init_selection = "<CR>",
+				scope_incremental = "<CR>",
+				node_incremental = "<TAB>",
+				node_decremental = "<S-TAB>",
+			},
+		},
 		refactor = {
 			highlight_definitions = {
 				enable = true,
 				clear_on_cursor_move = true,
+			},
+			smart_rename = {
+				enable = true,
+				keymaps = {
+					smart_rename = "<leader>lr",
+				},
+			},
+			navigation = {
+				enable = true,
+				keymaps = {
+					goto_definition_lsp_fallback = "<leader>lgd",
+				},
 			},
 		},
 		textobjects = {

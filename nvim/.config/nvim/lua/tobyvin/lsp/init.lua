@@ -21,7 +21,8 @@ M.on_attach = function(client, bufnr)
 	nmap("w", "<cmd>Telescope lsp_workspace_diagnostics<cr>", { desc = "Workspace Diagnostics" })
 
 	local nmap_goto = require("tobyvin.utils").create_map_group("n", "<leader>lg", { desc = "Goto", buffer = bufnr })
-	nmap_goto("d", vim.lsp.buf.definition, { desc = "Definition" })
+  -- disabled in favor of treesitter.refactor's goto-with-lsp-fallback
+	-- nmap_goto("d", vim.lsp.buf.definition, { desc = "Definition" })
 	nmap_goto("D", vim.lsp.buf.declaration, { desc = "Declaration" })
 	nmap_goto("i", vim.lsp.buf.implementation, { desc = "Implementation" })
 	nmap_goto("r", vim.lsp.buf.references, { desc = "References" })

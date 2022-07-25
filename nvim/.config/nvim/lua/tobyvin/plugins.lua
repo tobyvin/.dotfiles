@@ -275,6 +275,14 @@ M.plugins = function(use)
 	})
 
 	use({
+		"drybalka/tree-climber.nvim",
+		requires = { "nvim-treesitter/nvim-treesitter" },
+		config = function()
+			require("tobyvin.plugins.tree-climber").setup()
+		end,
+	})
+
+	use({
 		"ThePrimeagen/refactoring.nvim",
 		requires = {
 			"nvim-lua/plenary.nvim",
