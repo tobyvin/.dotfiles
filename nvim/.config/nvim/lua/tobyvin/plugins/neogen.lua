@@ -7,7 +7,7 @@ M.setup = function()
 		return
 	end
 
-	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>s", { name = "Snippets" })
+	local nmap = require("tobyvin.utils").create_map_group("n", "<leader>s", { desc = "Snippets" })
 
 	neogen.setup({ snippet_engine = "luasnip" })
 

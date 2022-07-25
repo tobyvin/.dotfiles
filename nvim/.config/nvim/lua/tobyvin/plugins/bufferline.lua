@@ -35,7 +35,7 @@ M.setup = function()
 		},
 	})
 
-	local nmap = utils.create_map_group("n", "<leader>b", { name = "Buffers" })
+	local nmap = utils.create_map_group("n", "<leader>b", { desc = "Buffers" })
 	nmap("c", bufferline.close_with_pick, { desc = "Close Buffer" })
 	nmap("b", bufferline.pick_buffer, { desc = "Pick Buffer" })
 end
