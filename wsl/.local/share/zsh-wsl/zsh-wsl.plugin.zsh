@@ -58,34 +58,7 @@ wsl_cmd_proxy() {
 winget() { wsl_cmd_proxy "winget.exe" "$@"; }
 scoop() { wsl_cmd_proxy "scoop" "$@"; }
 alacritty() { wsl_cmd_proxy "alacritty.exe" "$@"; }
-# pwsh() { alacritty --working-directory "c:\\Users\\${USER}" -e "pwsh.exe $@"; }
-
-gpg_init() (
-	wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
-	config_path="C\:/Users/$USER/AppData/Local/gnupg"
-
-	if ! test -x "$wsl2_ssh_pageant_bin"; then
-		echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
-	else
-		gpg-connect-agent.exe /bye >/dev/null 2>&1
-
-		if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
-			rm -f "$SSH_AUTH_SOCK"
-			(setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin --gpgConfigBasepath ${config_path}" >/dev/null 2>&1 &)
-		fi
-
-		if ! ss -a | grep -q "$GPG_AGENT_SOCK"; then
-			rm -rf "$GPG_AGENT_SOCK"
-			(setsid nohup socat UNIX-LISTEN:"$GPG_AGENT_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin -gpgConfigBasepath ${config_path} -gpg S.gpg-agent" >/dev/null 2>&1 &)
-		fi
-
-		if ! ss -a | grep -q "${GPG_AGENT_SOCK}.extra"; then
-			rm -rf "${GPG_AGENT_SOCK}.extra"
-			(setsid nohup socat UNIX-LISTEN:"${GPG_AGENT_SOCK}.extra,fork" EXEC:"$wsl2_ssh_pageant_bin -gpgConfigBasepath ${config_path} -gpg S.gpg-agent.extra" >/dev/null 2>&1 &)
-		fi
-	fi
-	unset wsl2_ssh_pageant_bin
-)
+pwsh() { alacritty --working-directory "c:\\Users\\${USER}" -e "pwsh.exe $@"; }
 
 # Reload
 gpg_reset() {
@@ -95,7 +68,7 @@ gpg_reset() {
 	rm -rfv "$GPG_AGENT_SOCK.extra"
 	pkill -f 'socat.*wsl2-ssh-pageant.exe'
 	gpg-connect-agent.exe /bye >/dev/null 2>&1
-	gpg_init
+	gpg-init.sh
 }
 
 # Relearn card serial number
@@ -103,6 +76,4 @@ gpg_learn() {
 	gpg-connect-agent.exe "scd serialno" "learn --force" /bye
 }
 
-gpg_init
-
-unset -f _start-pageant
+gpg-init.sh

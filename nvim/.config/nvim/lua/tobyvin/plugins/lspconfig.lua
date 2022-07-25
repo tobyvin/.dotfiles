@@ -33,6 +33,8 @@ M.setup = function()
 
 	lspconfig.tsserver.setup(lsp.config())
 
+	lspconfig.pylsp.setup(lsp.config())
+
 	lspconfig.cssls.setup(lsp.config())
 
 	lspconfig.cssmodules_ls.setup(lsp.config())
