@@ -21,7 +21,7 @@ export MANROFFOPT="-c"
 export STARSHIP_LOG="error"
 export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || exa --tree --icons --git-ignore {} || tree -C {}"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
-export FZF_DEFAULT_OPTS='--exit-0 --select-1 --bind "q:abort,ctrl-y:preview-up,ctrl-e:preview-down,ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down,ctrl-b:preview-page-up,ctrl-f:preview-page-down,alt-up:half-page-up,alt-down:half-page-down"'
+export FZF_DEFAULT_OPTS='--exit-0 --select-1 --bind "ctrl-q:abort,ctrl-y:preview-up,ctrl-e:preview-down,ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down,ctrl-b:preview-page-up,ctrl-f:preview-page-down,alt-up:half-page-up,alt-down:half-page-down"'
 export FZF_CTRL_T_COMMAND=$FZF_DEFAULT_COMMAND
 export FZF_CTRL_T_OPTS="--min-height 30 --preview-window down:60% --preview-window noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
 
