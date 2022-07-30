@@ -17,7 +17,8 @@ M.setup = function()
 
 			-- Code Actions
 			code_actions.gitrebase,
-			code_actions.gitsigns,
+			-- Disabled until sorting for code_actions gets pushed. See: https://github.com/stevearc/dressing.nvim/issues/22
+			-- code_actions.gitsigns,
 			code_actions.shellcheck,
 
 			-- Diagnostics
