@@ -88,6 +88,14 @@ M.diagnostic_signs = {
 	hint = { text = "", texthl = "DiagnosticSignHint" },
 }
 
+M.debug_signs = {
+	breakpoint = { text = "", texthl = "debugBreakpoint" },
+	condition = { text = "ﳁ", texthl = "debugBreakpoint" },
+	rejected = { text = "", texthl = "debugBreakpoint" },
+	logpoint = { text = "", texthl = "debugBreakpoint" },
+	stopped = { text = "", texthl = "debugBreakpoint", linehl = "debugPC", numhl = "debugPC" },
+}
+
 setmetatable(M.diagnostic_signs, {
 	__index = function()
 		return M.diagnostic_signs.info

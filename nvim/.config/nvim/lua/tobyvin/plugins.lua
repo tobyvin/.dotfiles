@@ -199,7 +199,7 @@ M.plugins = function(use)
 	use({
 		"kevinhwang91/nvim-bqf",
 		requires = {
-			"nvim-treesitter",
+			"nvim-treesitter/nvim-treesitter",
 			"junegunn/fzf",
 		},
 		ft = "qf",
@@ -218,7 +218,6 @@ M.plugins = function(use)
 		requires = {
 			"nvim-lua/plenary.nvim",
 			"BurntSushi/ripgrep",
-			"nvim-telescope/telescope-dap.nvim",
 			"nvim-telescope/telescope-packer.nvim",
 			"nvim-telescope/telescope-github.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
@@ -402,9 +401,10 @@ M.plugins = function(use)
 	use({
 		"mfussenegger/nvim-dap",
 		requires = {
-			"theHamsta/nvim-dap-virtual-text",
 			"rcarriga/nvim-dap-ui",
-			"Pocco81/DAPInstall.nvim",
+			{ "theHamsta/nvim-dap-virtual-text", requires = "nvim-treesitter/nvim-treesitter" },
+			{ "nvim-telescope/telescope-dap.nvim", requires = "nvim-telescope/telescope.nvim" },
+			"leoluz/nvim-dap-go",
 		},
 		config = function()
 			require("tobyvin.plugins.dap").setup()
