@@ -12,6 +12,9 @@ symbol = ""
 success_symbol = "[❯](green)"
 error_symbol = "[❯](red)"
 
+[container]
+disabled = true
+
 [aws]
 symbol = "  "
 
