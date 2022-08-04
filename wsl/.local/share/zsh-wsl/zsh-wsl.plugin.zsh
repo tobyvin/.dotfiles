@@ -12,8 +12,8 @@ mkdir -p /tmp/xdg
 export DISPLAY="$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')":0
 export BROWSER=wslview
 export XDG_RUNTIME_DIR=/tmp/xdg
-export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
-export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
+# export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
+# export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
 export GPG_TTY="$(tty)"
 
 alias wsl=wsl.exe
@@ -60,20 +60,3 @@ scoop() { wsl_cmd_proxy "scoop" "$@"; }
 alacritty() { wsl_cmd_proxy "alacritty.exe" "$@"; }
 pwsh() { alacritty --working-directory "c:\\Users\\${USER}" -e "pwsh.exe $@"; }
 
-# Reload
-gpg_reset() {
-	gpg-connect-agent.exe KILLAGENT /bye >/dev/null 2>&1
-
-	rm -rfv "$GPG_AGENT_SOCK"
-	rm -rfv "$GPG_AGENT_SOCK.extra"
-	pkill -f 'socat.*wsl2-ssh-pageant.exe'
-	gpg-connect-agent.exe /bye >/dev/null 2>&1
-	gpg-init.sh
-}
-
-# Relearn card serial number
-gpg_learn() {
-	gpg-connect-agent.exe "scd serialno" "learn --force" /bye
-}
-
-gpg-init.sh

@@ -1,7 +1,12 @@
 shell:
   program: C:\WINDOWS\system32\wsl.exe
   args:
-    - "tmux new -As home"
+    - "--user"
+    - "root"
+    # there is a bug that requires launching twice (the first one starts the bus)
+    # Related-Bug: https://github.com/nullpo-head/wsl-distrod/issues/13
+    # Related-Bug: https://github.com/sarim/gbash#known-issue
+    - "systemd-run --pty --service-type=simple --uid=tobyv --quiet --working-directory=/home/tobyv -p PAMName=login /bin/zsh -l -c 'tmux new -As tobyv'"
 
 working_directory: '\\wsl$\Arch\home\tobyv'
 
