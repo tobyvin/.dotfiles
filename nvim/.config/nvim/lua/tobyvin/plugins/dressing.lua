@@ -7,6 +7,9 @@ M.kinds = {
 		select_normal = {
 			telescope = themes.get_dropdown({ initial_mode = "normal" }),
 		},
+		-- ["rust-tools/debuggables"] = {
+		-- 	telescope = themes.get_ivy({}),
+		-- },
 	},
 }
 
@@ -20,12 +23,23 @@ M.setup = function()
 	dressing.setup({
 		select = {
 			get_config = function(opts)
-				if vim.tbl_contains(M.kinds, opts.kind) then
+				if vim.tbl_contains(vim.tbl_keys(M.kinds.select), opts.kind) then
 					return M.kinds.select[opts.kind]
 				elseif vim.tbl_contains(backends, opts.kind) then
 					return { backend = opts.kind }
 				end
 			end,
+			format_item_override = {
+				["rust-tools/debuggables"] = function(item)
+					item = item:gsub(" %-%-no%-run", "")
+					item = item:gsub(" %-%-package", " -p")
+					item = item:gsub(" %-%-all%-features", "")
+					item = item:gsub(" %-%-all%-targets", "")
+					item = item:gsub(" %-%-exact", "")
+					item = item:gsub(" %-%-nocapture", "")
+					return item
+				end,
+			},
 		},
 	})
 end

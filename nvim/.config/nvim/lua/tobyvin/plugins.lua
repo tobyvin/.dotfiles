@@ -38,6 +38,7 @@ M.plugins = function(use)
 	-- TODO: implement custom hls using base-16-gruvbox and remove this
 	use({
 		"eddyekofo94/gruvbox-flat.nvim",
+		requires = { "xiyaowong/nvim-transparent" },
 		config = function()
 			require("tobyvin.plugins.gruvbox-flat").setup()
 		end,
@@ -106,7 +107,7 @@ M.plugins = function(use)
 	use({
 		"simrat39/rust-tools.nvim",
 		after = "nvim-lspconfig",
-		branch = "modularize_and_inlay_rewrite",
+		-- branch = "modularize_and_inlay_rewrite",
 		requires = {
 			"neovim/nvim-lspconfig",
 		},
@@ -222,7 +223,6 @@ M.plugins = function(use)
 			"nvim-telescope/telescope-github.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
 			{ "nvim-telescope/telescope-smart-history.nvim", requires = { "tami5/sqlite.lua", module = "sqlite" } },
-			{ "nvim-telescope/telescope-frecency.nvim", requires = { "tami5/sqlite.lua", module = "sqlite" } },
 		},
 		config = function()
 			require("tobyvin.plugins.telescope").setup()
@@ -251,12 +251,16 @@ M.plugins = function(use)
 		end,
 	})
 
+	-- TODO: revert once https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/233 is merged
+	use("~/src/nvim-treesitter-textobjects")
+
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = ":TSUpdate",
 		requires = {
+			"nvim-treesitter/playground",
 			"nvim-treesitter/nvim-treesitter-refactor",
-			"nvim-treesitter/nvim-treesitter-textobjects",
+			"~/src/nvim-treesitter-textobjects",
 			"nvim-treesitter/nvim-treesitter-context",
 			"RRethy/nvim-treesitter-textsubjects",
 			"JoosepAlviste/nvim-ts-context-commentstring",
@@ -322,11 +326,17 @@ M.plugins = function(use)
 		"nvim-lualine/lualine.nvim",
 		requires = {
 			"kyazdani42/nvim-web-devicons",
-			"arkav/lualine-lsp-progress",
 			"SmiteshP/nvim-navic",
 		},
 		config = function()
 			require("tobyvin.plugins.lualine").setup()
+		end,
+	})
+
+	use({
+		"j-hui/fidget.nvim",
+		config = function()
+			require("tobyvin.plugins.fidget").setup()
 		end,
 	})
 
@@ -415,7 +425,6 @@ M.plugins = function(use)
 	use("nacro90/numb.nvim")
 	use("ThePrimeagen/harpoon")
 	use("b0o/SchemaStore.nvim")
-	use("windwp/nvim-spectre")
 	use("ggandor/lightspeed.nvim")
 
 	use({
@@ -440,12 +449,19 @@ M.plugins = function(use)
 	})
 
 	use({
-		"akinsho/nvim-bufferline.lua",
-		requires = "kyazdani42/nvim-web-devicons",
+		"tiagovla/scope.nvim",
 		config = function()
-			require("tobyvin.plugins.bufferline").setup()
+			require("scope").setup()
 		end,
 	})
+
+	-- use({
+	-- 	"akinsho/nvim-bufferline.lua",
+	-- 	requires = "kyazdani42/nvim-web-devicons",
+	-- 	config = function()
+	-- 		require("tobyvin.plugins.bufferline").setup()
+	-- 	end,
+	-- })
 
 	use("SmiteshP/nvim-gps")
 
@@ -489,23 +505,23 @@ M.setup = function()
 	})
 
 	-- TODO: either remove this or improve it to properly reload the file before syncing
-	local augroup_packer = vim.api.nvim_create_augroup("Packer", { clear = true })
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		group = augroup_packer,
-		pattern = "plugins.lua",
-		callback = function(args)
-			local dotfiles = vim.env.HOME .. "/.dotfiles"
-			local realpath = vim.fn.system({ "realpath", args.match })
-
-			if vim.fn.match(realpath, dotfiles) == -1 then
-				return
-			end
-
-			-- utils.reload("tobyvin.plugins")
-			packer.sync()
-		end,
-		desc = "Reload packer config on write",
-	})
+	-- local augroup_packer = vim.api.nvim_create_augroup("Packer", { clear = true })
+	-- vim.api.nvim_create_autocmd("BufWritePost", {
+	-- 	group = augroup_packer,
+	-- 	pattern = "plugins.lua",
+	-- 	callback = function(args)
+	-- 		local dotfiles = vim.env.HOME .. "/.dotfiles"
+	-- 		local realpath = vim.fn.system({ "realpath", args.match })
+	--
+	-- 		if vim.fn.match(realpath, dotfiles) == -1 then
+	-- 			return
+	-- 		end
+	--
+	-- 		-- utils.reload("tobyvin.plugins")
+	-- 		packer.sync()
+	-- 	end,
+	-- 	desc = "Reload packer config on write",
+	-- })
 
 	local nmap = utils.create_map_group("n", "<leader>p", { desc = "Packer" })
 

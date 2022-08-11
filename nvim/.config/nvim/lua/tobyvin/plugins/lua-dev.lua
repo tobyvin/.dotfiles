@@ -11,7 +11,14 @@ M.setup = function()
 	local lspconfig = require("lspconfig")
 
 	lspconfig.sumneko_lua.setup(lua_dev.setup({
-		runtime_path = true,
+		library = {
+			vimruntime = true, -- runtime path
+			types = true, -- full signature, docs and completion of vim.api, vim.treesitter, vim.lsp and others
+			plugins = true, -- installed opt or start plugins in packpath
+			-- you can also specify the list of plugins to make available as a workspace library
+			-- plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" },
+		},
+		-- runtime_path = true,
 		lspconfig = lsp.config({
 			settings = {
 				Lua = {

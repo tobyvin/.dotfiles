@@ -20,21 +20,38 @@ M.eval = function()
 	end)
 end
 
-M.open_in_tab = function()
+M.dapui_open = function()
 	if M.dapui_win and vim.api.nvim_win_is_valid(M.dapui_win) then
 		vim.api.nvim_set_current_win(M.dapui_win)
 		return
 	end
 
+	local dap = require("dap")
+	local dapui = require("dapui")
+
 	vim.cmd("tabedit %")
 	M.dapui_win = vim.fn.win_getid()
 	M.dapui_tab = vim.api.nvim_win_get_tabpage(M.dapui_win)
 
-	require("dapui").open({})
+	dapui.open({})
+
+	vim.keymap.set("n", "<leader>q", dap.terminate, { desc = "Quit (DAP)" })
+
+	local on_tab_closed = function()
+		dap.terminate()
+		return true
+	end
+
+	local group = vim.api.nvim_create_augroup("DapAU", { clear = true })
+	vim.api.nvim_create_autocmd("TabClosed", { group = group, callback = on_tab_closed })
 end
 
-M.close_tab = function()
-	require("dapui").close({})
+M.dapui_close = function()
+	local dapui = require("dapui")
+
+	dapui.close({})
+
+	vim.keymap.set("n", "<leader>q", utils.quit, { desc = "Quit" })
 
 	if M.dapui_tab and vim.api.nvim_tabpage_is_valid(M.dapui_tab) then
 		local tabnr = vim.api.nvim_tabpage_get_number(M.dapui_tab)
@@ -45,6 +62,38 @@ M.close_tab = function()
 	M.dapui_tab = nil
 end
 
+M.progress_start = function(session, body)
+	local notif_data = utils.get_notif_data("dap", body.progressId)
+
+	local message = utils.format_message(body.message, body.percentage)
+	notif_data.notification = vim.notify(message, "info", {
+		title = utils.format_title(body.title, session.config.type),
+		icon = utils.signs.spinner.text[1],
+		timeout = false,
+		hide_from_history = false,
+	})
+
+	notif_data.notification.spinner = 1, utils.update_spinner("dap", body.progressId)
+end
+
+M.progress_update = function(session, body)
+	local notif_data = utils.get_notif_data("dap", body.progressId)
+	notif_data.notification = vim.notify(utils.format_message(body.message, body.percentage), "info", {
+		replace = notif_data.notification,
+		hide_from_history = false,
+	})
+end
+
+M.progress_end = function(session, body)
+	local notif_data = utils.client_notifs["dap"][body.progressId]
+	notif_data.notification = vim.notify(body.message and utils.format_message(body.message) or "Complete", "info", {
+		icon = utils.signs.complete.text,
+		replace = notif_data.notification,
+		timeout = 3000,
+	})
+	notif_data.spinner = nil
+end
+
 M.setup = function()
 	local status_ok, dap = pcall(require, "dap")
 	if not status_ok then
@@ -52,7 +101,7 @@ M.setup = function()
 		return
 	end
 
-  -- TODO: Break these configs out into seperate module, similar to my LSP configs
+	-- TODO: Break these configs out into seperate module, similar to my LSP configs
 	-- Debugpy
 	dap.adapters.python = {
 		type = "executable",
@@ -139,14 +188,20 @@ M.setup = function()
 	-- DAPUI
 	require("dapui").setup()
 
+	-- Progress handlers
+	dap.listeners.before.event_progressStart["progress-notifications"] = M.progress_start
+	dap.listeners.before.event_progressUpdate["progress-notifications"] = M.progress_update
+	dap.listeners.before.event_progressEnd["progress-notifications"] = M.progress_end
+
+	-- Delete repl buffer
 	dap.listeners.before.event_terminated["close_repl"] = dap.repl.close
 	dap.listeners.before.event_exited["close_repl"] = dap.repl.close
 
 	-- Attach DAP UI to DAP events
-	dap.listeners.after.event_initialized["dapui_config"] = M.open_in_tab
-	dap.listeners.before.event_terminated["dapui_config"] = M.close_tab
-	dap.listeners.before.event_exited["dapui_config"] = M.close_tab
-	dap.listeners.before.disconnect["dapui_config"] = M.close_tab
+	dap.listeners.after.event_initialized["dapui_config"] = M.dapui_open
+	dap.listeners.before.event_terminated["dapui_config"] = M.dapui_close
+	dap.listeners.before.event_exited["dapui_config"] = M.dapui_close
+	dap.listeners.before.disconnect["dapui_config"] = M.dapui_close
 
 	-- Telescope
 	require("telescope").load_extension("dap")
@@ -158,7 +213,8 @@ M.setup = function()
 	vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out" })
 
 	local nmap = utils.create_map_group("n", "<leader>d", { desc = "Debug" })
-	nmap("d", dap.continue, { desc = "Continue" })
+	nmap("d", require("telescope").extensions.dap.configurations, { desc = "Configurations" })
+	nmap("c", dap.continue, { desc = "Continue" })
 	nmap("a", dap.step_over, { desc = "Step Over" })
 	nmap("i", dap.step_into, { desc = "Step Into" })
 	nmap("o", dap.step_out, { desc = "Step Out" })
@@ -167,8 +223,7 @@ M.setup = function()
 	nmap("b", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
 	nmap("B", M.set_custom_breakpoint, { desc = "Custom Breakpoint" })
 
-	nmap("c", require("telescope").extensions.dap.commands, { desc = "Commands" })
-	nmap("C", require("telescope").extensions.dap.configurations, { desc = "Configurations" })
+	nmap("C", require("telescope").extensions.dap.commands, { desc = "Commands" })
 	nmap("l", require("telescope").extensions.dap.list_breakpoints, { desc = "List Breakpoints" })
 	nmap("v", require("telescope").extensions.dap.variables, { desc = "Variables" })
 	nmap("f", require("telescope").extensions.dap.frames, { desc = "Frames" })

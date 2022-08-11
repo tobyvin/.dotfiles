@@ -1,3 +1,4 @@
+local utils = require("tobyvin.utils")
 local M = {}
 
 M.setup = function()
@@ -14,9 +15,8 @@ M.setup = function()
 		end
 	end
 
-	vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-		vim.lsp.handlers["textDocument/publishDiagnostics"],
-		{
+	vim.lsp.handlers["textDocument/publishDiagnostics"] =
+		vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
 			signs = {
 				severity_limit = "Error",
 			},
@@ -25,67 +25,56 @@ M.setup = function()
 			},
 			update_in_insert = true,
 			virtual_text = true,
-		}
-	)
+		})
 
-	vim.lsp.handlers["$/progress"] = function(_, result, ctx)
-		local utils = require("tobyvin.lsp.utils")
-		local client_id = ctx.client_id
-		local val = result.value
-
-		if not val.kind then
-			return
-		end
-
-		local notif_data = utils.get_notif_data(client_id, result.token)
-
-		if val.kind == "begin" then
-			local message = utils.format_message(val.message, val.percentage)
-
-			notif_data.notification = vim.notify(message, "info", {
-				title = utils.format_title(val.title, vim.lsp.get_client_by_id(client_id).name),
-				icon = utils.spinner_frames[1],
-				timeout = false,
-				hide_from_history = false,
-			})
-
-			notif_data.spinner = 1
-			utils.update_spinner(client_id, result.token)
-		elseif val.kind == "report" and notif_data then
-			notif_data.notification = vim.notify(utils.format_message(val.message, val.percentage), "info", {
-				replace = notif_data.notification,
-				hide_from_history = false,
-			})
-		elseif val.kind == "end" and notif_data then
-			notif_data.notification = vim.notify(
-				val.message and utils.format_message(val.message) or "Complete",
-				"info",
-				{
-					icon = "",
-					replace = notif_data.notification,
-					timeout = 3000,
-				}
-			)
-
-			notif_data.spinner = nil
-		end
-	end
+	-- vim.lsp.handlers["$/progress"] = function(_, result, ctx)
+	-- 	local client_id = ctx.client_id
+	-- 	local val = result.value
+	-- 	if val.kind then
+	-- 		if not utils.client_notifs[client_id] then
+	-- 			utils.client_notifs[client_id] = {}
+	-- 		end
+	-- 		local notif_data = utils.client_notifs[client_id][result.token]
+	-- 		if val.kind == "begin" then
+	-- 			local message = utils.format_message(val.message, val.percentage)
+	-- 			local notification = vim.notify(message, "info", {
+	-- 				title = utils.format_title(val.title, vim.lsp.get_client_by_id(client_id)),
+	-- 				icon = utils.progress_signs.spinner.text[1],
+	-- 				timeout = false,
+	-- 				hide_from_history = false,
+	-- 			})
+	-- 			utils.client_notifs[client_id][result.token] = {
+	-- 				notification = notification,
+	-- 				spinner = 1,
+	-- 			}
+	-- 			utils.update_spinner(client_id, result.token)
+	-- 		elseif val.kind == "report" and notif_data then
+	-- 			local new_notif = vim.notify(
+	-- 				utils.format_message(val.message, val.percentage),
+	-- 				"info",
+	-- 				{ replace = notif_data.notification, hide_from_history = false }
+	-- 			)
+	-- 			utils.client_notifs[client_id][result.token] = {
+	-- 				notification = new_notif,
+	-- 				spinner = notif_data.spinner,
+	-- 			}
+	-- 		elseif val.kind == "end" and notif_data then
+	-- 			local new_notif = vim.notify(
+	-- 				val.message and utils.format_message(val.message) or "Complete",
+	-- 				"info",
+	-- 				{ icon = utils.progress_signs.complete.text, replace = notif_data.notification, timeout = 3000 }
+	-- 			)
+	-- 			utils.client_notifs[client_id][result.token] = {
+	-- 				notification = new_notif,
+	-- 			}
+	-- 		end
+	-- 	end
+	-- end
 
 	vim.lsp.handlers["window/showMessage"] = function(_, result, ctx)
-		local client = vim.lsp.get_client_by_id(ctx.client_id)
-		local lvl = ({
-			"ERROR",
-			"WARN",
-			"INFO",
-			"DEBUG",
-		})[result.type]
-
-		vim.notify({ result.message }, lvl, {
-			title = "LSP | " .. client.name,
-			timeout = 10000,
-			keep = function()
-				return lvl == "ERROR" or lvl == "WARN"
-			end,
+		vim.notify({ result.message }, 5 - result.type, {
+			title = "[LSP] " .. vim.lsp.get_client_by_id(ctx.client_id),
+			timeout = 2500,
 		})
 	end
 end

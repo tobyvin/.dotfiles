@@ -24,7 +24,7 @@ M.setup = function()
 			-- Diagnostics
 			diagnostics.markdownlint,
 			-- diagnostics.luacheck,
-			diagnostics.shellcheck,
+			-- diagnostics.shellcheck,
 			diagnostics.checkmake,
 
 			-- Formatting

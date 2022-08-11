@@ -17,7 +17,7 @@ M.setup = function()
 					["<C-h>"] = actions.which_key,
 				},
 			},
-			file_ignore_patterns = { "^.git/" },
+			file_ignore_patterns = { "^.git/", "^target/" },
 			vimgrep_arguments = {
 				"rg",
 				"--color=never",
@@ -52,21 +52,11 @@ M.setup = function()
 				sort_lastused = true,
 			},
 		},
-		extensions = {
-			frecency = {
-				default_workspace = "CWD",
-				workspaces = {
-					["src"] = "~/src",
-				},
-				theme = "dropdown",
-			},
-		},
 	})
 
 	-- Extensions
 	telescope.load_extension("smart_history")
 	telescope.load_extension("fzf")
-	telescope.load_extension("frecency")
 	telescope.load_extension("packer")
 	telescope.load_extension("gh")
 
@@ -86,8 +76,6 @@ M.setup = function()
 	nmap_find("'", builtins.registers, { desc = "Registers" })
 	nmap_find("t", builtins.colorscheme, { desc = "Colorscheme" })
 	nmap_find("p", telescope.extensions.packer.packer, { desc = "Packer" })
-	-- TODO: Improve layout of frecency and make default
-	nmap_find("e", telescope.extensions.frecency.frecency, { desc = "Frecency" })
 
 	local nmap_git = require("tobyvin.utils").create_map_group("n", "<leader>g", { desc = "Git" })
 	nmap_git("b", builtins.git_branches, { desc = "Checkout branch" })

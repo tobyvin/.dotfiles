@@ -7,7 +7,6 @@ M.setup = function()
 	end
 
 	luasnip.config.set_config({
-		history = true,
 		updateevents = "TextChanged,TextChangedI",
 	})
 

@@ -8,6 +8,7 @@ M.setup = function()
 		return
 	end
 
+  require("neogit")
 	neogit.setup({
 		disable_commit_confirmation = true,
 		disable_signs = true,

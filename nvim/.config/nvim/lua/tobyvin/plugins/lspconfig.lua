@@ -11,6 +11,8 @@ M.setup = function()
 		return
 	end
 
+	lspconfig.bashls.setup(lsp.config())
+
 	lspconfig.taplo.setup(lsp.config())
 
 	lspconfig.yamlls.setup(lsp.config({
@@ -53,6 +55,10 @@ M.setup = function()
 				staticcheck = true,
 			},
 		},
+		on_attach = function(client, bufnr)
+			vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+			lsp.on_attach(client, bufnr)
+		end,
 	}))
 
 	lspconfig.ltex.setup(lsp.config({

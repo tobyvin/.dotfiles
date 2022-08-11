@@ -1,4 +1,104 @@
+---@diagnostic disable: missing-parameter
 local M = {}
+
+M.diagnostic_signs = {
+	hint = { text = " ", texthl = "DiagnosticSignHint" },
+	info = { text = " ", texthl = "DiagnosticSignInfo" },
+	warn = { text = " ", texthl = "DiagnosticSignWarn" },
+	error = { text = " ", texthl = "DiagnosticSignError" },
+}
+
+setmetatable(M.diagnostic_signs, {
+	__index = function(t, k)
+		if type(k) == "number" then
+			local levels = { "hint", "info", "warn", "error" }
+			return levels[k]
+		end
+
+		local fmt_k = k:gsub("warning", "warn"):lower()
+		if t[fmt_k] ~= nil then
+			return t[fmt_k]
+		end
+
+		return t[k]
+	end,
+})
+
+M.debug_signs = {
+	breakpoint = { text = " ", texthl = "debugBreakpoint" },
+	condition = { text = "ﳁ ", texthl = "debugBreakpoint" },
+	rejected = { text = " ", texthl = "debugBreakpoint" },
+	logpoint = { text = " ", texthl = "debugBreakpoint" },
+	stopped = { text = " ", texthl = "debugBreakpoint", linehl = "debugPC", numhl = "debugPC" },
+}
+
+M.progress_signs = {
+	complete = { text = " ", texthl = "diffAdded" },
+	spinner = { text = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }, texthl = "DiagnosticSignInfo" },
+}
+
+M.diagnostics_indicator = function(diagnostics_count)
+	local tbl = {}
+	for level, count in pairs(diagnostics_count) do
+		table.insert(tbl, M.diagnostic_signs[level].text .. count)
+	end
+	return table.concat(tbl, " ")
+end
+
+M.diagnostics_count = function(bufnr)
+	local items = {}
+	for i, level in ipairs({ "hint", "info", "warn", "error" }) do
+		local count = #vim.diagnostic.get(bufnr, { severity = i })
+		if count > 0 then
+			items[level] = count
+		end
+	end
+	return items
+end
+
+M.diagnostics_str = function(bufnr, highlight)
+	return M.diagnostics_indicator(M.diagnostics_count(bufnr))
+end
+
+M.update_spinner = function(client_id, token)
+	local notif_data = M.get_notif_data(client_id, token)
+
+	if notif_data.spinner then
+		local new_spinner = (notif_data.spinner + 1) % #M.progress_signs.spinner.text
+		notif_data.spinner = new_spinner
+
+		notif_data.notification = vim.notify(nil, nil, {
+			hide_from_history = true,
+			icon = M.progress_signs.spinner.text[new_spinner],
+			replace = notif_data.notification,
+		})
+
+		vim.defer_fn(function()
+			M.update_spinner(client_id, token)
+		end, 100)
+	end
+end
+
+M.hover = function()
+	if vim.fn.expand("%:t") == "Cargo.toml" then
+		require("crates").show_popup()
+	else
+		vim.lsp.buf.hover()
+	end
+end
+
+M.docs = function()
+	local filetype = vim.bo.filetype
+	if vim.tbl_contains({ "vim", "help" }, filetype) then
+		vim.cmd("help " .. vim.fn.expand("<cword>"))
+	elseif vim.tbl_contains({ "man" }, filetype) then
+		vim.cmd("Man " .. vim.fn.expand("<cword>"))
+	elseif vim.tbl_contains({ "rust" }, filetype) then
+		require("rust-tools.external_docs").open_external_docs()
+	else
+		M.hover()
+	end
+end
 
 ---@param retry fun(force:boolean?):nil
 M.modified_prompt_retry = function(retry)
@@ -62,6 +162,15 @@ M.quit = function(force)
 	M.win_buf_kill("quit", force)
 end
 
+---@param force boolean
+M.tabclose = function(force)
+	local cmd = "tabclose"
+	if #vim.api.nvim_list_tabpages() == 1 then
+		cmd = "qall"
+	end
+	vim.cmd(cmd .. (force and "!" or ""))
+end
+
 M.escape = function()
 	local key = "<ESC>"
 	vim.api.nvim_replace_termcodes(key, true, false, true)
@@ -79,28 +188,30 @@ M.get_visual_range = function()
 	-- return { { line = start_pos[2], col = start_pos[3] }, { line = end_pos[2], col = end_pos[3] } }
 end
 
-M.spinner_frames = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }
+M.client_notifs = {}
 
-M.diagnostic_signs = {
-	error = { text = " ", texthl = "DiagnosticSignError" },
-	warn = { text = " ", texthl = "DiagnosticSignWarn" },
-	info = { text = " ", texthl = "DiagnosticSignInfo" },
-	hint = { text = "", texthl = "DiagnosticSignHint" },
-}
+M.get_notif_data = function(client_id, token)
+	if not M.client_notifs[client_id] then
+		M.client_notifs[client_id] = {}
+	end
 
-M.debug_signs = {
-	breakpoint = { text = "", texthl = "debugBreakpoint" },
-	condition = { text = "ﳁ", texthl = "debugBreakpoint" },
-	rejected = { text = "", texthl = "debugBreakpoint" },
-	logpoint = { text = "", texthl = "debugBreakpoint" },
-	stopped = { text = "", texthl = "debugBreakpoint", linehl = "debugPC", numhl = "debugPC" },
-}
+	if not M.client_notifs[client_id][token] then
+		M.client_notifs[client_id][token] = {}
+	end
 
-setmetatable(M.diagnostic_signs, {
-	__index = function()
-		return M.diagnostic_signs.info
-	end,
-})
+	return M.client_notifs[client_id][token]
+end
+
+M.format_title = function(title, client)
+	if type(client) == "table" then
+		client = client.name
+	end
+	return client .. (#title > 0 and ": " .. title or "")
+end
+
+M.format_message = function(message, percentage)
+	return (percentage and percentage .. "%\t" or "") .. (message or "")
+end
 
 --- Helper function to create a group of keymaps that share a common prefix and/or options.
 ---@param mode string|table Same mode short names as vim.keymap.set(). A list will create the group on all modes.

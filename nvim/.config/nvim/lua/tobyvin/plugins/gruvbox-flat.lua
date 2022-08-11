@@ -4,12 +4,11 @@ local M = {}
 M.setup = function()
 	vim.opt.background = "dark"
 	vim.g.gruvbox_flat_style = "hard"
-	vim.g.gruvbox_transparent = true
 
 	local colors = require("gruvbox.colors").setup({})
 	local theme = require("gruvbox.theme").setup({})
 
-	vim.g.gruvbox_colors = { bg_statusline = colors.bg_highlight }
+	vim.g.gruvbox_colors = { bg_statusline = "none" }
 	vim.g.gruvbox_theme = {
 		debugBreakpoint = { bg = theme.base.SignColumn.bg, fg = "error" },
 	}
@@ -18,7 +17,13 @@ M.setup = function()
 
 	local ns_id = vim.api.nvim_create_namespace("gruvbox")
 
-	-- TODO: figure out why dap/dapui highlights are not being used
+	-- TODO: figure out why these highlights are not being used
+	-- Transparent
+	vim.api.nvim_set_hl(ns_id, "NormalFloat", { fg = colors.fg, bg = colors.bg_float, sp = "none" })
+	vim.api.nvim_set_hl(ns_id, "SignColumn", { fg = colors.fg_gutter, bg = colors.bg, sp = "none" })
+	vim.api.nvim_set_hl(ns_id, "Normal", { fg = colors.fg, bg = colors.bg, sp = "none" })
+	vim.api.nvim_set_hl(ns_id, "NormalNC", { fg = colors.fg, bg = colors.bg, sp = "none" })
+
 	-- nvim-dap
 	vim.api.nvim_set_hl(ns_id, "DapBreakpoint", { link = "debugBreakpoint" })
 	vim.api.nvim_set_hl(ns_id, "DapStopped", { link = "debugPC" })
@@ -42,6 +47,10 @@ M.setup = function()
 	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsInfo", { link = "LspDiagnosticsInfo" })
 	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsCurrentLine", { link = "DapStopped" })
 	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsLine", { link = "DapUILineNumber" })
+
+	require("transparent").setup({
+		enable = true,
+	})
 end
 
 return M

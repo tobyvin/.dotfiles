@@ -1,18 +1,15 @@
+---@diagnostic disable: assign-type-mismatch
 local utils = require("tobyvin.utils")
 local M = {}
 
-M.diagnostic_signs = function(name)
-	name = name:gsub("warning", "warn")
-	return utils.diagnostic_signs[name]
-end
-
 M.diagnostics_indicator = function(_, _, errors, _)
-	local s = " "
-	for e, n in pairs(errors) do
-		local sign = utils.diagnostic_signs[e:gsub("warning", "warn")].text
-		s = s .. (#s > 1 and " " or "") .. sign .. n
+	local outstr = " "
+	for level, count in pairs(errors) do
+		local sign = utils.diagnostic_signs[level:gsub("warning", "warn")].text
+		-- outstr = outstr .. sign .. (#count > 1 and count or "")
+		outstr = outstr .. sign .. count
 	end
-	return s
+	return outstr
 end
 
 M.setup = function()
@@ -23,13 +20,22 @@ M.setup = function()
 	end
 
 	bufferline.setup({
+		-- highlights = {
+		-- 	fill = {
+		-- 		guibg = {
+		-- 			attribute = "fg",
+		-- 			highlight = "Pmenu",
+		-- 		},
+		-- 	},
+		-- },
 		options = {
 			right_mouse_command = "buffer %d",
 			always_show_bufferline = false,
+			color_icons = false,
+			show_close_icon = false,
+			show_buffer_close_icons = false,
 			diagnostics = "nvim_lsp",
 			diagnostics_indicator = M.diagnostics_indicator,
-			-- show_tab_indicators = true,
-			show_close_icon = false,
 			left_trunc_marker = "<",
 			right_trunc_marker = ">",
 		},
