@@ -22,7 +22,8 @@ M.setup = function()
 		return
 	end
 
-	local nvim_navic = require("nvim-navic")
+	local navic_ok, navic = pcall(require, "nvim-navic")
+	local auto_session_ok, auto_session_library = pcall(require, "auto-session-library")
 
 	local modules = require("lualine_require").lazy_require({
 		highlight = "lualine.highlight",
@@ -123,9 +124,27 @@ M.setup = function()
 				},
 			},
 			lualine_c = {
-				{ "filetype", icon_only = true, colored = false },
-				"filename",
-				{ nvim_navic.get_location, cond = nvim_navic.is_available },
+
+				{
+					auto_session_library.current_session_name,
+					cond = function()
+						return auto_session_ok
+					end,
+					separator = ">",
+				},
+				-- { "filetype", icon_only = true, colored = false },
+				{
+					"filename",
+					path = 1,
+					separator = ">",
+					shorting_target = 100,
+				},
+				{
+					navic.get_location,
+					cond = function()
+						return navic_ok and navic.is_available()
+					end,
+				},
 			},
 			lualine_x = {
 				"encoding",
@@ -134,25 +153,18 @@ M.setup = function()
 			},
 		},
 		tabline = {
-			-- lualine_b = { { "buffers", buffers_color = { inactive = "StatusLineNC" } } },
 			lualine_b = {
 				{
 					"buffers",
-					-- TODO: figure out how to highlight diagnostic signs
 					fmt = function(name, bufnr)
-						return string.format("%s %s", name, utils.diagnostics_str(bufnr))
+						return string.format("%s %s", name, utils.diagnostic_indicator(bufnr))
 					end,
 				},
 			},
-			-- lualine_y = { "tabs" },
 			lualine_y = { { "tabs", mode = 1 } },
 		},
-		extensions = { "quickfix", "man", "fzf", "nvim-dap-ui" },
+		extensions = { "quickfix", "man", "fzf", "nvim-dap-ui", "symbols-outline", "toggleterm" },
 	})
-
-	-- local nmap = utils.create_map_group("n", "<leader>b", { desc = "Buffers" })
-	-- nmap("c", M.close_with_pick, { desc = "Close Buffer" })
-	-- nmap("b", M.pick_buffer, { desc = "Pick Buffer" })
 end
 
 return M

@@ -1,28 +1,10 @@
 ---@diagnostic disable: missing-parameter
 local M = {}
 
-M.diagnostic_signs = {
-	hint = { text = " ", texthl = "DiagnosticSignHint" },
-	info = { text = " ", texthl = "DiagnosticSignInfo" },
-	warn = { text = " ", texthl = "DiagnosticSignWarn" },
-	error = { text = " ", texthl = "DiagnosticSignError" },
+M.progress_signs = {
+	complete = { text = " ", texthl = "diffAdded" },
+	spinner = { text = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }, texthl = "DiagnosticSignInfo" },
 }
-
-setmetatable(M.diagnostic_signs, {
-	__index = function(t, k)
-		if type(k) == "number" then
-			local levels = { "hint", "info", "warn", "error" }
-			return levels[k]
-		end
-
-		local fmt_k = k:gsub("warning", "warn"):lower()
-		if t[fmt_k] ~= nil then
-			return t[fmt_k]
-		end
-
-		return t[k]
-	end,
-})
 
 M.debug_signs = {
 	breakpoint = { text = " ", texthl = "debugBreakpoint" },
@@ -32,32 +14,39 @@ M.debug_signs = {
 	stopped = { text = " ", texthl = "debugBreakpoint", linehl = "debugPC", numhl = "debugPC" },
 }
 
-M.progress_signs = {
-	complete = { text = " ", texthl = "diffAdded" },
-	spinner = { text = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }, texthl = "DiagnosticSignInfo" },
+M.diagnostic_signs = {
+	HINT = { text = " ", texthl = "DiagnosticSignHint" },
+	INFO = { text = " ", texthl = "DiagnosticSignInfo" },
+	WARN = { text = " ", texthl = "DiagnosticSignWarn" },
+	ERROR = { text = " ", texthl = "DiagnosticSignError" },
 }
 
-M.diagnostics_indicator = function(diagnostics_count)
-	local tbl = {}
-	for level, count in pairs(diagnostics_count) do
-		table.insert(tbl, M.diagnostic_signs[level].text .. count)
-	end
-	return table.concat(tbl, " ")
-end
-
-M.diagnostics_count = function(bufnr)
-	local items = {}
-	for i, level in ipairs({ "hint", "info", "warn", "error" }) do
-		local count = #vim.diagnostic.get(bufnr, { severity = i })
-		if count > 0 then
-			items[level] = count
+setmetatable(M.diagnostic_signs, {
+	__index = function(t, k)
+		if type(k) == "number" then
+			return t[vim.diagnostic.severity[k]]
 		end
+		return t[k:upper():gsub("WARNING", "WARN")]
+	end,
+})
+
+M.diagnostic_count = function(bufnr)
+	local items = {}
+	for i, level in ipairs(vim.diagnostic.severity) do
+		items[level] = #vim.diagnostic.get(bufnr, { severity = i })
 	end
 	return items
 end
 
-M.diagnostics_str = function(bufnr, highlight)
-	return M.diagnostics_indicator(M.diagnostics_count(bufnr))
+M.diagnostic_indicator = function(bufnr)
+	local diagnostic_count = M.diagnostic_count(bufnr)
+	local tbl = {}
+	for level, count in pairs(diagnostic_count) do
+		if count > 0 then
+			table.insert(tbl, M.diagnostic_signs[level].text .. count)
+		end
+	end
+	return table.concat(tbl, " ")
 end
 
 M.update_spinner = function(client_id, token)
