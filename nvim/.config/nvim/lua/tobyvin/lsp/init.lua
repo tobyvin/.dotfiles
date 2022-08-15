@@ -29,7 +29,7 @@ M.on_attach = function(client, bufnr)
 	nmap_goto("i", vim.lsp.buf.implementation, { desc = "Implementation" })
 	nmap_goto("r", vim.lsp.buf.references, { desc = "References" })
 
-	local nmap_tests = utils.create_map_group("n", "<leader>t", { desc = "Test", buffer = bufnr })
+	local nmap_tests = utils.create_map_group("n", "<leader>r", { desc = "Run", buffer = bufnr })
 	nmap_tests("l", vim.lsp.codelens.run, { desc = "CodeLens Action" })
 
 	-- disabled in favor of https://github.com/nvim-treesitter/nvim-treesitter-refactor#highlight-definitions

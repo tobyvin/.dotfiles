@@ -1,3 +1,4 @@
+local Job = require("plenary.job")
 local utils = require("tobyvin.utils")
 local lsp = require("tobyvin.lsp")
 local M = {
@@ -14,6 +15,55 @@ M.dap_adapter = function()
 	vim.notify("Failed to find codelldb adapter")
 end
 
+M.cargo_subcmd = function(subcmd)
+	vim.ui.input({ prompt = string.format("cargo %s", subcmd) }, function(input)
+		if input == nil then
+			return
+		end
+		local args = { subcmd }
+		for _, arg in ipairs(vim.split(input, " ", { trimempty = true })) do
+			table.insert(args, arg)
+		end
+
+		local cmd = "cargo"
+		local notification
+		local output = ""
+		local length = 0
+		local win, height
+		local on_data = function(_, data)
+			output = output .. data .. "\n"
+			notification = vim.notify(vim.trim(output), vim.log.levels.INFO, {
+				title = string.format("[%s] %s", cmd, subcmd),
+				replace = notification,
+				on_open = function(win_)
+					win, height = win_, vim.api.nvim_win_get_height(win_)
+				end,
+			})
+			if height then
+				vim.api.nvim_win_set_height(win, height + length)
+			end
+			length = length + 1
+		end
+
+		local job = Job:new({
+			command = "cargo",
+			args = args,
+			on_stdout = vim.schedule_wrap(on_data),
+			on_stderr = vim.schedule_wrap(on_data),
+		})
+
+		job:start()
+	end)
+end
+
+M.cargo_add = function()
+	M.cargo_subcmd("add")
+end
+
+M.cargo_rm = function()
+	M.cargo_subcmd("rm")
+end
+
 M.setup = function()
 	local status_ok, rust_tools = pcall(require, "rust-tools")
 	if not status_ok then
@@ -22,18 +72,6 @@ M.setup = function()
 	end
 
 	rust_tools.setup({
-		-- tools = {
-		-- 	autoSetHints = true,
-		-- 	hover_with_actions = true,
-		-- 	runnables = {
-		-- 		use_telescope = true,
-		-- 	},
-		-- 	inlay_hints = {
-		-- 		show_parameter_hints = true,
-		-- 		parameter_hints_prefix = "",
-		-- 		other_hints_prefix = "",
-		-- 	},
-		-- },
 		server = lsp.config({
 			standalone = true,
 			settings = {
@@ -61,9 +99,14 @@ M.setup = function()
 
 				local nmap = utils.create_map_group("n", "<leader>", { buffer = bufnr })
 				nmap("dd", rust_tools.debuggables.debuggables, { desc = "Debug" })
-				nmap("tt", rust_tools.runnables.runnables, { desc = "Run" })
-				-- nmap("lh", rust_tools.hover_actions.hover_actions, { desc = "Hover Actions" })
-				-- nmap("la", rust_tools.code_action_group.code_action_group, { desc = "Code Actions" })
+
+				local nmap_run = utils.create_map_group("n", "<leader>r", { desc = "Run", buffer = bufnr })
+				nmap_run("r", rust_tools.runnables.runnables, { desc = "Runnables" })
+
+				local nmap_run_cargo = utils.create_map_group("n", "<leader>rc", { desc = "Cargo", buffer = bufnr })
+				nmap_run_cargo("o", rust_tools.open_cargo_toml.open_cargo_toml, { desc = "Open Cargo.toml" })
+				nmap_run_cargo("a", M.cargo_add, { desc = "Add Crate" })
+				nmap_run_cargo("r", M.cargo_rm, { desc = "Remove Crate" })
 			end,
 		}),
 		dap = M.dap_adapter(),

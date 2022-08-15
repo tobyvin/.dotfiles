@@ -7,9 +7,11 @@ M.kinds = {
 		select_normal = {
 			telescope = themes.get_dropdown({ initial_mode = "normal" }),
 		},
-		-- ["rust-tools/debuggables"] = {
-		-- 	telescope = themes.get_ivy({}),
-		-- },
+	},
+	input = {
+		cargo = {
+			relative = "win",
+		},
 	},
 }
 
@@ -21,6 +23,15 @@ M.setup = function()
 	end
 
 	dressing.setup({
+		input = {
+			get_config = function(opts)
+				if vim.startswith(opts.prompt, "cargo") then
+					return {
+						relative = "win",
+					}
+				end
+			end,
+		},
 		select = {
 			get_config = function(opts)
 				if vim.tbl_contains(vim.tbl_keys(M.kinds.select), opts.kind) then
