@@ -224,12 +224,9 @@ M.plugins = function(use)
 	})
 
 	use({
-		"AckslD/nvim-neoclip.lua",
-		requires = {
-			"nvim-telescope/telescope.nvim",
-		},
+		"gbprod/yanky.nvim",
 		config = function()
-			require("tobyvin.plugins.neoclip").setup()
+			require("tobyvin.plugins.yanky").setup()
 		end,
 	})
 
