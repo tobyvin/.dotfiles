@@ -7,11 +7,13 @@ M.setup = function()
 		return
 	end
 
-	neoclip.setup({
-		continuous_sync = false,
-		enable_persistent_history = false,
-	})
+	neoclip.setup()
 
+	local telescope = require("telescope")
+	telescope.load_extension("neoclip")
+
+	vim.keymap.set("n", "fy", telescope.extensions.neoclip.default, { desc = "Yank History" })
+	vim.keymap.set("n", "fM", telescope.extensions.macroscope.default, { desc = "Macro History" })
 end
 
 return M

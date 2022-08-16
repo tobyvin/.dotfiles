@@ -57,14 +57,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"rmagatti/session-lens",
-		requires = { "rmagatti/auto-session", "nvim-telescope/telescope.nvim" },
-		config = function()
-			require("tobyvin.plugins.session-lens").setup()
-		end,
-	})
-
-	use({
 		"tpope/vim-dispatch",
 		cmd = {
 			"Dispatch",
@@ -235,8 +227,7 @@ M.plugins = function(use)
 	use({
 		"AckslD/nvim-neoclip.lua",
 		requires = {
-			{ "tami5/sqlite.lua", module = "sqlite" },
-			{ "nvim-telescope/telescope.nvim" },
+			"nvim-telescope/telescope.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.neoclip").setup()
