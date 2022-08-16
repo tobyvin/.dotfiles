@@ -1,19 +1,43 @@
 local themes = require("telescope.themes")
-local backends = require("dressing.config").get_mod_config("select").backend
 local M = {}
 
-M.kinds = {
+M.format_item_override = {
+	["rust-tools/debuggables"] = function(item)
+		item = item:gsub(" %-%-no%-run", "")
+		item = item:gsub(" %-%-package", " -p")
+		item = item:gsub(" %-%-all%-features", "")
+		item = item:gsub(" %-%-all%-targets", "")
+		item = item:gsub(" %-%-exact", "")
+		item = item:gsub(" %-%-nocapture", "")
+		return item
+	end,
+}
+
+M.config_overrides = {
 	select = {
-		select_normal = {
-			telescope = themes.get_dropdown({ initial_mode = "normal" }),
+		["Ring history"] = {
+			telescope = themes.get_dropdown({ preview = true }),
 		},
 	},
 	input = {
-		cargo = {
+		["cargo add"] = {
+			relative = "win",
+		},
+		["cargo rm"] = {
 			relative = "win",
 		},
 	},
 }
+
+M.get_config = function(type, opts)
+	local overrides = M.config_overrides[type]
+
+	if overrides[opts.kind] ~= nil then
+		return overrides[opts.kind]
+	elseif overrides[opts.prompt] ~= nil then
+		return overrides[opts.prompt]
+	end
+end
 
 M.setup = function()
 	local status_ok, dressing = pcall(require, "dressing")
@@ -25,32 +49,26 @@ M.setup = function()
 	dressing.setup({
 		input = {
 			get_config = function(opts)
-				if vim.startswith(opts.prompt, "cargo") then
-					return {
-						relative = "win",
-					}
+				local overrides = M.config_overrides.input
+
+				if overrides[opts.kind] ~= nil then
+					return overrides[opts.kind]
+				elseif overrides[opts.prompt] ~= nil then
+					return overrides[opts.prompt]
 				end
 			end,
 		},
 		select = {
 			get_config = function(opts)
-				if vim.tbl_contains(vim.tbl_keys(M.kinds.select), opts.kind) then
-					return M.kinds.select[opts.kind]
-				elseif vim.tbl_contains(backends, opts.kind) then
-					return { backend = opts.kind }
+				local overrides = M.config_overrides.select
+
+				if overrides[opts.kind] ~= nil then
+					return overrides[opts.kind]
+				elseif overrides[opts.prompt] ~= nil then
+					return overrides[opts.prompt]
 				end
 			end,
-			format_item_override = {
-				["rust-tools/debuggables"] = function(item)
-					item = item:gsub(" %-%-no%-run", "")
-					item = item:gsub(" %-%-package", " -p")
-					item = item:gsub(" %-%-all%-features", "")
-					item = item:gsub(" %-%-all%-targets", "")
-					item = item:gsub(" %-%-exact", "")
-					item = item:gsub(" %-%-nocapture", "")
-					return item
-				end,
-			},
+			format_item_override = M.format_item_override,
 		},
 	})
 end
