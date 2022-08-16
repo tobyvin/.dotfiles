@@ -102,7 +102,6 @@ M.plugins = function(use)
 	use({
 		"simrat39/rust-tools.nvim",
 		after = "nvim-lspconfig",
-		-- branch = "modularize_and_inlay_rewrite",
 		requires = {
 			"neovim/nvim-lspconfig",
 		},
@@ -449,14 +448,6 @@ M.plugins = function(use)
 		end,
 	})
 
-	-- use({
-	-- 	"akinsho/nvim-bufferline.lua",
-	-- 	requires = "kyazdani42/nvim-web-devicons",
-	-- 	config = function()
-	-- 		require("tobyvin.plugins.bufferline").setup()
-	-- 	end,
-	-- })
-
 	use("SmiteshP/nvim-gps")
 
 	if PackerBootstrap then
@@ -496,39 +487,19 @@ M.setup = function()
 				return require("packer.util").float({ border = "rounded" })
 			end,
 		},
+		autoremove = true,
+		profile = { enable = true },
 	})
 
-	-- TODO: either remove this or improve it to properly reload the file before syncing
-	-- local augroup_packer = vim.api.nvim_create_augroup("Packer", { clear = true })
-	-- vim.api.nvim_create_autocmd("BufWritePost", {
-	-- 	group = augroup_packer,
-	-- 	pattern = "plugins.lua",
-	-- 	callback = function(args)
-	-- 		local dotfiles = vim.env.HOME .. "/.dotfiles"
-	-- 		local realpath = vim.fn.system({ "realpath", args.match })
-	--
-	-- 		if vim.fn.match(realpath, dotfiles) == -1 then
-	-- 			return
-	-- 		end
-	--
-	-- 		-- utils.reload("tobyvin.plugins")
-	-- 		packer.sync()
-	-- 	end,
-	-- 	desc = "Reload packer config on write",
-	-- })
-
 	local nmap = utils.create_map_group("n", "<leader>p", { desc = "Packer" })
-
 	nmap("c", packer.compile, { desc = "Compile" })
 	nmap("C", packer.clean, { desc = "Clean" })
 	nmap("i", packer.install, { desc = "Install" })
 	nmap("p", packer.profile_output, { desc = "Profile" })
 	nmap("s", packer.sync, { desc = "Sync" })
-	nmap("S", packer.status, { desc = "Status" })
 	nmap("u", packer.update, { desc = "Update" })
 	nmap("l", M.open_log, { desc = "Log" })
 
-	-- Install your plugins here
 	return packer.startup(M.plugins)
 end
 
