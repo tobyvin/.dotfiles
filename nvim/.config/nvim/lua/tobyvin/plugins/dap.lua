@@ -4,6 +4,33 @@ local M = {
 	dapui_tab = nil,
 }
 
+M.highlights = function()
+	local ns_id = 0
+	-- nvim-dap
+	vim.api.nvim_set_hl(ns_id, "DapBreakpoint", { link = "debugBreakpoint" })
+	vim.api.nvim_set_hl(ns_id, "DapStopped", { link = "debugPC" })
+
+	-- nvim-dap-ui
+	vim.api.nvim_set_hl(ns_id, "DapUIVariable", { link = "TSVariable" })
+	vim.api.nvim_set_hl(ns_id, "DapUIScope", { link = "TSNamespace" })
+	vim.api.nvim_set_hl(ns_id, "DapUIType", { link = "Type" })
+	vim.api.nvim_set_hl(ns_id, "DapUIModifiedValue", { link = "Keyword" })
+	vim.api.nvim_set_hl(ns_id, "DapUIDecoration", { link = "PreProc" })
+	vim.api.nvim_set_hl(ns_id, "DapUIThread", { link = "String" })
+	vim.api.nvim_set_hl(ns_id, "DapUIStoppedThread", { link = "Special" })
+	vim.api.nvim_set_hl(ns_id, "DapUIFrameName", { link = "Normal" })
+	vim.api.nvim_set_hl(ns_id, "DapUISource", { link = "TSKeyword" })
+	vim.api.nvim_set_hl(ns_id, "DapUILineNumber", { link = "TSOperator" })
+	vim.api.nvim_set_hl(ns_id, "DapUIFloatBorder", { link = "FloatBorder" })
+	vim.api.nvim_set_hl(ns_id, "DapUIWatchesEmpty", { link = "LspDiagnosticsError" })
+	vim.api.nvim_set_hl(ns_id, "DapUIWatchesValue", { link = "String" })
+	vim.api.nvim_set_hl(ns_id, "DapUIWatchesError", { link = "LspDiagnosticsError" })
+	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsPath", { link = "Keyword" })
+	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsInfo", { link = "LspDiagnosticsInfo" })
+	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsCurrentLine", { link = "DapStopped" })
+	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsLine", { link = "DapUILineNumber" })
+end
+
 M.set_custom_breakpoint = function()
 	vim.ui.input({ prompt = "Condition: " }, function(condition)
 		vim.ui.input({ prompt = "Hit condition: " }, function(hit_condition)
@@ -73,10 +100,11 @@ M.progress_start = function(session, body)
 		hide_from_history = false,
 	})
 
+	---@diagnostic disable-next-line: redundant-value
 	notif_data.notification.spinner = 1, utils.update_spinner("dap", body.progressId)
 end
 
-M.progress_update = function(session, body)
+M.progress_update = function(_, body)
 	local notif_data = utils.get_notif_data("dap", body.progressId)
 	notif_data.notification = vim.notify(utils.format_message(body.message, body.percentage), "info", {
 		replace = notif_data.notification,
@@ -84,7 +112,7 @@ M.progress_update = function(session, body)
 	})
 end
 
-M.progress_end = function(session, body)
+M.progress_end = function(_, body)
 	local notif_data = utils.client_notifs["dap"][body.progressId]
 	notif_data.notification = vim.notify(body.message and utils.format_message(body.message) or "Complete", "info", {
 		icon = utils.signs.complete.text,
@@ -183,7 +211,7 @@ M.setup = function()
 	require("dap-go").setup()
 
 	-- Virtual text
-	require("nvim-dap-virtual-text").setup()
+	require("nvim-dap-virtual-text").setup({})
 
 	-- DAPUI
 	require("dapui").setup()
@@ -229,6 +257,10 @@ M.setup = function()
 	nmap("f", require("telescope").extensions.dap.frames, { desc = "Frames" })
 
 	nmap("e", M.eval, { desc = "Eval" })
+
+	vim.api.nvim_create_autocmd("ColorScheme", {
+		callback = M.highlights,
+	})
 
 	-- Signs
 	vim.fn.sign_define("DapBreakpoint", utils.debug_signs.breakpoint)

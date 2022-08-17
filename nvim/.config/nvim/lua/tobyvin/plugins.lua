@@ -38,9 +38,15 @@ M.plugins = function(use)
 	-- TODO: implement custom hls using base-16-gruvbox and remove this
 	use({
 		"eddyekofo94/gruvbox-flat.nvim",
-		requires = { "xiyaowong/nvim-transparent" },
 		config = function()
 			require("tobyvin.plugins.gruvbox-flat").setup()
+		end,
+	})
+
+	use({
+		"xiyaowong/nvim-transparent",
+		config = function()
+			require("tobyvin.plugins.transparent").setup()
 		end,
 	})
 
@@ -415,7 +421,13 @@ M.plugins = function(use)
 	use("nacro90/numb.nvim")
 	use("ThePrimeagen/harpoon")
 	use("b0o/SchemaStore.nvim")
-	use("ggandor/lightspeed.nvim")
+
+	use({
+		"ggandor/leap.nvim",
+		config = function()
+			require("leap").set_default_keymaps()
+		end,
+	})
 
 	use({
 		"ur4ltz/surround.nvim",
