@@ -165,7 +165,6 @@ M.setup = function()
 				},
 			},
 			lualine_c = {
-
 				{
 					auto_session_library.current_session_name,
 					cond = function()
@@ -173,7 +172,6 @@ M.setup = function()
 					end,
 					separator = ">",
 				},
-				-- { "filetype", icon_only = true, colored = false },
 				{
 					"filename",
 					path = 1,
