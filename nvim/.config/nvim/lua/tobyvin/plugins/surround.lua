@@ -9,6 +9,7 @@ M.setup = function()
 
 	surround.setup({
 		map_insert_mode = false,
+		prefix = "<C-s>",
 	})
 end
 
