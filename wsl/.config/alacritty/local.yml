@@ -3,10 +3,7 @@ shell:
   args:
     - "--user"
     - "root"
-    # there is a bug that requires launching twice (the first one starts the bus)
-    # Related-Bug: https://github.com/nullpo-head/wsl-distrod/issues/13
-    # Related-Bug: https://github.com/sarim/gbash#known-issue
-    - "systemd-run --pty --service-type=simple --uid=tobyv --quiet --working-directory=/home/tobyv -p PAMName=login /bin/zsh -l -c 'tmux new -As tobyv'"
+    - machinectl shell --uid=1000 --quiet .host /bin/zsh -l -c 'tmux new -As $USER'
 
 working_directory: '\\wsl$\Arch\home\tobyv'
 
