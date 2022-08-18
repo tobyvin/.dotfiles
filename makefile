@@ -29,6 +29,7 @@ stow: # Install configs
 	@stow sway
 	@stow tmux
 	@stow wezterm
+	@stow wired
 	@stow zsh
 	@if [ -n "$$WSL_DISTRO_NAME" ]; then stow wsl --override=/*; fi
 

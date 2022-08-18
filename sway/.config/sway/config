@@ -205,9 +205,6 @@ bar {
 default_border pixel
 hide_edge_borders smart
 
-# Start notification daemon
-exec mako
-
 # Clipboard manager
 exec wl-paste --type text --watch clipman store --no-persist
 bindsym $mod+v exec clipman pick --tool=rofi
