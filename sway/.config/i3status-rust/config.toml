@@ -17,11 +17,6 @@ critical_bg = "#fb4934"
 critical_fg = "#1d2021"
 
 [[block]]
-block = "music"
-player = "spotify"
-buttons = ["prev", "play", "next"]
-
-[[block]]
 block = "disk_space"
 path = "/"
 alias = "/"
@@ -50,6 +45,11 @@ interval = 1
 block = "sound"
 
 [[block]]
+block = "music"
+player = "spotifyd"
+buttons = ["prev", "play", "next"]
+
+[[block]]
 block = "battery"
 device = "/sys/class/power_supply/BAT0"
 if_command = "test -e /sys/class/power_supply/BAT0"
@@ -63,6 +63,13 @@ if_command = "test -e /sys/class/power_supply/BAT1"
 block = "battery"
 device = "/sys/class/power_supply/BAT2"
 if_command = "test -e /sys/class/power_supply/BAT2"
+
+# install: go install github.com/monban/iwdstatus
+[[block]]
+block = "custom"
+command = "iwdstatus"
+json = true
+if_command = "command -v iwdstatus"
 
 [[block]]
 block = "time"
