@@ -19,6 +19,7 @@ stow: # Install configs
 	@stow mpv
 	@stow nvim
 	@stow paru
+	@stow rofi
 	@stow scripts
 	@stow sheldon
 	@stow spotify
