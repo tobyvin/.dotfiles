@@ -9,6 +9,7 @@ set $term $TERMINAL
 # Menu
 set $menu exec rofi -modi "run,drun" -show drun -show-icons
 set $menu_all exec rofi -modi "run,drun" -show run -show-icons
+set $menu_ssh exec rofi -modi "ssh" -show ssh -show-icons
 
 # Home row direction keys, like vim
 set $left h
@@ -77,7 +78,8 @@ bindsym $mod+space exec $menu
 bindsym $mod+shift+space exec $menu_all
 
 # Launch terminal
-bindsym $mod+Return exec $TERMINAL
+bindsym $mod+return exec $TERMINAL
+bindsym $mod+shift+return exec $menu_ssh
 
 # Launch browser
 bindsym $mod+w exec $BROWSER
