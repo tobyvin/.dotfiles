@@ -30,8 +30,10 @@ alias dcu="docker context use"
 
 if [[ $- == *i* ]] && [ -d "$BASHCOMPDIR" ]; then
 	for f in "$BASHCOMPDIR"/*; do
+		# shellcheck disable=1090
 		source "$f"
 	done
 fi
 
+# shellcheck disable=1090
 command -v starship >/dev/null 2>&1 && source <(starship init bash)

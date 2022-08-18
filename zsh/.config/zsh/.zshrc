@@ -1,3 +1,5 @@
+#!/bin/zsh
+
 export HYPHEN_INSENSITIVE="true"
 export DISABLE_UPDATE_PROMPT="true"
 export DISABLE_AUTO_TITLE="true"
