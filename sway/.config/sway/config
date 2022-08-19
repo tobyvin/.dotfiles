@@ -57,6 +57,10 @@ for_window [shell=".*"] inhibit_idle fullscreen
 # Hide mouse cursor when not used
 seat * hide_cursor 8000
 
+input type:pointer {
+    accel_profile flat
+}
+
 input type:touchpad {
     tap enabled
     natural_scroll enabled
@@ -211,7 +215,7 @@ bindsym $mod+v exec clipman pick --tool=rofi
 # Password manager
 bindsym $mod+b exec rofi-rbw
 
-include config.d/*
+include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
 exec systemctl --user start sway-session.target
