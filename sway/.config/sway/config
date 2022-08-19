@@ -7,9 +7,7 @@ set $mod Mod4
 set $term $TERMINAL
 
 # Menu
-set $menu exec rofi -modi "run,drun" -show drun -show-icons
-set $menu_all exec rofi -modi "run,drun" -show run -show-icons
-set $menu_ssh exec rofi -modi "ssh" -show ssh -show-icons
+set $menu exec rofi -show-icons
 
 # Home row direction keys, like vim
 set $left h
@@ -70,16 +68,17 @@ input type:keyboard {
 
 ### Key bindings
 
-# Exit sway
-bindsym $mod+Shift+e exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
+# Power menu
+bindsym $mod+Escape exec $menu -modi p:rofi-power-menu -show p
+bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
 
-# App launcher
-bindsym $mod+space exec $menu
-bindsym $mod+shift+space exec $menu_all
+# Run menu
+bindsym $mod+space exec $menu -show drun
+bindsym $mod+shift+space exec $menu -show run
 
 # Launch terminal
 bindsym $mod+return exec $TERMINAL
-bindsym $mod+shift+return exec $menu_ssh
+bindsym $mod+shift+return exec $menu -show ssh
 
 # Launch browser
 bindsym $mod+w exec $BROWSER
@@ -141,7 +140,7 @@ bindsym $mod+7 workspace number 7
 bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
-bindsym $mod+tab workspace back_and_forth
+bindsym $mod+ctrl+6 workspace back_and_forth
 
 # Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number 1; workspace number 1
@@ -208,9 +207,9 @@ hide_edge_borders smart
 # Clipboard manager
 exec wl-paste --type text --watch clipman store --no-persist
 bindsym $mod+v exec clipman pick --tool=rofi
+
+# Password manager
 bindsym $mod+b exec rofi-rbw
 
-# float launcher window
-for_window [app_id="^launcher$"] floating enable, sticky enable, resize set 30 ppt 60 ppt, border pixel 2
-
-include @sysconfdir@/sway/config.d/*
+include config.d/*
+include /etc/sway/config.d/*
