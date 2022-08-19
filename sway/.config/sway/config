@@ -213,3 +213,5 @@ bindsym $mod+b exec rofi-rbw
 
 include config.d/*
 include /etc/sway/config.d/*
+
+exec systemctl --user start sway-session.target
