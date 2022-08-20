@@ -15,7 +15,7 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u "$USER")}"
 
 # prog
 EDITOR="$(command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi)"
-BROWSER="$(command -v chromium 2>/dev/null || command -v firefox)"
+BROWSER="$(command -v firefox || command -v chromium 2>/dev/null)"
 export EDITOR BROWSER
 export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
