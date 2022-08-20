@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/zsh
 
 emulate sh -c '. ~/.profile'
 
