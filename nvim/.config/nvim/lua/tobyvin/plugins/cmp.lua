@@ -10,51 +10,8 @@ M.enabled = function()
 	return enabled
 end
 
-M.has_words_before = function()
-	local line, col = unpack(vim.api.nvim_win_get_cursor(0))
-	return col ~= 0 and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
-end
-
-M.complete = function(fallback)
-	local cmp = require("cmp")
-	if cmp.visible() then
-		cmp.confirm({ behavior = cmp.ConfirmBehavior.insert, select = true })
-	elseif M.has_words_before() then
-		cmp.complete()
-	else
-		fallback()
-	end
-end
-
 M.expand_snip = function(args)
 	require("luasnip").lsp_expand(args.body)
-end
-
-M.next_snip = function(fallback)
-	local luasnip = require("luasnip")
-	if luasnip.expand_or_jumpable() then
-		luasnip.expand_or_jump()
-	else
-		fallback()
-	end
-end
-
-M.prev_snip = function(fallback)
-	local luasnip = require("luasnip")
-	if luasnip.in_snippet() and luasnip.jumpable(-1) then
-		luasnip.jump(-1)
-	else
-		fallback()
-	end
-end
-
-M.close = function(fallback)
-	local cmp = require("cmp")
-	if cmp.visible() then
-		cmp.close()
-	else
-		fallback()
-	end
 end
 
 M.setup = function()
@@ -70,15 +27,6 @@ M.setup = function()
 			expand = M.expand_snip,
 		},
 		mapping = cmp.mapping.preset.cmdline({
-			-- ["<Tab>"] = cmp.mapping(M.next_snip, { "i", "s" }),
-			-- ["<S-Tab>"] = cmp.mapping(M.prev_snip, { "i", "s" }),
-			-- ["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "s" }),
-			-- ["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "s" }),
-			-- ["<C-d>"] = cmp.mapping(cmp.mapping.scroll_docs(-4), { "i", "s" }),
-			-- ["<C-u>"] = cmp.mapping(cmp.mapping.scroll_docs(4), { "i", "s" }),
-			-- ["<C-Space>"] = cmp.mapping(M.complete, { "i", "s" }),
-			-- ["<CR>"] = cmp.mapping(cmp.mapping.confirm({ select = false }), { "i", "s" }),
-			-- ["<C-e>"] = cmp.mapping(M.close),
 			["<C-p>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "s" }),
 			["<C-n>"] = cmp.mapping(cmp.mapping.select_next_item(), { "i", "s" }),
 			["<S-Tab>"] = cmp.mapping(cmp.mapping.select_prev_item(), { "i", "s" }),
@@ -90,7 +38,7 @@ M.setup = function()
 			["<CR>"] = cmp.mapping(
 				cmp.mapping.confirm({
 					behavior = cmp.ConfirmBehavior.Insert,
-					select = true,
+					-- select = true,
 				}),
 				{ "i", "s" }
 			),
@@ -132,7 +80,6 @@ M.setup = function()
 		},
 	})
 
-	-- TODO: fix the default completion menu from showing on the cmdline
 	cmp.setup.cmdline(":", {
 		sources = {
 			{ name = "cmdline_history", max_item_count = 10 },
