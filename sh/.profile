@@ -2,9 +2,10 @@
 # shellcheck disable=1091,2046
 
 # environment.d
-if [ -x /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator ]; then
-	export $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator)
-fi
+/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator |
+	while read -r l; do
+		eval export $((l))
+	done
 
 # xdg
 export XDG_CONFIG_HOME="$HOME/.config"
