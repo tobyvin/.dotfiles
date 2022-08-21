@@ -64,12 +64,13 @@ block = "battery"
 device = "/sys/class/power_supply/BAT2"
 if_command = "test -e /sys/class/power_supply/BAT2"
 
+# TODO: figure out why this is creating a json error
 # install: go install github.com/monban/iwdstatus
-[[block]]
-block = "custom"
-command = "iwdstatus"
-json = true
-if_command = "command -v iwdstatus"
+# [[block]]
+# block = "custom"
+# command = "iwdstatus"
+# json = true
+# if_command = "command -v iwdstatus"
 
 [[block]]
 block = "time"
