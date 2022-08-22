@@ -21,12 +21,7 @@ setopt share_history          # share command history data
 
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 
-alias ls='ls --color=tty'
-alias l='ls -lah'
-alias la='ls -lAh'
-alias ll='ls -lh'
-alias lla='ls -lA'
-alias lsa='ls -lah'
+alias ls="$(command -v lsd || echo ls --color=tty)"
 alias grep='grep --color'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
@@ -64,13 +59,13 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4738"
 
-command -v fd &>/dev/null && _fzf_compgen_path() {
+command -v fd >/dev/null 2&>1 && _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
 }
 
-command -v fd &>/dev/null && _fzf_compgen_dir() {
+command -v fd >/dev/null 2&>1 && _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-command -v starship &>/dev/null && source <(starship init zsh)
-command -v sheldon &>/dev/null && source <(sheldon source)
+command -v starship >/dev/null 2&>1 && source <(starship init zsh)
+command -v sheldon >/dev/null 2&>1 && source <(sheldon source)
