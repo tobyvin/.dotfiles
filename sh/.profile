@@ -18,13 +18,15 @@ export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u "$USER")}"
 
 # prog
 EDITOR="$(command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi)"
+export EDITOR
 BROWSER="$(command -v firefox || command -v chromium 2>/dev/null)"
-export EDITOR BROWSER
+export BROWSER
 export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 
 # opts
 export MANROFFOPT="-c"
+export LESSOPEN="|lesspipe.sh %s"
 export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export STARSHIP_LOG="error"
