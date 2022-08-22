@@ -2,7 +2,7 @@
 # shellcheck disable=1091,2046
 
 # environment.d
-/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator |
+/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator 2>/dev/null |
 	while read -r l; do
 		eval export $((l))
 	done
