@@ -1,12 +1,14 @@
-#!/bin/sh
-# shellcheck disable=1091,2046
+#!/bin/bash
+# shellcheck disable=1091
 
 # environment.d
-/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator 2>/dev/null |
-	while read -r l; do
-		eval export $((l))
-	done
-
+if test -e /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator; then
+	set -a
+	. /dev/fd/0 <<EOF
+    $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator 2>/dev/null)
+EOF
+	set +a
+fi
 # xdg
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -26,11 +28,21 @@ export MANROFFOPT="-c"
 export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export STARSHIP_LOG="error"
-export FZF_PREVIEW_COMMAND="bat --style=numbers,changes --wrap never --color always {} || cat {} || exa --tree --icons --git-ignore {} || tree -C {}"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
-export FZF_DEFAULT_OPTS='--exit-0 --select-1 --bind "ctrl-q:abort,ctrl-y:preview-up,ctrl-e:preview-down,ctrl-u:preview-half-page-up,ctrl-d:preview-half-page-down,ctrl-b:preview-page-up,ctrl-f:preview-page-down,alt-up:half-page-up,alt-down:half-page-down"'
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-export FZF_CTRL_T_OPTS="--min-height 30 --preview-window down:60% --preview-window noborder --preview '($FZF_PREVIEW_COMMAND) 2> /dev/null'"
+export FZF_DEFAULT_OPTS='--exit-0 --select-1
+--bind ctrl-q:abort
+--bind ctrl-y:preview-up
+--bind ctrl-e:preview-down
+--bind ctrl-u:preview-half-page-up
+--bind ctrl-d:preview-half-page-down
+--bind ctrl-b:preview-page-up
+--bind ctrl-f:preview-page-down
+--bind alt-up:half-page-up
+--bind alt-down:half-page-down
+--color fg:#ebdbb2,bg:#282828,hl:#fabd2f,fg+:#ebdbb2,bg+:#3c3836,hl+:#fabd2f
+--color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54'
+export FZF_PREVIEW_COMMAND='bat --style=numbers,changes --wrap never --color always {} || cat {} ||
+    exa --tree --icons --git-ignore {} || tree -C {}'
 
 # path
 export PATH="$PATH:$HOME/.local/bin"
