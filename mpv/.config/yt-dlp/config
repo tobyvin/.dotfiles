@@ -1,3 +1,6 @@
---sub-langs=all
---cookies-from-browser=chromium
---embed-subs
+--downloader=aria2c
+--downloader-args="aria2c:-x 16 -k 1M"
+--cookies-from-browser=firefox
+--yes-playlist
+--write-auto-subs
+--sub-langs="en.*,all"
