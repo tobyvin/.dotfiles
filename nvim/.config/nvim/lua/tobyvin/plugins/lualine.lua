@@ -202,7 +202,32 @@ M.setup = function()
 			},
 			lualine_y = { { "tabs", mode = 1 } },
 		},
-		extensions = { "quickfix", "man", "fzf", "nvim-dap-ui", "symbols-outline", "toggleterm" },
+		extensions = {
+			"quickfix",
+			"man",
+			"fzf",
+			"nvim-dap-ui",
+			"symbols-outline",
+			"toggleterm",
+			{
+				sections = {
+					lualine_b = {
+						{
+							auto_session_library.current_session_name,
+							cond = function()
+								return auto_session_ok
+							end,
+						},
+					},
+					lualine_c = {
+						get_short_cwd,
+					},
+				},
+				filetypes = {
+					"netrw",
+				},
+			},
+		},
 	})
 end
 
