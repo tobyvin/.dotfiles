@@ -9,6 +9,7 @@ if test -e /usr/lib/systemd/user-environment-generators/30-systemd-environment-d
 EOF
 	set +a
 fi
+
 # xdg
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -41,7 +42,7 @@ export FZF_DEFAULT_OPTS='--exit-0 --select-1
 --bind ctrl-f:preview-page-down
 --bind alt-up:half-page-up
 --bind alt-down:half-page-down
---color fg:#ebdbb2,bg:#282828,hl:#fabd2f,fg+:#ebdbb2,bg+:#3c3836,hl+:#fabd2f
+--color fg:#ebdbb2,hl:#fabd2f,fg+:#ebdbb2,hl+:#fabd2f
 --color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54'
 export FZF_PREVIEW_COMMAND='bat --style=numbers,changes --wrap never --color always {} || cat {} ||
     exa --tree --icons --git-ignore {} || tree -C {}'
