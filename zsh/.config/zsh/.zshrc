@@ -59,15 +59,15 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4738"
 
-command -v fd >/dev/null 2&>1 && _fzf_compgen_path() {
+command -v fd >/dev/null 2>&1 && _fzf_compgen_path() {
   fd --hidden --follow --exclude ".git" . "$1"
 }
 
-command -v fd >/dev/null 2&>1 && _fzf_compgen_dir() {
+command -v fd >/dev/null 2>&1 && _fzf_compgen_dir() {
   fd --type d --hidden --follow --exclude ".git" . "$1"
 }
 
-command -v rga >/dev/null 2&>1 && rgi() {
+command -v rga >/dev/null 2>&1 && rgi() {
 	RG_PREFIX="rga --files-with-matches"
 	local file
 	file="$(
@@ -81,5 +81,5 @@ command -v rga >/dev/null 2&>1 && rgi() {
 	xdg-open "$file"
 }
 
-command -v starship >/dev/null 2&>1 && source <(starship init zsh)
-command -v sheldon >/dev/null 2&>1 && source <(sheldon source)
+command -v starship >/dev/null 2>&1 && source <(starship init zsh)
+command -v sheldon >/dev/null 2>&1 && source <(sheldon source)

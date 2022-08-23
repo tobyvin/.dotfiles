@@ -12,8 +12,6 @@ mkdir -p /tmp/xdg
 export DISPLAY="$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')":0
 export BROWSER=wslview
 export XDG_RUNTIME_DIR=/tmp/xdg
-# export GPG_AGENT_SOCK="$HOME/.gnupg/S.gpg-agent"
-# export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
 export GPG_TTY="$(tty)"
 
 alias wsl=wsl.exe

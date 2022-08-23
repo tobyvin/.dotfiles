@@ -1,11 +1,12 @@
-#!/usr/bin/env bash
+#!/bin/sh
+# shellcheck disable=2016
 
 if [ "$#" -eq 1 ]; then
 	selected="$1"
 else
 	selected=$(
 		find ~/src ~/.dotfiles -maxdepth 2 -type d,f -path '*/.git' -printf '%h\n' -prune |
-            xargs -I{} sh -c 'stat -c %Y:"{}" $XDG_DATA_HOME/nvim/sessions/$(echo "{}" | sed "s|/|%|g").vim ||
+			xargs -I{} sh -c 'stat -c %Y:"{}" $XDG_DATA_HOME/nvim/sessions/$(echo "{}" | sed "s|/|%|g").vim ||
             (git -C "{}" rev-parse HEAD &>/dev/null &&
                 git -C "{}" --no-pager log -1 --all --format="%at:{}" 2>/dev/null ||
                 stat -c %Y:"{}" "{}"/.git)' | sort -r | cut -d':' -f2- |
@@ -20,7 +21,7 @@ fi
 selected_name=$(basename "$selected" | tr . _)
 tmux_running=$(pgrep tmux)
 
-if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
+if [ -z "$TMUX" ] && [ -z "$tmux_running" ]; then
 	tmux new-session -s "$selected_name" -c "$selected"
 	exit 0
 fi
