@@ -26,7 +26,6 @@ alias grep='grep --color'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
 alias td=". td.sh"
-alias vim=nvim
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 alias dexec="docker exec -it"
