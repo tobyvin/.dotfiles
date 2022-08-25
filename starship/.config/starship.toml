@@ -8,6 +8,9 @@ add_newline = false
 disabled = true
 symbol = ""
 
+[hostname]
+format = "[$hostname]($style) in "
+
 [character]
 success_symbol = "[❯](green)"
 error_symbol = "[❯](red)"
