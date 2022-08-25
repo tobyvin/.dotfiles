@@ -3,4 +3,4 @@
 --cookies-from-browser=firefox
 --yes-playlist
 --write-auto-subs
---sub-langs="en.*,all"
+--sub-langs="en.*,live_chat"
