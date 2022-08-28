@@ -1,10 +1,10 @@
 local M = {}
 
 M.setup = function()
-	local augroup_user = vim.api.nvim_create_augroup("Default", { clear = true })
+	local group = vim.api.nvim_create_augroup("tobyvin", { clear = true })
 
 	vim.api.nvim_create_autocmd("User", {
-		group = augroup_user,
+		group = group,
 		pattern = "bdelete",
 		callback = function(opts)
 			local windows = vim.tbl_filter(function(win)
@@ -35,10 +35,8 @@ M.setup = function()
 		desc = "Sets the window to the alternate buffer for bdelete",
 	})
 
-	local augroup_default = vim.api.nvim_create_augroup("Default", { clear = true })
-
 	vim.api.nvim_create_autocmd("TextYankPost", {
-		group = augroup_default,
+		group = group,
 		pattern = "*",
 		callback = function()
 			vim.highlight.on_yank()
@@ -47,7 +45,7 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("BufWritePre", {
-		group = augroup_default,
+		group = group,
 		pattern = "*",
 		callback = function()
 			local cursor = vim.api.nvim_win_get_cursor(0)
@@ -58,7 +56,7 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_default,
+		group = group,
 		pattern = "help",
 		callback = function()
 			vim.opt_local.wrap = true
@@ -71,7 +69,7 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_default,
+		group = group,
 		pattern = "qf",
 		callback = function()
 			vim.opt_local.buflisted = false
@@ -80,7 +78,7 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_default,
+		group = group,
 		pattern = { "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart" },
 		callback = function()
 			vim.opt_local.shiftwidth = 2

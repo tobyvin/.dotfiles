@@ -10,8 +10,8 @@ M.setup = function()
 
 	fidget.setup({
 		text = {
-			spinner = utils.progress_signs.spinner.text,
-			done = vim.trim(utils.progress_signs.complete.text),
+			spinner = utils.status_signs.spinner.text,
+			done = vim.trim(utils.status_signs.completed.text),
 		},
 		window = { blend = 0 },
 	})

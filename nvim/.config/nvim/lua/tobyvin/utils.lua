@@ -1,8 +1,11 @@
 ---@diagnostic disable: missing-parameter
 local M = {}
 
-M.progress_signs = {
-	complete = { text = " ", texthl = "diffAdded" },
+M.status_signs = {
+	started = { text = "ﳁ ", texthl = "diffChanged" },
+	running = { text = "ﳁ ", texthl = "DiagnosticSignInfo" },
+	failed = { text = " ", texthl = "DiagnosticSignError" },
+	completed = { text = " ", texthl = "diffAdded" },
 	spinner = { text = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }, texthl = "DiagnosticSignInfo" },
 }
 
@@ -15,10 +18,10 @@ M.debug_signs = {
 }
 
 M.diagnostic_signs = {
-	HINT = { text = " ", texthl = "DiagnosticSignHint" },
-	INFO = { text = " ", texthl = "DiagnosticSignInfo" },
-	WARN = { text = " ", texthl = "DiagnosticSignWarn" },
-	ERROR = { text = " ", texthl = "DiagnosticSignError" },
+	hint = { text = " ", texthl = "DiagnosticSignHint" },
+	info = { text = " ", texthl = "DiagnosticSignInfo" },
+	warn = { text = " ", texthl = "DiagnosticSignWarn" },
+	error = { text = " ", texthl = "DiagnosticSignError" },
 }
 
 setmetatable(M.diagnostic_signs, {
@@ -26,7 +29,7 @@ setmetatable(M.diagnostic_signs, {
 		if type(k) == "number" then
 			return t[vim.diagnostic.severity[k]]
 		end
-		return t[k:upper():gsub("WARNING", "WARN")]
+		return t[k:lower():gsub("warning", "warn")]
 	end,
 })
 
@@ -35,6 +38,16 @@ M.diagnostic_count = function(bufnr)
 	for i, level in ipairs(vim.diagnostic.severity) do
 		items[level] = #vim.diagnostic.get(bufnr, { severity = i })
 	end
+
+	setmetatable(items, {
+		__index = function(t, k)
+			if type(k) == "number" then
+				return t[vim.diagnostic.severity[k]]
+			end
+			return t[k:upper():gsub("WARNING", "WARN")]
+		end,
+	})
+
 	return items
 end
 
@@ -53,12 +66,12 @@ M.update_spinner = function(client_id, token)
 	local notif_data = M.get_notif_data(client_id, token)
 
 	if notif_data.spinner then
-		local new_spinner = (notif_data.spinner + 1) % #M.progress_signs.spinner.text
+		local new_spinner = (notif_data.spinner + 1) % #M.status_signs.spinner.text
 		notif_data.spinner = new_spinner
 
 		notif_data.notification = vim.notify(nil, nil, {
 			hide_from_history = true,
-			icon = M.progress_signs.spinner.text[new_spinner],
+			icon = M.status_signs.spinner.text[new_spinner],
 			replace = notif_data.notification,
 		})
 
@@ -127,8 +140,6 @@ M.win_buf_kill = function(cmd, force)
 	if (string.sub(cmd, 1, 1) == "b" and vim.api.nvim_buf_is_valid(bufnr)) or vim.api.nvim_win_is_valid(winid) then
 		vim.cmd(cmd .. (force and "!" or ""))
 	end
-
-	vim.api.nvim_exec_autocmds("User", { pattern = cmd })
 end
 
 ---@param force boolean
@@ -210,8 +221,6 @@ end
 -- TODO: Possibly add memoization to groups/subgroups using the __call metatable attribute
 M.create_map_group = function(mode, group_lhs, group_opts)
 	group_opts = group_opts or {}
-
-	local name = group_opts.name
 
 	local desc = group_opts.desc
 	group_opts.desc = nil
@@ -304,6 +313,100 @@ end
 
 M.isdir = function(path)
 	return M.file_exists(path .. "/")
+end
+
+---@param cmd? string Default command to run.
+---@param args string[]? Default arguments.
+---@param quiet boolean? Silence stdout of the job.
+M.run_cmd_with_args = function(cmd, args, quiet)
+	quiet = quiet or false
+	cmd = cmd or ""
+	args = args or {}
+	vim.ui.input({
+		prompt = "Run command:",
+		default = cmd .. " " .. table.concat(args, " "),
+		completion = "shellcmd",
+		kind = "cmd",
+	}, function(input)
+		if input ~= nil then
+			args = {}
+			for i, arg in ipairs(vim.split(input, " ", { trimempty = true })) do
+				if i == 1 then
+					cmd = arg
+				else
+					table.insert(args, vim.fn.expand(arg))
+				end
+			end
+			M.job_with_notify(cmd, args, quiet):start()
+		end
+	end)
+end
+
+M.job_with_notify = function(cmd, args, quiet)
+	local Job = require("plenary.job")
+	local notification
+	local win, height
+	local output = ""
+	local length = 0
+	local width = 0
+
+	local on_data = function(status, data)
+		if data ~= nil then
+			output = output .. data .. "\n"
+			width = math.max(width, string.len(data) + 2)
+		end
+
+		notification = vim.notify(vim.trim(output), vim.log.levels.INFO, {
+			title = string.format("[%s] %s", cmd, status),
+			icon = M.status_signs[status].text,
+			replace = notification,
+			on_open = function(win_)
+				win, height = win_, vim.api.nvim_win_get_height(win_)
+			end,
+			timeout = 10000,
+		})
+
+		vim.api.nvim_win_set_width(win, width)
+		if height then
+			vim.api.nvim_win_set_height(win, height + length)
+		end
+
+		length = length + 1
+	end
+
+	local on_start = function()
+		if not quiet then
+			on_data("started", string.format("$ %s %s", cmd, table.concat(args, " ")))
+		end
+	end
+
+	local on_stdout = function(_, data)
+		if not quiet then
+			on_data("running", data)
+		end
+	end
+
+	local on_stderr = function(_, data)
+		on_data("running", data)
+	end
+
+	local on_exit = function(_, code)
+		if code ~= 0 then
+			on_data("failed")
+		elseif not quiet then
+			on_data("completed")
+		end
+	end
+
+	return Job:new({
+		command = cmd,
+		args = args,
+		enabled_recording = true,
+		on_start = vim.schedule_wrap(on_start),
+		on_stdout = vim.schedule_wrap(on_stdout),
+		on_stderr = vim.schedule_wrap(on_stderr),
+		on_exit = vim.schedule_wrap(on_exit),
+	})
 end
 
 return M

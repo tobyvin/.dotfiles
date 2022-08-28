@@ -13,6 +13,10 @@ M.setup = function()
 	nmap("h", utils.hover, { desc = "Hover" })
 	nmap("H", utils.docs, { desc = "Docs" })
 	nmap("w", M.write, { desc = "Write" })
+
+	local nmap_run = utils.create_map_group("n", "<leader>r", { desc = "Run" })
+
+	nmap_run("c", utils.run_cmd_with_args, { desc = "Command" })
 end
 
 return M

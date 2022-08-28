@@ -1,6 +1,10 @@
 local utils = require("tobyvin.utils")
 local M = {}
 
+local function get_short_cwd()
+	return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+end
+
 M.to_char = function(str)
 	return str:sub(1, 1)
 end
@@ -152,31 +156,52 @@ M.setup = function()
 			lualine_a = { { "mode", fmt = M.to_char } },
 			lualine_b = {
 				"branch",
-				{ "diff", source = M.diff_source },
+				{
+					"diff",
+					source = M.diff_source,
+					padding = { left = 0, right = 1 },
+				},
+				{
+					auto_session_library.current_session_name,
+					cond = function()
+						return auto_session_ok
+					end,
+				},
 				{
 					"diagnostics",
-					sources = { "nvim_workspace_diagnostic", "nvim_lsp" },
+					sources = { utils.diagnostic_count },
 					symbols = {
 						error = utils.diagnostic_signs.error.text,
 						warn = utils.diagnostic_signs.warn.text,
 						info = utils.diagnostic_signs.info.text,
 						hint = utils.diagnostic_signs.hint.text,
 					},
+					update_in_insert = false,
+					padding = { left = 0, right = 1 },
 				},
 			},
 			lualine_c = {
 				{
-					auto_session_library.current_session_name,
-					cond = function()
-						return auto_session_ok
-					end,
-					separator = ">",
-				},
-				{
 					"filename",
 					path = 1,
-					separator = ">",
 					shorting_target = 100,
+				},
+				{
+					"diagnostics",
+					sources = {
+						function()
+							return utils.diagnostic_count(0)
+						end,
+					},
+					symbols = {
+						error = utils.diagnostic_signs.error.text,
+						warn = utils.diagnostic_signs.warn.text,
+						info = utils.diagnostic_signs.info.text,
+						hint = utils.diagnostic_signs.hint.text,
+					},
+					update_in_insert = false,
+					padding = { left = 0, right = 1 },
+					separator = ">",
 				},
 				{
 					navic.get_location,

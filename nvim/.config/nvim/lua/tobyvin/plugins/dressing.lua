@@ -20,11 +20,9 @@ M.config_overrides = {
 		},
 	},
 	input = {
-		["cargo add"] = {
+		cmd = {
 			relative = "win",
-		},
-		["cargo rm"] = {
-			relative = "win",
+			insert_only = false,
 		},
 	},
 }
