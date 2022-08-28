@@ -2,5 +2,6 @@
 --downloader-args="aria2c:-x 16 -k 1M"
 --cookies-from-browser=firefox
 --yes-playlist
+--write-subs
 --write-auto-subs
---sub-langs="en.*,live_chat"
+--sub-langs="en,en.*,live_chat"
