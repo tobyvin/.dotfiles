@@ -22,9 +22,15 @@ alias pip3.7="DISPLAY= pip3.7"
 alias pip3.10="DISPLAY= pip3.10"
 alias pip="DISPLAY= pip3"
 
-wt() {
-	powershell.exe -NoProfile -c "wt $*"
+wsl_path() {
+    win_path="$(powershell.exe "(get-command $1 -ErrorAction SilentlyContinue).Source")"
+    if [ ! -z "$win_path" ]; then
+        echo "$(wslpath "$win_path" | sed 's/\s/\\\ /g' | sed 's/\\\s*$//')"
+    fi
 }
+
+alias alacritty="$(wsl_path "alacritty")"
+alias pwsh="$(wsl_path "pwsh")"
 
 wsl_cmd_proxy() {
 	exe="$1"
@@ -55,6 +61,3 @@ wsl_cmd_proxy() {
 
 winget() { wsl_cmd_proxy "winget.exe" "$@"; }
 scoop() { wsl_cmd_proxy "scoop" "$@"; }
-alacritty() { wsl_cmd_proxy "alacritty.exe" "$@"; }
-pwsh() { alacritty --working-directory "c:\\Users\\${USER}" -e "pwsh.exe $@"; }
-
