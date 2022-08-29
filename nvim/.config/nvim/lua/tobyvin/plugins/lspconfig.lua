@@ -61,29 +61,6 @@ M.setup = function()
 		end,
 	}))
 
-	lspconfig.ltex.setup(lsp.config({
-		settings = {
-			ltex = {
-				hiddenFalsePositives = {
-					["en-US"] = {},
-				},
-				disabledRules = {
-					["en-US"] = { "PROFANITY" },
-				},
-				dictionary = {
-					["en-US"] = {},
-				},
-			},
-		},
-		on_attach = function(client, bufnr)
-			require("ltex_extra").setup({
-				load_langs = { "en-US" },
-				path = vim.fs.dirname(vim.o.spellfile),
-			})
-			lsp.on_attach(client, bufnr)
-		end,
-	}))
-
 	lspconfig.texlab.setup(lsp.config({
 		init_options = { documentFormatting = true },
 		settings = {
