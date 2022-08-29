@@ -28,6 +28,7 @@ mkln.sh "$@" "$HOME"/.config/wezterm/wezterm.lua "${WINHOME}"/.config/wezterm/we
 mkln.sh "$@" "$HOME"/.config/alacritty/alacritty.yml "${WINHOME}"/AppData/Roaming/alacritty/alacritty.yml
 mkln.sh "$@" "$HOME"/.config/yt-dlp/config "${WINHOME}"/AppData/Roaming/yt-dlp/config
 mkln.sh "$@" "$HOME"/.config/mpv/mpv.conf "${WINHOME}"/AppData/Roaming/mpv/mpv.conf
+mkln.sh "$@" "$HOME"/.config/mpv/input.conf "${WINHOME}"/AppData/Roaming/mpv/input.conf
 mkln.sh "$@" "$HOME"/.config/streamlink/config.twitch "${WINHOME}"/AppData/Roaming/streamlink/config.twitch
 
 for f in "$HOME"/.config/alacritty/*; do
@@ -36,12 +37,6 @@ for f in "$HOME"/.config/alacritty/*; do
 	*) mkln.sh "$@" "$f" "${WINHOME}"/.config/alacritty/"$(basename "$f")" ;;
 	esac
 done
-
-# install xclip/xsel
-curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}"/.local/bin/xclip
-curl -sL "https://raw.githubusercontent.com/Konfekt/win-bash-xclip-xsel/master/clip.sh" >"${HOME}"/.local/bin/xsel
-chmod +x "${HOME}"/.local/bin/xclip
-chmod +x "${HOME}"/.local/bin/xsel
 
 # https://github.com/wslutilities/wslu
 command -v wslview >/dev/null 2>&1 || cat <<-EOF
