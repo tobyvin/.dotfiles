@@ -247,16 +247,13 @@ M.plugins = function(use)
 		end,
 	})
 
-	-- TODO: revert once https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/233 is merged
-	use("~/src/nvim-treesitter-textobjects")
-
 	use({
 		"nvim-treesitter/nvim-treesitter",
 		run = ":TSUpdate",
 		requires = {
 			"nvim-treesitter/playground",
 			"nvim-treesitter/nvim-treesitter-refactor",
-			"~/src/nvim-treesitter-textobjects",
+			"nvim-treesitter/nvim-treesitter-textobjects",
 			"nvim-treesitter/nvim-treesitter-context",
 			"RRethy/nvim-treesitter-textsubjects",
 			"JoosepAlviste/nvim-ts-context-commentstring",
