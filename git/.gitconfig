@@ -28,8 +28,8 @@ ff = only
 [fetch]
 prune = true
 
-[advice]
-detachedHead = false
+[diff]
+colorMoved = default
 
 [merge]
 tool = nvimdiff
