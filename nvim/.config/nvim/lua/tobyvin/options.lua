@@ -3,7 +3,8 @@ local M = {}
 M.setup = function()
 	vim.g.mapleader = " "
 	vim.g.netrw_preview = 1
-	vim.g.netrw_liststyle = 3
+  -- TODO: figure out how to only use this for specific windows
+	-- vim.g.netrw_liststyle = 3
 	vim.g.netrw_banner = 0
 	vim.g.netrw_altv = "nospr"
 	vim.g.netrw_winsize = -30
