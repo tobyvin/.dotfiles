@@ -381,9 +381,8 @@ M.plugins = function(use)
 
 	use({
 		"mbbill/undotree",
-		cmd = "UndotreeToggle",
 		config = function()
-			vim.g.undotree_SetFocusWhenToggle = 1
+			require("tobyvin.plugins.undotree").setup()
 		end,
 	})
 
