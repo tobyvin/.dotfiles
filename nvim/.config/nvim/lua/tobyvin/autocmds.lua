@@ -79,9 +79,8 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("FileType", {
 		group = group,
-		pattern = { "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart" },
+		pattern = { "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
 		callback = function()
-			vim.opt_local.shiftwidth = 2
 			vim.opt_local.tabstop = 2
 		end,
 		desc = "Set file specific tabstop",

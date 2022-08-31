@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	vim.g.mapleader = " "
 	vim.g.netrw_preview = 1
-  -- TODO: figure out how to only use this for specific windows
+	-- TODO: figure out how to only use this for specific windows
 	-- vim.g.netrw_liststyle = 3
 	vim.g.netrw_banner = 0
 	vim.g.netrw_altv = "nospr"
@@ -32,12 +32,12 @@ M.setup = function()
 	vim.opt.mouse = "a"
 	vim.opt.updatetime = 500
 	vim.opt.timeoutlen = 1000
-	vim.opt.expandtab = true
-	vim.opt.softtabstop = 4
 	vim.opt.textwidth = 120
-	vim.opt.shiftwidth = 4
 	vim.opt.tabstop = 4
+	vim.opt.softtabstop = 0
+	vim.opt.shiftwidth = 0
 	vim.opt.smarttab = true
+	vim.opt.expandtab = true
 	vim.opt.autoindent = true
 	vim.opt.breakindent = true
 	vim.opt.showbreak = string.rep(" ", 3) -- Make it so that long lines wrap smartly
