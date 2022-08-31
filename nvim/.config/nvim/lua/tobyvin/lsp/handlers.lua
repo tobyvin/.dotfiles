@@ -1,6 +1,6 @@
 local M = {}
 
-local handler_prehook = function(method, pre_hook, post_hook)
+local handler_hook = function(method, pre_hook, post_hook)
 	local original = vim.lsp.handlers[method]
 	vim.lsp.handlers[method] = function(...)
 		if pre_hook ~= nil then
@@ -14,13 +14,13 @@ local handler_prehook = function(method, pre_hook, post_hook)
 end
 
 M.setup = function()
-	handler_prehook("textDocument/definition", function(_, result)
+	handler_hook("textDocument/definition", function(_, result)
 		if not result or vim.tbl_isempty(result) then
 			vim.notify("[LSP] No definition found", "info")
 		end
 	end)
 
-	handler_prehook("textDocument/implementation", function(_, result)
+	handler_hook("textDocument/implementation", function(_, result)
 		if not result or vim.tbl_isempty(result) then
 			vim.notify("[LSP] No implementations found", "info")
 		end
