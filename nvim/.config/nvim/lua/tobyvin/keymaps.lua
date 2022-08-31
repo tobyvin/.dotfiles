@@ -6,13 +6,17 @@ M.write = function()
 end
 
 M.setup = function()
-	local nmap = utils.create_map_group("n", "<leader>")
-	nmap("q", utils.quit, { desc = "Quit" })
-	nmap("c", utils.bdelete, { desc = "Close" })
-	nmap("x", utils.tabclose, { desc = "Close" })
-	nmap("h", utils.hover, { desc = "Hover" })
-	nmap("H", utils.docs, { desc = "Docs" })
-	nmap("w", M.write, { desc = "Write" })
+	vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Up half page and center" })
+	vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Down half page and center" })
+	vim.keymap.set("n", "<leader>q", utils.quit, { desc = "Quit" })
+	vim.keymap.set("n", "<leader>c", utils.bdelete, { desc = "Close" })
+	vim.keymap.set("n", "<leader>x", utils.tabclose, { desc = "Close" })
+	vim.keymap.set("n", "<leader>h", utils.hover, { desc = "Hover" })
+	vim.keymap.set("n", "<leader>H", utils.docs, { desc = "Docs" })
+	vim.keymap.set("n", "<leader>w", M.write, { desc = "Write" })
+
+  vim.keymap.set("v", "<a-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
+  vim.keymap.set("v", "<a-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 
 	local nmap_run = utils.create_map_group("n", "<leader>r", { desc = "Run" })
 
