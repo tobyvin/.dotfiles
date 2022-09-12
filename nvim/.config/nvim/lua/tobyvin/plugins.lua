@@ -380,7 +380,10 @@ M.plugins = function(use)
 	end
 
 	use({
-		"mbbill/undotree",
+		"jiaoshijie/undotree",
+		requires = {
+			"nvim-lua/plenary.nvim",
+		},
 		config = function()
 			require("tobyvin.plugins.undotree").setup()
 		end,
