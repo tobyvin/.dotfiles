@@ -49,6 +49,8 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export PATH="$PATH:$CARGO_HOME/bin"
 
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+
 export GOPATH="$XDG_DATA_HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
