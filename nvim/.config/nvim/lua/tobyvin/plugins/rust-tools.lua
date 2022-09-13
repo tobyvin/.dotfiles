@@ -5,19 +5,6 @@ local M = {
 	liblldb = "/usr/lib/codelldb/lldb/lib/liblldb.so",
 }
 
-M.dap_adapter = function()
-	if vim.fn.executable(M.codelldb) ~= 0 then
-		return {
-			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),
-		}
-	end
-	vim.notify("Failed to find codelldb adapter")
-end
-
-M.cargo_cmd = function()
-	utils.run_cmd_with_args("cargo")
-end
-
 M.setup = function()
 	local status_ok, rust_tools = pcall(require, "rust-tools")
 	if not status_ok then
@@ -39,28 +26,24 @@ M.setup = function()
 				},
 			},
 			on_attach = function(client, bufnr)
-				if vim.fn.executable(M.codelldb) == 0 then
-					vim.notify(
-						"[DAP] Failed to find codelldb, falling back to default DAP adapter.",
-						"warn",
-						{ title = "[rust-tools] codelldb not found" }
-					)
-				end
-				vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
-				vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-				vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
 				lsp.on_attach(client, bufnr)
 
-				local nmap = utils.create_map_group("n", "<leader>", { buffer = bufnr })
-				nmap("dd", rust_tools.debuggables.debuggables, { desc = "Debug" })
+				local runnables = rust_tools.runnables.runnables
+				local debuggables = rust_tools.debuggables.debuggables
+				local open_cargo_toml = rust_tools.open_cargo_toml.open_cargo_toml
+				local run_cargo_cmd = function()
+					utils.run_cmd_with_args("cargo")
+				end
 
-				local nmap_run = utils.create_map_group("n", "<leader>r", { desc = "Run", buffer = bufnr })
-				nmap_run("r", rust_tools.runnables.runnables, { desc = "Runnables" })
-				nmap_run("c", M.cargo_cmd, { desc = "Command" })
-				nmap_run("o", rust_tools.open_cargo_toml.open_cargo_toml, { desc = "Open Cargo.toml" })
+				vim.keymap.set("n", "<leader>rr", runnables, { desc = "Runnables", buffer = bufnr })
+				vim.keymap.set("n", "<leader>rd", debuggables, { desc = "Debug", buffer = bufnr })
+				vim.keymap.set("n", "<leader>ro", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })
+				vim.keymap.set("n", "<leader>rc", run_cargo_cmd, { desc = "Command", buffer = bufnr })
 			end,
 		}),
-		dap = M.dap_adapter(),
+		dap = {
+			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),
+		},
 	})
 end
 

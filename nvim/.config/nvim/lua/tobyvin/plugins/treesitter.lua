@@ -45,7 +45,7 @@ M.setup = function()
 			navigation = {
 				enable = true,
 				keymaps = {
-					goto_definition_lsp_fallback = "<leader>lgd",
+					goto_definition_lsp_fallback = "gd",
 				},
 			},
 		},

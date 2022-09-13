@@ -55,10 +55,6 @@ M.setup = function()
 				staticcheck = true,
 			},
 		},
-		on_attach = function(client, bufnr)
-			vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-			lsp.on_attach(client, bufnr)
-		end,
 	}))
 
 	lspconfig.texlab.setup(lsp.config({

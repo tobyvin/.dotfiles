@@ -16,13 +16,18 @@ M.on_attach = function(_, bufnr)
 			vim.diagnostic.open_float(nil, opts)
 		end,
 	})
+
+	vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "<leader>E", vim.diagnostic.setloclist, { desc = "List Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic", buffer = bufnr })
 end
 
 M.setup = function()
 	vim.diagnostic.config({
 		virtual_text = {
-      source = "if_many"
-    },
+			source = "if_many",
+		},
 		signs = true,
 		underline = true,
 		update_in_insert = true,
