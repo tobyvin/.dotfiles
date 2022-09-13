@@ -1,5 +1,5 @@
 [include]
-path = ~/.config/git/local.inc
+path = ~/.config/git/config.d/local.inc
 
 [user]
 email = tobyv13@gmail.com
