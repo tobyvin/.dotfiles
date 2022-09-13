@@ -79,7 +79,7 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("FileType", {
 		group = group,
-		pattern = { "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
+		pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
 		callback = function()
 			vim.opt_local.tabstop = 2
 		end,
