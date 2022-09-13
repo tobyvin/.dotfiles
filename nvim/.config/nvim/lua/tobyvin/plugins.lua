@@ -117,6 +117,13 @@ M.plugins = function(use)
 	})
 
 	use({
+		"mickael-menu/zk-nvim",
+		config = function()
+			require("tobyvin.plugins.zk").setup()
+		end,
+	})
+
+	use({
 		"brymer-meneses/grammar-guard.nvim",
 		requires = {
 			"neovim/nvim-lspconfig",

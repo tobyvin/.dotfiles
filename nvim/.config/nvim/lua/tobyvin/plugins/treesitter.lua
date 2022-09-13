@@ -14,7 +14,7 @@ M.setup = function()
 		},
 		highlight = {
 			enable = true,
-			additional_vim_regex_highlighting = { "latex" },
+			additional_vim_regex_highlighting = { "latex", "markdown" },
 			disable = function(_, bufnr)
 				return vim.api.nvim_buf_line_count(bufnr) > 2500
 			end,
