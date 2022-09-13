@@ -21,26 +21,12 @@ setopt share_history          # share command history data
 
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 
-alias ls="$(command -v lsd || echo ls --color=tty)"
+alias ls="ls --color=tty"
 alias grep='grep --color'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
-alias td=". td.sh"
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
-alias dexec="docker exec -it"
-alias dps="docker ps"
-alias dc="docker compose"
-alias dce="docker compose exec"
-alias dcps="docker compose ps"
-alias dcls="docker compose ls"
-alias dcdn="docker compose down"
-alias dcup="docker compose up"
-alias dcupd="docker compose up -d"
-alias dcl="docker compose logs"
-alias dclf="docker compose logs -f"
-alias dct="docker context"
-alias dcu="docker context use"
 
 bindkey -e
 bindkey '^ ' autosuggest-accept
@@ -58,27 +44,54 @@ export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
 # https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4738"
 
-command -v fd >/dev/null 2>&1 && _fzf_compgen_path() {
-  fd --hidden --follow --exclude ".git" . "$1"
-}
+if command -v fd >/dev/null 2>&1; then
+  _fzf_compgen_path() {
+    fd --hidden --follow --exclude ".git" . "$1"
+  }
+fi
 
-command -v fd >/dev/null 2>&1 && _fzf_compgen_dir() {
-  fd --type d --hidden --follow --exclude ".git" . "$1"
-}
+if command -v fd >/dev/null 2>&1; then
+  _fzf_compgen_dir() {
+    fd --type d --hidden --follow --exclude ".git" . "$1"
+  }
+fi
 
-command -v rga >/dev/null 2>&1 && rgi() {
-	RG_PREFIX="rga --files-with-matches"
-	local file
-	file="$(
-		FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
-			fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
-				--phony -q "$1" \
-				--bind "change:reload:$RG_PREFIX {q}" \
-				--preview-window="70%:wrap"
-	)" &&
-	echo "opening $file" &&
-	xdg-open "$file"
-}
+if command -v docker >/dev/null 2>&1 ; then
+  alias dexec="docker exec -it"
+  alias dps="docker ps"
+  alias dc="docker compose"
+  alias dce="docker compose exec"
+  alias dcps="docker compose ps"
+  alias dcls="docker compose ls"
+  alias dcdn="docker compose down"
+  alias dcup="docker compose up"
+  alias dcupd="docker compose up -d"
+  alias dcl="docker compose logs"
+  alias dclf="docker compose logs -f"
+  alias dct="docker context"
+  alias dcu="docker context use"
+fi
+
+if command -v lsd >/dev/null 2>&1; then
+  alias ls='lsd'
+  alias lt='lsd --tree'
+fi
+
+if command -v rga >/dev/null 2>&1; then
+  rgi() {
+    RG_PREFIX="rga --files-with-matches"
+    local file
+    file="$(
+    FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
+      fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
+      --phony -q "$1" \
+      --bind "change:reload:$RG_PREFIX {q}" \
+      --preview-window="70%:wrap"
+    )" &&
+    echo "opening $file" &&
+    xdg-open "$file"
+  }
+fi
 
 command -v starship >/dev/null 2>&1 && source <(starship init zsh)
 command -v sheldon >/dev/null 2>&1 && source <(sheldon source)
