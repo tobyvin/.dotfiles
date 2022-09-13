@@ -1,0 +1,40 @@
+[note]
+filename = "{{id}}"
+id-charset = "hex"
+id-length = 8
+id-case = "lower"
+
+[extra]
+author = "Mickaël"
+
+[format.markdown]
+hashtags = true
+colon-tags = false
+multiword-tags = false
+
+[tool]
+fzf-preview = "$FZF_PREVIEW_COMMAND"
+
+[lsp.diagnostics]
+wiki-title = "hint"
+dead-link = "error"
+
+[lsp.completion]
+note-label = "{{title-or-path}}"
+note-filter-text = "{{title}} {{path}}"
+note-detail = "{{filename-stem}}"
+
+[alias]
+ls = "zk list $@"
+recent = "zk edit --sort created- --created-after 'last two weeks' --interactive"
+log = "zk list --format path --delimiter0 --quiet $@ | xargs -t -0 git log --patch --"
+lg = "zk list --format path --delimiter0 --quiet $@ | xargs -t -0 git lg --patch --"
+editlast = "zk edit --limit 1 --sort modified- $@"
+gen = "neuron gen -o public"
+serve = "neuron gen -wS"
+conf = '$EDITOR "$ZK_NOTEBOOK_DIR/.zk/config.toml"'
+# Print paths separated with colons for the notes found with the given
+# arguments. This can be useful to expand a complex search query into a flag
+# taking only paths. For example:
+#   zk list --link-to "`zk path -m potatoe`"
+#path = "zk list --quiet --format {{path}} --delimiter , $@"
