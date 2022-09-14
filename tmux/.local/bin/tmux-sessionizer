@@ -1,39 +1,33 @@
 #!/bin/sh
 # shellcheck disable=2016
 
-get_timestamp() {
-	path="$1"
-	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$path" | sed "s|/|%|g").vim"
-	if [ -f "$session_file" ]; then
-		stat -c %Y:"$path" "$session_file"
-	elif git -C "$path" rev-parse HEAD >/dev/null 2>&1; then
-		git -C "$path" --no-pager log -1 --all --format="%at:$1" 2>/dev/null
-	elif [ -e "$path/.git" ]; then
-		stat -c %Y:"$path" "$1"/.git
-	else
-		stat -c %Y:"$path" "$1"
-	fi
-}
-
 if [ "$#" -ne 0 ]; then
 	path="$1"
 else
 	PROJECT_DIR="$HOME/src"
-	DIRS="$(get_timestamp "$HOME/.dotfiles")"
-	# DIRS="$HOME/.dotfiles"
+	DIRS="$HOME/.dotfiles"
 
 	for entry in "$PROJECT_DIR"/*; do
 		if [ -d "$entry" ]; then
-			DIRS="$DIRS $(get_timestamp "$entry")"
-			# DIRS="$DIRS $entry"
+			DIRS="$DIRS $entry"
 		fi
 	done
 
-	# output="$(echo "$DIRS" | tr -s '[:space:]' '\n' | sort -r | cut -d':' -f2- |
-	# fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}")"
+	DIRS="$(printf %s\\n "$DIRS" | xargs -I{} -d ' ' sh -c 'path="{}"
+	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$path" | sed "s|/|%|g").vim"
+	if [ -f "$session_file" ]; then
+		stat -c %Y:"$path" "$session_file"
+	elif git -C "$path" rev-parse HEAD >/dev/null 2>&1; then
+		git -C "$path" --no-pager log -1 --all --format="%at:$path" 2>/dev/null
+	elif [ -e "$path/.git" ]; then
+		stat -c %Y:"$path" "$path"/.git
+	else
+		stat -c %Y:"$path" "$path"
+  fi' | sort -r | cut -d':' -f2)"
 
-	output="$(printf %s\\n "$DIRS" | tr -s '[:space:]' '\n' | sort -r | cut -d':' -f2- |
-		fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}" | tr -s '\n' ':')"
+	output="$(printf %s\\n "$DIRS" |
+		fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}" |
+		tr -s '\n' ':')"
 
 	query="$(printf %s\\n "$output" | cut -d':' -f1)"
 	selection="$(printf %s\\n "$output" | cut -d':' -f2)"
