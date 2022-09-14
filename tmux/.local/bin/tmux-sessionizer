@@ -2,52 +2,60 @@
 # shellcheck disable=2016
 
 get_timestamp() {
-	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$1" | sed "s|/|%|g").vim"
+	path="$1"
+	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$path" | sed "s|/|%|g").vim"
 	if [ -f "$session_file" ]; then
-		stat -c %Y:"$1" "$session_file"
-	elif git -C "$1" rev-parse HEAD >/dev/null 2>&1; then
-		git -C "$1" --no-pager log -1 --all --format="%at:$1" 2>/dev/null
-	elif [ -e "$1/.git" ]; then
-		stat -c %Y:"$1" "$1"/.git
+		stat -c %Y:"$path" "$session_file"
+	elif git -C "$path" rev-parse HEAD >/dev/null 2>&1; then
+		git -C "$path" --no-pager log -1 --all --format="%at:$1" 2>/dev/null
+	elif [ -e "$path/.git" ]; then
+		stat -c %Y:"$path" "$1"/.git
 	else
-		stat -c %Y:"$1" "$1"
+		stat -c %Y:"$path" "$1"
 	fi
 }
 
-if [ "$#" -eq 0 ]; then
+if [ "$#" -ne 0 ]; then
+	path="$1"
+else
 	PROJECT_DIR="$HOME/src"
 	DIRS="$(get_timestamp "$HOME/.dotfiles")"
+	# DIRS="$HOME/.dotfiles"
 
 	for entry in "$PROJECT_DIR"/*; do
 		if [ -d "$entry" ]; then
 			DIRS="$DIRS $(get_timestamp "$entry")"
+			# DIRS="$DIRS $entry"
 		fi
 	done
 
-	output="$(echo "$DIRS" | tr -s '[:space:]' '\n' | sort -r | cut -d':' -f2- |
-		fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}")"
+	# output="$(echo "$DIRS" | tr -s '[:space:]' '\n' | sort -r | cut -d':' -f2- |
+	# fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}")"
 
-	set -f
-	set -- "$output"
-	set -- "${1:-$2}"
-	set -f
+	output="$(printf %s\\n "$DIRS" | tr -s '[:space:]' '\n' | sort -r | cut -d':' -f2- |
+		fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}" | tr -s '\n' ':')"
+
+	query="$(printf %s\\n "$output" | cut -d':' -f1)"
+	selection="$(printf %s\\n "$output" | cut -d':' -f2)"
+
+	path="${selection:-$query}"
 fi
 
-if [ -z "$1" ]; then
+if [ -z "$path" ]; then
 	exit 0
+elif [ ! -d "$path" ]; then
+	mkdir -p "$1"
 fi
 
-mkdir -p "$1"
-
-name=$(basename "$1" | tr . _)
+name=$(basename "$path" | tr . _)
 
 if [ -z "$TMUX" ] && pgrep tmux; then
-	tmux new-session -s "$name" -c "$1"
+	tmux new-session -s "$name" -c "$path"
 	exit 0
 fi
 
 if ! tmux has-session -t="$name" 2>/dev/null; then
-	tmux new-session -ds "$name" -c "$1"
+	tmux new-session -ds "$name" -c "$path"
 fi
 
 tmux switch-client -t "$name"
