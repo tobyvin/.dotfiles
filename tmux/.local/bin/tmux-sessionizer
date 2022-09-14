@@ -1,33 +1,53 @@
 #!/bin/sh
 # shellcheck disable=2016
 
-if [ "$#" -eq 1 ]; then
-	selected="$1"
-else
-	selected=$(
-		find ~/src ~/.dotfiles -maxdepth 2 -type d,f -path '*/.git' -printf '%h\n' -prune |
-			xargs -I{} sh -c 'stat -c %Y:"{}" $XDG_DATA_HOME/nvim/sessions/$(echo "{}" | sed "s|/|%|g").vim ||
-            (git -C "{}" rev-parse HEAD &>/dev/null &&
-                git -C "{}" --no-pager log -1 --all --format="%at:{}" 2>/dev/null ||
-                stat -c %Y:"{}" "{}"/.git)' | sort -r | cut -d':' -f2- |
-			fzf-tmux -p -- -d/ --with-nth -2.. --preview="exa --tree --icons --git-ignore {}"
-	)
+get_timestamp() {
+	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$1" | sed "s|/|%|g").vim"
+	if [ -f "$session_file" ]; then
+		stat -c %Y:"$1" "$session_file"
+	elif git -C "$1" rev-parse HEAD >/dev/null 2>&1; then
+		git -C "$1" --no-pager log -1 --all --format="%at:$1" 2>/dev/null
+	elif [ -e "$1/.git" ]; then
+		stat -c %Y:"$1" "$1"/.git
+	else
+		stat -c %Y:"$1" "$1"
+	fi
+}
+
+if [ "$#" -eq 0 ]; then
+	PROJECT_DIR="$HOME/src"
+	DIRS="$(get_timestamp "$HOME/.dotfiles")"
+
+	for entry in "$PROJECT_DIR"/*; do
+		if [ -d "$entry" ]; then
+			DIRS="$DIRS $(get_timestamp "$entry")"
+		fi
+	done
+
+	output="$(echo "$DIRS" | tr -s '[:space:]' '\n' | sort -r | cut -d':' -f2- |
+		fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}")"
+
+	set -f
+	set -- "$output"
+	set -- "${1:-$2}"
+	set -f
 fi
 
-if [ -z "$selected" ]; then
+if [ -z "$1" ]; then
 	exit 0
 fi
 
-selected_name=$(basename "$selected" | tr . _)
-tmux_running=$(pgrep tmux)
+mkdir -p "$1"
 
-if [ -z "$TMUX" ] && [ -z "$tmux_running" ]; then
-	tmux new-session -s "$selected_name" -c "$selected"
+name=$(basename "$1" | tr . _)
+
+if [ -z "$TMUX" ] && pgrep tmux; then
+	tmux new-session -s "$name" -c "$1"
 	exit 0
 fi
 
-if ! tmux has-session -t="$selected_name" 2>/dev/null; then
-	tmux new-session -ds "$selected_name" -c "$selected"
+if ! tmux has-session -t="$name" 2>/dev/null; then
+	tmux new-session -ds "$name" -c "$1"
 fi
 
-tmux switch-client -t "$selected_name"
+tmux switch-client -t "$name"

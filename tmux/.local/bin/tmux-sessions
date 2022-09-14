@@ -5,6 +5,7 @@
 # shellcheck disable=2016
 session=$(tmux list-sessions -F '#{session_last_attached}:#{session_name}' 2>/dev/null |
 	sort -r | cut -d':' -f2 | sed "/$(tmux list-panes -F '#S')/d" |
-	fzf-tmux -p -- --preview-window=right,80% --preview='tmux capture-pane -ep -t {}' \
-		--bind 'ctrl-d:execute(tmux kill-session -t{})+reload(tmux list-sessions -F "#{session_name}" 2>/dev/null | sed "/$(tmux list-panes -F "#S")/d" )') &&
+	fzf-tmux -p -- --select-1 --exit-0 --preview-window=right,80% --preview='tmux capture-pane -ep -t {}' \
+		--bind 'ctrl-q:execute(tmux kill-session -t{})+reload(tmux list-sessions -F "#{session_name}" 2>/dev/null |
+        sed "/$(tmux list-panes -F "#S")/d" )') &&
 	tmux $change -t "$session" || exit 0

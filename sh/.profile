@@ -28,8 +28,7 @@ export WGETRC="$XDG_CONFIG_HOME/wgetrc"
 export ZK_NOTEBOOK_DIR="$HOME/zk"
 export STARSHIP_LOG="error"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
-export FZF_DEFAULT_OPTS='--exit-0 --select-1
---bind ctrl-q:abort
+export FZF_DEFAULT_OPTS='--bind ctrl-q:abort
 --bind ctrl-y:preview-up
 --bind ctrl-e:preview-down
 --bind ctrl-u:preview-half-page-up
