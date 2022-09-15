@@ -1,3 +1,5 @@
+ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
+
 .PHONY: stow
 stow:  # Install configs
 	stow */
@@ -8,7 +10,7 @@ unstow: # Uninstall configuration files
 
 .PHONY: clean
 clean: # Remove all broken symbolic links from $HOME (recursivly)
-	fd . $(HOME) --hidden --exclude $(XDG_CACHE_HOME) --type l --exec sh -c '[ -e "{}" ] || rm -v {}'
+	fd . $(HOME) --hidden --exclude $(shell realpath --relative-base="$(HOME)"  "$(ROOT_DIR)") --exclude $(shell realpath --relative-base="$(HOME)" "$(XDG_CACHE_HOME)") --type l --exec sh -c '[ -e "{}" ] || rm -v {}'
 
 .PHONY: gpg
 gpg: # Install GPG keys
