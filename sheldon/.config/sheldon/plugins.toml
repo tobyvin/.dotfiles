@@ -7,15 +7,15 @@ github = 'romkatv/zsh-defer'
 defer = { value = 'zsh-defer source "{{ file }}"', each = true }
 comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file }}" "$XDG_DATA_HOME/zsh/site-functions/_{{ name }}"', each = true }
 
+[plugins.zsh-vi-mode]
+github = "jeffreytse/zsh-vi-mode"
+
 [plugins.zsh-wsl]
-inline = 'test -f ~/.local/share/zsh-wsl/zsh-wsl.plugin.zsh && zsh-defer source ~/.local/share/zsh-wsl/zsh-wsl.plugin.zsh'
+local = '~/.local/share/zsh-wsl'
+profiles = ["WSL2"]
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
-apply = ["defer"]
-
-[plugins.zsh-shift-select]
-github = "jirutka/zsh-shift-select"
 apply = ["defer"]
 
 [plugins.zsh-fzf-history-search]
@@ -44,4 +44,3 @@ use = ["{{ name }}.zsh"]
 
 [plugins.compinit]
 inline = 'mkdir -p $XDG_CACHE_HOME/zsh && autoload -Uz compinit && zsh-defer compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION'
-

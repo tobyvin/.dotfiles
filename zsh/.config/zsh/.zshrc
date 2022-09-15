@@ -18,6 +18,7 @@ setopt hist_ignore_dups       # ignore duplicated commands history list
 setopt hist_ignore_space      # ignore commands that start with space
 setopt hist_verify            # show command with history expansion to user before running it
 setopt share_history          # share command history data
+setopt nonomatch
 
 zstyle ':completion:*' cache-path $XDG_CACHE_HOME/zsh/zcompcache
 
@@ -28,20 +29,9 @@ alias untar="tar -zxvf"
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 
-bindkey -e
-bindkey '^ ' autosuggest-accept
-bindkey '^[[Z' reverse-menu-complete
-bindkey '^[[1~' beginning-of-line
-bindkey '^[[4~' end-of-line
-bindkey '^[[3~' delete-char
-bindkey '^[[1;5C' forward-word
-bindkey '^[[1;5D' backward-word
-
-# typeset -A ZSH_HIGHLIGHT_STYLES
-# export ZSH_HIGHLIGHT_STYLES[path]='fg=cyan'
+export SHELDON_PROFILE="$(uname -r | sed 's/^.*-//g' 2>/dev/null)"
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
-# https://github.com/zsh-users/zsh-autosuggestions#suggestion-highlight-style
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4738"
 
 if command -v fd >/dev/null 2>&1; then
@@ -95,3 +85,13 @@ fi
 
 command -v starship >/dev/null 2>&1 && source <(starship init zsh)
 command -v sheldon >/dev/null 2>&1 && source <(sheldon source)
+
+zvm_after_init() {
+  bindkey '^ ' autosuggest-accept
+  bindkey '^[[Z' reverse-menu-complete
+  bindkey '^[[1~' beginning-of-line
+  bindkey '^[[4~' end-of-line
+  bindkey '^[[3~' delete-char
+  bindkey '^[[1;5C' forward-word
+  bindkey '^[[1;5D' backward-word
+}
