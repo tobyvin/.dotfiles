@@ -1,0 +1,18 @@
+#!/bin/sh
+
+setopt localoptions nonomatch
+tmp="$(mktemp)"
+
+tail -n +1 ~/.ssh/config ~/.ssh/config.d/* /etc/ssh/ssh_config 2>/dev/null | grep -i '^\s*host ' |
+	awk '{for (i = 2; i <= NF; i++) print "ssh_config " $i}' | grep -v '[*?%]' >"$tmp"
+
+grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print  "known_hosts " $1 }' >"$tmp"
+grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0' >"$tmp"
+cat "$tmp"
+exit 0
+while IFS= read -r host; do
+	hosts="$hosts $host"
+done <"$tmp"
+rm "$tmp"
+
+printf %s\\n "$hosts" | xargs -I{} -d ' ' printf %s\\n {}
