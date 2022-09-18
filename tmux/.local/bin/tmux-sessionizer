@@ -25,11 +25,14 @@ else
 		stat -c %Y:"$path" "$path"
   fi' | sort -r | cut -d':' -f2)"
 
-	output="$(printf %s\\n "$DIRS" |
-		fzf-tmux -p -- --print-query -d/ --with-nth -2.. --preview="$FZF_PREVIEW_COMMAND {}" |
+	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -2.. \
+		--preview="$FZF_PREVIEW_COMMAND ||
+    printf 'Create new project:\n %s' {q} |
+    sed 's|^ \([^/~][^/]*\)\$| $HOME/\1|' |
+    sed 's/^ //'" |
 		tr -s '\n' ':')"
 
-	query="$(printf %s\\n "$output" | cut -d':' -f1)"
+	query="$(printf %s\\n "$output" | cut -d':' -f1 | sed "s|^\(..*\)\$|$HOME/\1|")"
 	selection="$(printf %s\\n "$output" | cut -d':' -f2)"
 
 	path="${selection:-$query}"
@@ -38,7 +41,7 @@ fi
 if [ -z "$path" ]; then
 	exit 0
 elif [ ! -d "$path" ]; then
-	mkdir -p "$1"
+	mkdir -p "$path"
 fi
 
 name=$(basename "$path" | tr . _)
