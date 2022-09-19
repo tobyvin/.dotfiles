@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Name=wslview
+GenericName=Web Browser
+Comment=Open files using Windows start.exe from WSL2
+Keywords=Internet;WWW;Browser;Web;Explorer
+Exec=/usr/sbin/wslview %u
+Icon=firefox
+Terminal=false
+Type=Application
+MimeType=text/html;text/xml;image/bmp;image/gif;image/jpeg;image/jpg;image/pjpeg;image/png;image/tiff;image/webp;image/x-bmp;image/x-pcx;image/x-png;image/x-portable-anymap;image/x-portable-bitmap;image/x-portable-graymap;image/x-portable-pixmap;image/x-tga;image/x-xbitmap;image/heic;application/xhtml+xml;x-scheme-handler/http;x-scheme-handler/https;application/x-xpinstall;application/pdf;application/json;
+StartupNotify=true
+Categories=Network;WebBrowser;
+Actions=new-window;new-private-window;
