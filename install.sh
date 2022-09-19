@@ -41,7 +41,8 @@ say() {
 }
 
 say_verbose() {
-	if [ "$verbose" -gt 0 ]; then
+	# shellcheck disable=2086
+	if [ $verbose -gt 0 ]; then
 		say "$@"
 	fi
 }
@@ -106,11 +107,11 @@ while true; do
 	esac
 done
 
-verbose="$(head -c $verbose </dev/zero | tr '\0' 'v' | sed 's/^/-/')"
+verbose_args="$(head -c $verbose </dev/zero | tr '\0' 'v' | sed 's/^/-/')"
 
 if $clean; then
 	need fd
-	fd_verbose=$(printf %s\\n "$verbose" | sed 's/-vv\?//' | sed 's/^v/-v/')
+	fd_verbose=$(printf %s\\n "$verbose_args" | sed 's/-vv\?//' | sed 's/^v/-v/')
 
 	# shellcheck disable=2086
 	fd . "$HOME" --hidden --type l \
@@ -150,4 +151,4 @@ fi
 say_verbose "Installing: $*"
 
 # shellcheck disable=2068,2086
-stow $verbose $simulate $@
+stow $verbose_args $simulate $@
