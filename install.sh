@@ -4,8 +4,8 @@ SCRIPT="$(basename "$0")"
 SCRIPT_DIR="$(dirname -- "$(readlink -f -- "$0")")"
 INSTALL_DIR="$(dirname "$SCRIPT_DIR")"
 
-long='clean,no,simulate,verbose::,quiet,help'
-short='cnqvh'
+long='clean,clean-only,no,simulate,verbose,help'
+short='cCnvh'
 
 opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"
 
@@ -28,19 +28,16 @@ help() {
 		    $SCRIPT [OPTION ...] [PACKAGE ...]
 
 		OPTIONS:
-		    -c, --clean           Remove broken symlinks found in $INSTALL_DIR
+		    -c, --clean           Remove broken symlinks found in $INSTALL_DIR for proceeding
+		    -C, --clean-only      Like --clean, but will exit after cleaning
 		    -n, --no, --simulate  Do not actually make any filesystem changes
-		    -q, --quiet           Suppress all output
-		    -v, --verbose[=N]     Increase verbosity (levels are from 0 to 5;
-		                              -v or --verbose adds 1; --verbose=N sets level)
+		    -v, --verbose         Increase verbosity
 		    -h, --help            Show this help
 	EOF
 }
 
 say() {
-	if ! $quiet; then
-		printf "%s: %s\n" "$SCRIPT" "$@"
-	fi
+	printf "%s: %s\n" "$SCRIPT" "$@"
 }
 
 say_verbose() {
@@ -71,72 +68,59 @@ need() {
 	done
 }
 
-verbose=0
-quiet=false
-simulate=false
 clean=false
-stow_cmd="stow"
+clean_only=false
+verbose=0
+simulate=""
 while true; do
 	case "$1" in
 	-h | --help)
 		help
 		exit 0
 		;;
-	-v)
+	-v | --verbose)
 		verbose=$((verbose + 1))
-		stow_cmd="$stow_cmd $1"
-		shift
-		;;
-	--verbose)
-		if [ -n "$2" ]; then
-			say "$1 = $2"
-			verbose=$2
-			stow_cmd="$stow_cmd $1=$2"
-			shift 2
-		else
-			verbose=$((verbose + 1))
-			stow_cmd="$stow_cmd $1"
-			shift
-		fi
-		;;
-	-q | --quiet)
-		quiet=true
 		shift
 		;;
 	-c | --clean)
 		clean=true
 		shift
 		;;
+	-C | --clean-only)
+		clean=true
+		clean_only=true
+		shift
+		;;
+
 	-n | --no | --simulate)
-		simulate=true
-		stow_cmd="$stow_cmd $1"
+		simulate='-n'
 		shift
 		;;
 	--)
 		shift
-		stow_cmd="$stow_cmd --stow"
 		break
 		;;
 	*)
 		exit 1
-		break
 		;;
 	esac
 done
 
-if "$clean"; then
+verbose="$(head -c $verbose </dev/zero | tr '\0' 'v' | sed 's/^/-/')"
+
+if $clean; then
 	need fd
+	fd_verbose=$(printf %s\\n "$verbose" | sed 's/-vv\?//' | sed 's/^v/-v/')
 
-	if "$simulate"; then
-		clean_cmd="[ -e '{}' ] || echo 'rm -v {}'"
-	else
-		clean_cmd="[ -e '{}' ] || rm -v {}"
-	fi
-
+	# shellcheck disable=2086
 	fd . "$HOME" --hidden --type l \
 		--exclude "$(realpath --relative-base="$INSTALL_DIR" "$XDG_CACHE_HOME")" \
 		--exclude "$(realpath --relative-base="$INSTALL_DIR" "$SCRIPT_DIR")" \
-		--exec sh -c "$clean_cmd"
+		--exec sh $simulate $fd_verbose -c "[ -e '{}' ] || rm -v {}"
+
+	if $clean_only; then
+		exit 0
+	fi
 fi
 
 if [ $# -eq 0 ]; then
@@ -163,7 +147,7 @@ if [ $# -eq 0 ]; then
 	set -- "${pkgs## }"
 fi
 
-say "$stow_cmd $*"
+say_verbose "Installing: $*"
 
-# shellcheck disable=2068
-$stow_cmd $@
+# shellcheck disable=2068,2086
+stow $verbose $simulate $@
