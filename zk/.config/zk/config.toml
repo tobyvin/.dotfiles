@@ -5,7 +5,7 @@ id-length = 8
 id-case = "lower"
 
 [extra]
-author = "Mickaël"
+author = "Toby Vincent"
 
 [format.markdown]
 hashtags = true
