@@ -73,9 +73,42 @@ M.plugins = function(use)
 	})
 
 	use({
-		"neovim/nvim-lspconfig",
+		"mfussenegger/nvim-lint",
+		config = function()
+			require("tobyvin.plugins.lint").setup()
+		end,
+	})
+
+	use({
+		"mhartington/formatter.nvim",
+		config = function()
+			require("tobyvin.plugins.formatter").setup()
+		end,
+	})
+
+	use({
+		"williamboman/mason.nvim",
+		requires = {},
+		config = function()
+			require("tobyvin.plugins.mason").setup()
+		end,
+	})
+
+	use({
+		"williamboman/mason-lspconfig.nvim",
+		after = "mason.nvim",
 		requires = {
-			"williamboman/nvim-lsp-installer",
+			"williamboman/mason.nvim",
+		},
+		config = function()
+			require("tobyvin.plugins.mason-lspconfig").setup()
+		end,
+	})
+
+	use({
+		"neovim/nvim-lspconfig",
+		after = "mason-lspconfig.nvim",
+		requires = {
 			"ray-x/lsp_signature.nvim",
 			"SmiteshP/nvim-navic",
 			"barreiroleo/ltex-extra.nvim",
@@ -86,17 +119,8 @@ M.plugins = function(use)
 	})
 
 	use({
-		"jose-elias-alvarez/null-ls.nvim",
-		requires = {
-			"nvim-lua/plenary.nvim",
-		},
-		config = function()
-			require("tobyvin.plugins.null-ls").setup()
-		end,
-	})
-
-	use({
 		"folke/lua-dev.nvim",
+		after = "nvim-lspconfig",
 		requires = {
 			"neovim/nvim-lspconfig",
 		},
@@ -117,20 +141,20 @@ M.plugins = function(use)
 	})
 
 	use({
-		"mickael-menu/zk-nvim",
+		"brymer-meneses/grammar-guard.nvim",
+		after = "nvim-lspconfig",
+		requires = {
+			"neovim/nvim-lspconfig",
+		},
 		config = function()
-			require("tobyvin.plugins.zk").setup()
+			require("grammar-guard").init()
 		end,
 	})
 
 	use({
-		"brymer-meneses/grammar-guard.nvim",
-		requires = {
-			"neovim/nvim-lspconfig",
-			"williamboman/nvim-lsp-installer",
-		},
+		"mickael-menu/zk-nvim",
 		config = function()
-			require("grammar-guard").init()
+			require("tobyvin.plugins.zk").setup()
 		end,
 	})
 
@@ -183,7 +207,6 @@ M.plugins = function(use)
 		event = { "BufRead Cargo.toml" },
 		requires = {
 			"nvim-lua/plenary.nvim",
-			"jose-elias-alvarez/null-ls.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.crates").setup()

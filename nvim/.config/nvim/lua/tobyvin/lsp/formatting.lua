@@ -1,6 +1,10 @@
 local M = {}
 
 M.on_attach = function(client, bufnr)
+  if client.name == "sumneko_lua" then
+    return
+  end
+
 	if client.server_capabilities.documentFormattingProvider then
 		vim.api.nvim_buf_set_option(bufnr, "formatexpr", "v:lua.vim.lsp.formatexpr()")
 		vim.api.nvim_buf_create_user_command(bufnr, "Format", vim.lsp.buf.format, { nargs = "*" })
