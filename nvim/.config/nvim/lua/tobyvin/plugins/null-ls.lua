@@ -8,30 +8,26 @@ M.setup = function()
 		return
 	end
 
-	local code_actions = null_ls.builtins.code_actions
-	local formatting = null_ls.builtins.formatting
-
 	null_ls.setup({
 		sources = {
-			-- Code Actions
-			code_actions.gitrebase,
 			-- Disabled until sorting for code_actions gets pushed. See: https://github.com/stevearc/dressing.nvim/issues/22
-			-- code_actions.gitsigns,
-			code_actions.shellcheck,
+			-- null_ls.builtins.code_actions.gitsigns,
+			null_ls.builtins.code_actions.gitrebase,
+			null_ls.builtins.code_actions.shellcheck,
 
-			-- Formatting
-			formatting.prettier,
-			formatting.black,
-			formatting.latexindent,
-			formatting.stylua,
-			formatting.shfmt,
+			null_ls.builtins.diagnostics.pylint,
+			null_ls.builtins.diagnostics.vale,
+
+			null_ls.builtins.formatting.prettier,
+			null_ls.builtins.formatting.black,
+			null_ls.builtins.formatting.latexindent,
+			null_ls.builtins.formatting.stylua,
+			null_ls.builtins.formatting.shfmt,
 		},
 		on_attach = lsp.on_attach,
-		-- on_attach = function(client, bufnr)
-		-- 	client.server_capabilities.documentFormattingProvider = client.supports_method("textDocument/formatting")
-		-- 	lsp.on_attach(client, bufnr)
-		-- end,
 	})
+
+	vim.keymap.set("n", "<leader>n", "<CMD>NullLsInfo<CR>", { desc = "Null-LS Info" })
 end
 
 return M

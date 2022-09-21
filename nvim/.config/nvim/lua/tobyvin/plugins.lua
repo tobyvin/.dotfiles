@@ -73,24 +73,44 @@ M.plugins = function(use)
 	})
 
 	use({
-		"mfussenegger/nvim-lint",
-		config = function()
-			require("tobyvin.plugins.lint").setup()
-		end,
-	})
-
-	use({
-		"mhartington/formatter.nvim",
-		config = function()
-			require("tobyvin.plugins.formatter").setup()
-		end,
-	})
-
-	use({
 		"williamboman/mason.nvim",
 		requires = {},
 		config = function()
 			require("tobyvin.plugins.mason").setup()
+		end,
+	})
+
+	use({
+		"jose-elias-alvarez/null-ls.nvim",
+		requires = {
+			"nvim-lua/plenary.nvim",
+		},
+		config = function()
+			require("tobyvin.plugins.null-ls").setup()
+		end,
+	})
+
+	use({
+		"jayp0521/mason-null-ls.nvim",
+		after = { "mason.nvim", "null-ls.nvim" },
+		requires = {
+			"williamboman/mason.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+		config = function()
+			require("tobyvin.plugins.mason-null-ls").setup()
+		end,
+	})
+
+	use({
+		"saecki/crates.nvim",
+		event = { "BufRead Cargo.toml" },
+		requires = {
+			"nvim-lua/plenary.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+		config = function()
+			require("tobyvin.plugins.crates").setup()
 		end,
 	})
 
@@ -199,17 +219,6 @@ M.plugins = function(use)
 		},
 		config = function()
 			require("tobyvin.plugins.cmp-npm").setup()
-		end,
-	})
-
-	use({
-		"saecki/crates.nvim",
-		event = { "BufRead Cargo.toml" },
-		requires = {
-			"nvim-lua/plenary.nvim",
-		},
-		config = function()
-			require("tobyvin.plugins.crates").setup()
 		end,
 	})
 
