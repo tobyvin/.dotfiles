@@ -2,7 +2,7 @@
 # shellcheck disable=2016
 
 if [ "$#" -ne 0 ]; then
-	path="$1"
+	selection="$1"
 else
 	PROJECT_DIR="$HOME/src"
 	DIRS="$HOME/.dotfiles"
@@ -13,46 +13,62 @@ else
 		fi
 	done
 
-	DIRS="$(printf %s\\n "$DIRS" | xargs -I{} -d ' ' sh -c 'path="{}"
-	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$path" | sed "s|/|%|g").vim"
+	DIRS="$(printf %s\\n "$DIRS" | xargs -I{} -d ' ' sh -c 'uri="{}"
+	session_file="$XDG_DATA_HOME/nvim/sessions/$(echo "$uri" | sed "s|/|%|g").vim"
 	if [ -f "$session_file" ]; then
-		stat -c %Y:"$path" "$session_file"
-	elif git -C "$path" rev-parse HEAD >/dev/null 2>&1; then
-		git -C "$path" --no-pager log -1 --all --format="%at:$path" 2>/dev/null
-	elif [ -e "$path/.git" ]; then
-		stat -c %Y:"$path" "$path"/.git
+		stat -c %Y:"$uri" "$session_file"
+	elif git -C "$uri" rev-parse HEAD >/dev/null 2>&1; then
+		git -C "$uri" --no-pager log -1 --all --format="%at:$uri" 2>/dev/null
+	elif [ -e "$uri/.git" ]; then
+		stat -c %Y:"$uri" "$uri"/.git
 	else
-		stat -c %Y:"$path" "$path"
+		stat -c %Y:"$uri" "$uri"
   fi' | sort -r | cut -d':' -f2)"
 
+	# grep -P '((git|ssh|http(s)?)|(git@[\w\.]+))(:(//)?)([\w\.@\:/\-~]+)(\.git)(/)?'
 	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -2.. \
 		--preview="$FZF_PREVIEW_COMMAND ||
+    printf '%s' {q} | sed 's|/\$||' | xargs hut git show 2>/dev/null ||
+    gh repo view {q} 2>/dev/null ||
     printf 'Create new project:\n %s' {q} |
     sed 's|^ \([^/~][^/]*\)\$| $HOME/\1|' |
     sed 's/^ //'" |
-		tr -s '\n' ':')"
+		tr -s '\n' ' ')"
 
-	query="$(printf %s\\n "$output" | cut -d':' -f1 | sed "s|^\(..*\)\$|$HOME/\1|")"
-	selection="$(printf %s\\n "$output" | cut -d':' -f2)"
-
-	path="${selection:-$query}"
+	query="$(printf %s\\n "$output" | cut -d' ' -f1)"
+	selection="$(printf %s\\n "$output" | cut -d' ' -f2)"
 fi
 
-if [ -z "$path" ]; then
-	exit 0
-elif [ ! -d "$path" ]; then
-	mkdir -p "$path"
+if [ -z "$selection" ]; then
+	if [ -z "$query" ]; then
+		exit 0
+	fi
+	query=$(printf %s "$query" | sed 's/.git$//' | sed 's|/$||')
+	selection="$HOME/src/$(basename "$query")"
+	if [ ! -d "$selection" ]; then
+		if hut git show "$query" >/dev/null 2>&1; then
+			git clone "https://git.sr.ht/$query" "$selection" ||
+				git clone "$query" "$selection" ||
+				exit 1
+		elif gh repo view "$query" >/dev/null 2>&1; then
+			git clone "https://github.com/$query" "$selection" ||
+				git clone "$query" "$selection" ||
+				exit 1
+		else
+			exit 0
+		fi
+	fi
 fi
 
-name=$(basename "$path" | tr . _)
+name=$(basename "$selection" | tr . _)
 
 if [ -z "$TMUX" ] && pgrep tmux; then
-	tmux new-session -s "$name" -c "$path"
+	tmux new-session -s "$name" -c "$selection"
 	exit 0
 fi
 
 if ! tmux has-session -t="$name" 2>/dev/null; then
-	tmux new-session -ds "$name" -c "$path"
+	tmux new-session -ds "$name" -c "$selection"
 fi
 
 tmux switch-client -t "$name"
