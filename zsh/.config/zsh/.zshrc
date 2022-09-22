@@ -87,7 +87,6 @@ fi
 
 if command -v lsd >/dev/null 2>&1; then
 	alias ls='lsd'
-	alias tree='lsd --tree'
 fi
 
 if command -v rga >/dev/null 2>&1; then
