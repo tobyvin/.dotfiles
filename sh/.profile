@@ -25,9 +25,10 @@ export LESS="--RAW-CONTROL-CHARS --quit-if-one-screen --mouse"
 export LESSOPEN="|lesspipe.sh %s"
 export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+export PASSWORD_STORE_DIR="$HOME/.password-store"
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
+export ZK_NOTEBOOK_DIR="$HOME/.zk"
 export STARSHIP_LOG="error"
-export ZK_NOTEBOOK_DIR="$HOME/zk"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
 export FZF_DEFAULT_OPTS='--bind ctrl-q:abort
 --bind ctrl-y:preview-up
