@@ -1,10 +1,10 @@
 local M = {}
 
 M.setup = function()
-	local group = vim.api.nvim_create_augroup("tobyvin", { clear = true })
+	local augroup = vim.api.nvim_create_augroup("tobyvin_buffers", { clear = true })
 
 	vim.api.nvim_create_autocmd("User", {
-		group = group,
+		group = augroup,
 		pattern = "bdelete",
 		callback = function(opts)
 			local windows = vim.tbl_filter(function(win)
@@ -35,8 +35,28 @@ M.setup = function()
 		desc = "Sets the window to the alternate buffer for bdelete",
 	})
 
+	local augroup_hl = vim.api.nvim_create_augroup("tobyvin_hl", { clear = true })
+
+	vim.api.nvim_create_autocmd("CmdlineEnter", {
+		group = augroup_hl,
+		pattern = "/,?",
+		callback = function()
+			vim.opt.hlsearch = true
+		end,
+		desc = "Enable hlsearch on input",
+	})
+
+	vim.api.nvim_create_autocmd("CmdlineLeave", {
+		group = augroup_hl,
+		pattern = "/,?",
+		callback = function()
+			vim.opt.hlsearch = false
+		end,
+		desc = "Disable hlsearch on exit",
+	})
+
 	vim.api.nvim_create_autocmd("TextYankPost", {
-		group = group,
+		group = augroup_hl,
 		pattern = "*",
 		callback = function()
 			vim.highlight.on_yank()
@@ -44,8 +64,10 @@ M.setup = function()
 		desc = "Highlight yank",
 	})
 
+	local augroup_fmt = vim.api.nvim_create_augroup("tobyvin_fmt", { clear = true })
+
 	vim.api.nvim_create_autocmd("BufWritePre", {
-		group = group,
+		group = augroup_fmt,
 		pattern = "*",
 		callback = function()
 			local cursor = vim.api.nvim_win_get_cursor(0)
@@ -56,7 +78,34 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
-		group = group,
+		group = augroup_fmt,
+		pattern = "help",
+		callback = function() end,
+		desc = "Format help window",
+	})
+
+	vim.api.nvim_create_autocmd("FileType", {
+		group = augroup_fmt,
+		pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
+		callback = function()
+			vim.opt_local.tabstop = 2
+		end,
+		desc = "Set tabstop",
+	})
+
+	local augroup_view = vim.api.nvim_create_augroup("tobyvin_view", { clear = true })
+
+	vim.api.nvim_create_autocmd("FileType", {
+		group = augroup_view,
+		pattern = "qf",
+		callback = function()
+			vim.opt_local.buflisted = false
+		end,
+		desc = "Hide quickfix from buffer list",
+	})
+
+	vim.api.nvim_create_autocmd("FileType", {
+		group = augroup_view,
 		pattern = "help",
 		callback = function()
 			vim.opt_local.wrap = true
@@ -65,62 +114,8 @@ M.setup = function()
 			vim.cmd("wincmd L")
 			vim.cmd("vertical resize " .. vim.opt.textwidth:get())
 		end,
-		desc = "Resize help window",
+		desc = "Setup and resize help window",
 	})
-
-	vim.api.nvim_create_autocmd("FileType", {
-		group = group,
-		pattern = "qf",
-		callback = function()
-			vim.opt_local.buflisted = false
-		end,
-		desc = "Hide filetype from buffer list",
-	})
-
-	vim.api.nvim_create_autocmd("FileType", {
-		group = group,
-		pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
-		callback = function()
-			vim.opt_local.tabstop = 2
-		end,
-		desc = "Set file specific tabstop",
-	})
-
-	local augroup_search_highlighting = vim.api.nvim_create_augroup("SearchHighlighting", { clear = true })
-
-	vim.api.nvim_create_autocmd("CmdlineEnter", {
-		group = augroup_search_highlighting,
-		pattern = "/,?",
-		callback = function()
-			vim.opt.hlsearch = true
-		end,
-		desc = "Enable hlsearch on input",
-	})
-
-	vim.api.nvim_create_autocmd("CmdlineLeave", {
-		group = augroup_search_highlighting,
-		pattern = "/,?",
-		callback = function()
-			vim.opt.hlsearch = false
-		end,
-		desc = "Disable hlsearch on exit",
-	})
-
-	-- TODO: figure out how to do this correctly
-	-- config reloading
-	-- local configs = vim.api.nvim_create_augroup("Configs", { clear = true })
-	--
-	-- vim.api.nvim_create_autocmd("BufWritePost", {
-	-- 	group = configs,
-	-- 	pattern = ".nvimrc.lua",
-	-- 	command = "source <afile>",
-	-- })
-	--
-	-- vim.api.nvim_create_autocmd("BufWritePost", {
-	-- 	group = configs,
-	-- 	pattern = os.getenv("HOME") .. "/.config/nvim/*/*.lua",
-	-- 	command = "source $MYVIMRC",
-	-- })
 end
 
 return M

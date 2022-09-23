@@ -475,13 +475,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"antoinemadec/FixCursorHold.nvim",
-		config = function()
-			vim.g.curshold_updatime = 500
-		end,
-	})
-
-	use({
 		"numToStr/Comment.nvim",
 		config = function()
 			require("tobyvin.plugins.comment").setup()
