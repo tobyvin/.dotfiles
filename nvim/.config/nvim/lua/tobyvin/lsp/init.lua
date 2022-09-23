@@ -2,8 +2,13 @@ local utils = require("tobyvin.utils")
 local M = {}
 
 M.on_attach = function(client, bufnr)
-	-- vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
-	-- vim.api.nvim_buf_set_option(bufnr, "tagfunc", "v:lua.vim.lsp.tagfunc")
+	if client.server_capabilities.completionProvider then
+		vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
+	end
+
+	if client.server_capabilities.definitionProvider then
+		vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+	end
 
 	vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Definition", buffer = bufnr })
 	vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration", buffer = bufnr })
@@ -14,12 +19,13 @@ M.on_attach = function(client, bufnr)
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help", buffer = bufnr })
 
 	utils.create_map_group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
+	vim.keymap.set("n", "<leader>li", "<CMD>LspInfo<CR>", { desc = "LSP info" })
 	vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename", buffer = bufnr })
 	vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action", buffer = bufnr })
 	vim.keymap.set("n", "<leader>ll", vim.lsp.codelens.run, { desc = "Codelens", buffer = bufnr })
 
 	-- disabled in favor of https://github.com/nvim-treesitter/nvim-treesitter-refactor#highlight-definitions
-	-- require("tobyvin.lsp.highlighting").on_attach(client, bufnr)
+	require("tobyvin.lsp.highlighting").on_attach(client, bufnr)
 	require("tobyvin.lsp.diagnostics").on_attach(client, bufnr)
 	require("tobyvin.lsp.formatting").on_attach(client, bufnr)
 	require("tobyvin.lsp.symbol").on_attach(client, bufnr)

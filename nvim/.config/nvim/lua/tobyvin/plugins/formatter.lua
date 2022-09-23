@@ -30,8 +30,8 @@ M.setup = function()
 		},
 	})
 
-  vim.keymap.set("n", "<leader>lf", ":Format<CR>", { desc = "Format" })
-  vim.keymap.set("n", "<leader>lF", ":FormatWrite<CR>", { desc = "Format Write" })
+  vim.keymap.set("n", "<leader>lf", "<CMD>Format<CR>", { desc = "Format" })
+  vim.keymap.set("n", "<leader>lF", "<CMD>FormatWrite<CR>", { desc = "Format Write" })
 end
 
 return M

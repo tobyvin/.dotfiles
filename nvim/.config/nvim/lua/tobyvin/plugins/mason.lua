@@ -17,8 +17,8 @@ M.setup = function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>i", ":Mason<CR>", { desc = "Mason" })
-	vim.keymap.set("n", "<leader>I", ":MasonLog<CR>", { desc = "Mason Log" })
+	vim.keymap.set("n", "<leader>m", "<CMD>Mason<CR>", { desc = "Mason" })
+	vim.keymap.set("n", "<leader>M", "<CMD>MasonLog<CR>", { desc = "Mason Log" })
 end
 
 return M
