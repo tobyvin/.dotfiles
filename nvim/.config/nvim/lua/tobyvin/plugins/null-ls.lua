@@ -16,13 +16,14 @@ M.setup = function()
 			null_ls.builtins.code_actions.shellcheck,
 
 			null_ls.builtins.diagnostics.pylint,
-			null_ls.builtins.diagnostics.vale,
+			null_ls.builtins.diagnostics.markdownlint,
 
 			null_ls.builtins.formatting.prettier,
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.latexindent,
 			null_ls.builtins.formatting.stylua,
 			null_ls.builtins.formatting.shfmt,
+			null_ls.builtins.formatting.cbfmt,
 		},
 		on_attach = function(client, bufnr)
 			vim.keymap.set("n", "<leader>ln", "<CMD>NullLsInfo<CR>", { desc = "Null-LS Info", buffer = bufnr })
