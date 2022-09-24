@@ -2,10 +2,6 @@ local utils = require("tobyvin.utils")
 local M = {}
 
 M.on_attach = function(client, bufnr)
-	if client.server_capabilities.completionProvider then
-		vim.bo[bufnr].omnifunc = "v:lua.vim.lsp.omnifunc"
-	end
-
 	if client.server_capabilities.definitionProvider then
 		vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
 	end
