@@ -33,7 +33,23 @@ M.setup = function()
 
 	lspconfig.tsserver.setup(lsp.config())
 
-	lspconfig.pylsp.setup(lsp.config())
+	lspconfig.pylsp.setup(lsp.config({
+		settings = {
+			pylsp = {
+				plugins = {
+					autopep8 = {
+						enabled = false,
+					},
+					yapf = {
+						enabled = false,
+					},
+					pylint = {
+						enabled = true,
+					},
+				},
+			},
+		},
+	}))
 
 	lspconfig.cssls.setup(lsp.config())
 
@@ -94,7 +110,6 @@ M.setup = function()
 			border = "rounded",
 		},
 	})
-
 end
 
 return M

@@ -15,7 +15,6 @@ M.setup = function()
 			null_ls.builtins.code_actions.gitrebase,
 			null_ls.builtins.code_actions.shellcheck,
 
-			null_ls.builtins.diagnostics.pylint,
 			null_ls.builtins.diagnostics.markdownlint,
 
 			null_ls.builtins.formatting.prettier,
