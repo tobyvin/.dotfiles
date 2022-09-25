@@ -162,12 +162,6 @@ M.setup = function()
 					padding = { left = 0, right = 1 },
 				},
 				{
-					auto_session_library.current_session_name,
-					cond = function()
-						return auto_session_ok
-					end,
-				},
-				{
 					"diagnostics",
 					sources = { utils.diagnostic_count },
 					symbols = {

@@ -51,14 +51,9 @@ M.plugins = function(use)
 	})
 
 	use({
-		"rmagatti/auto-session",
+		"Shatur/neovim-session-manager",
 		config = function()
-			require("auto-session").setup({
-				log_level = "error",
-				cwd_change_handling = {
-					restore_upcoming_session = true,
-				},
-			})
+			require("tobyvin.plugins.session_manager").setup()
 		end,
 	})
 
