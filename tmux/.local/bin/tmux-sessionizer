@@ -5,13 +5,10 @@ if [ "$#" -ne 0 ]; then
 	selection="$1"
 else
 	PROJECT_DIR="$HOME/src"
-
-	if [ -n "$TMUX" ]; then
-		DIRS="$(tmux list-sessions -F '#{session_last_attached}:#{session_path}' 2>/dev/null | tr -s '\n' ' ' | sed 's/ $//')"
-	fi
+	DIRS="$(stat -c %Y:"$HOME/.dotfiles" "$HOME/.dotfiles")"
 
 	for session in "$XDG_DATA_HOME/nvim/sessions"/*; do
-		entry="$(printf %s\\n "$session" | sed "s|^$XDG_DATA_HOME/nvim/sessions/||" | sed 's|%%|/|g' | sed 's|__|/|g')"
+		entry="$(printf %s\\n "$session" | sed "s|^$XDG_DATA_HOME/nvim/sessions/||" | sed 's#%{2}|_{2}#/#g')"
 		if [ -d "$entry" ]; then
 			DIRS="$DIRS $(stat -c %Y:"$entry" "$session")"
 		fi
@@ -22,6 +19,10 @@ else
 			DIRS="$DIRS $(stat -c %Y:"$project" "$project")"
 		fi
 	done
+
+	if [ -n "$TMUX" ]; then
+		attached="$(tmux list-sessions -F '#{?session_attached,#{session_path},}' | sed '/^$/d')"
+	fi
 
 	DIRS="$(printf %s\\n "$DIRS" | xargs -I{} -d ' ' sh -c '
   timestamp="$(printf %s "{}" | cut -d":" -f1)"
@@ -37,11 +38,10 @@ else
   else
     printf %s\\n {}
   fi
-  ' | sort -r | sort --field-separator=':' -r --key=2 | uniq -s10 | sort -r | cut -d':' -f2)"
+  ' | sort -r | sort -t':' -r -k2 | uniq -s10 | sort -r | cut -d':' -f2 | sed "s#^$attached\$##g" | sed '/^$/d')"
 
 	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -2.. \
-		--preview="tmux capture-pane -ep -t \$(basename '{}' | tr . _) 2>/dev/null ||
-    $FZF_PREVIEW_COMMAND ||
+		--preview="$FZF_PREVIEW_COMMAND ||
     printf '%s' {q} | sed 's|/\$||' | xargs hut git show 2>/dev/null ||
     gh repo view {q} 2>/dev/null ||
     printf 'Create new project:\n %s' {q} |
