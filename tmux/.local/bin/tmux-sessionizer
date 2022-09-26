@@ -40,7 +40,7 @@ else
   fi
   ' | sort -r | sort -t':' -r -k2 | uniq -s10 | sort -r | cut -d':' -f2 | sed "s#^$attached\$##g" | sed '/^$/d')"
 
-	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -2.. \
+	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -1 \
 		--preview="$FZF_PREVIEW_COMMAND ||
     printf '%s' {q} | sed 's|/\$||' | xargs hut git show 2>/dev/null ||
     gh repo view {q} 2>/dev/null ||
