@@ -14,8 +14,8 @@ M.setup = function()
 
 	utils.create_map_group("n", "<leader>s", { desc = "Sessions" })
 	vim.keymap.set("n", "<leader>ss", session_manager.save_current_session, { desc = "Save session" })
-	vim.keymap.set("n", "<leader>sl", session_manager.load_session, { desc = "Load session" })
-	vim.keymap.set("n", "<leader>sL", session_manager.load_current_dir_session, { desc = "Load current session" })
+	vim.keymap.set("n", "<leader>sl", session_manager.load_current_dir_session, { desc = "Load current session" })
+	vim.keymap.set("n", "<leader>sL", session_manager.load_session, { desc = "Load session" })
 	vim.keymap.set("n", "<leader>sr", session_manager.load_last_session, { desc = "Load last session" })
 	vim.keymap.set("n", "<leader>sd", session_manager.delete_session, { desc = "Delete session" })
 end
