@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, neogen = pcall(require, "neogen")
 	if not status_ok then
-		vim.notify("Failed to load module 'neogen'", "error")
+		vim.notify("Failed to load module 'neogen'", vim.log.levels.ERROR)
 		return
 	end
 

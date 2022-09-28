@@ -5,7 +5,7 @@ local M = {}
 M.setup = function()
 	local status_ok, lspconfig = pcall(require, "lspconfig")
 	if not status_ok then
-		vim.notify("Failed to load module 'lspconfig'", "error")
+		vim.notify("Failed to load module 'lspconfig'", vim.log.levels.ERROR)
 		return
 	end
 

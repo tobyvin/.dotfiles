@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, mason_lspconfig = pcall(require, "mason-lspconfig")
 	if not status_ok then
-		vim.notify("Failed to load module 'mason-lspconfig'", "error")
+		vim.notify("Failed to load module 'mason-lspconfig'", vim.log.levels.ERROR)
 		return
 	end
 

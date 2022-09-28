@@ -4,7 +4,7 @@ local M = {}
 M.setup = function()
 	local status_ok, neogit = pcall(require, "neogit")
 	if not status_ok then
-		vim.notify("Failed to load module 'neogit'", "error")
+		vim.notify("Failed to load module 'neogit'", vim.log.levels.ERROR)
 		return
 	end
 

@@ -4,7 +4,7 @@ local M = {}
 M.setup = function()
 	local status_ok, notify = pcall(require, "notify")
 	if not status_ok then
-		vim.notify("Failed to load module 'notify'", "error")
+		vim.notify("Failed to load module 'notify'", vim.log.levels.ERROR)
 		return
 	end
 

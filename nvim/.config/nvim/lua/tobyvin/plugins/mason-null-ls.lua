@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, mason_null_ls = pcall(require, "mason-null-ls")
 	if not status_ok then
-		vim.notify("Failed to load module 'mason-null-ls'", "error")
+		vim.notify("Failed to load module 'mason-null-ls'", vim.log.levels.ERROR)
 		return
 	end
 

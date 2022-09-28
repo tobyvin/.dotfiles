@@ -5,7 +5,7 @@ M.setup = function()
   -- TODO: fix or find a better option, also appeared to have a high load time when running packer profile
 	-- local status_ok, refactoring = pcall(require, "refactoring")
 	-- if not status_ok then
-	-- 	vim.notify("Failed to load module 'refactoring'", "error")
+	-- 	vim.notify("Failed to load module 'refactoring'", vim.log.levels.ERROR)
 	-- 	return
 	-- end
  --

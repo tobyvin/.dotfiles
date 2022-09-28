@@ -17,7 +17,7 @@ end
 M.setup = function()
 	local status_ok, cmp = pcall(require, "cmp")
 	if not status_ok then
-		vim.notify("Failed to load module 'cmd'", "error")
+		vim.notify("Failed to load module 'cmd'", vim.log.levels.ERROR)
 		return
 	end
 

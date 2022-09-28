@@ -40,7 +40,7 @@ end
 M.setup = function()
 	local status_ok, dressing = pcall(require, "dressing")
 	if not status_ok then
-		vim.notify("Failed to load module 'dressing'", "error")
+		vim.notify("Failed to load module 'dressing'", vim.log.levels.ERROR)
 		return
 	end
 

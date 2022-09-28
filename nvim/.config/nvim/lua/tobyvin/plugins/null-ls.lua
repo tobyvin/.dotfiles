@@ -4,7 +4,7 @@ local M = {}
 M.setup = function()
 	local status_ok, null_ls = pcall(require, "null-ls")
 	if not status_ok then
-		vim.notify("Failed to load module 'null-ls'", "error")
+		vim.notify("Failed to load module 'null-ls'", vim.log.levels.ERROR)
 		return
 	end
 

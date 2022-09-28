@@ -20,7 +20,7 @@ M.open = function()
 	if vim.tbl_contains(vim.tbl_keys(M.sources), filetype) then
 		M.sources[filetype]()
 	else
-		vim.notify("[Utils] Documentation not available", "error")
+		vim.notify("[Utils] Documentation not available", vim.log.levels.ERROR)
 	end
 end
 

@@ -40,7 +40,7 @@ end
 M.setup = function()
 	local status_ok, gitsigns = pcall(require, "gitsigns")
 	if not status_ok then
-		vim.notify("Failed to load module 'gitsigns'", "error")
+		vim.notify("Failed to load module 'gitsigns'", vim.log.levels.ERROR)
 		return
 	end
 

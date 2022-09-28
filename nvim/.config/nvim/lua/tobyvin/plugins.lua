@@ -506,13 +506,13 @@ M.setup = function()
 			"https://github.com/wbthomason/packer.nvim",
 			install_path,
 		})
-		vim.notify("Installing packer. Reload neovim to load plugins.", "info", { title = "[packer] Installing" })
+		vim.notify("Installing packer. Reload neovim to load plugins.", vim.log.levels.INFO, { title = "[packer] Installing" })
 		vim.cmd([[packadd packer.nvim]])
 	end
 
 	local status_ok, packer = pcall(require, "packer")
 	if not status_ok then
-		vim.notify("Failed to load module 'packer'", "error")
+		vim.notify("Failed to load module 'packer'", vim.log.levels.ERROR)
 		return
 	end
 

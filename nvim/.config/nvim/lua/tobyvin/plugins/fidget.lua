@@ -4,7 +4,7 @@ local M = {}
 M.setup = function()
 	local status_ok, fidget = pcall(require, "fidget")
 	if not status_ok then
-		vim.notify("Failed to load module 'fidget'", "error")
+		vim.notify("Failed to load module 'fidget'", vim.log.levels.ERROR)
 		return
 	end
 

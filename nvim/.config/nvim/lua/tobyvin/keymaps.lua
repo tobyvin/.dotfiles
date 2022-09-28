@@ -2,7 +2,7 @@ local utils = require("tobyvin.utils")
 local M = {}
 
 M.training_wheels = function()
-	vim.notify("You did the thing. Stop doing the thing. Use <C-[>", "warn", { title = "STOP DOING THAT" })
+	vim.notify("You did the thing. Stop doing the thing. Use <C-[>", vim.log.levels.WARN, { title = "STOP DOING THAT" })
 end
 
 M.setup = function()

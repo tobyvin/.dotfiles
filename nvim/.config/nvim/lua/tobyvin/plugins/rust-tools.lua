@@ -8,7 +8,7 @@ local M = {
 M.setup = function()
 	local status_ok, rust_tools = pcall(require, "rust-tools")
 	if not status_ok then
-		vim.notify("Failed to load module 'rust-tools'", "error")
+		vim.notify("Failed to load module 'rust-tools'", vim.log.levels.ERROR)
 		return
 	end
 

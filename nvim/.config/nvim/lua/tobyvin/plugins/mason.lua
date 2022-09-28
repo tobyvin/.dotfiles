@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, mason = pcall(require, "mason")
 	if not status_ok then
-		vim.notify("Failed to load module 'mason'", "error")
+		vim.notify("Failed to load module 'mason'", vim.log.levels.ERROR)
 		return
 	end
 

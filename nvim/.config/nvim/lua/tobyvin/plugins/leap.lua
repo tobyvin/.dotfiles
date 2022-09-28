@@ -10,7 +10,7 @@ end
 M.setup = function()
 	local status_ok, leap = pcall(require, "leap")
 	if not status_ok then
-		vim.notify("Failed to load module 'leap'", "error")
+		vim.notify("Failed to load module 'leap'", vim.log.levels.ERROR)
 		return
 	end
 

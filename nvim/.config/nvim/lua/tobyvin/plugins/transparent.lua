@@ -18,7 +18,7 @@ end
 M.setup = function()
 	local status_ok, _ = pcall(require, "transparent")
 	if not status_ok then
-		vim.notify("failed to load module 'transparent'", "error")
+		vim.notify("failed to load module 'transparent'", vim.log.levels.ERROR)
 		return
 	end
 

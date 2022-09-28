@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, telescope = pcall(require, "telescope")
 	if not status_ok then
-		vim.notify("Failed to load module 'telescope'", "error")
+		vim.notify("Failed to load module 'telescope'", vim.log.levels.ERROR)
 		return
 	end
 

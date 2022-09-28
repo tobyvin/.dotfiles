@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, formatter = pcall(require, "formatter")
 	if not status_ok then
-		vim.notify("Failed to load module 'formatter'", "error")
+		vim.notify("Failed to load module 'formatter'", vim.log.levels.ERROR)
 		return
 	end
 

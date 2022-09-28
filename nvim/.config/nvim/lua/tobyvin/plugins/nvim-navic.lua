@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, nvim_navic = pcall(require, "nvim-navic")
 	if not status_ok then
-		vim.notify("Failed to load module 'nvim-navic'", "error")
+		vim.notify("Failed to load module 'nvim-navic'", vim.log.levels.ERROR)
 		return
 	end
 

@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, lua_dev = pcall(require, "lua-dev")
 	if not status_ok then
-		vim.notify("Failed to load module 'lua-dev'", "error")
+		vim.notify("Failed to load module 'lua-dev'", vim.log.levels.ERROR)
 		return
 	end
 

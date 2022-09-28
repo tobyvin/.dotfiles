@@ -4,7 +4,7 @@ local M = {}
 M.setup = function()
 	local status_ok, session_manager = pcall(require, "session_manager")
 	if not status_ok then
-		vim.notify("Failed to load module 'session_manager'", "error")
+		vim.notify("Failed to load module 'session_manager'", vim.log.levels.ERROR)
 		return
 	end
 

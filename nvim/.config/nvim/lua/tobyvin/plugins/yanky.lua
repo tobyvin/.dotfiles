@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, yanky = pcall(require, "yanky")
 	if not status_ok then
-		vim.notify("Failed to load module 'yanky'", "error")
+		vim.notify("Failed to load module 'yanky'", vim.log.levels.ERROR)
 		return
 	end
 

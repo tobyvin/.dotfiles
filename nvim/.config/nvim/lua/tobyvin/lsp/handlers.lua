@@ -16,13 +16,13 @@ end
 M.setup = function()
 	handler_hook("textDocument/definition", function(_, result)
 		if not result or vim.tbl_isempty(result) then
-			vim.notify("[LSP] No definition found", "info")
+			vim.notify("[LSP] No definition found", vim.log.levels.INFO)
 		end
 	end)
 
 	handler_hook("textDocument/implementation", function(_, result)
 		if not result or vim.tbl_isempty(result) then
-			vim.notify("[LSP] No implementations found", "info")
+			vim.notify("[LSP] No implementations found", vim.log.levels.INFO)
 		end
 	end)
 

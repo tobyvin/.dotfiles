@@ -93,7 +93,7 @@ M.progress_start = function(session, body)
 	local notif_data = utils.debug.get_notif_data("dap", body.progressId)
 
 	local message = utils.debug.format_message(body.message, body.percentage)
-	notif_data.notification = vim.notify(message, "info", {
+	notif_data.notification = vim.notify(message, vim.log.levels.INFO, {
 		title = utils.debug.format_title(body.title, session.config.type),
 		icon = utils.status.signs.spinner.text[1],
 		timeout = false,
@@ -115,7 +115,7 @@ end
 M.progress_end = function(_, body)
 	local notif_data = utils.debug.notifs["dap"][body.progressId]
 	notif_data.notification =
-		vim.notify(body.message and utils.debug.format_message(body.message) or "Complete", "info", {
+		vim.notify(body.message and utils.debug.format_message(body.message) or "Complete", vim.log.levels.INFO, {
 			icon = utils.status.signs.complete.text,
 			replace = notif_data.notification,
 			timeout = 3000,
@@ -126,7 +126,7 @@ end
 M.setup = function()
 	local status_ok, dap = pcall(require, "dap")
 	if not status_ok then
-		vim.notify("Failed to load module 'dap'", "error")
+		vim.notify("Failed to load module 'dap'", vim.log.levels.ERROR)
 		return
 	end
 

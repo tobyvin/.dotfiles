@@ -3,7 +3,7 @@ local M = {}
 M.setup = function()
 	local status_ok, lint = pcall(require, "lint")
 	if not status_ok then
-		vim.notify("Failed to load module 'lint'", "error")
+		vim.notify("Failed to load module 'lint'", vim.log.levels.ERROR)
 		return
 	end
 
