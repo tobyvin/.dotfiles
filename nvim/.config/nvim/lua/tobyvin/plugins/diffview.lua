@@ -24,12 +24,12 @@ M.setup = function()
 
 	diffview.setup()
 
-	local nmap = utils.create_map_group("n", "<leader>g", { desc = "Git" })
+	local nmap = utils.keymap.group("n", "<leader>g", { desc = "Git" })
 	nmap("d", diffview.open, { desc = "Diffview" })
 	nmap("h", M.file_history, { desc = "File History" })
 	nmap("H", M.workspace_history, { desc = "Workspace History" })
 
-	local vmap = utils.create_map_group("v", "<leader>g", { desc = "Git" })
+	local vmap = utils.keymap.group("v", "<leader>g", { desc = "Git" })
 	vmap("h", M.selection_history, { desc = "Selection History" })
 end
 

@@ -3,7 +3,7 @@ local M = {}
 
 M.with_selection = function(callback)
 	return function()
-		callback(utils.get_visual_range())
+		callback(utils.buffer.get_visual_range())
 	end
 end
 
@@ -13,7 +13,7 @@ end
 
 M.on_attach = function(bufnr)
 	local gitsigns = require("gitsigns")
-	local nmap = utils.create_map_group("n", "<leader>g", { desc = "Git", buffer = bufnr })
+	local nmap = utils.keymap.group("n", "<leader>g", { desc = "Git", buffer = bufnr })
 	nmap("b", gitsigns.blame_line, { desc = "Show blame" })
 	nmap("B", M.show_blameline, { desc = "Show blame" })
 	nmap("<C-b>", gitsigns.toggle_current_line_blame, { desc = "Toggle blame line" })
@@ -30,7 +30,7 @@ M.on_attach = function(bufnr)
 	nmap("S", gitsigns.stage_buffer, { desc = "Stage Buffer" })
 	nmap("U", gitsigns.reset_buffer_index, { desc = "Undo Stage Buffer" })
 
-	local vmap = utils.create_map_group("v", "<leader>g", { desc = "Git", buffer = bufnr })
+	local vmap = utils.keymap.group("v", "<leader>g", { desc = "Git", buffer = bufnr })
 	vmap("p", M.with_selection(gitsigns.preview_hunk), { desc = "Preview Hunk" })
 	vmap("r", M.with_selection(gitsigns.reset_hunk), { desc = "Reset Hunk" })
 	vmap("s", M.with_selection(gitsigns.stage_hunk), { desc = "Stage Hunk" })

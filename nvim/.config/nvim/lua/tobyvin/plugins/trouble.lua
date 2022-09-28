@@ -9,13 +9,6 @@ M.setup = function()
 	end
 
 	trouble.setup({
-		-- signs = {
-		-- 	error = utils.diagnostic_signs.error.text,
-		-- 	warning = utils.diagnostic_signs.warn.text,
-		-- 	hint = utils.diagnostic_signs.hint.text,
-		-- 	information = utils.diagnostic_signs.info.text,
-		-- 	other = utils.diagnostic_signs.info.text,
-		-- },
 		use_diagnostic_signs = true,
 	})
 end

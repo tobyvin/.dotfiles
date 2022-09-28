@@ -5,7 +5,7 @@ local M = {}
 M.diagnostics_indicator = function(_, _, errors, _)
 	local outstr = " "
 	for level, count in pairs(errors) do
-		local sign = utils.diagnostic_signs[level:gsub("warning", "warn")].text
+		local sign = utils.diagnostic.signs[level:gsub("warning", "warn")].text
 		-- outstr = outstr .. sign .. (#count > 1 and count or "")
 		outstr = outstr .. sign .. count
 	end
@@ -41,7 +41,7 @@ M.setup = function()
 		},
 	})
 
-	local nmap = utils.create_map_group("n", "<leader>b", { desc = "Buffers" })
+	local nmap = utils.keymap.group("n", "<leader>b", { desc = "Buffers" })
 	nmap("c", bufferline.close_with_pick, { desc = "Close Buffer" })
 	nmap("b", bufferline.pick_buffer, { desc = "Pick Buffer" })
 end

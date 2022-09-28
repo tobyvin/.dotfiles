@@ -78,7 +78,7 @@ M.dapui_close = function()
 
 	dapui.close({})
 
-	vim.keymap.set("n", "<leader>q", utils.quit, { desc = "Quit" })
+	vim.keymap.set("n", "<leader>q", utils.buffer.quit, { desc = "Quit" })
 
 	if M.dapui_tab and vim.api.nvim_tabpage_is_valid(M.dapui_tab) then
 		local tabnr = vim.api.nvim_tabpage_get_number(M.dapui_tab)
@@ -90,35 +90,36 @@ M.dapui_close = function()
 end
 
 M.progress_start = function(session, body)
-	local notif_data = utils.get_notif_data("dap", body.progressId)
+	local notif_data = utils.debug.get_notif_data("dap", body.progressId)
 
-	local message = utils.format_message(body.message, body.percentage)
+	local message = utils.debug.format_message(body.message, body.percentage)
 	notif_data.notification = vim.notify(message, "info", {
-		title = utils.format_title(body.title, session.config.type),
-		icon = utils.signs.spinner.text[1],
+		title = utils.debug.format_title(body.title, session.config.type),
+		icon = utils.status.signs.spinner.text[1],
 		timeout = false,
 		hide_from_history = false,
 	})
 
 	---@diagnostic disable-next-line: redundant-value
-	notif_data.notification.spinner = 1, utils.update_spinner("dap", body.progressId)
+	notif_data.notification.spinner = 1, utils.status.update_spinner("dap", body.progressId)
 end
 
 M.progress_update = function(_, body)
-	local notif_data = utils.get_notif_data("dap", body.progressId)
-	notif_data.notification = vim.notify(utils.format_message(body.message, body.percentage), "info", {
+	local notif_data = utils.debug.get_notif_data("dap", body.progressId)
+	notif_data.notification = vim.notify(utils.debug.format_message(body.message, body.percentage), "info", {
 		replace = notif_data.notification,
 		hide_from_history = false,
 	})
 end
 
 M.progress_end = function(_, body)
-	local notif_data = utils.client_notifs["dap"][body.progressId]
-	notif_data.notification = vim.notify(body.message and utils.format_message(body.message) or "Complete", "info", {
-		icon = utils.signs.complete.text,
-		replace = notif_data.notification,
-		timeout = 3000,
-	})
+	local notif_data = utils.debug.notifs["dap"][body.progressId]
+	notif_data.notification =
+		vim.notify(body.message and utils.debug.format_message(body.message) or "Complete", "info", {
+			icon = utils.status.signs.complete.text,
+			replace = notif_data.notification,
+			timeout = 3000,
+		})
 	notif_data.spinner = nil
 end
 
@@ -240,7 +241,7 @@ M.setup = function()
 	vim.keymap.set("n", "<F11>", dap.step_into, { desc = "Step Into" })
 	vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out" })
 
-	local nmap = utils.create_map_group("n", "<leader>d", { desc = "Debug" })
+	local nmap = utils.keymap.group("n", "<leader>d", { desc = "Debug" })
 	nmap("d", require("telescope").extensions.dap.configurations, { desc = "Configurations" })
 	nmap("c", dap.continue, { desc = "Continue" })
 	nmap("a", dap.step_over, { desc = "Step Over" })
@@ -263,11 +264,11 @@ M.setup = function()
 	})
 
 	-- Signs
-	vim.fn.sign_define("DapBreakpoint", utils.debug_signs.breakpoint)
-	vim.fn.sign_define("DapBreakpointCondition", utils.debug_signs.condition)
-	vim.fn.sign_define("DapBreakpointRejected", utils.debug_signs.rejected)
-	vim.fn.sign_define("DapStopped", utils.debug_signs.stopped)
-	vim.fn.sign_define("DapLogPoint", utils.debug_signs.logpoint)
+	vim.fn.sign_define("DapBreakpoint", utils.debug.signs.breakpoint)
+	vim.fn.sign_define("DapBreakpointCondition", utils.debug.signs.condition)
+	vim.fn.sign_define("DapBreakpointRejected", utils.debug.signs.rejected)
+	vim.fn.sign_define("DapStopped", utils.debug.signs.stopped)
+	vim.fn.sign_define("DapLogPoint", utils.debug.signs.logpoint)
 end
 
 return M

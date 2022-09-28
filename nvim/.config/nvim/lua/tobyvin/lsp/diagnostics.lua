@@ -17,8 +17,8 @@ M.on_attach = function(_, bufnr)
 		end,
 	})
 
-	vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show Diagnostic", buffer = bufnr })
-	vim.keymap.set("n", "<leader>E", vim.diagnostic.setloclist, { desc = "List Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "<leader>e", vim.diagnostic.setloclist, { desc = "Show Buffer Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "Show Workspace Diagnostic", buffer = bufnr })
 	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic", buffer = bufnr })
 	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic", buffer = bufnr })
 end
@@ -34,10 +34,10 @@ M.setup = function()
 		severity_sort = true,
 	})
 
-	vim.fn.sign_define("DiagnosticSignError", utils.diagnostic_signs.error)
-	vim.fn.sign_define("DiagnosticSignWarn", utils.diagnostic_signs.warn)
-	vim.fn.sign_define("DiagnosticSignInfo", utils.diagnostic_signs.info)
-	vim.fn.sign_define("DiagnosticSignHint", utils.diagnostic_signs.hint)
+	vim.fn.sign_define("DiagnosticSignError", utils.diagnostic.signs.error)
+	vim.fn.sign_define("DiagnosticSignWarn", utils.diagnostic.signs.warn)
+	vim.fn.sign_define("DiagnosticSignInfo", utils.diagnostic.signs.info)
+	vim.fn.sign_define("DiagnosticSignHint", utils.diagnostic.signs.hint)
 end
 
 return M

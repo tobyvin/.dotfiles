@@ -14,7 +14,7 @@ M.on_attach = function(client, bufnr)
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover", buffer = bufnr })
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help", buffer = bufnr })
 
-	utils.create_map_group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
+	utils.keymap.group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
 	vim.keymap.set("n", "<leader>li", "<CMD>LspInfo<CR>", { desc = "LSP info" })
 	vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename", buffer = bufnr })
 	vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action", buffer = bufnr })

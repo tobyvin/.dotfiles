@@ -163,12 +163,12 @@ M.setup = function()
 				},
 				{
 					"diagnostics",
-					sources = { utils.diagnostic_count },
+					sources = { utils.diagnostic.count },
 					symbols = {
-						error = utils.diagnostic_signs.error.text,
-						warn = utils.diagnostic_signs.warn.text,
-						info = utils.diagnostic_signs.info.text,
-						hint = utils.diagnostic_signs.hint.text,
+						error = utils.diagnostic.signs.error.text,
+						warn = utils.diagnostic.signs.warn.text,
+						info = utils.diagnostic.signs.info.text,
+						hint = utils.diagnostic.signs.hint.text,
 					},
 					update_in_insert = false,
 					padding = { left = 0, right = 1 },
@@ -184,14 +184,14 @@ M.setup = function()
 					"diagnostics",
 					sources = {
 						function()
-							return utils.diagnostic_count(0)
+							return utils.diagnostic.count(0)
 						end,
 					},
 					symbols = {
-						error = utils.diagnostic_signs.error.text,
-						warn = utils.diagnostic_signs.warn.text,
-						info = utils.diagnostic_signs.info.text,
-						hint = utils.diagnostic_signs.hint.text,
+						error = utils.diagnostic.signs.error.text,
+						warn = utils.diagnostic.signs.warn.text,
+						info = utils.diagnostic.signs.info.text,
+						hint = utils.diagnostic.signs.hint.text,
 					},
 					update_in_insert = false,
 					padding = { left = 0, right = 1 },
@@ -215,7 +215,7 @@ M.setup = function()
 				{
 					"buffers",
 					fmt = function(name, bufnr)
-						return string.format("%s %s", name, utils.diagnostic_indicator(bufnr))
+						return string.format("%s %s", name, utils.diagnostic.indicator(bufnr))
 					end,
 				},
 			},

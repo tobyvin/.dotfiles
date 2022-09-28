@@ -65,7 +65,7 @@ M.setup = function()
 
 	local builtins = require("telescope.builtin")
 
-	local nmap_find = require("tobyvin.utils").create_map_group("n", "<leader>f", { desc = "Find" })
+	local nmap_find = require("tobyvin.utils").keymap.group("n", "<leader>f", { desc = "Find" })
 	nmap_find("a", builtins.autocommands, { desc = "Autocommands" })
 	nmap_find("b", builtins.buffers, { desc = "Buffers" })
 	nmap_find("c", builtins.commands, { desc = "Commands" })
@@ -91,22 +91,22 @@ M.setup = function()
 	nmap_find("v", builtins.vim_options, { desc = "Vim Options" })
 	nmap_find("'", builtins.registers, { desc = "Registers" })
 
-	local nmap_git = require("tobyvin.utils").create_map_group("n", "<leader>g", { desc = "Git" })
+	local nmap_git = require("tobyvin.utils").keymap.group("n", "<leader>g", { desc = "Git" })
 	nmap_git("b", builtins.git_branches, { desc = "Checkout branch" })
 	nmap_git("c", builtins.git_commits, { desc = "Checkout commit" })
 	nmap_git("o", builtins.git_status, { desc = "Open changed file" })
 
-	local nmap_git_wt = require("tobyvin.utils").create_map_group("n", "<leader>gw", { desc = "Worktree" })
+	local nmap_git_wt = require("tobyvin.utils").keymap.group("n", "<leader>gw", { desc = "Worktree" })
 	nmap_git_wt("s", telescope.extensions.git_worktree.git_worktrees, { desc = "Switch worktree" })
 	nmap_git_wt("c", telescope.extensions.git_worktree.create_git_worktree, { desc = "Create worktree" })
 
-	local nmap_git_gh = require("tobyvin.utils").create_map_group("n", "<leader>gG", { desc = "Github" })
+	local nmap_git_gh = require("tobyvin.utils").keymap.group("n", "<leader>gG", { desc = "Github" })
 	nmap_git_gh("i", telescope.extensions.gh.issues, { desc = "Issues" })
 	nmap_git_gh("p", telescope.extensions.gh.pull_request, { desc = "Pull request" })
 	nmap_git_gh("g", telescope.extensions.gh.gist, { desc = "Gist" })
 	nmap_git_gh("r", telescope.extensions.gh.run, { desc = "Run" })
 
-	local nmap_packer = require("tobyvin.utils").create_map_group("n", "<leader>p", { desc = "Packer" })
+	local nmap_packer = require("tobyvin.utils").keymap.group("n", "<leader>p", { desc = "Packer" })
 	nmap_packer("f", telescope.extensions.packer.packer, { desc = "Find plugins" })
 end
 

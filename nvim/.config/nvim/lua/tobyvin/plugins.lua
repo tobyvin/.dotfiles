@@ -491,7 +491,7 @@ M.plugins = function(use)
 end
 
 M.open_log = function()
-	utils.popup(vim.fn.stdpath("cache") .. "/packer.nvim.log")
+	utils.buffer.popup(vim.fn.stdpath("cache") .. "/packer.nvim.log")
 end
 
 M.setup = function()
@@ -526,7 +526,7 @@ M.setup = function()
 		profile = { enable = true },
 	})
 
-	local nmap = utils.create_map_group("n", "<leader>p", { desc = "Packer" })
+	local nmap = utils.keymap.group("n", "<leader>p", { desc = "Packer" })
 	nmap("c", packer.compile, { desc = "Compile" })
 	nmap("C", packer.clean, { desc = "Clean" })
 	nmap("i", packer.install, { desc = "Install" })

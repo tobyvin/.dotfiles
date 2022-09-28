@@ -79,13 +79,6 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("FileType", {
 		group = augroup_fmt,
-		pattern = "help",
-		callback = function() end,
-		desc = "Format help window",
-	})
-
-	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_fmt,
 		pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
 		callback = function()
 			vim.opt_local.tabstop = 2
