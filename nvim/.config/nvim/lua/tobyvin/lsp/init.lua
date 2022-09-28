@@ -13,7 +13,7 @@ M.on_attach = function(client, bufnr)
 	vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", buffer = bufnr })
 	vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover", buffer = bufnr })
 	vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help", buffer = bufnr })
-	vim.keymap.set("n", "<C-K>", utils.documentation.open, { desc = "Documentation", buffer = bufnr })
+	vim.keymap.set("n", "<leader>k", utils.documentation.open, { desc = "Documentation", buffer = bufnr })
 
 	utils.keymap.group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
 	vim.keymap.set("n", "<leader>li", "<CMD>LspInfo<CR>", { desc = "LSP info" })
