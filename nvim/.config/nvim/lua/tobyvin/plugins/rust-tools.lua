@@ -31,6 +31,7 @@ M.setup = function()
 				local runnables = rust_tools.runnables.runnables
 				local debuggables = rust_tools.debuggables.debuggables
 				local open_cargo_toml = rust_tools.open_cargo_toml.open_cargo_toml
+				local external_docs = rust_tools.external_docs.open_external_docs
 				local run_cargo_cmd = function()
 					utils.job.cmd("cargo")
 				end
@@ -40,7 +41,7 @@ M.setup = function()
 				vim.keymap.set("n", "<leader>ro", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })
 				vim.keymap.set("n", "<leader>rc", run_cargo_cmd, { desc = "Command", buffer = bufnr })
 
-				utils.documentation.register("rust", require("rust-tools.external_docs").open_external_docs)
+				utils.documentation.register("rust", external_docs)
 			end,
 		}),
 		dap = {

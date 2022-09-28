@@ -1,10 +1,6 @@
 local utils = require("tobyvin.utils")
 local M = {}
 
-M.write = function()
-	vim.cmd("write")
-end
-
 M.training_wheels = function()
 	vim.notify("You did the thing. Stop doing the thing. Use <C-[>", "warn", { title = "STOP DOING THAT" })
 end
@@ -13,8 +9,7 @@ M.setup = function()
 	vim.keymap.set("n", "<leader>q", utils.buffer.quit, { desc = "Quit" })
 	vim.keymap.set("n", "<leader>c", utils.buffer.bdelete, { desc = "Close" })
 	vim.keymap.set("n", "<leader>x", utils.buffer.tabclose, { desc = "Close" })
-	vim.keymap.set("n", "<leader>h", utils.documentation.open, { desc = "Docs" })
-	vim.keymap.set("n", "<leader>w", M.write, { desc = "Write" })
+	vim.keymap.set("n", "<leader>w", "<CMD>write<CR>", { desc = "Write" })
 	vim.keymap.set("i", "<C-c>", M.training_wheels, { desc = "Helper to quit using <C-c>" })
 	vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Up half page and center" })
 	vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Down half page and center" })
