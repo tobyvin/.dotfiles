@@ -52,7 +52,6 @@ M.setup = function()
 			topdelete = { text = "契" },
 			changedelete = { text = "▎" },
 		},
-		current_line_blame = true,
 		preview_config = { border = "rounded" },
 		on_attach = M.on_attach,
 	})

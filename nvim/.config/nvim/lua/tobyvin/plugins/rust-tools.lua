@@ -36,6 +36,7 @@ M.setup = function()
 					utils.job.cmd("cargo")
 				end
 
+				utils.keymap.group("n", "<leader>r", { desc = "Run" })
 				vim.keymap.set("n", "<leader>rr", runnables, { desc = "Runnables", buffer = bufnr })
 				vim.keymap.set("n", "<leader>rd", debuggables, { desc = "Debug", buffer = bufnr })
 				vim.keymap.set("n", "<leader>ro", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })

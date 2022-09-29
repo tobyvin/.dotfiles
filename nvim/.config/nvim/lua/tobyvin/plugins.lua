@@ -15,6 +15,14 @@ M.plugins = function(use)
 	use("lewis6991/impatient.nvim")
 
 	use({
+		"goolord/alpha-nvim",
+		requires = { "kyazdani42/nvim-web-devicons" },
+		config = function()
+			require("tobyvin.plugins.alpha").setup()
+		end,
+	})
+
+	use({
 		"rcarriga/nvim-notify",
 		config = function()
 			require("tobyvin.plugins.notify").setup()
@@ -506,7 +514,11 @@ M.setup = function()
 			"https://github.com/wbthomason/packer.nvim",
 			install_path,
 		})
-		vim.notify("Installing packer. Reload neovim to load plugins.", vim.log.levels.INFO, { title = "[packer] Installing" })
+		vim.notify(
+			"Installing packer. Reload neovim to load plugins.",
+			vim.log.levels.INFO,
+			{ title = "[packer] Installing" }
+		)
 		vim.cmd([[packadd packer.nvim]])
 	end
 

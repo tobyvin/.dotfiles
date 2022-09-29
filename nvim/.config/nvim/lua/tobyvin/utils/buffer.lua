@@ -37,73 +37,63 @@ M.popup = function(file_path)
 	vim.api.nvim_buf_set_option(0, "modifiable", false)
 end
 
----@param retry fun(force:boolean?):nil
-M.modified_prompt_retry = function(retry)
-	local bufname = vim.fn.bufname(vim.fn.bufname())
+--- @class BdeleteOptions
+--- @field force boolean Force deletion and ignore unsaved changes.
+--- @field unload boolean Unloaded only, do not delete. See |:bunload|
 
-	vim.ui.select({ "write", "discard", "abort" }, {
-		prompt = string.format("No write since last change for buffer %s:", bufname),
-		kind = "select_normal",
-	}, function(_, idx)
-		if idx == 1 then
-			vim.cmd("write")
-			retry()
-		elseif idx == 2 then
-			retry(true)
-		else
-			vim.notify(
-				string.format("No write since last change for buffer %d", bufname),
-				vim.log.levels.ERROR,
-				{ title = "Aborting..." }
-			)
+--- Wrapper around nvim_buf_delete that preserves window layout
+--- @param buffer number? Buffer handle, or 0 for current buffer
+--- @param opts BdeleteOptions? Optional parameters
+M.bdelete = function(buffer, opts)
+	if buffer == nil then
+		buffer = vim.fn.bufnr()
+	end
+
+	if opts == nil then
+		opts = {
+			force = false,
+			unload = true,
+		}
+	end
+
+	if not opts.force and vim.bo[buffer].modified then
+		local bufname = vim.fn.bufname(vim.fn.bufname())
+
+		return vim.ui.select({ "write", "discard", "abort" }, {
+			prompt = string.format("No write since last change for buffer %s:", bufname),
+			kind = "select_normal",
+		}, function(_, idx)
+			if idx == 1 then
+				vim.cmd("write")
+				M.bdelete(buffer)
+			elseif idx == 2 then
+				M.bdelete(buffer, { force = true })
+			else
+				vim.notify(
+					string.format("No write since last change for buffer %d", bufname),
+					vim.log.levels.ERROR,
+					{ title = "Aborting..." }
+				)
+			end
+		end)
+	end
+
+	if vim.fn.buflisted(buffer) == 1 then
+		local windows = vim.fn.getbufinfo(buffer)[1].windows
+
+		for _, window in ipairs(windows) do
+			local alt_buffer = vim.fn.bufnr("#")
+			if vim.fn.buflisted(alt_buffer) == 1 then
+				vim.api.nvim_win_set_buf(window, alt_buffer)
+			end
 		end
-	end)
-end
-
----@param cmd string vim command
----@param force boolean
-M.kill = function(cmd, force)
-	local winid = vim.fn.win_getid()
-	local bufnr = vim.fn.winbufnr(winid)
-
-	if not force and vim.bo[bufnr].modified then
-		return M.modified_prompt_retry(M[cmd])
 	end
 
-	vim.api.nvim_exec_autocmds("User", { pattern = cmd })
-
-	if (string.sub(cmd, 1, 1) == "b" and vim.api.nvim_buf_is_valid(bufnr)) or vim.api.nvim_win_is_valid(winid) then
-		vim.cmd(cmd .. (force and "!" or ""))
+	if vim.api.nvim_buf_is_valid(buffer) then
+		vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre" })
+		vim.api.nvim_buf_set_option(buffer, "buflisted", false)
+		vim.api.nvim_buf_delete(buffer, opts)
 	end
-end
-
----@param force boolean
-M.bdelete = function(force)
-	M.kill("bdelete", force)
-end
-
----@param force boolean
-M.bwipeout = function(force)
-	M.kill("bwipeout", force)
-end
-
----@param force boolean
-M.close = function(force)
-	M.kill("close", force)
-end
-
----@param force boolean
-M.quit = function(force)
-	M.kill("quit", force)
-end
-
----@param force boolean
-M.tabclose = function(force)
-	local cmd = "tabclose"
-	if #vim.api.nvim_list_tabpages() == 1 then
-		cmd = "qall"
-	end
-	vim.cmd(cmd .. (force and "!" or ""))
 end
 
 return M
