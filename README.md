@@ -1,19 +1,19 @@
-tobyvin's dotfiles
-==================
+# tobyvin's [.dotfiles]
 
-Install
--------
+## Install
 
 ```sh
-git clone https://git.sr.ht/~tobyvin/.dotfiles ~/.dotfiles && cd ~/.dotfiles && make stow
+git clone https://git.sr.ht/~tobyvin/.dotfiles ~/.dotfiles && cd ~/.dotfiles && ./install.sh
 ```
 
-Getting started
----------------
+## Getting started
 
-The configuration files are managed using gnu stow and make. The Makefile
-includes targets for stowing, un-stowing, and cleaning the symlinks. It also
-has targets for installing a selection of tools I use.
+The configuration files are managed using GNU [stow]. The included [install.sh]
+script can be used to stow specified (or, if unspecified, all) packages using
+`./install.sh [package ..]`, clean broken symlinks from `$HOME` using
+`./install.sh -C`, or both with `./install.sh -c [package ..]`. Run
+`./install.sh -h` to see all options.
 
-Run `make interactive` or simply `make` to view and interactively select targets
-to install.
+[.dotfiles]: https://sr.ht/~tobyvin/.dotfiles/
+[stow]: https://www.gnu.org/software/stow/
+[install.sh]: ./install.sh
