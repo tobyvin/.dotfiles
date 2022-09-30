@@ -210,6 +210,13 @@ M.setup = function()
 				"filetype",
 			},
 		},
+		inactive_sections = {
+			lualine_c = { "filename" },
+			lualine_x = {
+				"filetype",
+				"location",
+			},
+		},
 		tabline = {
 			lualine_b = {
 				{
