@@ -56,11 +56,11 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("FileType", {
 		group = augroup_view,
-		pattern = "qf",
+		pattern = { "qf", "help", "gitcommit" },
 		callback = function()
 			vim.opt_local.buflisted = false
 		end,
-		desc = "Hide quickfix from buffer list",
+		desc = "Set buffer as unlisted",
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
