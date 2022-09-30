@@ -23,9 +23,9 @@ M.setup = function()
 			"IndentBlanklineIndent5",
 			"IndentBlanklineIndent6",
 		},
+		space_char_blankline = " ",
+		show_end_of_line = true,
 		show_current_context = true,
-		-- show_current_context_start = true,
-		-- show_end_of_line = true,
 		use_treesitter = true,
 		use_treesitter_scope = true,
 	})

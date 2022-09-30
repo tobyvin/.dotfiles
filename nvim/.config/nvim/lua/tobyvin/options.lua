@@ -3,8 +3,6 @@ local M = {}
 M.setup = function()
 	vim.g.mapleader = " "
 	vim.g.netrw_preview = 1
-	-- TODO: figure out how to only use this for specific windows
-	-- vim.g.netrw_liststyle = 3
 	vim.g.netrw_banner = 0
 	vim.g.netrw_altv = "nospr"
 	vim.g.netrw_winsize = -30
@@ -56,6 +54,13 @@ M.setup = function()
 	vim.opt.completeopt = { "menuone", "noselect", "noinsert" }
 	vim.opt.spelllang = "en_us"
 	vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
+	vim.opt.listchars = {
+		eol = "↵",
+		tab = "»-",
+		trail = "·",
+		extends = "…",
+		precedes = "…",
+	}
 	vim.opt.sessionoptions = {
 		"blank",
 		"buffers",
