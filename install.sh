@@ -22,7 +22,9 @@ help() {
 		Toby Vincent <tobyv13@gmail.com>
 
 		$SCRIPT
-		    Installer script
+		    Installer script. Basically just a wrapper around GNU stow with a few niceties. Running with
+		        no arguments and no '--clean-only' flag with stow all packages, with the exception of
+		        platform specific packages, e.g. 'wsl'.
 
 		USAGE:
 		    $SCRIPT [OPTION ...] [PACKAGE ...]
