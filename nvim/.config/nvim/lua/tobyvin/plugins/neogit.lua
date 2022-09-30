@@ -8,18 +8,16 @@ M.setup = function()
 		return
 	end
 
-  require("neogit")
 	neogit.setup({
 		disable_commit_confirmation = true,
 		disable_signs = true,
 		integrations = {
 			diffview = true,
 		},
-		-- kind = "replace",
 	})
 
-	local nmap = utils.keymap.group("n", "<leader>g", { desc = "Git" })
-	nmap("g", neogit.open, { desc = "Neogit" })
+	utils.keymap.group("n", "<leader>g", { desc = "Git" })
+	vim.keymap.set("n", "<leader>gg", neogit.open, { desc = "Neogit" })
 end
 
 return M
