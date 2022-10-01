@@ -17,8 +17,8 @@ M.on_attach = function(_, bufnr)
 		end,
 	})
 
-	vim.keymap.set("n", "<leader>e", vim.diagnostic.setloclist, { desc = "Show Buffer Diagnostic", buffer = bufnr })
-	vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "Show Workspace Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "<leader>e", vim.diagnostic.setloclist, { desc = "Buffer Diagnostic", buffer = bufnr })
+	vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "Workspace Diagnostic", buffer = bufnr })
 	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic", buffer = bufnr })
 	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic", buffer = bufnr })
 end
