@@ -19,7 +19,7 @@ M.setup = function()
 					callSnippet = "Replace",
 				},
 				diagnostics = {
-					globals = { "vim" },
+					globals = { "vim", "packer_plugins" },
 				},
 				format = {
 					enable = false,
