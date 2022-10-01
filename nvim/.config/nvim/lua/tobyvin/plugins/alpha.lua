@@ -29,18 +29,8 @@ M.setup = function()
 
 	local function info_value()
 		local total_plugins = #vim.tbl_keys(packer_plugins)
-		local datetime = os.date(" %d-%m-%Y")
 		local v = vim.version()
-		return "DATE: "
-			.. datetime
-			.. " VIM: v"
-			.. v.major
-			.. "."
-			.. v.minor
-			.. "."
-			.. v.patch
-			.. " PLUGINS: "
-			.. total_plugins
+		return string.format("VIM: v%d.%d.%d PLUGINS: %d", v.major, v.minor, v.patch, total_plugins)
 	end
 
 	local info = {
