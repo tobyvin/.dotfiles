@@ -72,7 +72,6 @@ M.setup = function()
 	}))
 
 	lspconfig.texlab.setup(lsp.config({
-		init_options = { documentFormatting = true },
 		settings = {
 			texlab = {
 				build = {
@@ -90,9 +89,6 @@ M.setup = function()
 				chktex = {
 					onEdit = true,
 					onOpenAndSave = true,
-				},
-				latexindent = {
-					modifyLineBreaks = true,
 				},
 				auxDirectory = "../aux",
 			},
