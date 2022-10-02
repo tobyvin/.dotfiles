@@ -51,6 +51,13 @@ M.plugins = function(use)
 	})
 
 	use({
+		"folke/tokyonight.nvim",
+		config = function()
+			require("tobyvin.plugins.tokyonight").setup()
+		end,
+	})
+
+	use({
 		"Shatur/neovim-session-manager",
 		config = function()
 			require("tobyvin.plugins.session_manager").setup()
