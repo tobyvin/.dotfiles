@@ -43,18 +43,10 @@ M.plugins = function(use)
 		end,
 	})
 
-	-- TODO: implement custom hls using base-16-gruvbox and remove this
 	use({
-		"eddyekofo94/gruvbox-flat.nvim",
+		"ellisonleao/gruvbox.nvim",
 		config = function()
-			require("tobyvin.plugins.gruvbox-flat").setup()
-		end,
-	})
-
-	use({
-		"xiyaowong/nvim-transparent",
-		config = function()
-			require("tobyvin.plugins.transparent").setup()
+			require("tobyvin.plugins.gruvbox").setup()
 		end,
 	})
 
@@ -77,7 +69,6 @@ M.plugins = function(use)
 
 	use({
 		"williamboman/mason.nvim",
-		requires = {},
 		config = function()
 			require("tobyvin.plugins.mason").setup()
 		end,

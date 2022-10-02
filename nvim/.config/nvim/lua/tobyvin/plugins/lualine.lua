@@ -20,46 +20,6 @@ M.diff_source = function()
 	end
 end
 
-M.theme = function()
-	local config = require("gruvbox.config")
-	local colors = require("gruvbox.colors").setup(config)
-
-	local theme = {
-		normal = {
-			a = { bg = colors.info, fg = colors.black },
-			b = { bg = colors.bg_highlight, fg = colors.info },
-			c = { bg = "none", fg = colors.fg_sidebar, gui = "none" },
-		},
-
-		insert = {
-			a = { bg = colors.gitSigns.add, fg = colors.black },
-			b = { bg = colors.bg_highlight, fg = colors.gitSigns.add },
-		},
-		command = {
-			a = { bg = colors.warning, fg = colors.black },
-			b = { bg = colors.bg_highlight, fg = colors.warning },
-		},
-
-		visual = {
-			a = { bg = colors.warning, fg = colors.black },
-			b = { bg = colors.bg_highlight, fg = colors.warning },
-		},
-
-		replace = {
-			a = { bg = colors.error, fg = colors.black },
-			b = { bg = colors.bg_highlight, fg = colors.error },
-		},
-
-		inactive = {
-			a = { bg = "none", fg = colors.info, gui = "none" },
-			b = { bg = "none", fg = colors.comment, gui = "none" },
-			c = { bg = "none", fg = colors.comment, gui = "none" },
-		},
-	}
-
-	return theme
-end
-
 M.setup = function()
 	local status_ok, lualine = pcall(require, "lualine")
 	if not status_ok then
@@ -145,7 +105,6 @@ M.setup = function()
 
 	lualine.setup({
 		options = {
-			theme = M.theme(),
 			refresh = {
 				statusline = 200,
 			},

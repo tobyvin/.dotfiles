@@ -10,6 +10,7 @@ M.setup = function()
 	vim.g.netrw_altfile = 1
 
 	vim.opt.termguicolors = true
+	vim.opt.background = "dark"
 	vim.opt.laststatus = 3
 	vim.opt.undofile = true
 	vim.opt.swapfile = false
