@@ -41,8 +41,7 @@ export FZF_DEFAULT_OPTS='--bind ctrl-q:abort
 --bind alt-down:half-page-down
 --color fg:#ebdbb2,hl:#fabd2f,fg+:#ebdbb2,hl+:#fabd2f
 --color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54'
-export FZF_PREVIEW_COMMAND='bat --style=numbers,changes --wrap never --color always {} 2>/dev/null || cat {} 2>/dev/null ||
-    exa --tree --git-ignore --level=3 --icons {} 2>/dev/null || tree -C {} 2>/dev/null'
+export FZF_PREVIEW_COMMAND='bat --style=numbers,changes --wrap never --color always {} 2>/dev/null'
 
 export PATH="$PATH:$HOME/.local/bin"
 

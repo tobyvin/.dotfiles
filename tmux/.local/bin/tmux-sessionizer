@@ -41,8 +41,10 @@ else
   ' | sort -r | sort -t':' -r -k2 | uniq -s10 | sort -r | cut -d':' -f2 | sed "s#^$attached\$##g" | sed '/^$/d')"
 
 	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -1 \
-		--preview="$FZF_PREVIEW_COMMAND ||
-    printf '%s' {q} | sed 's|/\$||' | xargs hut git show 2>/dev/null ||
+		--preview-window=right,75% --preview="onefetch {} 2>/dev/null ||
+    ([ -e {}/README.md ] && glow --style=dark {}/README.md 2>/dev/null) ||
+    exa --tree --git-ignore --level=3 --icons {} 2>/dev/null ||
+    (printf '%s' {q} | sed 's|/\$||' | xargs hut git show --repo 2>/dev/null && glow {q}/blob/HEAD/README.md --style=dark 2>/dev/null) ||
     gh repo view {q} 2>/dev/null ||
     printf 'Create new project:\n %s' {q} |
     sed 's|^ \([^/~][^/]*\)\$| $HOME/\1|' |
