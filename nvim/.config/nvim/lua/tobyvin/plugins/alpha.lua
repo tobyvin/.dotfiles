@@ -1,89 +1,123 @@
 ---@diagnostic disable: missing-parameter
-local filetype = require("plenary.filetype")
-local path = require("plenary.path")
-local M = {}
+local Filetype = require("plenary.filetype")
+local Icons = require("nvim-web-devicons")
+local utils = require("tobyvin.utils")
+local M = {
+	position = "center",
+	width = 60,
+}
+---@alias Alignment
+---| '"left"' # Left align
+---| '"right"' # Right align
+---| '"center"' # Center align
+--- @param str string
+--- @param position Alignment | string
+M.format_string = function(str, position)
+	local fmt
+	if position == "right" then
+		fmt = "%+" .. M.width .. "s"
+	elseif position == "center" then
+		fmt = "%+" .. math.ceil(M.width / 2) .. "s"
+	else
+		fmt = "%-" .. M.width .. "s"
+	end
+	return string.format(fmt, str)
+end
 
-M.button = function(...)
-	local startify = require("alpha.themes.startify")
-	local button = startify.button(...)
-	button.opts.position = "center"
-	button.opts.width = 60
-	button.opts.align_shortcut = "left"
+--- @param sc string
+--- @param txt string
+--- @param keybind string? optional
+--- @param keybind_opts table? optional
+M.button = function(sc, txt, keybind, keybind_opts)
+	local sc_ = sc:gsub("%s", "")
+
+	local opts = {
+		position = M.position,
+		shortcut = "[" .. sc .. "] ",
+		cursor = M.width - 3,
+		width = M.width,
+		align_shortcut = "right",
+		hl_shortcut = { { "Operator", 0, 1 }, { "Number", 1, #sc + 1 }, { "Operator", #sc + 1, #sc + 2 } },
+		shrink_margin = false,
+	}
+
+	if keybind then
+		keybind_opts = vim.F.if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
+		opts.keymap = { "n", sc_, keybind, { noremap = false, silent = true, nowait = true } }
+	end
+
+	local function on_press()
+		local key = vim.api.nvim_replace_termcodes(keybind .. "<Ignore>", true, false, true)
+		---@diagnostic disable-next-line: param-type-mismatch
+		vim.api.nvim_feedkeys(key, "t", false)
+	end
+
+	return {
+		type = "button",
+		val = txt,
+		on_press = on_press,
+		opts = opts,
+	}
+end
+
+M.file_button = function(filename, sc)
+	local short_fn = utils.fs.shorten_path(filename, M.width)
+	local hl = {}
+	local ico, ico_hl = Icons.get_icon_by_filetype(Filetype.detect(filename), { default = true })
+	table.insert(hl, { ico_hl, 0, 3 })
+	local ico_txt = ico .. "  "
+	local fn_start = short_fn:match(".*[/\\]")
+	if fn_start ~= nil then
+		table.insert(hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt })
+	end
+	local button = M.button(sc, ico_txt .. short_fn, "<Cmd>e " .. filename .. " <CR>")
+	button.opts.hl = hl
+	button.opts.cursor = M.width - 1
 	return button
 end
 
-M.get_extension = function(fn)
-	local match = fn:match("^.+(%..+)$")
-	local ext = ""
-	if match ~= nil then
-		ext = match:sub(2)
-	end
-	return ext
-end
-
-M.icon = function(fn)
-	local nwd_ok, nwd = pcall(require, "nvim-web-devicons")
-	local ft = filetype.detect(fn)
-	if nwd_ok and ft ~= nil then
-		return nwd.get_icon_by_filetype(ft, { default = true })
-	else
-		return "", ""
-	end
-end
-
-M.notified = false
-M.file_button = function(fn, sc)
-	local short_fn = vim.fn.fnamemodify(fn, ":.")
-	if vim.fn.strlen(short_fn) > 50 then
-		local path_fn = path:new(short_fn)
-		local v = -1
-		local exclude = { 1, v }
-		while v > -20 and vim.fn.strlen(path_fn:shorten(1, exclude)) < 50 do
-			v = v - 1
-			table.insert(exclude, v)
-		end
-		short_fn = path_fn:shorten(1, exclude)
-	end
-	local fb_hl = {}
-	local ico, hl = M.icon(fn)
-	table.insert(fb_hl, { hl, 0, 1 })
-	local ico_txt = ico .. "  "
-	local file_button_el = M.button(sc, ico_txt .. short_fn, "<Cmd>e " .. fn .. " <CR>")
-	local fn_start = short_fn:match(".*[/\\]")
-	if fn_start ~= nil then
-		table.insert(fb_hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt - 2 })
-	end
-	file_button_el.opts.hl = fb_hl
-
-	file_button_el.opts.position = "center"
-	file_button_el.opts.width = 60
-	file_button_el.opts.align_shortcut = "left"
-	return file_button_el
-end
-
-M.mru_filter = function(v)
+M.mru_filter = function(filename)
 	local ignored_ft = { "Git.*" }
 	local cwd = vim.fn.getcwd()
-	local ft = vim.F.if_nil(vim.filetype.match({ filename = v }), "")
+	local ft = vim.F.if_nil(Filetype.detect(filename), "")
 	local ignored = false
 	for _, pattern in pairs(ignored_ft) do
 		ignored = ignored or ft:match(pattern) ~= nil
 	end
-	return not ignored and (vim.fn.filereadable(v) == 1) and vim.startswith(v, cwd)
+	return not ignored and (vim.fn.filereadable(filename) == 1) and vim.startswith(filename, cwd)
 end
 
+M.mru_cache = nil
 M.mru = function()
-	local oldfiles = vim.tbl_filter(M.mru_filter, vim.v.oldfiles)
-	local tbl = {}
-	for i, fn in ipairs({ unpack(oldfiles, 1, 10) }) do
-		local file_button_el = M.file_button(fn, tostring(i % 10))
-		tbl[i] = file_button_el
+	if M.mru_cache == nil then
+		local oldfiles = vim.tbl_filter(M.mru_filter, { unpack(vim.v.oldfiles, 1, 10) })
+		local tbl = {}
+		for i, filename in ipairs(oldfiles) do
+			tbl[i] = M.file_button(filename, tostring(i % 10))
+		end
+		M.mru_cache = { {
+			type = "group",
+			val = tbl,
+		} }
 	end
-	return { {
-		type = "group",
-		val = tbl,
-		opts = { position = "center" },
-	} }
+	return M.mru_cache
+end
+
+M.actions_cache = nil
+M.actions = function()
+	if M.actions_cache == nil then
+		M.actions_cache = {
+			{
+				type = "group",
+				val = {
+					M.button("e", "new", "<cmd>enew<cr>"),
+					M.button("s", "session", "<cmd>SessionManager load_current_dir_session<cr>"),
+					M.button("q", "quit", "<cmd>qa<cr>"),
+				},
+			},
+		}
+	end
+	return M.actions_cache
 end
 
 M.setup = function()
@@ -107,7 +141,7 @@ M.setup = function()
 			" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
 		},
 		opts = {
-			position = "center",
+			position = M.position,
 			hl = "DevIconVim",
 		},
 	}
@@ -123,15 +157,15 @@ M.setup = function()
 		val = info_value(),
 		opts = {
 			hl = "DevIconVim",
-			position = "center",
+			position = M.position,
 		},
 	}
 
 	local message = {
 		type = "text",
-		val = fortune({ max_width = 60 }),
+		val = fortune({ max_width = M.width }),
 		opts = {
-			position = "center",
+			position = M.position,
 			hl = "Statement",
 		},
 	}
@@ -150,19 +184,15 @@ M.setup = function()
 		val = {
 			{
 				type = "text",
-				val = "MRU",
+				val = M.format_string("MRU"),
 				opts = {
 					hl = "String",
-					shrink_margin = false,
-					position = "center",
+					position = M.position,
 				},
 			},
 			{
 				type = "group",
 				val = M.mru,
-				opts = {
-					position = "center",
-				},
 			},
 		},
 	}
@@ -172,19 +202,16 @@ M.setup = function()
 		val = {
 			{
 				type = "text",
-				val = "CMD",
+				val = M.format_string("CMD"),
 				opts = {
 					hl = "String",
-					shrink_margin = false,
-					position = "center",
+					position = M.position,
 				},
 			},
-			M.button("e", "new", "<cmd>enew<cr>"),
-			M.button("s", "session", "<cmd>SessionManager load_current_dir_session<cr>"),
-			M.button("q", "quit", "<cmd>qa<cr>"),
-		},
-		opts = {
-			position = "center",
+			{
+				type = "group",
+				val = M.actions,
+			},
 		},
 	}
 
@@ -195,10 +222,6 @@ M.setup = function()
 			mru,
 			{ type = "padding", val = 1 },
 			actions,
-		},
-		opts = {
-			position = "center",
-			width = 60,
 		},
 	}
 
