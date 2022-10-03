@@ -16,7 +16,8 @@ M.setup = function()
 			enable = true,
 			additional_vim_regex_highlighting = { "markdown" },
 			disable = function(_, bufnr)
-				return vim.api.nvim_buf_line_count(bufnr) > 2500
+				-- TODO: temp solution to ts highlighting screwing up formatting
+				return vim.api.nvim_buf_line_count(bufnr) > 2500 or vim.bo[bufnr].filetype == "help"
 			end,
 		},
 		incremental_selection = {
