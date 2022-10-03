@@ -1,4 +1,90 @@
+---@diagnostic disable: missing-parameter
+local filetype = require("plenary.filetype")
+local path = require("plenary.path")
 local M = {}
+
+M.button = function(...)
+	local startify = require("alpha.themes.startify")
+	local button = startify.button(...)
+	button.opts.position = "center"
+	button.opts.width = 60
+	button.opts.align_shortcut = "left"
+	return button
+end
+
+M.get_extension = function(fn)
+	local match = fn:match("^.+(%..+)$")
+	local ext = ""
+	if match ~= nil then
+		ext = match:sub(2)
+	end
+	return ext
+end
+
+M.icon = function(fn)
+	local nwd_ok, nwd = pcall(require, "nvim-web-devicons")
+	local ft = filetype.detect(fn)
+	if nwd_ok and ft ~= nil then
+		return nwd.get_icon_by_filetype(ft, { default = true })
+	else
+		return "", ""
+	end
+end
+
+M.notified = false
+M.file_button = function(fn, sc)
+	local short_fn = vim.fn.fnamemodify(fn, ":.")
+	if vim.fn.strlen(short_fn) > 50 then
+		local path_fn = path:new(short_fn)
+		local v = -1
+		local exclude = { 1, v }
+		while v > -20 and vim.fn.strlen(path_fn:shorten(1, exclude)) < 50 do
+			v = v - 1
+			table.insert(exclude, v)
+		end
+		short_fn = path_fn:shorten(1, exclude)
+	end
+	local fb_hl = {}
+	local ico, hl = M.icon(fn)
+	table.insert(fb_hl, { hl, 0, 1 })
+	local ico_txt = ico .. "  "
+	local file_button_el = M.button(sc, ico_txt .. short_fn, "<Cmd>e " .. fn .. " <CR>")
+	local fn_start = short_fn:match(".*[/\\]")
+	if fn_start ~= nil then
+		table.insert(fb_hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt - 2 })
+	end
+	file_button_el.opts.hl = fb_hl
+
+	file_button_el.opts.position = "center"
+	file_button_el.opts.width = 60
+	file_button_el.opts.align_shortcut = "left"
+	return file_button_el
+end
+
+M.mru_filter = function(v)
+	local ignored_ft = { "Git.*" }
+	local cwd = vim.fn.getcwd()
+	local ft = vim.F.if_nil(vim.filetype.match({ filename = v }), "")
+	local ignored = false
+	for _, pattern in pairs(ignored_ft) do
+		ignored = ignored or ft:match(pattern) ~= nil
+	end
+	return not ignored and (vim.fn.filereadable(v) == 1) and vim.startswith(v, cwd)
+end
+
+M.mru = function()
+	local oldfiles = vim.tbl_filter(M.mru_filter, vim.v.oldfiles)
+	local tbl = {}
+	for i, fn in ipairs({ unpack(oldfiles, 1, 10) }) do
+		local file_button_el = M.file_button(fn, tostring(i % 10))
+		tbl[i] = file_button_el
+	end
+	return { {
+		type = "group",
+		val = tbl,
+		opts = { position = "center" },
+	} }
+end
 
 M.setup = function()
 	local status_ok, alpha = pcall(require, "alpha")
@@ -7,7 +93,6 @@ M.setup = function()
 		return
 	end
 
-	local startify = require("alpha.themes.startify")
 	local fortune = require("alpha.fortune")
 
 	local logo = {
@@ -22,7 +107,7 @@ M.setup = function()
 			" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
 		},
 		opts = {
-			position = "left",
+			position = "center",
 			hl = "DevIconVim",
 		},
 	}
@@ -38,7 +123,7 @@ M.setup = function()
 		val = info_value(),
 		opts = {
 			hl = "DevIconVim",
-			position = "left",
+			position = "center",
 		},
 	}
 
@@ -46,7 +131,7 @@ M.setup = function()
 		type = "text",
 		val = fortune({ max_width = 60 }),
 		opts = {
-			position = "left",
+			position = "center",
 			hl = "Statement",
 		},
 	}
@@ -69,20 +154,20 @@ M.setup = function()
 				opts = {
 					hl = "String",
 					shrink_margin = false,
-					position = "left",
-					max_width = 60,
+					position = "center",
 				},
 			},
 			{
 				type = "group",
-				val = function()
-					return { startify.mru(1, vim.fn.getcwd(), 5) }
-				end,
+				val = M.mru,
+				opts = {
+					position = "center",
+				},
 			},
 		},
 	}
 
-	local buttons = {
+	local actions = {
 		type = "group",
 		val = {
 			{
@@ -91,16 +176,15 @@ M.setup = function()
 				opts = {
 					hl = "String",
 					shrink_margin = false,
-					position = "left",
+					position = "center",
 				},
 			},
-			{ type = "padding", val = 1 },
-			startify.button("e", "new", "<cmd>enew<cr>"),
-			startify.button("s", "session", "<cmd>SessionManager load_current_dir_session<cr>"),
-			startify.button("q", "quit", "<cmd>qa<cr>"),
+			M.button("e", "new", "<cmd>enew<cr>"),
+			M.button("s", "session", "<cmd>SessionManager load_current_dir_session<cr>"),
+			M.button("q", "quit", "<cmd>qa<cr>"),
 		},
 		opts = {
-			position = "left",
+			position = "center",
 		},
 	}
 
@@ -110,11 +194,11 @@ M.setup = function()
 			{ type = "padding", val = 1 },
 			mru,
 			{ type = "padding", val = 1 },
-			buttons,
+			actions,
 		},
 		opts = {
 			position = "center",
-			width = 50,
+			width = 60,
 		},
 	}
 
