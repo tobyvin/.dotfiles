@@ -4,7 +4,6 @@ local M = {}
 M.with_handler = function(callback)
 	return function(err, result, ctx, config)
 		if result == nil or vim.tbl_isempty(result) then
-			vim.lsp.log.info(ctx.method, "No location found")
 			vim.notify("No location found", vim.log.levels.INFO, { title = "[LSP] " .. ctx.method })
 			return nil
 		end
