@@ -1,17 +1,13 @@
 ---@diagnostic disable: missing-parameter
-local Filetype = require("plenary.filetype")
 local Icons = require("nvim-web-devicons")
 local utils = require("tobyvin.utils")
 local M = {
 	position = "center",
 	width = 60,
 }
----@alias Alignment
----| '"left"' # Left align
----| '"right"' # Right align
----| '"center"' # Center align
+
 --- @param str string
---- @param position Alignment | string
+--- @param position '"left"' | '"right"' | '"center"'
 M.format_string = function(str, position)
 	local fmt
 	if position == "right" then
@@ -63,7 +59,10 @@ end
 M.file_button = function(filename, sc)
 	local short_fn = utils.fs.shorten_path(filename, M.width)
 	local hl = {}
-	local ico, ico_hl = Icons.get_icon_by_filetype(Filetype.detect(filename), { default = true })
+
+	local filetype, _ = vim.filetype.match({ filename = filename })
+	filetype = vim.F.if_nil(filetype, "")
+	local ico, ico_hl = Icons.get_icon_by_filetype(filetype, { default = true })
 	table.insert(hl, { ico_hl, 0, 3 })
 	local ico_txt = ico .. "  "
 	local fn_start = short_fn:match(".*[/\\]")
@@ -77,12 +76,13 @@ M.file_button = function(filename, sc)
 end
 
 M.mru_filter = function(filename)
-	local ignored_ft = { "Git.*" }
+	local ignored_ft = { "gitcommit" }
 	local cwd = vim.fn.getcwd()
-	local ft = vim.F.if_nil(Filetype.detect(filename), "")
+	local filetype, _ = vim.filetype.match({ filename = filename })
+	filetype = vim.F.if_nil(filetype, "")
 	local ignored = false
 	for _, pattern in pairs(ignored_ft) do
-		ignored = ignored or ft:match(pattern) ~= nil
+		ignored = ignored or filetype:match(pattern) ~= nil
 	end
 	return not ignored and (vim.fn.filereadable(filename) == 1) and vim.startswith(filename, cwd)
 end
