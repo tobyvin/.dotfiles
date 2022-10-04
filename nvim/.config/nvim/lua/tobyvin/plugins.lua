@@ -259,10 +259,13 @@ M.plugins = function(use)
 		requires = {
 			"nvim-lua/plenary.nvim",
 			"BurntSushi/ripgrep",
-			"nvim-telescope/telescope-packer.nvim",
-			"nvim-telescope/telescope-github.nvim",
+			"nvim-telescope/telescope-frecency.nvim",
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
 			{ "nvim-telescope/telescope-smart-history.nvim", requires = { "tami5/sqlite.lua", module = "sqlite" } },
+			"nvim-telescope/telescope-dap.nvim",
+			"nvim-telescope/telescope-packer.nvim",
+			"nvim-telescope/telescope-github.nvim",
+			"ThePrimeagen/git-worktree.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.telescope").setup()
@@ -432,7 +435,7 @@ M.plugins = function(use)
 	use({
 		"ThePrimeagen/git-worktree.nvim",
 		config = function()
-			require("tobyvin.plugins.git-worktree")
+			require("tobyvin.plugins.git-worktree").setup()
 		end,
 	})
 
@@ -446,13 +449,31 @@ M.plugins = function(use)
 	use({
 		"mfussenegger/nvim-dap",
 		requires = {
-			"rcarriga/nvim-dap-ui",
-			{ "theHamsta/nvim-dap-virtual-text", requires = "nvim-treesitter/nvim-treesitter" },
-			{ "nvim-telescope/telescope-dap.nvim", requires = "nvim-telescope/telescope.nvim" },
 			"leoluz/nvim-dap-go",
 		},
 		config = function()
 			require("tobyvin.plugins.dap").setup()
+		end,
+	})
+
+	use({
+		"theHamsta/nvim-dap-virtual-text",
+		requires = {
+			"mfussenegger/nvim-dap",
+			"nvim-treesitter/nvim-treesitter",
+		},
+		config = function()
+			require("tobyvin.plugins.nvim-dap-virtual-text").setup()
+		end,
+	})
+
+	use({
+		"rcarriga/nvim-dap-ui",
+		requires = {
+			"mfussenegger/nvim-dap",
+		},
+		config = function()
+			require("tobyvin.plugins.dapui").setup()
 		end,
 	})
 

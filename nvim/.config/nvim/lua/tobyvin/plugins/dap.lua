@@ -1,35 +1,5 @@
 local utils = require("tobyvin.utils")
-local M = {
-	dapui_win = nil,
-	dapui_tab = nil,
-}
-
-M.highlights = function()
-	local ns_id = 0
-	-- nvim-dap
-	vim.api.nvim_set_hl(ns_id, "DapBreakpoint", { link = "debugBreakpoint" })
-	vim.api.nvim_set_hl(ns_id, "DapStopped", { link = "debugPC" })
-
-	-- nvim-dap-ui
-	vim.api.nvim_set_hl(ns_id, "DapUIVariable", { link = "TSVariable" })
-	vim.api.nvim_set_hl(ns_id, "DapUIScope", { link = "TSNamespace" })
-	vim.api.nvim_set_hl(ns_id, "DapUIType", { link = "Type" })
-	vim.api.nvim_set_hl(ns_id, "DapUIModifiedValue", { link = "Keyword" })
-	vim.api.nvim_set_hl(ns_id, "DapUIDecoration", { link = "PreProc" })
-	vim.api.nvim_set_hl(ns_id, "DapUIThread", { link = "String" })
-	vim.api.nvim_set_hl(ns_id, "DapUIStoppedThread", { link = "Special" })
-	vim.api.nvim_set_hl(ns_id, "DapUIFrameName", { link = "Normal" })
-	vim.api.nvim_set_hl(ns_id, "DapUISource", { link = "TSKeyword" })
-	vim.api.nvim_set_hl(ns_id, "DapUILineNumber", { link = "TSOperator" })
-	vim.api.nvim_set_hl(ns_id, "DapUIFloatBorder", { link = "FloatBorder" })
-	vim.api.nvim_set_hl(ns_id, "DapUIWatchesEmpty", { link = "LspDiagnosticsError" })
-	vim.api.nvim_set_hl(ns_id, "DapUIWatchesValue", { link = "String" })
-	vim.api.nvim_set_hl(ns_id, "DapUIWatchesError", { link = "LspDiagnosticsError" })
-	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsPath", { link = "Keyword" })
-	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsInfo", { link = "LspDiagnosticsInfo" })
-	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsCurrentLine", { link = "DapStopped" })
-	vim.api.nvim_set_hl(ns_id, "DapUIBreakpointsLine", { link = "DapUILineNumber" })
-end
+local M = {}
 
 M.set_custom_breakpoint = function()
 	vim.ui.input({ prompt = "Condition: " }, function(condition)
@@ -39,54 +9,6 @@ M.set_custom_breakpoint = function()
 			end)
 		end)
 	end)
-end
-
-M.eval = function()
-	vim.ui.input({ prompt = "Expr: " }, function(input)
-		require("dapui").eval(input, {})
-	end)
-end
-
-M.dapui_open = function()
-	if M.dapui_win and vim.api.nvim_win_is_valid(M.dapui_win) then
-		vim.api.nvim_set_current_win(M.dapui_win)
-		return
-	end
-
-	local dap = require("dap")
-	local dapui = require("dapui")
-
-	vim.cmd("tabedit %")
-	M.dapui_win = vim.fn.win_getid()
-	M.dapui_tab = vim.api.nvim_win_get_tabpage(M.dapui_win)
-
-	dapui.open({})
-
-	vim.keymap.set("n", "<leader>q", dap.terminate, { desc = "Quit (DAP)" })
-
-	local on_tab_closed = function()
-		dap.terminate()
-		return true
-	end
-
-	local group = vim.api.nvim_create_augroup("DapAU", { clear = true })
-	vim.api.nvim_create_autocmd("TabClosed", { group = group, callback = on_tab_closed })
-end
-
-M.dapui_close = function()
-	local dapui = require("dapui")
-
-	dapui.close({})
-
-	vim.keymap.set("n", "<leader>q", utils.buffer.quit, { desc = "Quit" })
-
-	if M.dapui_tab and vim.api.nvim_tabpage_is_valid(M.dapui_tab) then
-		local tabnr = vim.api.nvim_tabpage_get_number(M.dapui_tab)
-		vim.cmd("tabclose " .. tabnr)
-	end
-
-	M.dapui_win = nil
-	M.dapui_tab = nil
 end
 
 M.progress_start = function(session, body)
@@ -106,10 +28,11 @@ end
 
 M.progress_update = function(_, body)
 	local notif_data = utils.debug.get_notif_data("dap", body.progressId)
-	notif_data.notification = vim.notify(utils.debug.format_message(body.message, body.percentage), "info", {
-		replace = notif_data.notification,
-		hide_from_history = false,
-	})
+	notif_data.notification =
+		vim.notify(utils.debug.format_message(body.message, body.percentage), vim.log.levels.INFO, {
+			replace = notif_data.notification,
+			hide_from_history = false,
+		})
 end
 
 M.progress_end = function(_, body)
@@ -211,57 +134,45 @@ M.setup = function()
 	-- Language specific plugins
 	require("dap-go").setup()
 
-	-- Virtual text
-	require("nvim-dap-virtual-text").setup({})
-
-	-- DAPUI
-	require("dapui").setup()
-
-	-- Progress handlers
 	dap.listeners.before.event_progressStart["progress-notifications"] = M.progress_start
 	dap.listeners.before.event_progressUpdate["progress-notifications"] = M.progress_update
 	dap.listeners.before.event_progressEnd["progress-notifications"] = M.progress_end
 
-	-- Delete repl buffer
 	dap.listeners.before.event_terminated["close_repl"] = dap.repl.close
 	dap.listeners.before.event_exited["close_repl"] = dap.repl.close
 
-	-- Attach DAP UI to DAP events
-	dap.listeners.after.event_initialized["dapui_config"] = M.dapui_open
-	dap.listeners.before.event_terminated["dapui_config"] = M.dapui_close
-	dap.listeners.before.event_exited["dapui_config"] = M.dapui_close
-	dap.listeners.before.disconnect["dapui_config"] = M.dapui_close
+	local keymap_restore = {}
+	dap.listeners.after.event_initialized["keymap"] = function()
+		for _, buf in pairs(vim.api.nvim_list_bufs()) do
+			local keymaps = vim.api.nvim_buf_get_keymap(buf, "n")
+			for _, keymap in pairs(keymaps) do
+				if keymap.lhs == "K" then
+					table.insert(keymap_restore, keymap)
+					vim.api.nvim_buf_del_keymap(buf, "n", "K")
+				end
+			end
+		end
+		vim.keymap.set("n", "K", require("dap.ui.widgets").hover, { desc = "Hover" })
+	end
+	dap.listeners.before.event_terminated["keymap"] = function()
+		for _, k in pairs(keymap_restore) do
+			vim.keymap.set(k.mode, k.lhs, vim.F.if_nil(k.callback, k.rhs), { desc = k.desc })
+		end
+		keymap_restore = {}
+	end
 
-	-- Telescope
-	require("telescope").load_extension("dap")
-
-	-- Keymaps
+	utils.keymap.group("n", "<leader>d", { desc = "Debug" })
 	vim.keymap.set("n", "<F5>", dap.continue, { desc = "Continue" })
 	vim.keymap.set("n", "<F10>", dap.step_over, { desc = "Step Over" })
 	vim.keymap.set("n", "<F11>", dap.step_into, { desc = "Step Into" })
 	vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out" })
-
-	local nmap = utils.keymap.group("n", "<leader>d", { desc = "Debug" })
-	nmap("d", require("telescope").extensions.dap.configurations, { desc = "Configurations" })
-	nmap("c", dap.continue, { desc = "Continue" })
-	nmap("a", dap.step_over, { desc = "Step Over" })
-	nmap("i", dap.step_into, { desc = "Step Into" })
-	nmap("o", dap.step_out, { desc = "Step Out" })
-	nmap("q", dap.terminate, { desc = "Terminate" })
-
-	nmap("b", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
-	nmap("B", M.set_custom_breakpoint, { desc = "Custom Breakpoint" })
-
-	nmap("C", require("telescope").extensions.dap.commands, { desc = "Commands" })
-	nmap("l", require("telescope").extensions.dap.list_breakpoints, { desc = "List Breakpoints" })
-	nmap("v", require("telescope").extensions.dap.variables, { desc = "Variables" })
-	nmap("f", require("telescope").extensions.dap.frames, { desc = "Frames" })
-
-	nmap("e", M.eval, { desc = "Eval" })
-
-	vim.api.nvim_create_autocmd("ColorScheme", {
-		callback = M.highlights,
-	})
+	vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue" })
+	vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "Step Over" })
+	vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into" })
+	vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "Step Out" })
+	vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Terminate" })
+	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
+	vim.keymap.set("n", "<leader>dB", M.set_custom_breakpoint, { desc = "Custom Breakpoint" })
 
 	-- Signs
 	vim.fn.sign_define("DapBreakpoint", utils.debug.signs.breakpoint)
