@@ -46,6 +46,30 @@ M.progress_end = function(_, body)
 	notif_data.spinner = nil
 end
 
+M.hover_available = function()
+	local session = require("dap").session()
+	if not session then
+		return false
+	end
+	local frame = session.current_frame or {}
+	---@diagnostic disable-next-line: missing-parameter
+	local expression = vim.fn.expand("<cexpr>")
+	local variable
+	local scopes = frame.scopes or {}
+	for _, s in pairs(scopes) do
+		variable = s.variables and s.variables[expression]
+		if variable then
+			return true
+		end
+	end
+	return session:evaluate(expression, function(err)
+		if not err then
+			return true
+		end
+		return false
+	end)
+end
+
 M.setup = function()
 	local status_ok, dap = pcall(require, "dap")
 	if not status_ok then
@@ -141,24 +165,18 @@ M.setup = function()
 	dap.listeners.before.event_terminated["close_repl"] = dap.repl.close
 	dap.listeners.before.event_exited["close_repl"] = dap.repl.close
 
-	local keymap_restore = {}
+	local original_hover = vim.lsp.handlers["textDocument/hover"]
 	dap.listeners.after.event_initialized["keymap"] = function()
-		for _, buf in pairs(vim.api.nvim_list_bufs()) do
-			local keymaps = vim.api.nvim_buf_get_keymap(buf, "n")
-			for _, keymap in pairs(keymaps) do
-				if keymap.lhs == "K" then
-					table.insert(keymap_restore, keymap)
-					vim.api.nvim_buf_del_keymap(buf, "n", "K")
-				end
+		vim.lsp.handlers["textDocument/hover"] = function(...)
+			if M.hover_available() then
+				require("dap.ui.widgets").hover()
+			else
+				original_hover(...)
 			end
 		end
-		vim.keymap.set("n", "K", require("dap.ui.widgets").hover, { desc = "Hover" })
 	end
 	dap.listeners.before.event_terminated["keymap"] = function()
-		for _, k in pairs(keymap_restore) do
-			vim.keymap.set(k.mode, k.lhs, vim.F.if_nil(k.callback, k.rhs), { desc = k.desc })
-		end
-		keymap_restore = {}
+		vim.lsp.handlers["textDocument/hover"] = original_hover
 	end
 
 	utils.keymap.group("n", "<leader>d", { desc = "Debug" })

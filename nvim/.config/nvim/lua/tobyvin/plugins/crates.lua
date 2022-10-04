@@ -19,7 +19,6 @@ M.setup = function()
 		callback = function()
 			utils.documentation.register("toml", crates.open_documentation)
 
-			-- TODO: impl registration system like documentation (global and buffer?)
 			local original = vim.lsp.handlers["textDocument/hover"]
 			vim.lsp.handlers["textDocument/hover"] = function(...)
 				if crates.popup_available() then

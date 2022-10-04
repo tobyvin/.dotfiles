@@ -11,8 +11,6 @@ M.setup = function()
 	vim.keymap.set({ "n", "v", "o" }, "<s-l>", tree_climber.goto_child, { desc = "Goto Child" })
 	vim.keymap.set({ "n", "v", "o" }, "<s-j>", tree_climber.goto_next, { desc = "Goto Next" })
 	vim.keymap.set({ "n", "v", "o" }, "<s-k>", tree_climber.goto_prev, { desc = "Goto Prev" })
-	vim.keymap.set("n", "<c-k>", tree_climber.swap_prev, { desc = "Swap Prev" })
-	vim.keymap.set("n", "<c-j>", tree_climber.swap_next, { desc = "Swap Next" })
 end
 
 return M
