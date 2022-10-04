@@ -90,7 +90,7 @@ end
 M.mru_cache = nil
 M.mru = function()
 	if M.mru_cache == nil then
-		local oldfiles = vim.tbl_filter(M.mru_filter, { unpack(vim.v.oldfiles, 1, 10) })
+		local oldfiles = { unpack(vim.tbl_filter(M.mru_filter, vim.v.oldfiles), 1, 10) }
 		local tbl = {}
 		for i, filename in ipairs(oldfiles) do
 			tbl[i] = M.file_button(filename, tostring(i % 10))
