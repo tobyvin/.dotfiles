@@ -40,6 +40,8 @@ lsp.on_attach = function(client, bufnr)
 	lsp.formatting.on_attach(client, bufnr)
 	lsp.symbol.on_attach(client, bufnr)
 	require("lsp_signature").on_attach()
+
+	vim.api.nvim_exec_autocmds("User", { pattern = "LspAttach", data = { client_id = client.id } })
 end
 
 lsp.config = function(config)

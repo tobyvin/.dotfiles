@@ -456,6 +456,18 @@ M.plugins = function(use)
 	})
 
 	use({
+		"jayp0521/mason-nvim-dap.nvim",
+		after = { "mason.nvim", "nvim-dap" },
+		requires = {
+			"williamboman/mason.nvim",
+			"mfussenegger/nvim-dap",
+		},
+		config = function()
+			require("tobyvin.plugins.mason-nvim-dap").setup()
+		end,
+	})
+
+	use({
 		"theHamsta/nvim-dap-virtual-text",
 		requires = {
 			"mfussenegger/nvim-dap",

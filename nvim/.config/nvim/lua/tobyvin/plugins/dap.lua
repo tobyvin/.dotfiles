@@ -158,37 +158,65 @@ M.setup = function()
 	-- Language specific plugins
 	require("dap-go").setup()
 
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "DapAttach",
+		callback = function(args)
+			vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue", buffer = args.buf })
+			vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "Step Over", buffer = args.buf })
+			vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into", buffer = args.buf })
+			vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "Step Out", buffer = args.buf })
+			vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Terminate", buffer = args.buf })
+			vim.keymap.set("n", "<F5>", dap.continue, { desc = "Continue", buffer = args.buf })
+			vim.keymap.set("n", "<F10>", dap.step_over, { desc = "Step Over", buffer = args.buf })
+			vim.keymap.set("n", "<F11>", dap.step_into, { desc = "Step Into", buffer = args.buf })
+			vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out", buffer = args.buf })
+
+			local dap_ui_widgets = require("dap.ui.widgets")
+			M.lsp_hover = vim.lsp.handlers["textDocument/hover"]
+			vim.lsp.handlers["textDocument/hover"] = function(...)
+				if M.hover_available() then
+					dap_ui_widgets.hover()
+				else
+					M.lsp_hover(...)
+				end
+			end
+		end,
+	})
+
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "DapDetach",
+		callback = function(args)
+			vim.keymap.del("n", "<leader>dc", { buffer = args.buf })
+			vim.keymap.del("n", "<leader>da", { buffer = args.buf })
+			vim.keymap.del("n", "<leader>di", { buffer = args.buf })
+			vim.keymap.del("n", "<leader>do", { buffer = args.buf })
+			vim.keymap.del("n", "<leader>dq", { buffer = args.buf })
+			vim.keymap.del("n", "<F5>", { buffer = args.buf })
+			vim.keymap.del("n", "<F10>", { buffer = args.buf })
+			vim.keymap.del("n", "<F11>", { buffer = args.buf })
+			vim.keymap.del("n", "<F12>", { buffer = args.buf })
+
+			if M.lsp_hover ~= nil then
+				vim.lsp.handlers["textDocument/hover"] = M.lsp_hover
+				M.lsp_hover = nil
+			end
+		end,
+	})
+
+	dap.listeners.after.event_initialized["User"] = function()
+		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
+	end
+	dap.listeners.before.event_terminated["User"] = function()
+		vim.api.nvim_exec_autocmds("User", { pattern = "DapDetach" })
+	end
+
 	dap.listeners.before.event_progressStart["progress-notifications"] = M.progress_start
 	dap.listeners.before.event_progressUpdate["progress-notifications"] = M.progress_update
 	dap.listeners.before.event_progressEnd["progress-notifications"] = M.progress_end
-
 	dap.listeners.before.event_terminated["close_repl"] = dap.repl.close
 	dap.listeners.before.event_exited["close_repl"] = dap.repl.close
 
-	local original_hover = vim.lsp.handlers["textDocument/hover"]
-	dap.listeners.after.event_initialized["keymap"] = function()
-		vim.lsp.handlers["textDocument/hover"] = function(...)
-			if M.hover_available() then
-				require("dap.ui.widgets").hover()
-			else
-				original_hover(...)
-			end
-		end
-	end
-	dap.listeners.before.event_terminated["keymap"] = function()
-		vim.lsp.handlers["textDocument/hover"] = original_hover
-	end
-
 	utils.keymap.group("n", "<leader>d", { desc = "Debug" })
-	vim.keymap.set("n", "<F5>", dap.continue, { desc = "Continue" })
-	vim.keymap.set("n", "<F10>", dap.step_over, { desc = "Step Over" })
-	vim.keymap.set("n", "<F11>", dap.step_into, { desc = "Step Into" })
-	vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out" })
-	vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue" })
-	vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "Step Over" })
-	vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into" })
-	vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "Step Out" })
-	vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Terminate" })
 	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
 	vim.keymap.set("n", "<leader>dB", M.set_custom_breakpoint, { desc = "Custom Breakpoint" })
 

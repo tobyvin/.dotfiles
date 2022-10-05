@@ -16,11 +16,13 @@ M.toggle_blameline = function()
 end
 
 M.on_attach = function(bufnr)
-	local gitsigns = require("gitsigns")
+	local gitsigns = package.loaded.gitsigns
 	utils.keymap.group("n", "<leader>g", { desc = "Git", buffer = bufnr })
+
 	vim.keymap.set("n", "<leader>gb", gitsigns.blame_line, { desc = "Show blame", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gB", M.show_blameline, { desc = "Show blame", buffer = bufnr })
 	vim.keymap.set("n", "<leader>g<C-b>", M.toggle_blameline, { desc = "Toggle blame", buffer = bufnr })
+
 	vim.keymap.set("n", "<leader>gj", gitsigns.next_hunk, { desc = "Next Hunk", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gk", gitsigns.prev_hunk, { desc = "Prev Hunk", buffer = bufnr })
 
@@ -29,7 +31,6 @@ M.on_attach = function(bufnr)
 	vim.keymap.set("n", "<leader>gs", gitsigns.stage_hunk, { desc = "Stage Hunk", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gu", gitsigns.undo_stage_hunk, { desc = "Undo Stage Hunk", buffer = bufnr })
 
-	-- vim.keymap.set("n", "<leader>gP", gitsigns.preview_buffer, { desc = "Preview Buffer", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gR", gitsigns.reset_buffer, { desc = "Reset Buffer", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gS", gitsigns.stage_buffer, { desc = "Stage Buffer", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gU", gitsigns.reset_buffer_index, { desc = "Undo Stage Buffer", buffer = bufnr })

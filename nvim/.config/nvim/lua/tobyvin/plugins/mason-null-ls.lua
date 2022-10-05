@@ -1,5 +1,9 @@
 local M = {}
 
+M.install = function()
+	require("mason-null-ls.api.command").NullLsInstall({})
+end
+
 M.setup = function()
 	local status_ok, mason_null_ls = pcall(require, "mason-null-ls")
 	if not status_ok then
@@ -9,14 +13,13 @@ M.setup = function()
 
 	mason_null_ls.setup()
 
-	vim.api.nvim_create_autocmd("LspAttach", {
+	vim.api.nvim_create_autocmd("User", {
+		pattern = "LspAttach",
 		callback = function(args)
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
-			if client.name ~= "null-ls" then
-				return
+			if client.name == "null-ls" then
+				vim.keymap.set("n", "<leader>lN", M.install, { desc = "Null-LS Install", buffer = args.buf })
 			end
-			local bufnr = args.buf
-			vim.keymap.set("n", "<leader>lN", "<CMD>NullLsInstall<CR>", { desc = "Null-LS Install", buffer = bufnr })
 		end,
 	})
 end
