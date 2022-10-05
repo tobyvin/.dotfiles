@@ -79,8 +79,8 @@ M.setup = function()
 						"-pdf",
 						"-interaction=nonstopmode",
 						"-synctex=1",
-						"-auxdir=../aux",
-						"-outdir=../out",
+						string.format("-auxdir=%s/aux", vim.fn.getcwd()),
+						string.format("-outdir=%s/out", vim.fn.getcwd()),
 						"-emulate-aux-dir",
 						"%f",
 					},
@@ -90,7 +90,11 @@ M.setup = function()
 					onEdit = true,
 					onOpenAndSave = true,
 				},
-				auxDirectory = "../aux",
+				auxDirectory = string.format("%s/aux", vim.fn.getcwd()),
+				latexindent = {
+					["local"] = string.format("%s/latexindent/indentconfig.yaml", vim.env.XDG_CONFIG_HOME),
+					modifyLineBreaks = true,
+				},
 			},
 		},
 		on_attach = function(client, bufnr)
