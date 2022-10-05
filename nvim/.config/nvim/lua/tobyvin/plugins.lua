@@ -82,6 +82,14 @@ M.plugins = function(use)
 	})
 
 	use({
+		"RubixDev/mason-update-all",
+		requires = { "williamboman/mason.nvim" },
+		config = function()
+			require("tobyvin.plugins.mason-update-all").setup()
+		end,
+	})
+
+	use({
 		"jose-elias-alvarez/null-ls.nvim",
 		requires = {
 			"nvim-lua/plenary.nvim",

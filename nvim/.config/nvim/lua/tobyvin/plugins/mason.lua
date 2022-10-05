@@ -1,5 +1,9 @@
 local M = {}
 
+M.install = function()
+	require("mason.api.command").Mason({})
+end
+
 M.setup = function()
 	local status_ok, mason = pcall(require, "mason")
 	if not status_ok then
@@ -17,8 +21,7 @@ M.setup = function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>m", "<CMD>Mason<CR>", { desc = "Mason" })
-	vim.keymap.set("n", "<leader>M", "<CMD>MasonLog<CR>", { desc = "Mason Log" })
+	vim.keymap.set("n", "<leader>m", M.install, { desc = "Mason" })
 end
 
 return M

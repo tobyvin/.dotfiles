@@ -4,8 +4,8 @@ SCRIPT="$(basename "$0")"
 SCRIPT_DIR="$(dirname -- "$(readlink -f -- "$0")")"
 INSTALL_DIR="$(dirname "$SCRIPT_DIR")"
 
-long='clean,clean-only,no,simulate,verbose,help'
-short='cCnvh'
+long='nvim,clean,clean-only,no,simulate,verbose,help'
+short='ecCnvh'
 
 opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"
 
@@ -30,6 +30,7 @@ help() {
 		    $SCRIPT [OPTION ...] [PACKAGE ...]
 
 		OPTIONS:
+		    -e, --nvim            Run neovim update commands
 		    -c, --clean           Remove broken symlinks found in $INSTALL_DIR for proceeding
 		    -C, --clean-only      Like --clean, but will exit after cleaning
 		    -n, --no, --simulate  Do not actually make any filesystem changes
@@ -71,6 +72,7 @@ need() {
 	done
 }
 
+nvim=false
 clean=false
 clean_only=false
 verbose=0
@@ -83,6 +85,10 @@ while true; do
 		;;
 	-v | --verbose)
 		verbose=$((verbose + 1))
+		shift
+		;;
+	-e | --nvim)
+		nvim=true
 		shift
 		;;
 	-c | --clean)
@@ -154,3 +160,11 @@ say_verbose "Installing: $*"
 
 # shellcheck disable=2068,2086
 stow $verbose_args $simulate $@
+
+if $nvim; then
+	need nvim
+	# Update Packer plugins
+	nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
+	# Update Mason packages
+	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
+fi
