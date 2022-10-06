@@ -2,6 +2,31 @@ local utils = require("tobyvin.utils")
 local M = {}
 
 M.plugins = function(use)
+	---@diagnostic disable-next-line: unused-local, unused-function
+	local local_use = function(opts, skip_missing)
+		skip_missing = vim.F.if_nil(skip_missing, false)
+
+		if type(opts) == "string" then
+			opts = { opts }
+		end
+
+		---@diagnostic disable-next-line: missing-parameter
+		local local_path = vim.fn.expand("~/src/" .. vim.fs.basename(opts[1]))
+		if vim.fn.isdirectory(local_path) == 1 then
+			opts[1] = local_path
+		else
+			local notif_opts = { title = "[Packer] Missing local plugin" }
+			local notif_msg = string.format("Failed to find local plugin: %s", local_path)
+			if skip_missing then
+				vim.notify(string.format("%s\nSkipping.", notif_msg), vim.log.levels.WARN, notif_opts)
+				return
+			end
+			vim.notify(string.format("%s\nFalling back to '%s'", notif_msg, opts[1]), vim.log.levels.WARN, notif_opts)
+		end
+
+		use(opts)
+	end
+
 	use("wbthomason/packer.nvim")
 
 	use({
