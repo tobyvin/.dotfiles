@@ -20,7 +20,7 @@ sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\11
 	sed '/Control/d' >"${WINHOME}/.ssh/config"
 
 # Create windows symlinks to dotfiles
-mkln.sh "$@" "$HOME"/.gitconfig "${WINHOME}"/.gitconfig
+mkln.sh "$@" "$HOME"/.config/git/config "${WINHOME}"/.gitconfig
 mkln.sh "$@" "$HOME"/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
 mkln.sh "$@" "$HOME"/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
 mkln.sh "$@" "$HOME"/.gnupg/scdaemon.conf "${WINHOME}"/AppData/Roaming/gnupg/scdaemon.conf
