@@ -17,7 +17,9 @@ M.setup = function()
 
 			null_ls.builtins.diagnostics.markdownlint,
 
-			null_ls.builtins.formatting.prettier,
+			null_ls.builtins.formatting.prettier.with({
+				extra_args = { "--prose-wrap=always" },
+			}),
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.stylua,
 			null_ls.builtins.formatting.shfmt,
