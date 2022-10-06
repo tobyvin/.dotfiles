@@ -1,0 +1,4 @@
+include base16-gruvbox-dark-hard.config
+
+set first-page-column 1
+set recolor true
