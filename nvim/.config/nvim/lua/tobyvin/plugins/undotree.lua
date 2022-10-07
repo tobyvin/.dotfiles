@@ -7,7 +7,13 @@ M.setup = function()
 		return
 	end
 
-	vim.keymap.set("n", "<leader>u", undotree.toggle, { desc = "Toggle undotree" })
+	undotree.setup({
+		window = {
+			winblend = 0,
+		},
+	})
+
+	vim.keymap.set("n", "<leader>u", undotree.toggle, { desc = "Undotree" })
 end
 
 return M
