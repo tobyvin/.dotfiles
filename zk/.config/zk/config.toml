@@ -13,7 +13,7 @@ colon-tags = false
 multiword-tags = false
 
 [tool]
-fzf-preview = "$FZF_PREVIEW_COMMAND"
+fzf-preview = "bat -p --color always {-1} 2>/dev/null || cat {-1} 2>/dev/null"
 
 [lsp.diagnostics]
 wiki-title = "hint"
