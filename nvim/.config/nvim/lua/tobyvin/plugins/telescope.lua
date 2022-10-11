@@ -132,14 +132,10 @@ M.setup = function()
 		group = vim.api.nvim_create_augroup("tobyvin_telescope", { clear = true }),
 		pattern = "GitAttach",
 		callback = function(args)
-			telescope.load_extension("git_worktree")
-			local wt = telescope.extensions.git_worktree
 			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
 			vim.keymap.set("n", "<leader>gb", builtins.git_branches, { desc = "Checkout branch", buffer = bufnr })
 			vim.keymap.set("n", "<leader>gc", builtins.git_commits, { desc = "Checkout commit", buffer = bufnr })
 			vim.keymap.set("n", "<leader>gd", builtins.git_status, { desc = "Git diffs", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gw", wt.git_worktrees, { desc = "Switch worktree", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gW", wt.create_git_worktree, { desc = "Create worktree", buffer = bufnr })
 		end,
 	})
 end

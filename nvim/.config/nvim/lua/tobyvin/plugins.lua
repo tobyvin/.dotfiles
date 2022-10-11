@@ -1,41 +1,30 @@
+---@diagnostic disable: missing-parameter
 local utils = require("tobyvin.utils")
 local M = {}
 
-M.plugins = function(use)
-	---@diagnostic disable-next-line: unused-local, unused-function
-	local local_use = function(opts, skip_missing)
-		skip_missing = vim.F.if_nil(skip_missing, false)
-
-		if type(opts) == "string" then
-			opts = { opts }
-		end
-
-		---@diagnostic disable-next-line: missing-parameter
-		local local_path = vim.fn.expand("~/src/" .. vim.fs.basename(opts[1]))
-		if vim.fn.isdirectory(local_path) == 1 then
-			opts[1] = local_path
-		else
-			local notif_opts = { title = "[Packer] Missing local plugin" }
-			local notif_msg = string.format("Failed to find local plugin: %s", local_path)
-			if skip_missing then
-				vim.notify(string.format("%s\nSkipping.", notif_msg), vim.log.levels.WARN, notif_opts)
-				return
-			end
-			vim.notify(string.format("%s\nFalling back to '%s'", notif_msg, opts[1]), vim.log.levels.WARN, notif_opts)
-		end
-
-		use(opts)
+M.ensure_packer = function()
+	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
+		vim.fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
+		vim.cmd([[packadd packer.nvim]])
+		return true
 	end
+	return false
+end
 
+M.try_local = function(opts)
+	if type(opts) == "string" then
+		opts = { opts }
+	end
+	local local_path = vim.fn.expand("~/src/" .. vim.fs.basename(opts[1]))
+	if vim.fn.isdirectory(local_path) == 1 then
+		opts[1] = local_path
+	end
+	return opts
+end
+
+M.plugins = function(use)
 	use("wbthomason/packer.nvim")
-
-	use({
-		"dstein64/vim-startuptime",
-		cmd = "StartupTime",
-		config = function()
-			vim.g.startuptime_tries = 3
-		end,
-	})
 
 	use("lewis6991/impatient.nvim")
 
@@ -49,6 +38,7 @@ M.plugins = function(use)
 
 	use({
 		"rcarriga/nvim-notify",
+		event = "VimEnter",
 		config = function()
 			require("tobyvin.plugins.notify").setup()
 		end,
@@ -58,13 +48,6 @@ M.plugins = function(use)
 		"stevearc/dressing.nvim",
 		config = function()
 			require("tobyvin.plugins.dressing").setup()
-		end,
-	})
-
-	use({
-		"andweeb/presence.nvim",
-		config = function()
-			require("tobyvin.plugins.presence").setup()
 		end,
 	})
 
@@ -87,16 +70,6 @@ M.plugins = function(use)
 		config = function()
 			require("tobyvin.plugins.session_manager").setup()
 		end,
-	})
-
-	use({
-		"tpope/vim-dispatch",
-		cmd = {
-			"Dispatch",
-			"Make",
-			"Focus",
-			"Start",
-		},
 	})
 
 	use({
@@ -206,13 +179,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"mickael-menu/zk-nvim",
-		config = function()
-			require("tobyvin.plugins.zk").setup()
-		end,
-	})
-
-	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
 			"hrsh7th/cmp-nvim-lsp",
@@ -264,13 +230,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"simrat39/symbols-outline.nvim",
-		config = function()
-			require("symbols-outline").setup()
-		end,
-	})
-
-	use({
 		"kevinhwang91/nvim-bqf",
 		requires = {
 			"nvim-treesitter/nvim-treesitter",
@@ -297,7 +256,6 @@ M.plugins = function(use)
 			"nvim-telescope/telescope-dap.nvim",
 			"nvim-telescope/telescope-packer.nvim",
 			"nvim-telescope/telescope-github.nvim",
-			"ThePrimeagen/git-worktree.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.telescope").setup()
@@ -336,41 +294,6 @@ M.plugins = function(use)
 		},
 		config = function()
 			require("tobyvin.plugins.treesitter").setup()
-		end,
-	})
-
-	use({
-		"lewis6991/spellsitter.nvim",
-		requires = { "nvim-treesitter/nvim-treesitter" },
-		config = function()
-			require("tobyvin.plugins.spellsitter").setup()
-		end,
-	})
-
-	use({
-		"drybalka/tree-climber.nvim",
-		requires = { "nvim-treesitter/nvim-treesitter" },
-		config = function()
-			require("tobyvin.plugins.tree-climber").setup()
-		end,
-	})
-
-	use({
-		"ThePrimeagen/refactoring.nvim",
-		requires = {
-			"nvim-lua/plenary.nvim",
-			"nvim-treesitter/nvim-treesitter",
-		},
-		config = function()
-			require("tobyvin.plugins.refactoring").setup()
-		end,
-	})
-
-	use({
-		"danymat/neogen",
-		requires = "nvim-treesitter/nvim-treesitter",
-		config = function()
-			require("tobyvin.plugins.neogen").setup()
 		end,
 	})
 
@@ -465,13 +388,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"ThePrimeagen/git-worktree.nvim",
-		config = function()
-			require("tobyvin.plugins.git-worktree").setup()
-		end,
-	})
-
-	use({
 		"folke/which-key.nvim",
 		config = function()
 			require("tobyvin.plugins.which-key").setup()
@@ -521,15 +437,14 @@ M.plugins = function(use)
 		end,
 	})
 
-	use({ "ellisonleao/glow.nvim" })
-	use("nacro90/numb.nvim")
+	use("ellisonleao/glow.nvim")
 	use("ThePrimeagen/harpoon")
 	use("b0o/SchemaStore.nvim")
 
 	use({
-		"ggandor/leap.nvim",
+		"nacro90/numb.nvim",
 		config = function()
-			require("tobyvin.plugins.leap").setup()
+			require("numb").setup()
 		end,
 	})
 
@@ -553,64 +468,40 @@ M.plugins = function(use)
 			require("scope").setup()
 		end,
 	})
-
-	use("SmiteshP/nvim-gps")
-
-	if PackerBootstrap then
-		require("packer").sync()
-	end
-end
-
-M.open_log = function()
-	utils.buffer.popup(vim.fn.stdpath("cache") .. "/packer.nvim.log")
 end
 
 M.setup = function()
-	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-	---@diagnostic disable-next-line: missing-parameter
-	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
-		PackerBootstrap = vim.fn.system({
-			"git",
-			"clone",
-			"--depth",
-			"1",
-			"https://github.com/wbthomason/packer.nvim",
-			install_path,
-		})
-		vim.notify(
-			"Installing packer. Reload neovim to load plugins.",
-			vim.log.levels.INFO,
-			{ title = "[packer] Installing" }
-		)
-		vim.cmd([[packadd packer.nvim]])
-	end
-
+	local packer_bootstrap = M.ensure_packer()
 	local status_ok, packer = pcall(require, "packer")
 	if not status_ok then
 		vim.notify("Failed to load module 'packer'", vim.log.levels.ERROR)
 		return
 	end
 
-	packer.init({
-		display = {
-			open_fn = function()
-				return require("packer.util").float({ border = "rounded" })
-			end,
+	utils.keymap.group("n", "<leader>p", { desc = "Packer" })
+	vim.keymap.set("n", "<leader>pc", packer.compile, { desc = "Compile" })
+	vim.keymap.set("n", "<leader>pC", packer.clean, { desc = "Clean" })
+	vim.keymap.set("n", "<leader>pi", packer.install, { desc = "Install" })
+	vim.keymap.set("n", "<leader>pp", packer.profile_output, { desc = "Profile" })
+	vim.keymap.set("n", "<leader>ps", packer.sync, { desc = "Sync" })
+	vim.keymap.set("n", "<leader>pu", packer.update, { desc = "Update" })
+
+	return packer.startup({
+		function(...)
+			M.plugins(...)
+			if packer_bootstrap then
+				packer.sync()
+			end
+		end,
+		config = {
+			display = {
+				open_fn = function()
+					return require("packer.util").float({ border = "rounded" })
+				end,
+			},
+			autoremove = true,
 		},
-		autoremove = true,
-		profile = { enable = true },
 	})
-
-	local nmap = utils.keymap.group("n", "<leader>p", { desc = "Packer" })
-	nmap("c", packer.compile, { desc = "Compile" })
-	nmap("C", packer.clean, { desc = "Clean" })
-	nmap("i", packer.install, { desc = "Install" })
-	nmap("p", packer.profile_output, { desc = "Profile" })
-	nmap("s", packer.sync, { desc = "Sync" })
-	nmap("u", packer.update, { desc = "Update" })
-	nmap("l", M.open_log, { desc = "Log" })
-
-	return packer.startup(M.plugins)
 end
 
 return M

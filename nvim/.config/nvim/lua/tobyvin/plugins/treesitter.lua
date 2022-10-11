@@ -32,20 +32,6 @@ M.setup = function()
 		playground = {
 			enable = true,
 		},
-		refactor = {
-			smart_rename = {
-				enable = true,
-				keymaps = {
-					smart_rename = "<leader>lr",
-				},
-			},
-			navigation = {
-				enable = true,
-				keymaps = {
-					goto_definition_lsp_fallback = "gd",
-				},
-			},
-		},
 		textobjects = {
 			select = {
 				enable = true,
