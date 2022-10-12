@@ -50,6 +50,7 @@ alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
+alias unlock='echo "" | gpg --clearsign --verbose && ssh -T git@github.com'
 
 SHELDON_PROFILE="$(uname -r | sed 's/^.*-//g' 2>/dev/null)"
 export SHELDON_PROFILE
