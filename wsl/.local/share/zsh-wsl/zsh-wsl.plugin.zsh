@@ -35,6 +35,7 @@ wsl_path() {
 
 alias alacritty="$(wsl_path "alacritty")"
 alias pwsh="$(wsl_path "pwsh")"
+alias ykhold='sudo systemctl stop usbip@wsl.service && echo "Press any key..." && read && sudo systemctl start usbip@wsl.service'
 
 wsl_cmd_proxy() {
 	exe="$1"
