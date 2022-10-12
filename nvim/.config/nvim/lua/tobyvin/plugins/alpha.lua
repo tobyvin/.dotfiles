@@ -250,11 +250,11 @@ M.setup = function()
 	vim.api.nvim_create_autocmd("User", {
 		group = vim.api.nvim_create_augroup("alpha_user", { clear = true }),
 		pattern = "BDeletePre",
-		callback = function()
+		callback = function(args)
+			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
 			if
 				#vim.fn.getbufinfo({ buflisted = 1 }) < 2
-				and vim.api.nvim_buf_get_name(0) ~= ""
-				and vim.api.nvim_buf_get_option(0, "filetype") ~= "Alpha"
+				and vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "alpha"
 			then
 				alpha.start(false)
 			end

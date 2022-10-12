@@ -57,7 +57,7 @@ M.bdelete = function(buffer, opts)
 	end
 
 	if not opts.force and vim.bo[buffer].modified then
-		local bufname = vim.fn.bufname(vim.fn.bufname())
+		local bufname = vim.fn.bufname()
 
 		return vim.ui.select({ "write", "discard", "abort" }, {
 			prompt = string.format("No write since last change for buffer %s:", bufname),
@@ -79,6 +79,7 @@ M.bdelete = function(buffer, opts)
 	end
 
 	if vim.fn.buflisted(buffer) == 1 then
+		---@diagnostic disable-next-line: param-type-mismatch
 		local windows = vim.fn.getbufinfo(buffer)[1].windows
 
 		for _, window in ipairs(windows) do
@@ -89,8 +90,9 @@ M.bdelete = function(buffer, opts)
 		end
 	end
 
+	vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre", data = { buf = buffer } })
+
 	if vim.api.nvim_buf_is_valid(buffer) then
-		vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre" })
 		vim.api.nvim_buf_set_option(buffer, "buflisted", false)
 		vim.api.nvim_buf_delete(buffer, opts)
 	end
