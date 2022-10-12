@@ -38,8 +38,9 @@ M.button = function(sc, txt, keybind, keybind_opts)
 	}
 
 	if keybind then
-		keybind_opts = vim.F.if_nil(keybind_opts, { noremap = true, silent = true, nowait = true })
-		opts.keymap = { "n", sc_, keybind, { noremap = false, silent = true, nowait = true } }
+		keybind_opts = vim.F.if_nil(keybind_opts, {})
+		keybind_opts.desc = vim.F.if_nil(keybind_opts.desc, txt)
+		opts.keymap = { "n", sc_, keybind, keybind_opts }
 	end
 
 	local function on_press()
@@ -69,7 +70,7 @@ M.file_button = function(filename, sc)
 	if fn_start ~= nil then
 		table.insert(hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt })
 	end
-	local button = M.button(sc, ico_txt .. short_fn, "<Cmd>e " .. filename .. " <CR>")
+	local button = M.button(sc, ico_txt .. short_fn, "<Cmd>e " .. filename .. " <CR>", { desc = "oldfile_" .. sc })
 	button.opts.hl = hl
 	button.opts.cursor = M.width - 1
 	return button
@@ -106,11 +107,15 @@ end
 M.actions_cache = nil
 M.actions = function()
 	if M.actions_cache == nil then
+		local builtins = require("telescope.builtin")
+		local neogit = require("neogit")
 		M.actions_cache = {
 			{
 				type = "group",
 				val = {
 					M.button("e", "new", "<cmd>enew<cr>"),
+					M.button("f", "find", builtins.find_files),
+					M.button("g", "git", neogit.open),
 					M.button("s", "session", "<cmd>SessionManager load_current_dir_session<cr>"),
 					M.button("q", "quit", "<cmd>qa<cr>"),
 				},
@@ -125,6 +130,21 @@ M.setup = function()
 	if not status_ok then
 		vim.notify("Failed to load module 'alpha'", vim.log.levels.ERROR)
 		return
+	end
+
+	alpha.keymaps_element.button = function(el, _, state)
+		if el.opts and el.opts.keymap then
+			if type(el.opts.keymap[1]) == "table" then
+				for _, map in el.opts.keymap do
+					map[4].buffer = state.buffer
+					vim.keymap.set(unpack(map))
+				end
+			else
+				local map = el.opts.keymap
+				map[4].buffer = state.buffer
+				vim.keymap.set(unpack(map))
+			end
+		end
 	end
 
 	local fortune = require("alpha.fortune")
