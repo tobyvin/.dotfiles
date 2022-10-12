@@ -78,6 +78,7 @@ M.bdelete = function(buffer, opts)
 		end)
 	end
 
+	local is_last_buffer = true
 	if vim.fn.buflisted(buffer) == 1 then
 		---@diagnostic disable-next-line: param-type-mismatch
 		local windows = vim.fn.getbufinfo(buffer)[1].windows
@@ -86,15 +87,18 @@ M.bdelete = function(buffer, opts)
 			local alt_buffer = vim.fn.bufnr("#")
 			if vim.fn.buflisted(alt_buffer) == 1 then
 				vim.api.nvim_win_set_buf(window, alt_buffer)
+				is_last_buffer = false
 			end
 		end
 	end
 
-	vim.api.nvim_exec_autocmds("User", { pattern = "BDeletePre", data = { buf = buffer } })
+	if is_last_buffer and (#vim.fn.getbufinfo({ buflisted = 1 }) == 1) then
+		vim.api.nvim_exec_autocmds("User", { pattern = "BDeleteLast", data = { buf = buffer } })
+	end
 
 	if vim.api.nvim_buf_is_valid(buffer) then
 		vim.api.nvim_buf_set_option(buffer, "buflisted", false)
-		vim.api.nvim_buf_delete(buffer, opts)
+		pcall(vim.api.nvim_buf_delete, buffer, opts)
 	end
 end
 
