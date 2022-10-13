@@ -1,3 +1,5 @@
 modifyLineBreaks:
   textWrapOptions:
     columns: 100
+    blocksBeginWith:
+      other: '\\section|\\subsection|\\subsubsection|\\paragraph|\\subparagraph'
