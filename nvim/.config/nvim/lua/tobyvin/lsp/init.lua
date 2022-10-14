@@ -73,20 +73,116 @@ lsp.on_attach = function(client, bufnr)
 	vim.api.nvim_exec_autocmds("User", { pattern = "LspAttach", data = { client_id = client.id } })
 end
 
-lsp.config = function(config)
-	local capabilities = vim.lsp.protocol.make_client_capabilities()
-	capabilities.textDocument.completion.completionItem.snippetSupport = true
-	capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
+lsp.default_config = {
+	on_attach = lsp.on_attach,
+	capabilities = vim.lsp.protocol.make_client_capabilities(),
+}
 
-	return vim.tbl_deep_extend("keep", config or {}, {
-		capabilities = capabilities,
-		on_attach = lsp.on_attach,
-	})
-end
+lsp.configs = {
+	bashls = {},
+	taplo = {},
+	yamlls = {},
+	tsserver = {},
+	pylsp = {
+		settings = {
+			pylsp = {
+				plugins = {
+					autopep8 = {
+						enabled = false,
+					},
+					yapf = {
+						enabled = false,
+					},
+					pylint = {
+						enabled = true,
+					},
+				},
+			},
+		},
+	},
+	cssls = {},
+	cssmodules_ls = {},
+	stylelint_lsp = {},
+	ccls = {},
+	gopls = {
+		cmd = { "gopls", "serve" },
+		settings = {
+			gopls = {
+				analyses = {
+					unusedparams = true,
+				},
+				staticcheck = true,
+			},
+		},
+	},
+	["rust-analyzer"] = {
+		standalone = true,
+		settings = {
+			["rust-analyzer"] = {
+				cargo = {
+					allFeatures = true,
+				},
+				checkOnSave = {
+					command = "clippy",
+				},
+			},
+		},
+	},
+	sumneko_lua = {
+		settings = {
+			Lua = {
+				completion = {
+					callSnippet = "Replace",
+				},
+				diagnostics = {
+					globals = { "vim", "packer_plugins" },
+				},
+				format = {
+					enable = false,
+				},
+				telemetry = {
+					enable = false,
+				},
+			},
+		},
+	},
+	texlab = {
+		settings = {
+			texlab = {
+				build = {
+					args = {
+						"-pdf",
+						"-interaction=nonstopmode",
+						"-synctex=1",
+						string.format("-auxdir=%s/aux", vim.fn.getcwd()),
+						string.format("-outdir=%s/out", vim.fn.getcwd()),
+						"-emulate-aux-dir",
+						"%f",
+					},
+					onSave = true,
+				},
+				chktex = {
+					onEdit = true,
+					onOpenAndSave = true,
+				},
+				auxDirectory = string.format("%s/aux", vim.fn.getcwd()),
+				latexindent = {
+					["local"] = string.format("%s/latexindent/indentconfig.yaml", vim.env.XDG_CONFIG_HOME),
+					modifyLineBreaks = true,
+				},
+			},
+		},
+		on_attach = function(client, bufnr)
+			vim.g.tex_flavor = "latex"
+			vim.opt.spell = true
+			lsp.on_attach(client, bufnr)
+		end,
+	},
+}
 
 lsp.setup = function()
 	lsp.handlers.setup()
-	require("tobyvin.lsp.diagnostics").setup()
+	lsp.diagnostics.setup()
 end
 
 return lsp

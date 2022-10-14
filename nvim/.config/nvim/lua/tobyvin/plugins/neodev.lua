@@ -24,28 +24,6 @@ M.setup = function()
 			end
 		end,
 	})
-
-	local lsp = require("tobyvin.lsp")
-	local lspconfig = require("lspconfig")
-
-	lspconfig.sumneko_lua.setup(lsp.config({
-		settings = {
-			Lua = {
-				completion = {
-					callSnippet = "Replace",
-				},
-				diagnostics = {
-					globals = { "vim", "packer_plugins" },
-				},
-				format = {
-					enable = false,
-				},
-				telemetry = {
-					enable = false,
-				},
-			},
-		},
-	}))
 end
 
 return M

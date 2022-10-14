@@ -12,39 +12,24 @@ M.setup = function()
 		return
 	end
 
+	lsp.configs["rust-analyzer"].on_attach = function(client, bufnr)
+		lsp.on_attach(client, bufnr)
+
+		local runnables = rust_tools.runnables.runnables
+		local debuggables = rust_tools.debuggables.debuggables
+		local open_cargo_toml = rust_tools.open_cargo_toml.open_cargo_toml
+		local external_docs = rust_tools.external_docs.open_external_docs
+
+		utils.keymap.group("n", "<leader>r", { desc = "Run" })
+		vim.keymap.set("n", "<leader>rr", runnables, { desc = "Runnables", buffer = bufnr })
+		vim.keymap.set("n", "<leader>rd", debuggables, { desc = "Debug", buffer = bufnr })
+		vim.keymap.set("n", "<leader>ro", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })
+
+		utils.documentation.register("rust", external_docs)
+	end
+
 	rust_tools.setup({
-		server = lsp.config({
-			standalone = true,
-			settings = {
-				["rust-analyzer"] = {
-					cargo = {
-						allFeatures = true,
-					},
-					checkOnSave = {
-						command = "clippy",
-					},
-				},
-			},
-			on_attach = function(client, bufnr)
-				lsp.on_attach(client, bufnr)
-
-				local runnables = rust_tools.runnables.runnables
-				local debuggables = rust_tools.debuggables.debuggables
-				local open_cargo_toml = rust_tools.open_cargo_toml.open_cargo_toml
-				local external_docs = rust_tools.external_docs.open_external_docs
-				local run_cargo_cmd = function()
-					utils.job.cmd("cargo")
-				end
-
-				utils.keymap.group("n", "<leader>r", { desc = "Run" })
-				vim.keymap.set("n", "<leader>rr", runnables, { desc = "Runnables", buffer = bufnr })
-				vim.keymap.set("n", "<leader>rd", debuggables, { desc = "Debug", buffer = bufnr })
-				vim.keymap.set("n", "<leader>ro", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })
-				vim.keymap.set("n", "<leader>rc", run_cargo_cmd, { desc = "Command", buffer = bufnr })
-
-				utils.documentation.register("rust", external_docs)
-			end,
-		}),
+		server = lsp.configs["rust-analyzer"],
 		dap = {
 			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),
 		},

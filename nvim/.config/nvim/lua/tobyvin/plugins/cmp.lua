@@ -1,3 +1,4 @@
+local lsp = require("tobyvin.lsp")
 local M = {}
 
 M.enabled = function()
@@ -20,6 +21,8 @@ M.setup = function()
 		vim.notify("Failed to load module 'cmd'", vim.log.levels.ERROR)
 		return
 	end
+
+	lsp.default_config.capabilities = require("cmp_nvim_lsp").update_capabilities(lsp.default_config.capabilities)
 
 	cmp.setup({
 		enabled = M.enabled,

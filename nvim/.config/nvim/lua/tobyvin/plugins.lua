@@ -122,63 +122,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"williamboman/mason-lspconfig.nvim",
-		after = "mason.nvim",
-		requires = {
-			"williamboman/mason.nvim",
-		},
-		config = function()
-			require("tobyvin.plugins.mason-lspconfig").setup()
-		end,
-	})
-
-	use({
-		"neovim/nvim-lspconfig",
-		after = "mason-lspconfig.nvim",
-		requires = {
-			"ray-x/lsp_signature.nvim",
-			"SmiteshP/nvim-navic",
-			"barreiroleo/ltex-extra.nvim",
-		},
-		config = function()
-			require("tobyvin.plugins.lspconfig").setup()
-		end,
-	})
-
-	use({
-		"folke/neodev.nvim",
-		after = "nvim-lspconfig",
-		requires = {
-			"neovim/nvim-lspconfig",
-		},
-		config = function()
-			require("tobyvin.plugins.neodev").setup()
-		end,
-	})
-
-	use({
-		"simrat39/rust-tools.nvim",
-		after = "nvim-lspconfig",
-		requires = {
-			"neovim/nvim-lspconfig",
-		},
-		config = function()
-			require("tobyvin.plugins.rust-tools").setup()
-		end,
-	})
-
-	use({
-		"brymer-meneses/grammar-guard.nvim",
-		after = "nvim-lspconfig",
-		requires = {
-			"neovim/nvim-lspconfig",
-		},
-		config = function()
-			require("grammar-guard").init()
-		end,
-	})
-
-	use({
 		"hrsh7th/nvim-cmp",
 		requires = {
 			"hrsh7th/cmp-nvim-lsp",
@@ -226,6 +169,55 @@ M.plugins = function(use)
 		"onsails/lspkind-nvim",
 		config = function()
 			require("tobyvin.plugins.lspkind").setup()
+		end,
+	})
+
+	use({
+		"williamboman/mason-lspconfig.nvim",
+		after = "mason.nvim",
+		requires = {
+			"williamboman/mason.nvim",
+		},
+		config = function()
+			require("tobyvin.plugins.mason-lspconfig").setup()
+		end,
+	})
+
+	use({
+		"folke/neodev.nvim",
+		config = function()
+			require("tobyvin.plugins.neodev").setup()
+		end,
+	})
+
+	use({
+		"simrat39/rust-tools.nvim",
+		requires = {
+			"neovim/nvim-lspconfig",
+		},
+		config = function()
+			require("tobyvin.plugins.rust-tools").setup()
+		end,
+	})
+
+	use({
+		"neovim/nvim-lspconfig",
+		after = {
+			"mason-lspconfig.nvim",
+			"neodev.nvim",
+			"rust-tools.nvim",
+			"cmp-nvim-lsp",
+		},
+		requires = {
+			"folke/neodev.nvim",
+			"simrat39/rust-tools.nvim",
+			"hrsh7th/cmp-nvim-lsp",
+			"ray-x/lsp_signature.nvim",
+			"SmiteshP/nvim-navic",
+			"barreiroleo/ltex-extra.nvim",
+		},
+		config = function()
+			require("tobyvin.plugins.lspconfig").setup()
 		end,
 	})
 
