@@ -1,22 +1,42 @@
 #!/bin/sh
-# shellcheck disable=2016
+# shellcheck disable=2016,2089
 
-if [ "$#" -ne 0 ]; then
-	selection="$1"
-else
-	PROJECT_DIR="$HOME/src"
-	DIRS="$(stat -c %Y:"$HOME/.dotfiles" "$HOME/.dotfiles")"
+PROJECT_DIR="$HOME/src"
+INITIAL_DIRS="$HOME/.dotfiles"
+{ PREVIEW_CMD=$(cat); } <<'EOF'
+selection={}
+query=$(printf %s\\n {q} | sed 's|/$||')
+width=$(((($(tput cols) * 3) + (4 - 1)) / 4))
+ofargs=$([ "$width" -gt 80 ] || echo "--show-logo=never")
+if [ -n "$selection" ]; then
+  timeout 1s onefetch --hidden $ofargs $selection 2>/dev/null ||
+  ([ -e $selection/README.md ] && timeout 1s glow --local --style=dark $selection/README.md) ||
+  timeout 1s exa --tree --git-ignore --level=3 --icons $selection
+elif [ -n "$query" ]; then
+  timeout 3s hut git show --repo "$query" 2>/dev/null ||
+  timeout 3s gh repo view "$query" 2>/dev/null
+fi
+EOF
 
-	for session in "$XDG_DATA_HOME/nvim/sessions"/*; do
-		entry="$(printf %s\\n "$session" | sed "s|^$XDG_DATA_HOME/nvim/sessions/||" | sed 's#%{2}|_{2}#/#g')"
-		if [ -d "$entry" ]; then
-			DIRS="$DIRS $(stat -c %Y:"$entry" "$session")"
+if [ "$#" -eq 0 ]; then
+	DIRS=""
+
+	for initial_dir in $INITIAL_DIRS; do
+		if [ -d "$initial_dir" ]; then
+			DIRS="$DIRS $(stat -c %Y:"$initial_dir" "$initial_dir")"
 		fi
 	done
 
 	for project in "$PROJECT_DIR"/*; do
 		if [ -d "$project" ]; then
 			DIRS="$DIRS $(stat -c %Y:"$project" "$project")"
+		fi
+	done
+
+	for session in "$XDG_DATA_HOME/nvim/sessions"/*; do
+		entry="$(printf %s\\n "$session" | sed "s|^$XDG_DATA_HOME/nvim/sessions/||" | sed 's#%{2}|_{2}#/#g')"
+		if [ -d "$entry" ]; then
+			DIRS="$DIRS $(stat -c %Y:"$entry" "$session")"
 		fi
 	done
 
@@ -40,50 +60,38 @@ else
   fi
   ' | sort -r | sort -t':' -r -k2 | uniq -s10 | sort -r | cut -d':' -f2 | sed "s#^$attached\$##g" | sed '/^$/d')"
 
-	output="$(printf %s\\n "$DIRS" | fzf-tmux -p -- --print-query -d/ --with-nth -1 \
-		--preview-window=right,75% --preview='width=$(( (($(tput cols) * 3) + (4 - 1) ) / 4 ))
-    onefetch --hidden $([ "$width" -gt 80 ] || echo "--show-logo=never") {} 2>/dev/null ||
-    ([ -e {}/README.md ] && glow --local --style=dark {}/README.md 2>/dev/null) ||
-    exa --tree --git-ignore --level=3 --icons {} 2>/dev/null ||
-    # if input is git remote
-    (printf "%s" {q} | sed "s|/\$||" | xargs hut git show --repo 2>/dev/null) ||
-    gh repo view {q} 2>/dev/null' |
-		tr -s '\n' ' ')"
-
-	query="$(printf %s\\n "$output" | cut -d' ' -f1)"
-	selection="$(printf %s\\n "$output" | cut -d' ' -f2)"
+	# shellcheck disable=2046
+	set -- $(printf %s\\n "$DIRS" | fzf-tmux -p -- --multi --print-query -d/ --with-nth -1 \
+		--preview-window=right,75% --preview="$PREVIEW_CMD" | tr -s '\n' ' ')
 fi
 
-if [ -z "$selection" ]; then
-	if [ -z "$query" ]; then
-		exit 0
+while [ $# -gt 0 ]; do
+	session_path="$1"
+	if [ ! -d "$1" ]; then
+		repo=$(printf %s "$1" | sed 's/.git$//' | sed 's|/$||')
+		remotes="$repo https://git.sr.ht/$repo https://github.com/$repo"
+		for remote in $remotes; do
+			if timeout 3s git ls-remote "$remote" CHECK_GIT_REMOTE_URL_REACHABILITY; then
+				session_path="$HOME/src/$(basename "$remote")"
+				git clone "$remote" "$session_path"
+				break
+			fi
+		done
 	fi
-	query=$(printf %s "$query" | sed 's/.git$//' | sed 's|/$||')
-	selection="$HOME/src/$(basename "$query")"
-	if [ ! -d "$selection" ]; then
-		if hut git show "$query" >/dev/null 2>&1; then
-			git clone "https://git.sr.ht/$query" "$selection" ||
-				git clone "$query" "$selection" ||
-				exit 1
-		elif gh repo view "$query" >/dev/null 2>&1; then
-			git clone "https://github.com/$query" "$selection" ||
-				git clone "$query" "$selection" ||
-				exit 1
-		else
-			exit 0
-		fi
+
+	if [ ! -d "$session_path" ]; then
+		continue
 	fi
+
+	name=$(basename "$session_path" | tr . _)
+	if ! tmux has-session -t="$name" 2>/dev/null; then
+		tmux new-session -ds "$name" -c "$session_path"
+	fi
+	shift
+done
+
+if [ -z "$TMUX" ] && [ -z "$name" ]; then
+	tmux attach-session -t "$name"
+elif tmux has-session -t="$name" 2>/dev/null; then
+	tmux switch-client -t "$name"
 fi
-
-name=$(basename "$selection" | tr . _)
-
-if [ -z "$TMUX" ] && pgrep tmux; then
-	tmux new-session -s "$name" -c "$selection"
-	exit 0
-fi
-
-if ! tmux has-session -t="$name" 2>/dev/null; then
-	tmux new-session -ds "$name" -c "$selection"
-fi
-
-tmux switch-client -t "$name"
