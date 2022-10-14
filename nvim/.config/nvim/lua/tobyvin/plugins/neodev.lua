@@ -1,13 +1,13 @@
 local M = {}
 
 M.setup = function()
-	local status_ok, lua_dev = pcall(require, "lua-dev")
+	local status_ok, neodev = pcall(require, "neodev")
 	if not status_ok then
-		vim.notify("Failed to load module 'lua-dev'", vim.log.levels.ERROR)
+		vim.notify("Failed to load module 'neodev'", vim.log.levels.ERROR)
 		return
 	end
 
-	lua_dev.setup({
+	neodev.setup({
 		library = {
 			enabled = true,
 			runtime = true,
@@ -17,10 +17,10 @@ M.setup = function()
 		override = function(root_dir, library)
 			local lua_dev_utils = require("lua-dev.util")
 			if lua_dev_utils.has_file(root_dir, lua_dev_utils.fqn("~/.dotfiles/nvim/.config/nvim")) then
-					library.enabled = true
-					library.runtime = true
-					library.types = true
-					library.plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" }
+				library.enabled = true
+				library.runtime = true
+				library.types = true
+				library.plugins = { "nvim-treesitter", "plenary.nvim", "telescope.nvim" }
 			end
 		end,
 	})

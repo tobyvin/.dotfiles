@@ -146,13 +146,13 @@ M.plugins = function(use)
 	})
 
 	use({
-		"folke/lua-dev.nvim",
+		"folke/neodev.nvim",
 		after = "nvim-lspconfig",
 		requires = {
 			"neovim/nvim-lspconfig",
 		},
 		config = function()
-			require("tobyvin.plugins.lua-dev").setup()
+			require("tobyvin.plugins.neodev").setup()
 		end,
 	})
 
