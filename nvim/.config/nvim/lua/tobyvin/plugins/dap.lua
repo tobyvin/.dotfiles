@@ -107,25 +107,21 @@ M.setup = function()
 		callback({ type = "server", host = config.host, port = config.port })
 	end
 
-	dap.configurations.lua = {
-		{
-			type = "nlua",
-			request = "attach",
-			name = "Attach to running Neovim instance",
-			host = function()
-				local value = vim.fn.input("Host [127.0.0.1]: ")
-				if value ~= "" then
-					return value
-				end
-				return "127.0.0.1"
-			end,
-			port = function()
-				local val = tonumber(vim.fn.input("Port: "))
-				assert(val, "Please provide a port number")
-				return val
-			end,
-		},
-	}
+	dap.configurations.lua = function()
+		vim.ui.input({ prompt = "Host: ", default = "127.0.0.1" }, function(host)
+			vim.ui.input({ prompt = "Port: ", default = "7777" }, function(port)
+				dap.configurations.lua = {
+					{
+						type = "nlua",
+						request = "attach",
+						name = "Attach to running Neovim instance",
+						host = host,
+						port = tonumber(port),
+					},
+				}
+			end)
+		end)
+	end
 
 	-- lldb
 	dap.adapters.lldb = {
@@ -134,26 +130,39 @@ M.setup = function()
 		name = "lldb",
 	}
 
-	dap.configurations.cpp = {
-		{
-			name = "Launch",
-			type = "lldb",
-			request = "launch",
-			program = function()
-				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
-			end,
-			cwd = "${workspaceFolder}",
-			stopOnEntry = false,
-			args = {},
-			runInTerminal = false,
-		},
-	}
+	dap.configurations.cpp = function()
+		utils.fs.select_executable(function(bin)
+			dap.configurations.cpp = {
+				{
+					name = "Launch",
+					type = "lldb",
+					request = "launch",
+					program = bin,
+					cwd = "${workspaceFolder}",
+					stopOnEntry = false,
+					args = {},
+					runInTerminal = false,
+				},
+			}
+		end)
+	end
 
-	dap.configurations.c = dap.configurations.cpp
-
-	-- Disabled in favor of rust-tools
-	-- TODO: integrate rust-tools.nvim into this config
-	-- dap.configurations.rust = dap.configurations.cpp
+	dap.configurations.c = function()
+		utils.fs.select_executable(function(bin)
+			dap.configurations.c = {
+				{
+					name = "Launch",
+					type = "lldb",
+					request = "launch",
+					program = bin,
+					cwd = "${workspaceFolder}",
+					stopOnEntry = false,
+					args = {},
+					runInTerminal = false,
+				},
+			}
+		end)
+	end
 
 	-- Language specific plugins
 	require("dap-go").setup()

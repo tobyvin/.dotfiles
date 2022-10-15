@@ -46,8 +46,8 @@ M.setup = function()
 	vim.api.nvim_create_autocmd("FileType", {
 		group = augroup_fmt,
 		pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
-		callback = function()
-			vim.opt_local.tabstop = 2
+		callback = function(args)
+			vim.bo[args.buf].tabstop = 2
 		end,
 		desc = "Set tabstop",
 	})
@@ -57,8 +57,8 @@ M.setup = function()
 	vim.api.nvim_create_autocmd("FileType", {
 		group = augroup_view,
 		pattern = { "qf", "help", "gitcommit", "gitrebase" },
-		callback = function()
-			vim.opt_local.buflisted = false
+		callback = function(args)
+			vim.bo[args.buf].buflisted = false
 		end,
 		desc = "Set buffer as unlisted",
 	})
@@ -66,14 +66,26 @@ M.setup = function()
 	vim.api.nvim_create_autocmd("FileType", {
 		group = augroup_view,
 		pattern = "help",
-		callback = function()
-			vim.opt_local.wrap = true
-			vim.opt_local.textwidth = 120
-			vim.opt_local.colorcolumn = nil
+		callback = function(args)
+			vim.wo.wrap = true
+			vim.bo[args.buf].textwidth = 120
+			vim.wo.colorcolumn = nil
 			vim.cmd("wincmd L")
-			vim.cmd("vertical resize " .. vim.opt.textwidth:get())
+			vim.api.nvim_win_set_width(0, vim.o.textwidth)
 		end,
 		desc = "Setup and resize help window",
+	})
+
+	vim.api.nvim_create_autocmd("FileType", {
+		group = vim.api.nvim_create_augroup("tobyvin_reload", { clear = true }),
+		pattern = "lua",
+		callback = function(args)
+			local utils = require("tobyvin.utils")
+			if utils.fs.module_from_path(args.file) then
+				vim.keymap.set("n", "<leader>R", utils.fs.reload, { desc = "reload lua module" })
+			end
+		end,
+		desc = "Setup lua module reloader",
 	})
 end
 
