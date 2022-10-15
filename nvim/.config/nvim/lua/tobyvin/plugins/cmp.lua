@@ -22,7 +22,9 @@ M.setup = function()
 		return
 	end
 
-	lsp.default_config.capabilities = require("cmp_nvim_lsp").update_capabilities(lsp.default_config.capabilities)
+	lsp.configs.default = vim.tbl_extend("force", lsp.configs.default, {
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
+	})
 
 	cmp.setup({
 		enabled = M.enabled,

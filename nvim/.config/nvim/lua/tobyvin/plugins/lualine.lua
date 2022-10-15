@@ -93,6 +93,7 @@ M.setup = function()
 		if buftype == "help" then
 			return "help:" .. vim.fn.fnamemodify(file, ":t:r")
 		elseif buftype == "terminal" then
+			---@diagnostic disable-next-line: missing-parameter
 			local match = string.match(vim.split(file, " ")[1], "term:.*:(%a+)")
 			return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ":t")
 		elseif vim.fn.isdirectory(file) == 1 then

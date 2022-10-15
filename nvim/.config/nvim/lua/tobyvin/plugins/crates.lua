@@ -15,7 +15,9 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("LspAttach", {
+    group = vim.api.nvim_create_augroup("tobyvin_crates", { clear = true }),
 		pattern = "*/Cargo.toml",
+		desc = "setup crates",
 		callback = function()
 			utils.documentation.register("toml", crates.open_documentation)
 

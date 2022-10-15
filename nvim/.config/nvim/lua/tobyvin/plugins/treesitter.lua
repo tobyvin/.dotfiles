@@ -16,7 +16,6 @@ M.setup = function()
 			attach = function(bufnr, _)
 				local refactor_module = require("nvim-treesitter-refactor.smart_rename")
 				local smart_rename = function()
-					vim.notify("ts renameing")
 					refactor_module.smart_rename(bufnr)
 				end
 
