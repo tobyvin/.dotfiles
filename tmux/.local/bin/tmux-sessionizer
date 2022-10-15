@@ -67,8 +67,9 @@ fi
 
 while [ $# -gt 0 ]; do
 	session_path="$1"
-	if [ ! -d "$1" ]; then
-		repo=$(printf %s "$1" | sed 's/.git$//' | sed 's|/$||')
+	shift
+	if [ ! -d "$session_path" ]; then
+		repo=$(printf %s "$session_path" | sed 's/.git$//' | sed 's|/$||')
 		remotes="$repo https://git.sr.ht/$repo https://github.com/$repo"
 		for remote in $remotes; do
 			if timeout 3s git ls-remote "$remote" CHECK_GIT_REMOTE_URL_REACHABILITY; then
@@ -87,7 +88,6 @@ while [ $# -gt 0 ]; do
 	if ! tmux has-session -t="$name" 2>/dev/null; then
 		tmux new-session -ds "$name" -c "$session_path"
 	fi
-	shift
 done
 
 if [ -z "$TMUX" ] && [ -z "$name" ]; then
