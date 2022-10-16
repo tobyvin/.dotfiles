@@ -99,9 +99,9 @@ configs.texlab = {
 			},
 		},
 	},
-	on_attach = function()
-		vim.g.tex_flavor = "latex"
-		vim.opt.spell = true
+	on_attach = function(_, bufnr)
+		vim.b[bufnr].tex_flavor = "latex"
+		vim.wo.spell = true
 	end,
 }
 
