@@ -33,7 +33,7 @@ M.button = function(sc, txt, keybind, keybind_opts)
 		cursor = M.width - 3,
 		width = M.width,
 		align_shortcut = "right",
-		hl_shortcut = { { "Operator", 0, 1 }, { "Number", 1, #sc + 1 }, { "Operator", #sc + 1, #sc + 2 } },
+		hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
 		shrink_margin = false,
 	}
 

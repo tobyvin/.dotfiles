@@ -8,16 +8,7 @@ M.setup = function()
 	end
 
 	gruvbox.setup({
-		bold = false,
-		italic = false,
-		inverse = false,
 		overrides = {
-			NormalFloat = { bg = "" },
-			FloatBorder = { bg = "" },
-			ColorColumn = { bg = "" },
-			CursorLine = { bg = "" },
-			CursorLineNr = { bg = "" },
-			SignColumn = { bg = "" },
 			GruvboxRedSign = { bg = "" },
 			GruvboxGreenSign = { bg = "" },
 			GruvboxYellowSign = { bg = "" },
@@ -25,6 +16,16 @@ M.setup = function()
 			GruvboxPurpleSign = { bg = "" },
 			GruvboxAquaSign = { bg = "" },
 			GruvboxOrangeSign = { bg = "" },
+			NormalFloat = { bg = "" },
+			FloatBorder = { bg = "" },
+			ColorColumn = { bg = "" },
+			CursorLine = { bg = "" },
+			CursorLineNr = { bg = "" },
+			SignColumn = { bg = "" },
+			DiffDelete = { reverse = false },
+			DiffAdd = { reverse = false },
+			DiffChange = { reverse = false },
+			DiffText = { reverse = false },
 		},
 		transparent_mode = true,
 	})
