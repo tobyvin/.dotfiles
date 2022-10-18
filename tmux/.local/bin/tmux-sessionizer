@@ -2,67 +2,20 @@
 # shellcheck disable=2016,2089
 
 PROJECT_DIR="$HOME/src"
-INITIAL_DIRS="$HOME/.dotfiles"
-{ PREVIEW_CMD=$(cat); } <<'EOF'
-selection={}
-query=$(printf %s\\n {q} | sed 's|/$||')
-width=$(((($(tput cols) * 3) + (4 - 1)) / 4))
-ofargs=$([ "$width" -gt 80 ] || echo "--show-logo=never")
-if [ -n "$selection" ]; then
-  timeout 1s onefetch --hidden $ofargs $selection 2>/dev/null ||
-  ([ -e $selection/README.md ] && timeout 1s glow --local --style=dark $selection/README.md) ||
-  timeout 1s exa --tree --git-ignore --level=3 --icons $selection
-elif [ -n "$query" ]; then
-  timeout 3s hut git show --repo "$query" 2>/dev/null ||
-  timeout 3s gh repo view "$query" 2>/dev/null
-fi
-EOF
+SESSION_DIR="$XDG_DATA_HOME/nvim/sessions"
+PREVIEW_CMD="previewer.sh {} 2>/dev/null || previewer.sh {q} --remote"
+ATTACHED="$(tmux list-sessions -F '#{?session_attached,#{session_path},}' 2>/dev/null | sed '/^$/d')"
 
 if [ "$#" -eq 0 ]; then
-	DIRS=""
-
-	for initial_dir in $INITIAL_DIRS; do
-		if [ -d "$initial_dir" ]; then
-			DIRS="$DIRS $(stat -c %Y:"$initial_dir" "$initial_dir")"
-		fi
-	done
-
-	for project in "$PROJECT_DIR"/*; do
-		if [ -d "$project" ]; then
-			DIRS="$DIRS $(stat -c %Y:"$project" "$project")"
-		fi
-	done
-
-	for session in "$XDG_DATA_HOME/nvim/sessions"/*; do
-		entry="$(printf %s\\n "$session" | sed "s|^$XDG_DATA_HOME/nvim/sessions/||" | sed 's#%{2}|_{2}#/#g')"
-		if [ -d "$entry" ]; then
-			DIRS="$DIRS $(stat -c %Y:"$entry" "$session")"
-		fi
-	done
-
-	if [ -n "$TMUX" ]; then
-		attached="$(tmux list-sessions -F '#{?session_attached,#{session_path},}' | sed '/^$/d')"
-	fi
-
-	DIRS="$(printf %s\\n "$DIRS" | xargs -I{} -d ' ' sh -c '
-  timestamp="$(printf %s "{}" | cut -d":" -f1)"
-  dir_path="$(printf %s "{}" | cut -d":" -f2)"
-  source="$(printf %s "{}" | cut -d":" -f2)"
-
-	if [ -e "$dir_path/.git" ]; then
-    git_timestamp="$(git -C "$dir_path" --no-pager log -1 --all --format="%at" 2>/dev/null || stat -c %Y "$dir_path"/.git)"
-  fi
-
-  if [ $git_timestamp -gt $timestamp ]; then
-    printf %s:%s\\n $git_timestamp $dir_path
-  else
-    printf %s\\n {}
-  fi
-  ' | sort -r | sort -t':' -r -k2 | uniq -s10 | sort -r | cut -d':' -f2 | sed "s#^$attached\$##g" | sed '/^$/d')"
-
 	# shellcheck disable=2046
-	set -- $(printf %s\\n "$DIRS" | fzf-tmux -p -- --multi --print-query -d/ --with-nth -1 \
-		--preview-window=right,75% --preview="$PREVIEW_CMD" | tr -s '\n' ' ')
+	set -- $({
+		printf %s\\n "$HOME/.dotfiles"
+		fd . "$PROJECT_DIR" --type=d --max-depth=1
+		fd . "$SESSION_DIR" --type=f --max-depth=1 | sed "s|^$SESSION_DIR/||" | sed 's#%%\|__#/#g'
+	} | sed 's|/$||' | sed "\|^$HOME\$|d" | sed "\|^$ATTACHED\$|d" | sort -u |
+		timestamp.sh --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
+		fzf-tmux -p -- --multi --print-query -d/ --with-nth -1 --preview-window=right,75% --preview="$PREVIEW_CMD" |
+		tr -s '\n' ' ')
 fi
 
 while [ $# -gt 0 ]; do
