@@ -2,19 +2,20 @@
 # shellcheck disable=2016,2089
 
 PROJECT_DIR="$HOME/src"
+DOCKER_DIR="$HOME/dkr"
 SESSION_DIR="$XDG_DATA_HOME/nvim/sessions"
-PREVIEW_CMD="previewer.sh {} 2>/dev/null || previewer.sh {q} --remote"
-ATTACHED="$(tmux list-sessions -F '#{?session_attached,#{session_path},}' 2>/dev/null | sed '/^$/d')"
+PREVIEW_CMD="([ -n {} ] && less {}) || ([ ! -e {q} ] && less {q})"
+ATTACHED="$(tmux display -p '#{session_path}')"
 
 if [ "$#" -eq 0 ]; then
 	# shellcheck disable=2046
 	set -- $({
 		printf %s\\n "$HOME/.dotfiles"
-		fd . "$PROJECT_DIR" --type=d --max-depth=1
+		fd . "$PROJECT_DIR" "$DOCKER_DIR" --type=d --max-depth=1
 		fd . "$SESSION_DIR" --type=f --max-depth=1 | sed "s|^$SESSION_DIR/||" | sed 's#%%\|__#/#g'
 	} | sed 's|/$||' | sed "\|^$HOME\$|d" | sed "\|^$ATTACHED\$|d" | sort -u |
 		timestamp.sh --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
-		fzf-tmux -p -- --multi --print-query -d/ --with-nth -1 --preview-window=right,75% --preview="$PREVIEW_CMD" |
+		fzf-tmux -p -- --multi --print-query -d/ --with-nth -1 --preview-window='right,75%,<30(up,30%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ')
 fi
 

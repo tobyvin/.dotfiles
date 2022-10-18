@@ -31,6 +31,7 @@ export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export ZK_NOTEBOOK_DIR="$HOME/notebook"
 export STARSHIP_LOG="error"
 export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
+export FZF_TMUX_OPTS="-p"
 export FZF_DEFAULT_OPTS='--bind ctrl-q:abort
 --bind ctrl-y:preview-up
 --bind ctrl-e:preview-down
