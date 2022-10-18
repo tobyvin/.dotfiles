@@ -25,6 +25,7 @@ export LESS="--RAW-CONTROL-CHARS --quit-if-one-screen --mouse"
 export LESSOPEN="|lesspipe.sh %s"
 export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
+export BASE16_DEFAULT_THEME="gruvbox-dark-hard"
 export PASSWORD_STORE_DIR="$HOME/.password-store"
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export ZK_NOTEBOOK_DIR="$HOME/notebook"

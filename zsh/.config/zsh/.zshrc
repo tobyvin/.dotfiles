@@ -52,7 +52,7 @@ alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
 alias unlock='echo "" | gpg --clearsign --verbose && ssh -T git@github.com'
 
-SHELDON_PROFILE="$(uname -r | sed 's/^.*-//g' 2>/dev/null)"
+SHELDON_PROFILE="$(uname -r 2>/dev/null | rev | cut -d- -f1 | rev)"
 export SHELDON_PROFILE
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
 export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)

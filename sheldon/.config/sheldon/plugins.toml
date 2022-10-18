@@ -1,18 +1,41 @@
+[templates]
+defer = '{% for file in files %} zsh-defer source "{{ file }}" {% endfor %}'
+contrib_fpath = 'fpath=( "{{ dir }}/contrib/completion/zsh" $fpath )'
+
 [plugins]
 
 [plugins.zsh-defer]
 github = 'romkatv/zsh-defer'
 
-[templates]
-defer = { value = 'zsh-defer source "{{ file }}"', each = true }
-comp = { value = 'mkdir -p "$XDG_DATA_HOME/zsh/site-functions"; ln -sf "{{ file }}" "$XDG_DATA_HOME/zsh/site-functions/_{{ name }}"', each = true }
-
 [plugins.zsh-vi-mode]
 github = "jeffreytse/zsh-vi-mode"
 
 [plugins.zsh-wsl]
-local = '~/.local/share/zsh-wsl'
+local = '~/.local/share/wsl/shell'
 profiles = ["WSL2"]
+
+[plugins.zsh-autosuggestions]
+github = "zsh-users/zsh-autosuggestions"
+use = ["{{ name }}.zsh"]
+
+[plugins.fzf]
+github = "junegunn/fzf"
+use = ["completion.zsh"]
+
+[plugins.zsh-completions]
+github = "zsh-users/zsh-completions"
+
+[plugins.zsh-pandoc-completion]
+github = "srijanshetty/zsh-pandoc-completion"
+apply = ["fpath"]
+
+[plugins.docker]
+github = "docker/cli"
+apply = ["contrib_fpath"]
+
+[plugins.base16]
+github = "chriskempson/base16-shell"
+apply = ["defer"]
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
@@ -22,25 +45,6 @@ apply = ["defer"]
 github = "joshskidmore/zsh-fzf-history-search"
 apply = ["defer"]
 
-[plugins.zsh-completions]
-github = "zsh-users/zsh-completions"
-apply = ["defer"]
-
-[plugins.zsh-pandoc-completion]
-github = "srijanshetty/zsh-pandoc-completion"
-apply = ["defer"]
-
-[plugins.dotnet]
-remote = "https://raw.githubusercontent.com/dotnet/cli/master/scripts/register-completions.zsh"
-apply = ["comp"]
-
-[plugins.docker]
-remote = "https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker"
-apply = ["comp"]
-
-[plugins.zsh-autosuggestions]
-github = "zsh-users/zsh-autosuggestions"
-use = ["{{ name }}.zsh"]
-
 [plugins.compinit]
-inline = 'mkdir -p $XDG_CACHE_HOME/zsh && autoload -Uz compinit && zsh-defer compinit -d $XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION'
+local = '~/.local/share/zsh/plugins'
+apply = ["defer"]
