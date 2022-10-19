@@ -60,108 +60,24 @@ has() {
 	command -v "$1" >/dev/null
 }
 
-is_git_repo() {
+in_git_repo() {
 	[ -d "$1/.git" ] || git -C "$1" rev-parse --is-inside-work-tree >/dev/null 2>&1
 }
 
-mime() {
-	if [ -e "$1" ]; then
-		mtype=$(file -L -s -b --mime "$1" 2>/dev/null)
-		fcat="${mtype%/*}"
-		mtype="${mtype#*/}"
-		mtype="${mtype%;*}"
-		mtype="${mtype#x-}"
-		mtype="${mtype#vnd\.}"
-
-		if [ "$fcat" = "application" ] &&
-			[ "$ftype" = "octet-stream" ] ||
-			[ "$fcat" = "text" ] &&
-			[ "$ftype" = "plain" ]; then
-			mtype=$(file -L -s -b "$1" 2>/dev/null)
-		fi
-	else
-		case "$1" in
-		http://*)
-			mtype='x-scheme-handler/http'
-			;;
-		https://*)
-			mtype='x-scheme-handler/https'
-			;;
-		*)
-			mtype='repo'
-			;;
-		esac
-	fi
-
-	printf %s\\n "$mtype"
-}
-
-fileext() {
-	case "$1" in
-	.*.*) extension=${1##*.} ;;
-	.*) extension= ;;
-	*.*) extension=${1##*.} ;;
-	esac
-
-	printf %s\\n "$extension"
-}
-
 filetype() {
-	fname="$1"
-	fext=$(fileext "$fname")
-	mtype=$(mime "$fname")
-
-	ft="${mtype#*/}"
-	ft="${ft%;*}"
-	ft="${ft#x-}"
-	ftype="${ft#vnd\.}"
-
-	case "$fext" in
-	epub) [ "$ftype" = "zip" ] && ftype='epub' ;;
-	ipynb) [ "$ftype" = "json" ] && ftype='ipynb' ;;
-	mp3) [ "$ftype" = "mpeg" ] && ftype='mp3' ;;
-	crt | pem) ftype='x509' ;;
-	crl) ftype='crl' ;;
-	csr) ftype='csr' ;;
-	pod) ftype='pod' ;;
-	pm) ftype='perl' ;;
-	md | MD | mkd | markdown | rst) ftype='markdown' ;;
-	log) ftype='log' ;;
-	ebuild | eclass) ftype='sh' ;;
-	esac
-
-	case "$ftype" in
-	openxmlformats-officedocument.wordprocessingml.document) ftype='docx' ;;
-	openxmlformats-officedocument.presentationml.presentation) ftype='pptx' ;;
-	openxmlformats-officedocument.spreadsheetml.sheet) ftype='xlsx' ;;
-	oasis.opendocument.text*) ftype='odt' ;;
-	oasis.opendocument.spreadsheet) ftype='ods' ;;
-	oasis.opendocument.presentation) ftype='odp' ;;
-	sun.xml.writer) ftype='ooffice1' ;;
-	shellscript) ftype='sh' ;;
-	makefile) ftype='make' ;;
-	epub+zip) ftype='epub' ;;
-	matlab-data) ftype='matlab' ;;
-	troff) case "${fname##*/}" in
-		[Mm]akefile | [Mm]akefile.* | BSDMakefile) ftype='make' ;;
-		esac ;;
-	*mat-file*) ftype='matlab' ;;
-	*POD\ document*) ftype='pod' ;;
-	*PEM\ certificate\ request) ftype='csr' ;;
-	*PEM\ certificate) ftype='csr' ;;
-	*Microsoft\ OOXML) ftype='docx' ;;
-	Apple\ binary\ property\ list) ftype='plist' ;;
-	PGP\ *ncrypted* | GPG\ encrypted*) ftype='pgp' ;;
-	Audio\ file\ with\ ID3\ *) ftype='mp3' ;;
-	'OpenOffice.org 1.x Writer document') ftype='ooffice1' ;;
-	# if still unspecific, determine file type by extension
-	data)
-		### binary only file formats, type not guessed by 'file'
-		case "$fext" in
-		mat) ftype='matlab' ;;
-		br | bro | tbr) ftype='brotli' ;;
-		lz4 | lt4 | tz4 | tlz4) ftype='lz4' ;;
-		esac
+	case "$1" in
+	https://git.sr.ht*) ftype="sourcehut" ;;
+	https://github.com*) ftype="github" ;;
+	*.md | *.MD | *.mkd | *.markdown | *.rst) ftype='markdown' ;;
+	/*) [ -d "$1" ] && ftype='directory' ;;
+	"${1%/*}/${1#*/}")
+		say_err "GOT HERE"
+		for remote in ${GIT_REMOTES:-https://git.sr.ht https://github.com}; do
+			if git ls-remote "$remote/$1" CHECK_GIT_REMOTE_URL_REACHABILITY; then
+				ftype=$(filetype "$remote/$1")
+				break
+			fi
+		done
 		;;
 	esac
 
@@ -207,9 +123,10 @@ if [ -z "$width" ]; then
 fi
 
 ft=$(filetype "$1")
+
 case "$ft" in
 directory)
-	if has onefetch && is_git_repo "$1" 2>/dev/null; then
+	if has onefetch && in_git_repo "$1" 2>/dev/null; then
 		onefetch --hidden --show-logo="$([ "$width" -lt "80" ] && printf 'never' || printf 'always')" "$1" 2>/dev/null
 	elif [ -f "$1/README.md" ]; then
 		$SCRIPT "$1/README.md"
@@ -220,16 +137,11 @@ directory)
 markdown)
 	bat --color always "$1" 2>/dev/null
 	;;
-http | https)
-	if printf %s\\n "$1" | grep -q "git.sr.ht"; then
-		has hut && hut git show --repo "$1" 2>/dev/null
-	elif printf %s\\n "$1" | grep -q "github.com"; then
-		has gh && gh repo view "$1" 2>/dev/null
-	fi
+sourcehut)
+	has hut && hut git show --repo "$1" 2>/dev/null
 	;;
-repo)
-	hut git show --repo "https://git.sr.ht/$1" 2>/dev/null ||
-		gh repo view "https://github.com/$1" 2>/dev/null
+github)
+	has gh && gh repo view "$1" 2>/dev/null
 	;;
 *)
 	exit 1
