@@ -1,13 +1,18 @@
 #!/bin/sh
 # shellcheck disable=2016,2089
 
-PROJECT_DIR="$HOME/src"
-DOCKER_DIR="$HOME/dkr"
-SESSION_DIR="$XDG_DATA_HOME/nvim/sessions"
-PREVIEW_CMD="([ -n {} ] && less {}) || ([ ! -e {q} ] && less {q})"
-ATTACHED="$(tmux display -p '#{session_path}')"
-
 if [ "$#" -eq 0 ]; then
+	PROJECT_DIR="$HOME/src"
+	DOCKER_DIR="$HOME/dkr"
+	SESSION_DIR="$XDG_DATA_HOME/nvim/sessions"
+	PREVIEW_CMD="([ -n {} ] && less {}) || ([ ! -e {q} ] && less {q})"
+
+	ATTACHED=$(tmux display -p '#{session_path}')
+	lines=$(tmux display -p "#{pane_height}")
+	columns=$(tmux display -p "#{pane_width}")
+	WIDTH=$([ "$columns" -gt "120" ] && printf %s "120" || printf %s "90%")
+	HEIGHT=$([ "$lines" -gt "40" ] && printf %s "40" || printf %s "90%")
+
 	# shellcheck disable=2046
 	set -- $({
 		printf %s\\n "$HOME/.dotfiles"
@@ -15,7 +20,7 @@ if [ "$#" -eq 0 ]; then
 		fd . "$SESSION_DIR" --type=f --max-depth=1 | sed "s|^$SESSION_DIR/||" | sed 's#%%\|__#/#g'
 	} | sed 's|/$||' | sed "\|^$HOME\$|d" | sed "\|^$ATTACHED\$|d" | sort -u |
 		timestamp.sh --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
-		fzf-tmux -p -- --multi --print-query -d/ --with-nth -1 --preview-window='right,75%,<30(up,30%,border-bottom)' --preview="$PREVIEW_CMD" |
+		fzf-tmux -p "$WIDTH,$HEIGHT" -- --multi --print-query -d/ --with-nth -1 --preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ')
 fi
 
