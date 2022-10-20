@@ -5,7 +5,7 @@ if [ "$#" -eq 0 ]; then
 	PROJECT_DIR="$HOME/src"
 	DOCKER_DIR="$HOME/dkr"
 	SESSION_DIR="$XDG_DATA_HOME/nvim/sessions"
-	PREVIEW_CMD="([ -n {} ] && less {}) || ([ ! -e {q} ] && less {q})"
+	PREVIEW_CMD='sel={}; less ${sel:-{q}} 2>/dev/null'
 
 	ATTACHED=$(tmux display -p '#{session_path}')
 	lines=$(tmux display -p "#{pane_height}")
@@ -21,22 +21,26 @@ if [ "$#" -eq 0 ]; then
 	} | sed 's|/$||' | sed "\|^$HOME\$|d" | sed "\|^$ATTACHED\$|d" | sort -u |
 		timestamp.sh --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
 		fzf-tmux -p "$WIDTH,$HEIGHT" -- --multi --print-query -d/ --with-nth -1 --preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
-		tr -s '\n' ' ')
+		tr -s '\n' ' ') && [ $# -gt 1 ] && shift
 fi
 
 while [ $# -gt 0 ]; do
 	session_path="$1"
 	shift
+
 	if [ ! -d "$session_path" ]; then
-		repo=$(printf %s "$session_path" | sed 's/.git$//' | sed 's|/$||')
-		remotes="$repo https://git.sr.ht/$repo https://github.com/$repo"
-		for remote in $remotes; do
-			if timeout 3s git ls-remote "$remote" CHECK_GIT_REMOTE_URL_REACHABILITY; then
-				session_path="$HOME/src/$(basename "$remote")"
-				git clone "$remote" "$session_path"
-				break
-			fi
-		done
+		repo="$session_path"
+		if [ "$repo" = "${repo%/*}/${repo#*/}" ]; then
+			for remote in ${GIT_REMOTES:-https://git.sr.ht https://github.com}; do
+				if git ls-remote "$remote/$repo" CHECK_GIT_REMOTE_REACHABILITY; then
+					session_path="$remote/$repo"
+					break
+				fi
+			done
+		fi
+
+		session_path="$HOME/src/$(basename "$session_path")"
+		git clone "$repo" "$session_path"
 	fi
 
 	if [ ! -d "$session_path" ]; then
