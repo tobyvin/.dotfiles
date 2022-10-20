@@ -9,36 +9,8 @@ M.setup = function()
 		return
 	end
 
-	local queries = require("nvim-treesitter.query")
-
-	treesitter.define_modules({
-		tobyvin_keymaps = {
-			attach = function(bufnr, _)
-				local refactor_module = require("nvim-treesitter-refactor.smart_rename")
-				local smart_rename = function()
-					refactor_module.smart_rename(bufnr)
-				end
-
-				vim.keymap.set("n", "<leader>lr", smart_rename, { desc = "Rename", buffer = bufnr })
-				M.attached_keymaps[bufnr] = { "n", "<leader>lr", { buffer = bufnr } }
-			end,
-			detach = function(bufnr)
-				local attached_keymaps = vim.F.if_nil(M.attached_keymaps[bufnr], {})
-				for _, attached_keymap in pairs(attached_keymaps) do
-					vim.keymap.del(unpack(attached_keymap))
-				end
-			end,
-			is_supported = function(lang)
-				return queries.has_locals(lang)
-			end,
-		},
-	})
-
 	treesitter.setup({
 		ensure_installed = "all",
-		tobyvin_keymaps = {
-			enable = true,
-		},
 		indent = {
 			enable = true,
 		},
@@ -55,11 +27,6 @@ M.setup = function()
 			keymaps = {
 				node_incremental = "<TAB>",
 				node_decremental = "<S-TAB>",
-			},
-		},
-		refactor = {
-			smart_rename = {
-				enable = true,
 			},
 		},
 		playground = {

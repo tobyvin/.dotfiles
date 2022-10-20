@@ -3,24 +3,6 @@ local M = {}
 M.setup = function()
 	local augroup_hl = vim.api.nvim_create_augroup("tobyvin_hl", { clear = true })
 
-	vim.api.nvim_create_autocmd("CmdlineEnter", {
-		group = augroup_hl,
-		pattern = "/,?",
-		callback = function()
-			vim.opt.hlsearch = true
-		end,
-		desc = "Enable hlsearch on input",
-	})
-
-	vim.api.nvim_create_autocmd("CmdlineLeave", {
-		group = augroup_hl,
-		pattern = "/,?",
-		callback = function()
-			vim.opt.hlsearch = false
-		end,
-		desc = "Disable hlsearch on exit",
-	})
-
 	vim.api.nvim_create_autocmd("TextYankPost", {
 		group = augroup_hl,
 		pattern = "*",

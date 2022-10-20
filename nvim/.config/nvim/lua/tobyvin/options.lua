@@ -51,7 +51,6 @@ M.setup = function()
 	vim.opt.inccommand = "split"
 	vim.opt.shell = "zsh"
 	vim.opt.wildignore = vim.opt.wildignore + { "*.o", "*.rej", "*.so" }
-	vim.opt.lazyredraw = true
 	vim.opt.completeopt = { "menuone", "noselect", "noinsert" }
 	vim.opt.spelllang = "en_us"
 	vim.opt.spellfile = vim.fn.stdpath("config") .. "/spell/en.utf-8.add"
