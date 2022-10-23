@@ -31,17 +31,19 @@ help() {
 }
 
 say() {
-	printf "%s: %s\n" "$SCRIPT" "$@"
+	if [ -z "$LESSQUIET" ]; then
+		printf "%s: %s\n" "$SCRIPT" "$*"
+	fi
 }
 
 say_verbose() {
 	if [ "$verbose" -gt "0" ]; then
-		say "$@"
+		say "$*"
 	fi
 }
 
 say_err() {
-	say "$@" >&2
+	say "$*" >&2
 }
 
 err() {
@@ -71,7 +73,6 @@ filetype() {
 	*.md | *.MD | *.mkd | *.markdown | *.rst) ftype='markdown' ;;
 	/*) [ -d "$1" ] && ftype='directory' ;;
 	"${1%/*}/${1#*/}")
-		say_err "GOT HERE"
 		for remote in ${GIT_REMOTES:-https://git.sr.ht https://github.com}; do
 			if git ls-remote "$remote/$1" CHECK_GIT_REMOTE_URL_REACHABILITY; then
 				ftype=$(filetype "$remote/$1")
@@ -127,23 +128,27 @@ ft=$(filetype "$1")
 case "$ft" in
 directory)
 	if has onefetch && in_git_repo "$1" 2>/dev/null; then
-		onefetch --hidden --show-logo="$([ "$width" -lt "80" ] && printf 'never' || printf 'always')" "$1" 2>/dev/null
+		show_logo=$([ "$width" -lt "80" ] && printf 'never' || printf 'always')
+		cmd="onefetch --include-hidden --show-logo=$show_logo"
 	elif [ -f "$1/README.md" ]; then
-		$SCRIPT "$1/README.md"
+		exec $SCRIPT "$1/README.md"
 	else
-		exa --tree --git-ignore --level=3 --icons "$1" 2>/dev/null
+		cmd="exa --tree --git-ignore --level=3 --icons"
 	fi
 	;;
 markdown)
-	bat --color always "$1" 2>/dev/null
+	had bat && cmd="bat --color always"
 	;;
 sourcehut)
-	has hut && hut git show --repo "$1" 2>/dev/null
+	has hut && cmd="hut git show --repo"
 	;;
 github)
-	has gh && gh repo view "$1" 2>/dev/null
-	;;
-*)
-	exit 1
+	has gh && cmd="gh repo view"
 	;;
 esac
+
+if [ -z "$cmd" ]; then
+	exit 1
+fi
+
+$cmd "$1" 2>/dev/null
