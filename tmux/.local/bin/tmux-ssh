@@ -1,18 +1,38 @@
 #!/bin/sh
 
-setopt localoptions nonomatch
-tmp="$(mktemp)"
+#!/bin/sh
+# shellcheck disable=2016,2089
 
-tail -n +1 ~/.ssh/config ~/.ssh/config.d/* /etc/ssh/ssh_config 2>/dev/null | grep -i '^\s*host ' |
-	awk '{for (i = 2; i <= NF; i++) print "ssh_config " $i}' | grep -v '[*?%]' >"$tmp"
+if [ "$#" -eq 0 ]; then
+	ATTACHED=$(tmux display -p '#{session_path}')
+	lines=$(tmux display -p "#{pane_height}")
+	columns=$(tmux display -p "#{pane_width}")
+	WIDTH=$([ "$columns" -gt "20" ] && printf %s "20" || printf %s "90%")
+	HEIGHT=$([ "$lines" -gt "15" ] && printf %s "15" || printf %s "90%")
 
-grep -oE '^[[a-z0-9.,:-]+' ~/.ssh/known_hosts | tr ',' '\n' | tr -d '[' | awk '{ print  "known_hosts " $1 }' >"$tmp"
-grep -v '^\s*\(#\|$\)' /etc/hosts | command grep -Fv '0.0.0.0' >"$tmp"
-cat "$tmp"
+	# shellcheck disable=2046
+	set -- $(
+		grep -P '^[Hh]ost ([^*]+)$' "$HOME/.ssh/config" | grep -Po ' \K(\w+)' |
+			sed "\|^$HOST\$|d" | sed "\|^${ATTACHED#SSH:}\$|d" | sort -u |
+			timestamp.sh --type="ssh" --format="{}:{1}" | sort -r | cut -d':' -f2 |
+			fzf-tmux -p "$WIDTH,$HEIGHT" -- --multi --print-query -d/ --with-nth -1 |
+			tr -s '\n' ' '
+	) && [ $# -gt 1 ] && shift
+fi
+
 exit 0
-while IFS= read -r host; do
-	hosts="$hosts $host"
-done <"$tmp"
-rm "$tmp"
+while [ $# -gt 0 ]; do
+	ssh_host="$1"
+	shift
 
-printf %s\\n "$hosts" | xargs -I{} -d ' ' printf %s\\n {}
+	name="SSH:$ssh_host"
+	if ! tmux has-session -t "$name" 2>/dev/null; then
+		tmux new-session -ds "$name" ssh -t "$ssh_host" 'tmux new -As $USER'
+	fi
+done
+
+if [ -z "$TMUX" ] && [ -z "$name" ]; then
+	tmux attach-session -t "$name"
+elif tmux has-session -t="$name" 2>/dev/null; then
+	tmux switch-client -t "$name"
+fi

@@ -3,8 +3,8 @@
 
 SCRIPT="$(basename "$0")"
 
-long='git,sessions::,format:,verbose,help'
-short='gs::f:vh'
+long='type:,git,sessions::,format:,verbose,help'
+short='t:gs::f:vh'
 
 if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
 	exit 1
@@ -24,6 +24,7 @@ help() {
 		    $SCRIPT [OPTION ...] <PATH> [PATH ...]
 
 		OPTIONS:
+		    -t, --type=<file|ssh>   Specify type of input
 		    -g, --git               Check last git commit for timestamp
 		    -s, --sessions=[PATH]   Check nvim sessions directory for existing session files.
 		                                (DEFAULT="$XDG_DATA_HOME/nvim/sessions")
@@ -62,9 +63,11 @@ err_help() {
 }
 
 verbose=0
+type=''
 git=false
 sessions=false
 sessions_dir="$XDG_DATA_HOME/nvim/sessions"
+histfile="${HISTFILE:-$XDG_STATE_HOME/zsh/history}"
 format="{}"
 while true; do
 	case "$1" in
@@ -75,6 +78,15 @@ while true; do
 	-v | --verbose)
 		verbose=$((verbose + 1))
 		shift
+		;;
+	-t | --type)
+		case "$2" in
+		s*) type="ssh" ;;
+		f*) type="file" ;;
+		d*) type="directory" ;;
+		*) type="$2" ;;
+		esac
+		shift 2
 		;;
 	-e | --git)
 		git=true
@@ -109,34 +121,46 @@ if [ "$#" -eq 0 ]; then
 fi
 
 while [ $# -gt 0 ]; do
-	if [ ! -d "$1" ]; then
-		say_err "$1" "No such file or directory"
-		shift
-		continue
-	fi
-
 	ts_max="0"
-	if ts=$(stat -c "%Y" "$1"); then
-		say_verbose "stat '$1': $ts"
-		if [ "$ts" -gt "$ts_max" ]; then
-			ts_max=$ts
+	case "$type" in
+	ssh)
+		if ts=$(grep -P "^: \d+:\d;ssh.* $1" "$histfile" | tail -1 | cut -d: -f2 | sed 's/^\s*//'); then
+			say_verbose "ssh '$1': $ts"
+			if [ -n "$ts" ] && [ "$ts" -gt "$ts_max" ]; then
+				ts_max=$ts
+			fi
 		fi
-	fi
+		;;
+	file | directory)
+		if [ ! -d "$1" ]; then
+			say_err "$1" "No such file or directory"
+			shift
+			continue
+		fi
 
-	if $git && ts=$(git -C "$1" --no-pager log -1 --all --format="%at" 2>/dev/null); then
-		say_verbose "git '$1': $ts"
-		if [ "$ts" -gt "$ts_max" ]; then
-			ts_max=$ts
+		if ts=$(stat -c "%Y" "$1"); then
+			say_verbose "stat '$1': $ts"
+			if [ "$ts" -gt "$ts_max" ]; then
+				ts_max=$ts
+			fi
 		fi
-	fi
 
-	pattern=$(printf %s\\n "$1" | sed 's|/|.{1,2}|g')
-	if $sessions && ts=$(fd "$pattern" "$sessions_dir" -1 --type=f --max-depth=1 -x stat -c "%Y" {} 2>/dev/null); then
-		say_verbose "session '$1': $ts"
-		if [ "$ts" -gt "$ts_max" ]; then
-			ts_max=$ts
+		if $git && ts=$(git -C "$1" --no-pager log -1 --all --format="%at" 2>/dev/null); then
+			say_verbose "git '$1': $ts"
+			if [ "$ts" -gt "$ts_max" ]; then
+				ts_max=$ts
+			fi
 		fi
-	fi
+
+		pattern=$(printf %s\\n "$1" | sed 's|/|.{1,2}|g')
+		if $sessions && ts=$(fd "$pattern" "$sessions_dir" -1 --type=f --max-depth=1 -x stat -c "%Y" {} 2>/dev/null); then
+			say_verbose "session '$1': $ts"
+			if [ "$ts" -gt "$ts_max" ]; then
+				ts_max=$ts
+			fi
+		fi
+		;;
+	esac
 
 	printf %s\\n "$format" | sed "s|{}|$ts_max|g" | sed "s|{1}|$1|g"
 	shift
