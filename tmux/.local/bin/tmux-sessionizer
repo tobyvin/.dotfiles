@@ -19,7 +19,7 @@ if [ "$#" -eq 0 ]; then
 		fd . "$PROJECT_DIR" "$DOCKER_DIR" --type=d --max-depth=1
 		fd . "$SESSION_DIR" --type=f --max-depth=1 | sed "s|^$SESSION_DIR/||" | sed 's#%%\|__#/#g'
 	} | sed 's|/$||' | sed "\|^$HOME\$|d" | sed "\|^$ATTACHED\$|d" | sort -u |
-		timestamp.sh --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
+		timestamp.sh --type=directory --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
 		fzf-tmux -p "$WIDTH,$HEIGHT" -- --multi --print-query -d/ --with-nth -1 --preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ') && [ $# -gt 1 ] && shift
 fi
