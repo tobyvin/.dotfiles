@@ -9,100 +9,70 @@ M.to_char = function(str)
 	return str:sub(1, 1)
 end
 
-M.diff_source = function()
-	local gitsigns = vim.b.gitsigns_status_dict
-	if gitsigns then
-		return {
-			added = gitsigns.added,
-			modified = gitsigns.changed,
-			removed = gitsigns.removed,
-		}
-	end
-end
-
 M.setup = function()
 	local status_ok, lualine = pcall(require, "lualine")
 	if not status_ok then
 		return
 	end
 
-	local navic_ok, navic = pcall(require, "nvim-navic")
-	local auto_session_ok, auto_session_library = pcall(require, "auto-session-library")
+	local diff = {
+		"diff",
+		source = function()
+			local gitsigns = vim.b.gitsigns_status_dict
+			if gitsigns then
+				return {
+					added = gitsigns.added,
+					modified = gitsigns.changed,
+					removed = gitsigns.removed,
+				}
+			end
+		end,
+		padding = { left = 0, right = 1 },
+	}
 
-	local modules = require("lualine_require").lazy_require({
-		highlight = "lualine.highlight",
-		utils = "lualine.utils.utils",
-	})
+	local diagnostics = {
+		"diagnostics",
+		sources = { utils.diagnostic.count },
+		symbols = {
+			error = utils.diagnostic.signs.error.text,
+			warn = utils.diagnostic.signs.warn.text,
+			info = utils.diagnostic.signs.info.text,
+			hint = utils.diagnostic.signs.hint.text,
+		},
+		update_in_insert = true,
 
-	local buffer = require("lualine.components.buffers.buffer")
-	---returns rendered buffer
-	---@return string
-	function buffer:render()
-		local name = self:name()
-		if self.options.fmt then
-			name = self.options.fmt(name or "", self.bufnr)
-		end
+		padding = { left = 0, right = 1 },
+	}
 
-		if self.ellipse then -- show ellipsis
-			name = "..."
-		else
-			name = self:apply_mode(name)
-		end
-		name = buffer.apply_padding(name, self.options.padding)
-		self.len = vim.fn.strchars(name)
+	local workspace = {
+		{ "b:gitsigns_head", icon = "" },
+		diff,
+		diagnostics,
+	}
 
-		-- setup for mouse clicks
-		local line = self:configure_mouse_click(name)
-		-- apply highlight
-		line = modules.highlight.component_format_highlight(self.highlights[(self.current and "active" or "inactive")])
-			.. line
-
-		-- apply separators
-		if self.options.self.section < "x" and not self.first then
-			local sep_before = self:separator_before()
-			line = sep_before .. line
-			self.len = self.len + vim.fn.strchars(sep_before)
-		elseif self.options.self.section >= "x" and not self.last then
-			local sep_after = self:separator_after()
-			line = line .. sep_after
-			self.len = self.len + vim.fn.strchars(sep_after)
-		end
-		return line
-	end
-
-	local tab = require("lualine.components.tabs.tab")
-
-	---returns name for tab. Tabs name is the name of buffer in last active window
-	--- of the tab.
-	---@return string
-	function tab:label()
-		local ok, custom_tabname = pcall(vim.api.nvim_tabpage_get_var, self.tabId, "tabname")
-		if not ok then
-			custom_tabname = nil
-		end
-		if custom_tabname and custom_tabname ~= "" then
-			return modules.utils.stl_escape(custom_tabname)
-		elseif self.options.mode == 1 then
-			return tostring(self.tabnr)
-		end
-		local buflist = vim.fn.tabpagebuflist(self.tabnr)
-		local winnr = vim.fn.tabpagewinnr(self.tabnr)
-		local bufnr = buflist[winnr]
-		local file = modules.utils.stl_escape(vim.api.nvim_buf_get_name(bufnr))
-		local buftype = vim.fn.getbufvar(bufnr, "&buftype")
-		if buftype == "help" then
-			return "help:" .. vim.fn.fnamemodify(file, ":t:r")
-		elseif buftype == "terminal" then
-			---@diagnostic disable-next-line: missing-parameter
-			local match = string.match(vim.split(file, " ")[1], "term:.*:(%a+)")
-			return match ~= nil and match or vim.fn.fnamemodify(vim.env.SHELL, ":t")
-		elseif vim.fn.isdirectory(file) == 1 then
-			return vim.fn.fnamemodify(file, ":p:.")
-		elseif file == "" then
-			return "[No Name]"
-		end
-		return vim.fn.fnamemodify(file, ":t")
-	end
+	local buffer = {
+		{
+			"filetype",
+			colored = false,
+			icon_only = true,
+			padding = { left = 1, right = 0 },
+		},
+		"filename",
+		vim.tbl_extend("force", diagnostics, { source = { utils.diagnostic.buf_count }, colored = false }),
+		{
+			require("nvim-navic").get_location,
+			color = { bg = "" },
+		},
+		{
+			"string.format(' ')",
+			color = { bg = "" },
+		},
+	}
+	local filetypes = vim.fn.getcompletion("", "filetype")
+	local disabled = vim.tbl_filter(function(ft)
+		return string.match(ft, "^Neogit.*") ~= nil
+	end, filetypes)
+	table.insert(disabled, "gitcommit")
 
 	lualine.setup({
 		options = {
@@ -111,57 +81,21 @@ M.setup = function()
 			},
 			component_separators = "",
 			section_separators = "",
+			disabled_filetypes = {
+				"netrw",
+				"alpha",
+				"",
+				winbar = disabled,
+			},
 		},
+
 		sections = {
 			lualine_a = { { "mode", fmt = M.to_char } },
-			lualine_b = {
-				"branch",
-				{
-					"diff",
-					source = M.diff_source,
-					padding = { left = 0, right = 1 },
-				},
-				{
-					"diagnostics",
-					sources = { utils.diagnostic.count },
-					symbols = {
-						error = utils.diagnostic.signs.error.text,
-						warn = utils.diagnostic.signs.warn.text,
-						info = utils.diagnostic.signs.info.text,
-						hint = utils.diagnostic.signs.hint.text,
-					},
-					update_in_insert = false,
-					padding = { left = 0, right = 1 },
-				},
-			},
+			lualine_b = workspace,
 			lualine_c = {
 				{
 					"filename",
 					path = 1,
-					shorting_target = 100,
-				},
-				{
-					"diagnostics",
-					sources = {
-						function()
-							return utils.diagnostic.count(0)
-						end,
-					},
-					symbols = {
-						error = utils.diagnostic.signs.error.text,
-						warn = utils.diagnostic.signs.warn.text,
-						info = utils.diagnostic.signs.info.text,
-						hint = utils.diagnostic.signs.hint.text,
-					},
-					update_in_insert = false,
-					padding = { left = 0, right = 1 },
-					separator = ">",
-				},
-				{
-					navic.get_location,
-					cond = function()
-						return navic_ok and navic.is_available()
-					end,
 				},
 			},
 			lualine_x = {
@@ -170,6 +104,7 @@ M.setup = function()
 				"filetype",
 			},
 		},
+
 		inactive_sections = {
 			lualine_c = { "filename" },
 			lualine_x = {
@@ -177,17 +112,16 @@ M.setup = function()
 				"location",
 			},
 		},
-		tabline = {
-			lualine_b = {
-				{
-					"buffers",
-					fmt = function(name, bufnr)
-						return string.format("%s %s", name, utils.diagnostic.indicator(bufnr))
-					end,
-				},
-			},
-			lualine_y = { { "tabs", mode = 1 } },
+
+		winbar = {
+			lualine_c = buffer,
 		},
+
+		tabline = {
+			lualine_b = { "buffers" },
+			lualine_y = { "tabs" },
+		},
+
 		extensions = {
 			"quickfix",
 			"man",
@@ -197,14 +131,6 @@ M.setup = function()
 			"toggleterm",
 			{
 				sections = {
-					lualine_b = {
-						{
-							auto_session_library.current_session_name,
-							cond = function()
-								return auto_session_ok
-							end,
-						},
-					},
 					lualine_c = {
 						get_short_cwd,
 					},

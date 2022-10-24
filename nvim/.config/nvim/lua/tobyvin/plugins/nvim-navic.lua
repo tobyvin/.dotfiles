@@ -7,12 +7,17 @@ M.setup = function()
 		return
 	end
 
+	local icons = require("lspkind").symbol_map
+	for i, _ in pairs(icons) do
+		icons[i] = icons[i] .. " "
+	end
+
 	nvim_navic.setup({
-		icons = require("lspkind").symbol_map,
+		icons = icons,
 	})
 
 	vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("tobyvin_nvim-navic", { clear = true }),
+		group = vim.api.nvim_create_augroup("tobyvin_nvim-navic", { clear = true }),
 		desc = "setup nvim-navic",
 		callback = function(args)
 			local bufnr = args.buf

@@ -327,7 +327,7 @@ M.plugins = function(use)
 		"SmiteshP/nvim-navic",
 		requires = "onsails/lspkind-nvim",
 		config = function()
-			require("tobyvin.plugins.lualine").setup()
+			require("tobyvin.plugins.nvim-navic").setup()
 		end,
 	})
 

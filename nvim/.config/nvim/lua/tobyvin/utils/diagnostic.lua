@@ -45,4 +45,12 @@ M.indicator = function(bufnr)
 	return table.concat(tbl, " ")
 end
 
+M.buf_count = function(bufnr)
+	return M.count(vim.F.if_nil(bufnr, vim.fn.bufnr()))
+end
+
+M.buf_indicator = function(bufnr)
+	return M.indicator(vim.F.if_nil(bufnr, vim.fn.bufnr()))
+end
+
 return M

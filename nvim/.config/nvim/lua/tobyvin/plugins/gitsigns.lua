@@ -14,17 +14,38 @@ end
 M.toggle_blameline = function()
 	require("gitsigns").toggle_current_line_blame()
 end
+M.next_hunk = function()
+	local gitsigns = package.loaded.gitsigns
+	if vim.wo.diff then
+		return "]c"
+	end
+	vim.schedule(function()
+		gitsigns.next_hunk()
+	end)
+	return "<Ignore>"
+end
+
+M.prev_hunk = function()
+	local gitsigns = package.loaded.gitsigns
+	if vim.wo.diff then
+		return "[c"
+	end
+	vim.schedule(function()
+		gitsigns.prev_hunk()
+	end)
+	return "<Ignore>"
+end
 
 M.on_attach = function(bufnr)
 	local gitsigns = package.loaded.gitsigns
 	utils.keymap.group("n", "<leader>g", { desc = "Git", buffer = bufnr })
 
+	vim.keymap.set("n", "]c", M.next_hunk, { expr = true, desc = "Next hunk", buffer = bufnr })
+	vim.keymap.set("n", "[c", M.prev_hunk, { expr = true, desc = "Previous hunk", buffer = bufnr })
+
 	vim.keymap.set("n", "<leader>gb", gitsigns.blame_line, { desc = "Show blame", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gB", M.show_blameline, { desc = "Show blame", buffer = bufnr })
 	vim.keymap.set("n", "<leader>g<C-b>", M.toggle_blameline, { desc = "Toggle blame", buffer = bufnr })
-
-	vim.keymap.set("n", "<leader>gj", gitsigns.next_hunk, { desc = "Next Hunk", buffer = bufnr })
-	vim.keymap.set("n", "<leader>gk", gitsigns.prev_hunk, { desc = "Prev Hunk", buffer = bufnr })
 
 	vim.keymap.set("n", "<leader>gp", gitsigns.preview_hunk, { desc = "Preview Hunk", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gr", gitsigns.reset_hunk, { desc = "Reset Hunk", buffer = bufnr })
