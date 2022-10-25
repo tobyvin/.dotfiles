@@ -12,8 +12,6 @@ M.setup = function()
 			winblend = 0,
 		},
 	})
-
-	vim.keymap.set("n", "<leader>u", undotree.toggle, { desc = "Undotree" })
 end
 
 return M
