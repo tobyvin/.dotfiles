@@ -22,13 +22,6 @@ M.setup = function()
 				return vim.api.nvim_buf_line_count(bufnr) > 2500 or vim.bo[bufnr].filetype == "help"
 			end,
 		},
-		incremental_selection = {
-			enable = true,
-			keymaps = {
-				node_incremental = "<TAB>",
-				node_decremental = "<S-TAB>",
-			},
-		},
 		playground = {
 			enable = true,
 		},
