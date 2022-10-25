@@ -15,77 +15,58 @@ M.setup = function()
 		return
 	end
 
-	local diff = {
-		"diff",
-		source = function()
-			local gitsigns = vim.b.gitsigns_status_dict
-			if gitsigns then
-				return {
-					added = gitsigns.added,
-					modified = gitsigns.changed,
-					removed = gitsigns.removed,
-				}
-			end
-		end,
-		padding = { left = 0, right = 1 },
-	}
-
-	local diagnostics = {
-		"diagnostics",
-		sources = { utils.diagnostic.count },
-		symbols = {
-			error = utils.diagnostic.signs.error.text,
-			warn = utils.diagnostic.signs.warn.text,
-			info = utils.diagnostic.signs.info.text,
-			hint = utils.diagnostic.signs.hint.text,
-		},
-		update_in_insert = true,
-
-		padding = { left = 0, right = 1 },
-	}
-
 	local workspace = {
-		{ "b:gitsigns_head", icon = "" },
-		diff,
-		diagnostics,
+		"branch",
+		{
+			"diff",
+			source = function()
+				local gitsigns = vim.b.gitsigns_status_dict
+				if gitsigns then
+					return {
+						added = gitsigns.added,
+						modified = gitsigns.changed,
+						removed = gitsigns.removed,
+					}
+				end
+			end,
+			padding = { left = 0, right = 1 },
+		},
 	}
 
 	local buffer = {
 		{
-			"filetype",
-			colored = false,
-			icon_only = true,
-			padding = { left = 1, right = 0 },
-		},
-		"filename",
-		vim.tbl_extend("force", diagnostics, { source = { utils.diagnostic.buf_count }, colored = false }),
-		{
-			require("nvim-navic").get_location,
-			color = { bg = "" },
+			"filename",
+			color = "WinBar",
 		},
 		{
-			"string.format(' ')",
-			color = { bg = "" },
+			"diagnostics",
+			source = { utils.diagnostic.buf_count },
+			symbols = {
+				error = utils.diagnostic.signs.error.text,
+				warn = utils.diagnostic.signs.warn.text,
+				info = utils.diagnostic.signs.info.text,
+				hint = utils.diagnostic.signs.hint.text,
+			},
+			update_in_insert = true,
+			color = "WinBar",
+			padding = { left = 0, right = 1 },
 		},
 	}
+
 	local filetypes = vim.fn.getcompletion("", "filetype")
-	local disabled = vim.tbl_filter(function(ft)
+	local neogit = vim.tbl_filter(function(ft)
 		return string.match(ft, "^Neogit.*") ~= nil
 	end, filetypes)
-	table.insert(disabled, "gitcommit")
 
 	lualine.setup({
 		options = {
-			refresh = {
-				statusline = 200,
-			},
 			component_separators = "",
 			section_separators = "",
 			disabled_filetypes = {
 				"netrw",
 				"alpha",
 				"",
-				winbar = disabled,
+				winbar = vim.tbl_extend("keep", neogit, { "gitcommit" }),
 			},
 		},
 
@@ -114,7 +95,16 @@ M.setup = function()
 		},
 
 		winbar = {
-			lualine_c = buffer,
+			lualine_b = buffer,
+			lualine_c = {
+				{
+					-- Hack to prevent lualine_b from taking over the lualine_c when navic has no results
+					function()
+						return require("nvim-navic").get_location():gsub("^$", " ")
+					end,
+					color = "WinBarNC",
+				},
+			},
 		},
 
 		tabline = {
@@ -123,11 +113,11 @@ M.setup = function()
 		},
 
 		extensions = {
-			"quickfix",
-			"man",
 			"fzf",
+			"man",
 			"nvim-dap-ui",
 			"symbols-outline",
+			"quickfix",
 			"toggleterm",
 			{
 				sections = {

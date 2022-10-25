@@ -7,6 +7,7 @@ M.setup = function()
 		return
 	end
 
+	local colors = require("gruvbox.palette")
 	gruvbox.setup({
 		overrides = {
 			GruvboxRedSign = { bg = "" },
@@ -26,6 +27,10 @@ M.setup = function()
 			DiffAdd = { reverse = false },
 			DiffChange = { reverse = false },
 			DiffText = { reverse = false },
+			StatusLine = { fg = colors.light1, bg = colors.dark2, reverse = false },
+			StatusLineNC = { fg = colors.light4, bg = colors.dark1, reverse = false },
+			WinBar = { link = "StatusLineNC" },
+			WinBarNC = { fg = colors.light4, bg = "" },
 		},
 		transparent_mode = true,
 	})
