@@ -38,7 +38,7 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("FileType", {
 		group = augroup_view,
-		pattern = { "qf", "help", "gitcommit", "gitrebase" },
+		pattern = { "qf", "help", "gitcommit", "gitrebase", "Neogit*" },
 		callback = function(args)
 			vim.bo[args.buf].buflisted = false
 		end,

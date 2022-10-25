@@ -15,6 +15,10 @@ M.setup = function()
 		return
 	end
 
+	local winbar_cond = function()
+		return vim.fn.buflisted(0) == 1
+	end
+
 	local workspace = {
 		"branch",
 		{
@@ -37,6 +41,7 @@ M.setup = function()
 		{
 			"filename",
 			color = "WinBar",
+			cond = winbar_cond,
 		},
 		{
 			"diagnostics",
@@ -50,13 +55,9 @@ M.setup = function()
 			update_in_insert = true,
 			color = "WinBar",
 			padding = { left = 0, right = 1 },
+			cond = winbar_cond,
 		},
 	}
-
-	local filetypes = vim.fn.getcompletion("", "filetype")
-	local neogit = vim.tbl_filter(function(ft)
-		return string.match(ft, "^Neogit.*") ~= nil
-	end, filetypes)
 
 	lualine.setup({
 		options = {
@@ -65,8 +66,7 @@ M.setup = function()
 			disabled_filetypes = {
 				"netrw",
 				"alpha",
-				"",
-				winbar = vim.tbl_extend("keep", neogit, { "gitcommit" }),
+				winbar = vim.fn.getcompletion("Neogit*", "filetype"),
 			},
 		},
 
@@ -103,6 +103,7 @@ M.setup = function()
 						return require("nvim-navic").get_location():gsub("^$", " ")
 					end,
 					color = "WinBarNC",
+					cond = winbar_cond,
 				},
 			},
 		},
