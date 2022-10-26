@@ -14,7 +14,7 @@ M.setup = function()
 			},
 		},
 		window = {
-			border = "rounded",
+			border = "single",
 		},
 		layout = {
 			align = "center",

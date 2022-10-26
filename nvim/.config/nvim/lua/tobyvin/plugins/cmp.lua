@@ -28,6 +28,10 @@ M.setup = function()
 
 	cmp.setup({
 		enabled = M.enabled,
+		window = {
+			completion = cmp.config.window.bordered({ border = "single" }),
+			documentation = cmp.config.window.bordered({ border = "single" }),
+		},
 		snippet = {
 			expand = M.expand_snip,
 		},

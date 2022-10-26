@@ -19,7 +19,7 @@ M.setup = function()
 					hint_prefix = "> ",
 					hi_parameter = "IncSearch",
 					handler_opts = {
-						border = "rounded",
+						border = "single",
 					},
 				}, bufnr)
 			end

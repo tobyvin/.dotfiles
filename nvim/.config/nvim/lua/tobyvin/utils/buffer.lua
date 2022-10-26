@@ -28,7 +28,7 @@ M.popup = function(file_path)
 		height = win_height,
 		row = row,
 		col = col,
-		border = "rounded",
+		border = "single",
 	}
 
 	local win = vim.api.nvim_open_win(buf, true, opts)

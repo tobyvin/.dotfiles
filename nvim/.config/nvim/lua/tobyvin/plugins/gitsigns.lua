@@ -80,7 +80,7 @@ M.setup = function()
 			topdelete = { text = "契" },
 			changedelete = { text = "▎" },
 		},
-		preview_config = { border = "rounded" },
+		preview_config = { border = "single" },
 		on_attach = M.on_attach,
 	})
 end
