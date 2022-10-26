@@ -107,7 +107,7 @@ M.bdelete = function(buffer, opts)
 
 		for _, window in ipairs(windows) do
 			local alt_buffer = vim.fn.bufnr("#")
-			if vim.bo[alt_buffer].buflisted then
+			if vim.api.nvim_buf_is_valid(buffer) and vim.bo[alt_buffer].buflisted then
 				vim.api.nvim_win_set_buf(window, alt_buffer)
 				is_last_buffer = false
 			end

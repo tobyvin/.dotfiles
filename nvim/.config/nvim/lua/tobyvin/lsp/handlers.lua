@@ -54,52 +54,7 @@ M.preview = {
 	references = M.preview_handler("textDocument/references"),
 }
 
-M.provider_handers = {
-	signatureHelpProvider = function(_, bufnr)
-		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help", buffer = bufnr })
-	end,
-	hoverProvider = function(_, bufnr)
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover", buffer = bufnr })
-	end,
-	codeActionProvider = function(_, bufnr)
-		vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action", buffer = bufnr })
-	end,
-	codeLensProvider = function(_, bufnr)
-		vim.keymap.set("n", "<leader>ll", vim.lsp.codelens.run, { desc = "Codelens", buffer = bufnr })
-	end,
-	renameProvider = function(_, bufnr)
-		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename", buffer = bufnr })
-	end,
-	definitionProvider = function(_, bufnr)
-		vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Definition", buffer = bufnr })
-		vim.keymap.set("n", "g<C-d>", M.preview.definition, { desc = "Definition", buffer = bufnr })
-	end,
-	declarationProvider = function(_, bufnr)
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration", buffer = bufnr })
-		vim.keymap.set("n", "g<CS-D>", M.preview.declaration, { desc = "Preview Declaration", buffer = bufnr })
-	end,
-	typeDefinitionProvider = function(_, bufnr)
-		vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { desc = "Type", buffer = bufnr })
-		vim.keymap.set("n", "g<CS-t>", M.preview.type_definition, { desc = "Preview Type", buffer = bufnr })
-	end,
-	implementationProvider = function(_, bufnr)
-		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation", buffer = bufnr })
-		vim.keymap.set("n", "g<C-i>", M.preview.implementation, { desc = "Preview Implementation", buffer = bufnr })
-	end,
-	referencesProvider = function(_, bufnr)
-		vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", buffer = bufnr })
-		vim.keymap.set("n", "g<C-r>", M.preview.references, { desc = "Preview References", buffer = bufnr })
-	end,
-}
-
 M.setup = function()
-	vim.lsp.handlers["textDocument/definition"] = M.goto_handler("textDocument/definition")
-	vim.lsp.handlers["textDocument/declaration"] = M.goto_handler("textDocument/declaration")
-	vim.lsp.handlers["textDocument/type_definition"] = M.goto_handler("textDocument/type_definition")
-	vim.lsp.handlers["textDocument/implementation"] = M.goto_handler("textDocument/implementation")
-	vim.lsp.handlers["textDocument/references"] = M.goto_handler("textDocument/references")
-
 	vim.lsp.handlers["textDocument/publishDiagnostics"] =
 		vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
 			signs = true,
@@ -107,6 +62,11 @@ M.setup = function()
 			update_in_insert = true,
 			virtual_text = true,
 		})
+
+	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
+
+	vim.lsp.handlers["textDocument/signatureHelp"] =
+		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
 
 	vim.lsp.handlers["window/showMessage"] = function(_, result, ctx)
 		vim.notify(result.message, 5 - result.type, {
@@ -120,11 +80,37 @@ M.setup = function()
 		callback = function(args)
 			local bufnr = args.buf
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
-			for provider, handler in pairs(M.provider_handers) do
-				if client.server_capabilities[provider] then
-					handler(client, bufnr)
-				end
+
+			if client.name ~= "rust-analyzer" then
+				vim.lsp.handlers["textDocument/definition"] = M.goto_handler("textDocument/definition")
+				vim.lsp.handlers["textDocument/declaration"] = M.goto_handler("textDocument/declaration")
+				vim.lsp.handlers["textDocument/type_definition"] = M.goto_handler("textDocument/type_definition")
+				vim.lsp.handlers["textDocument/implementation"] = M.goto_handler("textDocument/implementation")
+				vim.lsp.handlers["textDocument/references"] = M.goto_handler("textDocument/references")
 			end
+
+			if client.server_capabilities["definitionProvider"] then
+				vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
+			end
+
+			vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help", buffer = bufnr })
+			vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "Hover", buffer = bufnr })
+
+			vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Definition", buffer = bufnr })
+			vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "Declaration", buffer = bufnr })
+			vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { desc = "Type", buffer = bufnr })
+			vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation", buffer = bufnr })
+			vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "References", buffer = bufnr })
+
+			vim.keymap.set("n", "g<C-d>", M.preview.definition, { desc = "Definition", buffer = bufnr })
+			vim.keymap.set("n", "g<CS-D>", M.preview.declaration, { desc = "Preview Declaration", buffer = bufnr })
+			vim.keymap.set("n", "g<C-t>", M.preview.type_definition, { desc = "Preview Type", buffer = bufnr })
+			vim.keymap.set("n", "g<C-i>", M.preview.implementation, { desc = "Preview Implementation", buffer = bufnr })
+			vim.keymap.set("n", "g<C-r>", M.preview.references, { desc = "Preview References", buffer = bufnr })
+
+			vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "Code Action", buffer = bufnr })
+			vim.keymap.set("n", "<leader>ll", vim.lsp.codelens.run, { desc = "Codelens", buffer = bufnr })
+			vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "Rename", buffer = bufnr })
 		end,
 	})
 end
