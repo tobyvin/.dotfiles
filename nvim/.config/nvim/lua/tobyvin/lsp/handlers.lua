@@ -80,8 +80,8 @@ M.provider_handers = {
 		vim.keymap.set("n", "g<CS-D>", M.preview.declaration, { desc = "Preview Declaration", buffer = bufnr })
 	end,
 	typeDefinitionProvider = function(_, bufnr)
-		vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "Type", buffer = bufnr })
-		vim.keymap.set("n", "g<C-t>", M.preview.type_definition, { desc = "Preview Type", buffer = bufnr })
+		vim.keymap.set("n", "gT", vim.lsp.buf.type_definition, { desc = "Type", buffer = bufnr })
+		vim.keymap.set("n", "g<CS-t>", M.preview.type_definition, { desc = "Preview Type", buffer = bufnr })
 	end,
 	implementationProvider = function(_, bufnr)
 		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "Implementation", buffer = bufnr })

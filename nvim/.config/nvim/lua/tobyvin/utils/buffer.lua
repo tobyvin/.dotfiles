@@ -1,3 +1,4 @@
+local Path = require("plenary.path")
 local M = {}
 
 M.get_visual_range = function()
@@ -35,6 +36,27 @@ M.popup = function(file_path)
 	vim.api.nvim_buf_set_option(buf, "modifiable", true)
 	vim.api.nvim_command("$read" .. file_path)
 	vim.api.nvim_buf_set_option(0, "modifiable", false)
+end
+
+M.bselect = function()
+	local buffers = vim.tbl_filter(function(bufnr)
+		return vim.api.nvim_buf_is_valid(bufnr) and vim.bo[bufnr].buflisted
+	end, vim.api.nvim_list_bufs())
+
+	local opts = {
+		prompt = "Switch buffer: ",
+		format_item = function(bufnr)
+			local path = vim.api.nvim_buf_get_name(bufnr)
+			local relpath = Path:new(path):make_relative()
+			return string.format("%s: %s", bufnr, relpath)
+		end,
+	}
+
+	vim.ui.select(buffers, opts, function(_, idx)
+		if idx ~= nil then
+			vim.api.nvim_set_current_buf(buffers[idx])
+		end
+	end)
 end
 
 --- @class BdeleteOptions
@@ -79,13 +101,13 @@ M.bdelete = function(buffer, opts)
 	end
 
 	local is_last_buffer = true
-	if vim.fn.buflisted(buffer) == 1 then
+	if vim.bo[buffer].buflisted then
 		---@diagnostic disable-next-line: param-type-mismatch
 		local windows = vim.fn.getbufinfo(buffer)[1].windows
 
 		for _, window in ipairs(windows) do
 			local alt_buffer = vim.fn.bufnr("#")
-			if vim.fn.buflisted(alt_buffer) == 1 then
+			if vim.bo[alt_buffer].buflisted then
 				vim.api.nvim_win_set_buf(window, alt_buffer)
 				is_last_buffer = false
 			end
@@ -97,7 +119,7 @@ M.bdelete = function(buffer, opts)
 	end
 
 	if vim.api.nvim_buf_is_valid(buffer) then
-		vim.api.nvim_buf_set_option(buffer, "buflisted", false)
+		vim.bo[buffer].buflisted = false
 		pcall(vim.api.nvim_buf_delete, buffer, opts)
 	end
 end

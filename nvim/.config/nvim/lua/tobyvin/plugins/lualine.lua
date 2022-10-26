@@ -16,7 +16,7 @@ M.setup = function()
 	end
 
 	local winbar_cond = function()
-		return vim.fn.buflisted(0) == 1
+		return vim.bo.buflisted
 	end
 
 	local workspace = {
@@ -109,7 +109,7 @@ M.setup = function()
 		},
 
 		tabline = {
-			lualine_b = { "buffers" },
+			lualine_b = { { "buffers", mode = 4 } },
 			lualine_y = { "tabs" },
 		},
 
