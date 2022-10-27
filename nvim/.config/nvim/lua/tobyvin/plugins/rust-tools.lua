@@ -69,8 +69,8 @@ M.setup = function()
 			local external_docs = rust_tools.external_docs.open_external_docs
 			local expand_macro = rust_tools.expand_macro.expand_macro
 
-			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "Debug", buffer = bufnr })
-			vim.keymap.set("n", "<leader>lr", runnables, { desc = "Run", buffer = bufnr })
+			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "Debuggables", buffer = bufnr })
+			vim.keymap.set("n", "<leader>r", runnables, { desc = "Runnables", buffer = bufnr })
 			vim.keymap.set("n", "<leader>lo", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })
 			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "Expand macro", buffer = bufnr })
 
