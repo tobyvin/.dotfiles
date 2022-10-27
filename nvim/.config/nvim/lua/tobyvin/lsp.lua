@@ -12,7 +12,7 @@ lsp.setup = function()
 	lsp.formatting.setup()
 
 	vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("tobyvin_lsp", { clear = true }),
+		group = vim.api.nvim_create_augroup("tobyvin_lsp", { clear = true }),
 		desc = "lsp",
 		callback = function(args)
 			local bufnr = args.buf
@@ -20,7 +20,6 @@ lsp.setup = function()
 
 			utils.keymap.group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
 			vim.keymap.set("n", "<leader>L", "<CMD>LspInfo<CR>", { desc = "LSP info" })
-			vim.keymap.set("n", "<leader>k", utils.documentation.open, { desc = "Documentation", buffer = bufnr })
 			vim.api.nvim_exec_autocmds("User", { pattern = "LspAttach", data = { client_id = client.id } })
 		end,
 	})
