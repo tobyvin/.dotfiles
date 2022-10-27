@@ -75,6 +75,12 @@ M.setup = function()
 			lualine_b = workspace,
 			lualine_c = {
 				{
+					function()
+						return utils.diagnostic.indicator(nil)
+					end,
+					padding = { left = 1, right = 0 },
+				},
+				{
 					"filename",
 					path = 1,
 				},
