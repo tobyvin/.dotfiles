@@ -1,6 +1,6 @@
-local Job = require("plenary.job")
-local Path = require("plenary.path")
-local Reload = require("plenary.reload")
+local Job = require("plenary").job
+local Path = require("plenary").path
+local Reload = require("plenary").reload
 local M = {}
 
 M.config_path = function(package)
@@ -18,18 +18,18 @@ M.module_from_path = function(path)
 end
 
 M.reload = function(module_name, starts_with_only)
-	module_name = vim.F.if_nil(module_name, M.module_from_path())
+	module_name = vim.F.if_nil(module_name, "")
 	starts_with_only = vim.F.if_nil(starts_with_only, "tobyvin")
+
+	module = package.loaded[module_name]
 
 	Reload.reload_module(module_name, starts_with_only)
 
-	local notify_opts = { title = string.format("[utils] reload: '%s'", module_name) }
-	local status_ok, module = pcall(require, module_name)
-	if not status_ok then
-		vim.notify("Failed to require module", vim.log.levels.ERROR, notify_opts)
+	if not pcall(require, module_name) then
+		package.loaded[module_name] = module
 	end
-	vim.notify("Reloaded module", vim.log.levels.INFO, notify_opts)
-	return module
+
+	return package.loaded[module_name]
 end
 
 M.select_exe = function(cwd, callback)

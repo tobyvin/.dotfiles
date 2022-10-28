@@ -28,7 +28,7 @@ M.cmd = function(cmd, args, quiet)
 end
 
 M.with_notify = function(cmd, args, quiet)
-	local Job = require("plenary.job")
+	local Job = require("plenary").job
 	local notification
 	local win, height
 	local output = ""

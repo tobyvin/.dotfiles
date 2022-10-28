@@ -1,10 +1,10 @@
+local utils = require("tobyvin.utils")
+local Path = require("plenary").path
 local M = {}
 
 M.setup = function()
-	local augroup_hl = vim.api.nvim_create_augroup("tobyvin_hl", { clear = true })
-
 	vim.api.nvim_create_autocmd("TextYankPost", {
-		group = augroup_hl,
+		group = vim.api.nvim_create_augroup("tobyvin_hl", { clear = true }),
 		pattern = "*",
 		callback = function()
 			vim.highlight.on_yank()
@@ -12,10 +12,20 @@ M.setup = function()
 		desc = "Highlight yank",
 	})
 
-	local augroup_fmt = vim.api.nvim_create_augroup("tobyvin_fmt", { clear = true })
+	vim.api.nvim_create_autocmd("BufWritePre", {
+		group = vim.api.nvim_create_augroup("tobyvin_mkdir", { clear = true }),
+		callback = function(args)
+			local parent = Path:new(args.file):parent()
+			local prompt = string.format("%s does not exist. Create it?", parent:make_relative())
+			if not parent:is_dir() and vim.fn.confirm(prompt, "&Yes\n&No") == 1 then
+				parent:mkdir()
+			end
+		end,
+		desc = "Check for missing directory on write",
+	})
 
 	vim.api.nvim_create_autocmd("BufWritePre", {
-		group = augroup_fmt,
+		group = vim.api.nvim_create_augroup("tobyvin_whitespace", { clear = true }),
 		pattern = "*",
 		callback = function()
 			local cursor = vim.api.nvim_win_get_cursor(0)
@@ -26,7 +36,7 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_fmt,
+		group = vim.api.nvim_create_augroup("tobyvin_tabstop", { clear = true }),
 		pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
 		callback = function(args)
 			vim.bo[args.buf].tabstop = 2
@@ -34,10 +44,8 @@ M.setup = function()
 		desc = "Set tabstop",
 	})
 
-	local augroup_view = vim.api.nvim_create_augroup("tobyvin_view", { clear = true })
-
 	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_view,
+		group = vim.api.nvim_create_augroup("tobyvin_unlisted", { clear = true }),
 		pattern = { "qf", "help", "gitcommit", "gitrebase", "Neogit*" },
 		callback = function(args)
 			vim.bo[args.buf].buflisted = false
@@ -46,7 +54,7 @@ M.setup = function()
 	})
 
 	vim.api.nvim_create_autocmd("FileType", {
-		group = augroup_view,
+		group = vim.api.nvim_create_augroup("tobyvin_help", { clear = true }),
 		pattern = "help",
 		callback = function(args)
 			vim.wo.wrap = true
@@ -58,16 +66,16 @@ M.setup = function()
 		desc = "Setup and resize help window",
 	})
 
-	vim.api.nvim_create_autocmd("FileType", {
-		group = vim.api.nvim_create_augroup("tobyvin_reload", { clear = true }),
-		pattern = "lua",
+	vim.api.nvim_create_autocmd("BufWritePost", {
+		group = vim.api.nvim_create_augroup("tobyvin_auto_reload", { clear = true }),
+		pattern = "*.lua",
 		callback = function(args)
-			local utils = require("tobyvin.utils")
-			if utils.fs.module_from_path(args.file) then
-				vim.keymap.set("n", "<leader>R", utils.fs.reload, { desc = "reload lua module" })
+			local module_name = utils.fs.module_from_path(args.match)
+			if module_name then
+				utils.fs.reload(module_name)
 			end
 		end,
-		desc = "Setup lua module reloader",
+		desc = "Reload lua module on write",
 	})
 end
 

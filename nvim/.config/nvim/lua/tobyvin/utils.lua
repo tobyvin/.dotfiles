@@ -1,12 +1,14 @@
-local M = {
-	buffer = require("tobyvin.utils.buffer"),
-	debug = require("tobyvin.utils.debug"),
-	diagnostic = require("tobyvin.utils.diagnostic"),
-	documentation = require("tobyvin.utils.documentation"),
-	fs = require("tobyvin.utils.fs"),
-	job = require("tobyvin.utils.job"),
-	keymap = require("tobyvin.utils.keymap"),
-	status = require("tobyvin.utils.status"),
-}
+-- Lazy load
+local M = setmetatable({}, {
+	__index = function(t, k)
+		local ok, val = pcall(require, string.format("tobyvin.utils.%s", k))
+
+		if ok then
+			rawset(t, k, val)
+		end
+
+		return val
+	end,
+})
 
 return M
