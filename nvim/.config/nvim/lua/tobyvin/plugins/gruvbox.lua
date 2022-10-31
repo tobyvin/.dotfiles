@@ -31,6 +31,10 @@ M.setup = function()
 			StatusLineNC = { fg = colors.light4, bg = colors.dark1, reverse = false },
 			WinBar = { link = "StatusLineNC" },
 			WinBarNC = { fg = colors.light4, bg = "" },
+
+			-- TODO: workaround for weird highlights in lsp hover/signature
+			-- SEE: https://github.com/neovim/neovim/issues/13746
+			markdownError = { link = "Normal" },
 		},
 		transparent_mode = true,
 	})
