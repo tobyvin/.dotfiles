@@ -12,7 +12,6 @@ M.setup = function()
 		local rhs = string.format("<cmd>%sb<cr>", i)
 		vim.keymap.set("n", lhs, rhs, { desc = desc })
 	end
-	vim.keymap.set("", "<esc>", ":noh<esc>", { silent = true, desc = "clear search" })
 
 	vim.keymap.set("n", "gn", "<cmd>bnext<cr>", { desc = "bnext" })
 	vim.keymap.set("n", "gp", "<cmd>bprev<cr>", { desc = "bprev" })
