@@ -68,6 +68,7 @@ M.setup = function()
 			local open_cargo_toml = rust_tools.open_cargo_toml.open_cargo_toml
 			local external_docs = rust_tools.external_docs.open_external_docs
 			local expand_macro = rust_tools.expand_macro.expand_macro
+			local hover_actions = rust_tools.hover_actions.hover_actions
 
 			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "Debuggables", buffer = bufnr })
 			vim.keymap.set("n", "<leader>r", runnables, { desc = "Runnables", buffer = bufnr })
@@ -75,10 +76,16 @@ M.setup = function()
 			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "Expand macro", buffer = bufnr })
 
 			utils.documentation.register("rust", external_docs)
+			utils.hover.register(hover_actions, { desc = "rust-tools hover actions", buffer = bufnr, priority = 10 })
 		end,
 	})
 
 	rust_tools.setup({
+		tools = {
+			hover_actions = {
+				border = "single",
+			},
+		},
 		server = lsp.configs["rust-analyzer"],
 		dap = {
 			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),

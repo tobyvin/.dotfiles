@@ -73,7 +73,7 @@ M.setup = function()
 				vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
 			end
 
-			utils.hover.register(vim.lsp.buf.hover, { buffer = bufnr, priority = 1 })
+			utils.hover.register(vim.lsp.buf.hover, { desc = "lsp", buffer = bufnr, priority = 1 })
 
 			vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "Signature Help", buffer = bufnr })
 			vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "Definition", buffer = bufnr })
