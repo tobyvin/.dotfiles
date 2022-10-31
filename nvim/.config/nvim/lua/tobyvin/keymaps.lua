@@ -17,6 +17,15 @@ M.setup = function()
 	vim.keymap.set("n", "gp", "<cmd>bprev<cr>", { desc = "bprev" })
 	vim.keymap.set("n", "gb", utils.buffer.bselect, { desc = "bselect" })
 	vim.keymap.set("n", "gk", utils.documentation.open, { desc = "Documentation" })
+	vim.keymap.set("n", "K", function()
+		if utils.hover.open() then
+			-- Fix for diagnostics immediately overriding hover window
+			vim.api.nvim_command("set eventignore=CursorHold")
+			vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
+			return "<Ignore>"
+		end
+		return "K"
+	end, { expr = true, desc = "Hover" })
 
 	vim.keymap.set("n", "<leader>q", "<cmd>qall<cr>", { desc = "quit" })
 	vim.keymap.set("n", "<leader>c", utils.buffer.bdelete, { desc = "bdelete" })
