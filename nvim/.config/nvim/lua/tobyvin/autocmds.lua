@@ -56,14 +56,10 @@ M.setup = function()
 	vim.api.nvim_create_autocmd("FileType", {
 		group = vim.api.nvim_create_augroup("tobyvin_help", { clear = true }),
 		pattern = "help",
-		callback = function(args)
-			vim.wo.wrap = true
-			vim.bo[args.buf].textwidth = 120
-			vim.wo.colorcolumn = nil
+		callback = function()
 			vim.cmd("wincmd L")
-			vim.api.nvim_win_set_width(0, vim.o.textwidth)
 		end,
-		desc = "Setup and resize help window",
+		desc = "Vertical help window",
 	})
 
 	vim.api.nvim_create_autocmd("BufWritePost", {

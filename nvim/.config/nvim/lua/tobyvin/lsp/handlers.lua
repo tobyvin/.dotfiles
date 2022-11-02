@@ -63,10 +63,6 @@ M.setup = function()
 
 			if client.name ~= "rust_analyzer" then
 				vim.lsp.handlers["textDocument/definition"] = M.wrap_handler("textDocument/definition")
-				vim.lsp.handlers["textDocument/declaration"] = M.wrap_handler("textDocument/declaration")
-				vim.lsp.handlers["textDocument/type_definition"] = M.wrap_handler("textDocument/type_definition")
-				vim.lsp.handlers["textDocument/implementation"] = M.wrap_handler("textDocument/implementation")
-				vim.lsp.handlers["textDocument/references"] = M.wrap_handler("textDocument/references")
 			end
 
 			if client.server_capabilities["definitionProvider"] then

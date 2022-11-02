@@ -228,13 +228,8 @@ M.plugins = function(use)
 			"junegunn/fzf",
 		},
 		ft = "qf",
-	})
-
-	use({
-		"folke/trouble.nvim",
-		cmd = "TroubleToggle",
 		config = function()
-			require("tobyvin.plugins.trouble").setup()
+			require("tobyvin.plugins.nvim-bqf").setup()
 		end,
 	})
 
