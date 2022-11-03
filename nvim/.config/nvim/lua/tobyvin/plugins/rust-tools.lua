@@ -86,7 +86,7 @@ M.setup = function()
 				border = "single",
 			},
 		},
-		server = lsp.configs["rust-analyzer"],
+		server = lsp.configs.rust_analyzer,
 		dap = {
 			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),
 		},
