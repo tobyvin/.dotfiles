@@ -238,11 +238,10 @@ M.plugins = function(use)
 		requires = {
 			"nvim-lua/plenary.nvim",
 			"BurntSushi/ripgrep",
-			{ "nvim-telescope/telescope-frecency.nvim", requires = { "kkharji/sqlite.lua" } },
 			{ "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
+			"nvim-telescope/telescope-file-browser.nvim",
+			"nvim-telescope/telescope-live-grep-args.nvim",
 			"nvim-telescope/telescope-dap.nvim",
-			"nvim-telescope/telescope-packer.nvim",
-			"nvim-telescope/telescope-github.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.telescope").setup()
