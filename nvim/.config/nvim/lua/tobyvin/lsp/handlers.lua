@@ -16,24 +16,6 @@ M.wrap_handler = function(method, handler)
 	end
 end
 
-M.with_float = function(name)
-	local method = string.format("textDocument/%s", name)
-	local handler = M.wrap_handler(method, function(_, result)
-		vim.lsp.util.preview_location(result, {
-			focus_id = "preview_" .. name,
-			close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-			border = "single",
-			scope = "cursor",
-		})
-	end)
-
-	return function()
-		---@diagnostic disable-next-line: missing-parameter
-		local params = vim.lsp.util.make_position_params()
-		return vim.lsp.buf_request(0, method, params, handler)
-	end
-end
-
 M.setup = function()
 	vim.lsp.handlers["textDocument/publishDiagnostics"] =
 		vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
@@ -77,13 +59,6 @@ M.setup = function()
 			vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "type definition", buffer = bufnr })
 			vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "implementation", buffer = bufnr })
 			vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "references", buffer = bufnr })
-
-			utils.keymap.group("n", "gp", { desc = "Float" })
-			vim.keymap.set("n", "gpd", M.with_float("definition"), { desc = "definition", buffer = bufnr })
-			vim.keymap.set("n", "gpD", M.with_float("declaration"), { desc = "declaration", buffer = bufnr })
-			vim.keymap.set("n", "gpt", M.with_float("type_definition"), { desc = "type definition", buffer = bufnr })
-			vim.keymap.set("n", "gpi", M.with_float("implementation"), { desc = "implementation", buffer = bufnr })
-			vim.keymap.set("n", "gpr", M.with_float("references"), { desc = "references", buffer = bufnr })
 
 			vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "rename", buffer = bufnr })
 			vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "code action", buffer = bufnr })
