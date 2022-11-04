@@ -57,6 +57,7 @@ M.setup = function()
 		group = vim.api.nvim_create_augroup("tobyvin_help", { clear = true }),
 		pattern = "help",
 		callback = function()
+			vim.wo.colorcolumn = nil
 			vim.cmd("wincmd L")
 		end,
 		desc = "Vertical help window",
