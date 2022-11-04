@@ -19,7 +19,7 @@ M.setup = function()
 		return vim.bo.buflisted
 	end
 
-	local workspace = {
+	local git = {
 		"branch",
 		{
 			"diff",
@@ -34,6 +34,25 @@ M.setup = function()
 				end
 			end,
 			padding = { left = 0, right = 1 },
+		},
+	}
+
+	local workspace = {
+		{
+			function()
+				return utils.diagnostic
+					.indicator(nil)
+					:gsub("DiagnosticSignError", "lualine_b_diagnostics_error_normal")
+					:gsub("DiagnosticSignWarn", "lualine_b_diagnostics_warn_normal")
+					:gsub("DiagnosticSignInfo", "lualine_b_diagnostics_info_normal")
+					:gsub("DiagnosticSignHint", "lualine_b_diagnostics_hint_normal")
+			end,
+			padding = { left = 1, right = 0 },
+			color = "StatusLineNC",
+		},
+		{
+			"filename",
+			path = 1,
 		},
 	}
 
@@ -72,19 +91,8 @@ M.setup = function()
 
 		sections = {
 			lualine_a = { { "mode", fmt = M.to_char } },
-			lualine_b = workspace,
-			lualine_c = {
-				{
-					function()
-						return utils.diagnostic.indicator(nil)
-					end,
-					padding = { left = 1, right = 0 },
-				},
-				{
-					"filename",
-					path = 1,
-				},
-			},
+			lualine_b = git,
+			lualine_c = workspace,
 			lualine_x = {
 				"encoding",
 				"fileformat",

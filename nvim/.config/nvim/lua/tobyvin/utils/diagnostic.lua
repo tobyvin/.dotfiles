@@ -16,6 +16,8 @@ setmetatable(M.signs, {
 	end,
 })
 
+---@param bufnr number?
+---@return table
 M.count = function(bufnr)
 	local items = {}
 	for i, level in ipairs(vim.diagnostic.severity) do
@@ -34,12 +36,16 @@ M.count = function(bufnr)
 	return items
 end
 
+---@param bufnr number?
+---@return string
 M.indicator = function(bufnr)
 	local diagnostic_count = M.count(bufnr)
 	local tbl = {}
 	for level, count in pairs(diagnostic_count) do
 		if count > 0 then
-			table.insert(tbl, M.signs[level].text .. count)
+			local color = "%#" .. M.signs[level].texthl .. "#"
+			local indicator = color .. M.signs[level].text .. count
+			table.insert(tbl, indicator)
 		end
 	end
 	return table.concat(tbl, " ")
