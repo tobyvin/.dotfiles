@@ -42,7 +42,6 @@ M.setup = function()
 	end
 
 	local actions = require("telescope.actions")
-	local lga_actions = require("telescope-live-grep-args.actions")
 
 	telescope.setup({
 		defaults = {
