@@ -17,9 +17,7 @@ lsp.setup = function()
 		callback = function(args)
 			local bufnr = args.buf
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
-
 			utils.keymap.group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
-			vim.keymap.set("n", "<leader>li", "<CMD>LspInfo<CR>", { desc = "LSP info" })
 			vim.api.nvim_exec_autocmds("User", { pattern = "LspAttach", data = { client_id = client.id } })
 		end,
 	})

@@ -13,6 +13,8 @@ M.setup = function()
 		return
 	end
 
+	require("lspconfig.ui.windows").default_options.border = "single"
+
 	lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, lsp.configs.default)
 
 	for name, config in pairs(lsp.configs) do
@@ -20,6 +22,15 @@ M.setup = function()
 			lspconfig[name].setup(config)
 		end
 	end
+
+	vim.api.nvim_create_autocmd("LspAttach", {
+		group = vim.api.nvim_create_augroup("tobyvin_lsp", { clear = true }),
+		desc = "lsp",
+		callback = function(args)
+			local lspinfo = require("lspconfig.ui.lspinfo")
+			vim.keymap.set("n", "<leader>li", lspinfo, { desc = "LSP info", buffer = args.buf })
+		end,
+	})
 end
 
 return M
