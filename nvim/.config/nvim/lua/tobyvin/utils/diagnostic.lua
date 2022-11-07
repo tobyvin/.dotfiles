@@ -59,4 +59,97 @@ M.buf_indicator = function(bufnr)
 	return M.indicator(vim.F.if_nil(bufnr, vim.fn.bufnr()))
 end
 
+local function get_buffers(opts)
+	local buffers = {}
+	local diagnostics = vim.diagnostic.get(nil, opts)
+	for _, diagnostic in ipairs(diagnostics) do
+		if not vim.tbl_contains(buffers, diagnostic.bufnr) then
+			table.insert(buffers, diagnostic.bufnr)
+		end
+	end
+
+	return buffers
+end
+
+---@param opts table
+---@param search_forward boolean Search forward
+---@return number? Buffer number
+local function next_buffer(opts, search_forward)
+	local win_id = opts.win_id or vim.api.nvim_get_current_win()
+	local bufnr = vim.api.nvim_win_get_buf(win_id)
+	local buffers = get_buffers(opts)
+	local sort_buffers, is_next
+
+	if search_forward then
+		sort_buffers = function(a, b)
+			return a < b
+		end
+		is_next = function(a)
+			return a > bufnr
+		end
+	else
+		sort_buffers = function(a, b)
+			return a > b
+		end
+		is_next = function(a)
+			return a < bufnr
+		end
+	end
+
+	table.sort(buffers, sort_buffers)
+
+	for _, buffer in ipairs(buffers) do
+		if is_next(buffer) then
+			return buffer
+		end
+	end
+
+	if opts.wrap then
+		return buffers[1]
+	end
+end
+
+---@param opts table?
+---@param search_forward boolean Search forward
+local function goto_diagnostic(opts, search_forward)
+	opts = vim.F.if_nil(opts, {})
+	opts.wrap = vim.F.if_nil(opts.wrap, true)
+	local win_id = opts.win_id or vim.api.nvim_get_current_win()
+
+	local get_pos, goto_pos
+	if search_forward then
+		get_pos = vim.diagnostic.get_next_pos
+		goto_pos = vim.diagnostic.goto_next
+	else
+		get_pos = vim.diagnostic.get_prev_pos
+		goto_pos = vim.diagnostic.goto_prev
+	end
+
+	local pos_opts = vim.tbl_extend("force", opts, { wrap = false })
+	local pos = get_pos(pos_opts)
+	if not pos then
+		local buffer = next_buffer(opts, true)
+		if buffer then
+			vim.api.nvim_win_set_buf(win_id, buffer)
+			vim.api.nvim_win_set_cursor(win_id, { 1, 0 })
+		end
+	end
+
+	return goto_pos(opts)
+end
+
+--- Move to the next diagnostic in the workspace.
+---
+---@param opts table?
+function M.goto_next(opts)
+	goto_diagnostic(opts, true)
+end
+
+--- Move to the prev diagnostic in the workspace.
+---
+---@param opts table?
+function M.goto_prev(opts)
+	goto_diagnostic(opts, false)
+end
+
 return M

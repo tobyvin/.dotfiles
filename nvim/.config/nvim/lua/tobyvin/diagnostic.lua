@@ -33,8 +33,8 @@ M.setup = function()
 
 	vim.keymap.set("n", "<leader>e", vim.diagnostic.setloclist, { desc = "Buffer Diagnostic" })
 	vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "Workspace Diagnostic" })
-	vim.keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
-	vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
+	vim.keymap.set("n", "]d", utils.diagnostic.goto_next, { desc = "Next Diagnostic" })
+	vim.keymap.set("n", "[d", utils.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
 end
 
 return M
