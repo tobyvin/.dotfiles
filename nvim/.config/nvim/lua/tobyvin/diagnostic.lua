@@ -10,6 +10,10 @@ M.setup = function()
 		underline = true,
 		update_in_insert = true,
 		severity_sort = true,
+		float = {
+			border = "single",
+			scope = "cursor",
+		},
 	})
 
 	vim.fn.sign_define("DiagnosticSignError", utils.diagnostic.signs.error)
@@ -19,22 +23,16 @@ M.setup = function()
 
 	vim.api.nvim_create_autocmd("CursorHold", {
 		callback = function()
-			local opts = {
-				focusable = false,
-				close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-				border = "single",
-				source = "always",
-				prefix = " ",
-				scope = "cursor",
-			}
-			vim.diagnostic.open_float(nil, opts)
+			vim.diagnostic.open_float(nil, {
+				focus = false,
+			})
 		end,
 	})
 
-	vim.keymap.set("n", "<leader>e", vim.diagnostic.setloclist, { desc = "Buffer Diagnostic" })
-	vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "Workspace Diagnostic" })
-	vim.keymap.set("n", "]d", utils.diagnostic.goto_next, { desc = "Next Diagnostic" })
-	vim.keymap.set("n", "[d", utils.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
+	vim.keymap.set("n", "]d", utils.diagnostic.goto_next, { desc = "next diagnostic" })
+	vim.keymap.set("n", "[d", utils.diagnostic.goto_prev, { desc = "prev diagnostic" })
+	vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "open diagnostic float" })
+	vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "qf diagnostic" })
 end
 
 return M
