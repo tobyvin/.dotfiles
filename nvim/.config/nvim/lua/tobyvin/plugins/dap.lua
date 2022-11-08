@@ -181,14 +181,13 @@ M.setup = function()
 			vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out", buffer = args.buf })
 
 			local dap_ui_widgets = require("dap.ui.widgets")
-			M.lsp_hover = vim.lsp.handlers["textDocument/hover"]
-			vim.lsp.handlers["textDocument/hover"] = function(...)
-				if M.hover_available() then
-					dap_ui_widgets.hover()
-				else
-					M.lsp_hover(...)
-				end
-			end
+
+			vim.b[args.buf].dap_hover_id = utils.hover.register(dap_ui_widgets.hover, {
+				enabled = M.hover_available,
+				desc = "dap",
+				buffer = args.buf,
+				priority = 20,
+			})
 		end,
 	})
 
@@ -205,10 +204,7 @@ M.setup = function()
 			vim.keymap.del("n", "<F11>", { buffer = args.buf })
 			vim.keymap.del("n", "<F12>", { buffer = args.buf })
 
-			if M.lsp_hover ~= nil then
-				vim.lsp.handlers["textDocument/hover"] = M.lsp_hover
-				M.lsp_hover = nil
-			end
+			utils.hover.unregister(vim.b[args.buf].dap_hover_id)
 		end,
 	})
 

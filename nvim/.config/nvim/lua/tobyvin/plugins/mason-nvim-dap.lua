@@ -13,12 +13,7 @@ M.setup = function()
 
 	mason_nvim_dap.setup()
 
-	vim.api.nvim_create_autocmd("User", {
-		pattern = "DapAttach",
-		callback = function(args)
-			vim.keymap.set("n", "<leader>dI", M.install, { desc = "Dap Install", buffer = args.buf })
-		end,
-	})
+	vim.keymap.set("n", "<leader>dI", M.install, { desc = "Dap Install" })
 end
 
 return M
