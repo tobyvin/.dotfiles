@@ -16,8 +16,8 @@ M.setup = function()
 		},
 	})
 
-	utils.keymap.group("n", "<leader>g", { desc = "Git" })
-	vim.keymap.set("n", "<leader>gg", neogit.open, { desc = "Neogit" })
+	utils.keymap.group("n", "<leader>g", { desc = "git" })
+	vim.keymap.set("n", "<leader>gg", neogit.open, { desc = "neogit" })
 end
 
 return M

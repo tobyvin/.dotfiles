@@ -28,7 +28,7 @@ M.setup = function()
 		desc = "lsp",
 		callback = function(args)
 			local lspinfo = require("lspconfig.ui.lspinfo")
-			vim.keymap.set("n", "<leader>li", lspinfo, { desc = "LSP info", buffer = args.buf })
+			vim.keymap.set("n", "<leader>li", lspinfo, { desc = "lsp info", buffer = args.buf })
 		end,
 	})
 end

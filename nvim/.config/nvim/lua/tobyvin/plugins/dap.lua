@@ -170,15 +170,15 @@ M.setup = function()
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "DapAttach",
 		callback = function(args)
-			vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "Continue", buffer = args.buf })
-			vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "Step Over", buffer = args.buf })
-			vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "Step Into", buffer = args.buf })
-			vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "Step Out", buffer = args.buf })
-			vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "Terminate", buffer = args.buf })
-			vim.keymap.set("n", "<F5>", dap.continue, { desc = "Continue", buffer = args.buf })
-			vim.keymap.set("n", "<F10>", dap.step_over, { desc = "Step Over", buffer = args.buf })
-			vim.keymap.set("n", "<F11>", dap.step_into, { desc = "Step Into", buffer = args.buf })
-			vim.keymap.set("n", "<F12>", dap.step_out, { desc = "Step Out", buffer = args.buf })
+			vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "continue", buffer = args.buf })
+			vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "step over", buffer = args.buf })
+			vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "step into", buffer = args.buf })
+			vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "step out", buffer = args.buf })
+			vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "terminate", buffer = args.buf })
+			vim.keymap.set("n", "<F5>", dap.continue, { desc = "continue", buffer = args.buf })
+			vim.keymap.set("n", "<F10>", dap.step_over, { desc = "step over", buffer = args.buf })
+			vim.keymap.set("n", "<F11>", dap.step_into, { desc = "step into", buffer = args.buf })
+			vim.keymap.set("n", "<F12>", dap.step_out, { desc = "step out", buffer = args.buf })
 
 			local dap_ui_widgets = require("dap.ui.widgets")
 
@@ -221,9 +221,9 @@ M.setup = function()
 	dap.listeners.before.event_terminated["close_repl"] = dap.repl.close
 	dap.listeners.before.event_exited["close_repl"] = dap.repl.close
 
-	utils.keymap.group("n", "<leader>d", { desc = "Debug" })
-	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "Toggle Breakpoint" })
-	vim.keymap.set("n", "<leader>dB", M.set_custom_breakpoint, { desc = "Custom Breakpoint" })
+	utils.keymap.group("n", "<leader>d", { desc = "debug" })
+	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "toggle breakpoint" })
+	vim.keymap.set("n", "<leader>dB", M.set_custom_breakpoint, { desc = "custom breakpoint" })
 
 	-- Signs
 	vim.fn.sign_define("DapBreakpoint", utils.debug.signs.breakpoint)

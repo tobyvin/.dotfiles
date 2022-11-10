@@ -9,7 +9,7 @@ M.setup = function()
 
 	mason_update_all.setup()
 
-	vim.keymap.set("n", "<leader>M", mason_update_all.update_all, { desc = "Update All" })
+	vim.keymap.set("n", "<leader>M", mason_update_all.update_all, { desc = "update all" })
 end
 
 return M

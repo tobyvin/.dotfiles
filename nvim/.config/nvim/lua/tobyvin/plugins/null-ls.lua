@@ -26,7 +26,7 @@ M.setup = function()
 			null_ls.builtins.formatting.cbfmt,
 		},
 		on_attach = function(_, bufnr)
-			vim.keymap.set("n", "<leader>ln", "<CMD>NullLsInfo<CR>", { desc = "Null-LS Info", buffer = bufnr })
+			vim.keymap.set("n", "<leader>ln", "<CMD>NullLsInfo<CR>", { desc = "null-ls info", buffer = bufnr })
 		end,
 	})
 end

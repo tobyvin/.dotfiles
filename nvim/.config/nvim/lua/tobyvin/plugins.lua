@@ -464,13 +464,13 @@ M.setup = function()
 		return
 	end
 
-	utils.keymap.group("n", "<leader>p", { desc = "Packer" })
-	vim.keymap.set("n", "<leader>pc", packer.compile, { desc = "Compile" })
-	vim.keymap.set("n", "<leader>pC", packer.clean, { desc = "Clean" })
-	vim.keymap.set("n", "<leader>pi", packer.install, { desc = "Install" })
-	vim.keymap.set("n", "<leader>pp", packer.profile_output, { desc = "Profile" })
-	vim.keymap.set("n", "<leader>ps", packer.sync, { desc = "Sync" })
-	vim.keymap.set("n", "<leader>pu", packer.update, { desc = "Update" })
+	utils.keymap.group("n", "<leader>p", { desc = "packer" })
+	vim.keymap.set("n", "<leader>pc", packer.compile, { desc = "compile" })
+	vim.keymap.set("n", "<leader>pC", packer.clean, { desc = "clean" })
+	vim.keymap.set("n", "<leader>pi", packer.install, { desc = "install" })
+	vim.keymap.set("n", "<leader>pp", packer.profile_output, { desc = "profile" })
+	vim.keymap.set("n", "<leader>ps", packer.sync, { desc = "sync" })
+	vim.keymap.set("n", "<leader>pu", packer.update, { desc = "update" })
 
 	return packer.startup({
 		function(...)

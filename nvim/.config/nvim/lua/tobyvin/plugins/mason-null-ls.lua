@@ -18,7 +18,7 @@ M.setup = function()
 		callback = function(args)
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
 			if client.name == "null-ls" then
-				vim.keymap.set("n", "<leader>lN", M.install, { desc = "Null-LS Install", buffer = args.buf })
+				vim.keymap.set("n", "<leader>lN", M.install, { desc = "null-ls install", buffer = args.buf })
 			end
 		end,
 	})

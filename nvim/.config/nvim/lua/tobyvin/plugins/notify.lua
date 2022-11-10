@@ -9,7 +9,7 @@ M.setup = function()
 	end
 
 	notify.setup({
-		background_colour = "#" .. vim.api.nvim_get_hl_by_name("Pmenu", "rgb").background,
+		background_colour = "#" .. vim.api.nvim_get_hl_by_name("Pmenu", true).background,
 	})
 
 	vim.notify = notify
@@ -17,8 +17,9 @@ M.setup = function()
 	local telescope_ok, telescope = pcall(require, "telescope")
 	if telescope_ok then
 		telescope.load_extension("notify")
-		local nmap = utils.keymap.group("n", "<leader>f", { desc = "Find" })
-		nmap("n", telescope.extensions.notify.notify, { desc = "Notifications" })
+
+		utils.keymap.group("n", "<leader>f", { desc = "find" })
+		vim.keymap.set("n", "<leader>fn", telescope.extensions.notify.notify, { desc = "notifications" })
 	end
 end
 

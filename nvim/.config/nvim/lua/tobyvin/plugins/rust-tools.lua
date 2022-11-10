@@ -70,10 +70,10 @@ M.setup = function()
 			local expand_macro = rust_tools.expand_macro.expand_macro
 			local hover_actions = rust_tools.hover_actions.hover_actions
 
-			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "Debuggables", buffer = bufnr })
-			vim.keymap.set("n", "<leader>r", runnables, { desc = "Runnables", buffer = bufnr })
-			vim.keymap.set("n", "<leader>lo", open_cargo_toml, { desc = "Open Cargo.toml", buffer = bufnr })
-			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "Expand macro", buffer = bufnr })
+			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "debug", buffer = bufnr })
+			vim.keymap.set("n", "<leader>tt", runnables, { desc = "test", buffer = bufnr })
+			vim.keymap.set("n", "<leader>lo", open_cargo_toml, { desc = "open Cargo.toml", buffer = bufnr })
+			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "expand macro", buffer = bufnr })
 
 			utils.documentation.register("rust", external_docs)
 			utils.hover.register(hover_actions, { desc = "rust-tools hover actions", buffer = bufnr, priority = 10 })

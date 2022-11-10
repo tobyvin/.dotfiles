@@ -13,7 +13,7 @@ M.setup = function()
 
 	mason_nvim_dap.setup()
 
-	vim.keymap.set("n", "<leader>dI", M.install, { desc = "Dap Install" })
+	vim.keymap.set("n", "<leader>dI", M.install, { desc = "dap install" })
 end
 
 return M

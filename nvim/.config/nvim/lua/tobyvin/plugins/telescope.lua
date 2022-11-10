@@ -107,7 +107,7 @@ M.setup = function()
 		end,
 	})
 
-	utils.keymap.group("n", "<leader>f", { desc = "Find" })
+	utils.keymap.group("n", "<leader>f", { desc = "find" })
 
 	vim.keymap.set("n", "<leader>fa", pickers.autocommands, { desc = "autocommands" })
 	vim.keymap.set("n", "<leader>fb", pickers.buffers, { desc = "buffers" })

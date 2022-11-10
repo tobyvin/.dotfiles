@@ -29,8 +29,6 @@ M.open = function()
 	dap.listeners.before.event_exited["dapui_config"] = M.close
 	dap.listeners.before.disconnect["dapui_config"] = M.close
 
-	vim.keymap.set("n", "<leader>q", dap.terminate, { desc = "Quit (DAP)" })
-
 	vim.api.nvim_create_autocmd("TabClosed", {
 		group = vim.api.nvim_create_augroup("DapAU", { clear = true }),
 		callback = function()
@@ -44,8 +42,6 @@ M.close = function()
 	local dapui = require("dapui")
 
 	dapui.close({})
-
-	vim.keymap.set("n", "<leader>q", utils.buffer.quit, { desc = "Quit" })
 
 	if M.dapui_tab and vim.api.nvim_tabpage_is_valid(M.dapui_tab) then
 		local tabnr = vim.api.nvim_tabpage_get_number(M.dapui_tab)
@@ -63,8 +59,8 @@ M.setup = function()
 		return
 	end
 
-	vim.keymap.set("n", "<leader>de", M.eval, { desc = "Eval" })
-	vim.keymap.set("n", "<leader>du", dapui.open, { desc = "DapUI" })
+	vim.keymap.set("n", "<leader>de", M.eval, { desc = "eval" })
+	vim.keymap.set("n", "<leader>du", dapui.open, { desc = "dapui" })
 
 	-- Attach DAP UI to DAP events
 	vim.api.nvim_set_hl(0, "DapUIVariable", { link = "TSVariable" })

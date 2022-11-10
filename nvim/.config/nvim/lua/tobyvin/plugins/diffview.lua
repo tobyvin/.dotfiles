@@ -1,15 +1,15 @@
 local utils = require("tobyvin.utils")
 local M = {}
 
-M.file_history = function()
+local file_history = function()
 	require("diffview").file_history(nil, vim.fn.bufname())
 end
 
-M.workspace_history = function()
+local workspace_history = function()
 	require("diffview").file_history()
 end
 
-M.selection_history = function()
+local selection_history = function()
 	local first = vim.api.nvim_buf_get_mark(0, "<")[1]
 	local last = vim.api.nvim_buf_get_mark(0, ">")[1]
 	require("diffview").file_history({ first, last })
@@ -24,13 +24,13 @@ M.setup = function()
 
 	diffview.setup()
 
-	local nmap = utils.keymap.group("n", "<leader>g", { desc = "Git" })
-	nmap("d", diffview.open, { desc = "Diffview" })
-	nmap("h", M.file_history, { desc = "File History" })
-	nmap("H", M.workspace_history, { desc = "Workspace History" })
+	utils.keymap.group("n", "<leader>g", { desc = "git" })
+	vim.keymap.set("n", "<leader>gd", diffview.open, { desc = "diffview" })
+	vim.keymap.set("n", "<leader>gh", file_history, { desc = "file history" })
+	vim.keymap.set("n", "<leader>gH", workspace_history, { desc = "workspace history" })
 
-	local vmap = utils.keymap.group("v", "<leader>g", { desc = "Git" })
-	vmap("h", M.selection_history, { desc = "Selection History" })
+	utils.keymap.group("v", "<leader>g", { desc = "git" })
+	vim.keymap.set("v", "<leader>gh", selection_history, { desc = "selection history" })
 end
 
 return M

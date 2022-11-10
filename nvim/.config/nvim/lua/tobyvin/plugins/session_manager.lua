@@ -12,12 +12,12 @@ M.setup = function()
 		autoload_mode = require("session_manager.config").AutoloadMode.Disabled,
 	})
 
-	utils.keymap.group("n", "<leader>s", { desc = "Sessions" })
-	vim.keymap.set("n", "<leader>ss", session_manager.save_current_session, { desc = "Save session" })
-	vim.keymap.set("n", "<leader>sl", session_manager.load_current_dir_session, { desc = "Load current session" })
-	vim.keymap.set("n", "<leader>sL", session_manager.load_session, { desc = "Load session" })
-	vim.keymap.set("n", "<leader>sr", session_manager.load_last_session, { desc = "Load last session" })
-	vim.keymap.set("n", "<leader>sd", session_manager.delete_session, { desc = "Delete session" })
+	utils.keymap.group("n", "<leader>s", { desc = "sessions" })
+	vim.keymap.set("n", "<leader>ss", session_manager.save_current_session, { desc = "save session" })
+	vim.keymap.set("n", "<leader>sl", session_manager.load_current_dir_session, { desc = "load current session" })
+	vim.keymap.set("n", "<leader>sL", session_manager.load_session, { desc = "load session" })
+	vim.keymap.set("n", "<leader>sr", session_manager.load_last_session, { desc = "load last session" })
+	vim.keymap.set("n", "<leader>sd", session_manager.delete_session, { desc = "delete session" })
 end
 
 return M

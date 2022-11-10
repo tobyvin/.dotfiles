@@ -21,7 +21,7 @@ M.setup = function()
 		},
 	})
 
-	vim.keymap.set("n", "<leader>m", M.install, { desc = "Mason" })
+	vim.keymap.set("n", "<leader>m", M.install, { desc = "mason" })
 end
 
 return M

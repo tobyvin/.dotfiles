@@ -19,7 +19,7 @@ M.setup = function()
 
 	local picker = require("yanky.picker")
 	picker.setup()
-	vim.keymap.set({ "n", "x" }, "<C-p>", picker.select_in_history, { desc = "Yank History" })
+	vim.keymap.set({ "n", "x" }, "<C-p>", picker.select_in_history, { desc = "yank history" })
 end
 
 return M
