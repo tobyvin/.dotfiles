@@ -1,40 +1,29 @@
 local utils = require("tobyvin.utils")
 local M = {}
 
-M.wrap_handler = function(method, handler)
-	handler = vim.F.if_nil(handler, vim.lsp.handlers[method])
-	return function(err, result, ctx, config)
-		if result == nil or vim.tbl_isempty(result) then
-			vim.notify("No location found", vim.log.levels.INFO, { title = "[LSP] " .. ctx.method })
-			return nil
-		end
-
-		if vim.tbl_islist(result) then
-			result = result[1]
-		end
-		handler(err, result, ctx, config)
+local location_handler = vim.lsp.handlers["textDocument/definition"]
+local definition_handler = function(err, result, ctx, config)
+	if not result or vim.tbl_isempty(result) then
+		vim.notify("No location found", vim.log.levels.INFO, { title = "[LSP] " .. ctx.method })
+	elseif vim.tbl_islist(result) then
+		result = result[1]
 	end
+
+	location_handler(err, result, ctx, config)
+end
+
+local show_message = function(_, result, ctx)
+	vim.notify(result.message, 5 - result.type, {
+		title = "[LSP] " .. vim.lsp.get_client_by_id(ctx.client_id),
+	})
 end
 
 M.setup = function()
-	vim.lsp.handlers["textDocument/publishDiagnostics"] =
-		vim.lsp.with(vim.lsp.handlers["textDocument/publishDiagnostics"], {
-			signs = true,
-			underline = true,
-			update_in_insert = true,
-			virtual_text = true,
-		})
-
-	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
-
-	vim.lsp.handlers["textDocument/signatureHelp"] =
-		vim.lsp.with(vim.lsp.handlers.signature_help, { border = "single" })
-
-	vim.lsp.handlers["window/showMessage"] = function(_, result, ctx)
-		vim.notify(result.message, 5 - result.type, {
-			title = "[LSP] " .. vim.lsp.get_client_by_id(ctx.client_id),
-		})
-	end
+	local hover_ops = { border = "single" }
+	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, hover_ops)
+	vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, hover_ops)
+	vim.lsp.handlers["textDocument/definition"] = definition_handler
+	vim.lsp.handlers["window/showMessage"] = show_message
 
 	vim.api.nvim_create_autocmd("LspAttach", {
 		group = vim.api.nvim_create_augroup("tobyvin_lsp_handlers", { clear = true }),
@@ -42,11 +31,6 @@ M.setup = function()
 		callback = function(args)
 			local bufnr = args.buf
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-			if client.name ~= "rust_analyzer" then
-				vim.lsp.handlers["textDocument/definition"] = M.wrap_handler("textDocument/definition")
-			end
-
 			if client.server_capabilities["definitionProvider"] then
 				vim.bo[bufnr].tagfunc = "v:lua.vim.lsp.tagfunc"
 			end
