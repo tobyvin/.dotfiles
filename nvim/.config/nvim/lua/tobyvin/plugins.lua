@@ -272,12 +272,7 @@ M.plugins = function(use)
 		requires = {
 			"nvim-treesitter/playground",
 			"nvim-treesitter/nvim-treesitter-refactor",
-			-- TODO: Temp fix until #317 is merged
-			-- See: https://github.com/nvim-treesitter/nvim-treesitter-textobjects/pull/317
-			{
-				"numToStr/nvim-treesitter-textobjects",
-				branch = "rust/let-expr",
-			},
+			"nvim-treesitter/nvim-treesitter-textobjects",
 			"nvim-treesitter/nvim-treesitter-context",
 			"RRethy/nvim-treesitter-textsubjects",
 			"JoosepAlviste/nvim-ts-context-commentstring",
