@@ -194,6 +194,7 @@ M.plugins = function(use)
 		"simrat39/rust-tools.nvim",
 		requires = {
 			"neovim/nvim-lspconfig",
+			"nvim-lua/plenary.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.rust-tools").setup()
@@ -381,6 +382,8 @@ M.plugins = function(use)
 	use({
 		"mfussenegger/nvim-dap",
 		requires = {
+			"nvim-telescope/telescope-dap.nvim",
+			"mfussenegger/nvim-dap-python",
 			"leoluz/nvim-dap-go",
 		},
 		config = function()

@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local M = {
 	dapui_win = nil,
 	dapui_tab = nil,
@@ -62,7 +61,6 @@ M.setup = function()
 	vim.keymap.set("n", "<leader>de", M.eval, { desc = "eval" })
 	vim.keymap.set("n", "<leader>du", dapui.open, { desc = "dapui" })
 
-	-- Attach DAP UI to DAP events
 	vim.api.nvim_set_hl(0, "DapUIVariable", { link = "TSVariable" })
 	vim.api.nvim_set_hl(0, "DapUIScope", { link = "TSNamespace" })
 	vim.api.nvim_set_hl(0, "DapUIType", { link = "Type" })

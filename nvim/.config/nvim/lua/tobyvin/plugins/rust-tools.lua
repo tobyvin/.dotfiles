@@ -1,10 +1,7 @@
 local utils = require("tobyvin.utils")
 local lsp = require("tobyvin.lsp")
-local M = {
-	codelldb = "/usr/lib/codelldb/adapter/codelldb",
-	liblldb = "/usr/lib/codelldb/lldb/lib/liblldb.so",
-	popup_id = "",
-}
+local dap = require("tobyvin.plugins.dap")
+local M = {}
 
 M.setup = function()
 	local status_ok, rust_tools = pcall(require, "rust-tools")
@@ -87,9 +84,7 @@ M.setup = function()
 			},
 		},
 		server = lsp.configs.rust_analyzer,
-		dap = {
-			adapter = require("rust-tools.dap").get_codelldb_adapter(M.codelldb, M.liblldb),
-		},
+		dap = { adapter = dap.adapters.codelldb },
 	})
 end
 

@@ -91,61 +91,46 @@ M.setup = function()
 
 	-- Extensions
 	telescope.load_extension("fzf")
-	telescope.load_extension("dap")
 	telescope.load_extension("file_browser")
 	telescope.load_extension("live_grep_args")
 
-	local pickers = setmetatable(require("telescope.builtin"), {
-		__index = function(_, k)
-			for _, extension in pairs(telescope.extensions) do
-				if extension[k] then
-					return extension[k]
-				end
-			end
-			vim.notify(string.format("[Telescope] extension not found: &s", k), vim.log.levels.WARN)
-			return function() end
-		end,
-	})
+	local builtins = require("telescope.builtin")
+	local extensions = telescope.extensions
 
 	utils.keymap.group("n", "<leader>f", { desc = "find" })
 
-	vim.keymap.set("n", "<leader>fa", pickers.autocommands, { desc = "autocommands" })
-	vim.keymap.set("n", "<leader>fb", pickers.buffers, { desc = "buffers" })
-	vim.keymap.set("n", "<leader>fc", pickers.commands, { desc = "commands" })
-	vim.keymap.set("n", "<leader>fC", pickers.command_history, { desc = "command history" })
-	vim.keymap.set("n", "<leader>fd", pickers.file_browser, { desc = "file browser" })
-	vim.keymap.set("n", "<leader>ff", pickers.find_files, { desc = "find files" })
-	vim.keymap.set("n", "<leader>fF", pickers.filetypes, { desc = "filetypes" })
-	vim.keymap.set("n", "<leader>fg", pickers.live_grep_args, { desc = "live grep" })
-	vim.keymap.set("n", "<leader>fh", pickers.help_tags, { desc = "help" })
-	vim.keymap.set("n", "<leader>fH", pickers.highlights, { desc = "highlights" })
-	vim.keymap.set("n", "<leader>fj", pickers.jumplist, { desc = "jumplist" })
-	vim.keymap.set("n", "<leader>fk", pickers.keymaps, { desc = "keymaps" })
-	vim.keymap.set("n", "<leader>fl", pickers.loclist, { desc = "loclist" })
-	vim.keymap.set("n", "<leader>fm", pickers.marks, { desc = "marks" })
-	vim.keymap.set("n", "<leader>fM", pickers.man_pages, { desc = "man pages" })
-	vim.keymap.set("n", "<leader>fo", pickers.oldfiles, { desc = "old files" })
-	vim.keymap.set("n", "<leader>fp", pickers.pickers, { desc = "pickers" })
-	vim.keymap.set("n", "<leader>fr", pickers.resume, { desc = "resume" })
-	vim.keymap.set("n", "<leader>fR", pickers.reloader, { desc = "reloader" })
-	vim.keymap.set("n", "<leader>fs", pickers.spell_suggest, { desc = "spell suggest" })
-	vim.keymap.set("n", "<leader>fS", pickers.search_history, { desc = "search history" })
-	vim.keymap.set("n", "<leader>ft", pickers.tags, { desc = "tags" })
-	vim.keymap.set("n", "<leader>ft", pickers.colorscheme, { desc = "colorscheme" })
-	vim.keymap.set("n", "<leader>fv", pickers.vim_options, { desc = "vim options" })
-	vim.keymap.set("n", "<leader>f'", pickers.registers, { desc = "registers" })
-	vim.keymap.set("n", "<leader>dd", pickers.configurations, { desc = "configurations" })
-	vim.keymap.set("n", "<leader>dC", pickers.commands, { desc = "commands" })
-	vim.keymap.set("n", "<leader>dl", pickers.list_breakpoints, { desc = "list breakpoints" })
-	vim.keymap.set("n", "<leader>dv", pickers.variables, { desc = "variables" })
-	vim.keymap.set("n", "<leader>df", pickers.frames, { desc = "frames" })
+	vim.keymap.set("n", "<leader>fa", builtins.autocommands, { desc = "autocommands" })
+	vim.keymap.set("n", "<leader>fb", builtins.buffers, { desc = "buffers" })
+	vim.keymap.set("n", "<leader>fc", builtins.commands, { desc = "commands" })
+	vim.keymap.set("n", "<leader>fC", builtins.command_history, { desc = "command history" })
+	vim.keymap.set("n", "<leader>fd", extensions.file_browser.file_browser, { desc = "file browser" })
+	vim.keymap.set("n", "<leader>ff", builtins.find_files, { desc = "find files" })
+	vim.keymap.set("n", "<leader>fF", builtins.filetypes, { desc = "filetypes" })
+	vim.keymap.set("n", "<leader>fg", extensions.live_grep_args.live_grep_args, { desc = "live grep" })
+	vim.keymap.set("n", "<leader>fh", builtins.help_tags, { desc = "help" })
+	vim.keymap.set("n", "<leader>fH", builtins.highlights, { desc = "highlights" })
+	vim.keymap.set("n", "<leader>fj", builtins.jumplist, { desc = "jumplist" })
+	vim.keymap.set("n", "<leader>fk", builtins.keymaps, { desc = "keymaps" })
+	vim.keymap.set("n", "<leader>fl", builtins.loclist, { desc = "loclist" })
+	vim.keymap.set("n", "<leader>fm", builtins.marks, { desc = "marks" })
+	vim.keymap.set("n", "<leader>fM", builtins.man_pages, { desc = "man pages" })
+	vim.keymap.set("n", "<leader>fo", builtins.oldfiles, { desc = "old files" })
+	vim.keymap.set("n", "<leader>fp", builtins.pickers, { desc = "pickers" })
+	vim.keymap.set("n", "<leader>fr", builtins.resume, { desc = "resume" })
+	vim.keymap.set("n", "<leader>fR", builtins.reloader, { desc = "reloader" })
+	vim.keymap.set("n", "<leader>fs", builtins.spell_suggest, { desc = "spell suggest" })
+	vim.keymap.set("n", "<leader>fS", builtins.search_history, { desc = "search history" })
+	vim.keymap.set("n", "<leader>ft", builtins.tags, { desc = "tags" })
+	vim.keymap.set("n", "<leader>ft", builtins.colorscheme, { desc = "colorscheme" })
+	vim.keymap.set("n", "<leader>fv", builtins.vim_options, { desc = "vim options" })
+	vim.keymap.set("n", "<leader>f'", builtins.registers, { desc = "registers" })
 
 	vim.api.nvim_create_autocmd("User", {
 		group = vim.api.nvim_create_augroup("tobyvin_telescope_lsp", { clear = true }),
 		pattern = "LspAttach",
 		desc = "Setup telescope lsp keymaps",
 		callback = function(args)
-			vim.keymap.set("n", "<leader>fe", pickers.diagnostics, { desc = "diagnostics", buffer = args.buf })
+			vim.keymap.set("n", "<leader>fe", builtins.diagnostics, { desc = "diagnostics", buffer = args.buf })
 		end,
 	})
 
@@ -155,9 +140,12 @@ M.setup = function()
 		desc = "Setup telescope git keymaps",
 		callback = function(args)
 			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
-			vim.keymap.set("n", "<leader>gb", pickers.git_branches, { desc = "branches", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gc", pickers.git_commits, { desc = "commits", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gd", pickers.git_status, { desc = "status", buffer = bufnr })
+			vim.keymap.set("n", "<leader>gb", builtins.git_branches, { desc = "branches", buffer = bufnr })
+			vim.keymap.set("n", "<leader>gc", builtins.git_bcommits, { desc = "bcommits", buffer = bufnr })
+			vim.keymap.set("n", "<leader>gC", builtins.git_commits, { desc = "commits", buffer = bufnr })
+			vim.keymap.set("n", "<leader>gf", builtins.git_files, { desc = "files", buffer = bufnr })
+			vim.keymap.set("n", "<leader>gt", builtins.git_status, { desc = "status", buffer = bufnr })
+			vim.keymap.set("n", "<leader>gT", builtins.git_stash, { desc = "stash", buffer = bufnr })
 		end,
 	})
 end

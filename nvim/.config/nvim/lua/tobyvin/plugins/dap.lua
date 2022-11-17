@@ -1,7 +1,12 @@
 local utils = require("tobyvin.utils")
-local M = {}
+local M = {
+	configs = require("tobyvin.plugins.dap.configs"),
+	adapters = require("tobyvin.plugins.dap.adapters"),
+	events = require("tobyvin.plugins.dap.events"),
+	hover = require("tobyvin.plugins.dap.hover"),
+}
 
-M.set_custom_breakpoint = function()
+local set_custom_breakpoint = function()
 	vim.ui.input({ prompt = "Condition: " }, function(condition)
 		vim.ui.input({ prompt = "Hit condition: " }, function(hit_condition)
 			vim.ui.input({ prompt = "Log point message: " }, function(log_message)
@@ -11,63 +16,38 @@ M.set_custom_breakpoint = function()
 	end)
 end
 
-M.progress_start = function(session, body)
-	local notif_data = utils.debug.get_notif_data("dap", body.progressId)
-
-	local message = utils.debug.format_message(body.message, body.percentage)
-	notif_data.notification = vim.notify(message, vim.log.levels.INFO, {
-		title = utils.debug.format_title(body.title, session.config.type),
-		icon = utils.status.signs.spinner.text[1],
-		timeout = false,
-		hide_from_history = false,
-	})
-
-	---@diagnostic disable-next-line: redundant-value
-	notif_data.notification.spinner = 1, utils.status.update_spinner("dap", body.progressId)
-end
-
-M.progress_update = function(_, body)
-	local notif_data = utils.debug.get_notif_data("dap", body.progressId)
-	notif_data.notification =
-		vim.notify(utils.debug.format_message(body.message, body.percentage), vim.log.levels.INFO, {
-			replace = notif_data.notification,
-			hide_from_history = false,
-		})
-end
-
-M.progress_end = function(_, body)
-	local notif_data = utils.debug.notifs["dap"][body.progressId]
-	notif_data.notification =
-		vim.notify(body.message and utils.debug.format_message(body.message) or "Complete", vim.log.levels.INFO, {
-			icon = utils.status.signs.complete.text,
-			replace = notif_data.notification,
-			timeout = 3000,
-		})
-	notif_data.spinner = nil
-end
-
-M.hover_available = function()
-	local session = require("dap").session()
-	if not session then
-		return false
+---@param config table
+---@return function
+local with_eval = function(config)
+	return function()
+		local evaluated = {}
+		for key, value in pairs(config) do
+			if type(value) == "function" then
+				evaluated[key] = value()
+			end
+		end
+		return vim.tbl_extend("keep", evaluated, config)
 	end
-	local frame = session.current_frame or {}
-	---@diagnostic disable-next-line: missing-parameter
-	local expression = vim.fn.expand("<cexpr>")
-	local variable
-	local scopes = frame.scopes or {}
-	for _, s in pairs(scopes) do
-		variable = s.variables and s.variables[expression]
-		if variable then
+end
+
+---@param config table
+---@return boolean
+local contains_func = function(config)
+	for _, value in pairs(config) do
+		if type(value) == "function" then
 			return true
 		end
 	end
-	return session:evaluate(expression, function(err)
-		if not err then
-			return true
-		end
-		return false
-	end)
+	return false
+end
+
+---@param config table
+---@return table|function
+local make_config = function(config)
+	if contains_func(config) then
+		return with_eval(config)
+	end
+	return config
 end
 
 M.setup = function()
@@ -77,155 +57,72 @@ M.setup = function()
 		return
 	end
 
-	-- TODO: Break these configs out into seperate module, similar to my LSP configs
-	-- Debugpy
-	dap.adapters.python = {
-		type = "executable",
-		command = "python",
-		args = { "-m", "debugpy.adapter" },
-	}
+	dap.defaults.fallback.focus_terminal = true
+	dap.defaults.fallback.terminal_win_cmd = "15split new"
+	dap.set_exception_breakpoints("default")
 
-	dap.configurations.python = {
-		{
-			type = "python",
-			request = "launch",
-			name = "Launch file",
-			program = "${file}",
-			pythonPath = function()
-				local venv_path = vim.fn.getenv("VIRTUAL_ENVIRONMENT")
-				if venv_path ~= vim.NIL and venv_path ~= "" then
-					return venv_path .. "/bin/python"
-				else
-					return "/usr/bin/python"
-				end
-			end,
-		},
-	}
+	M.events.setup()
+	M.hover.setup()
 
-	-- Neovim Lua
-	dap.adapters.nlua = function(callback, config)
-		callback({ type = "server", host = config.host, port = config.port })
+	for name, config in pairs(M.configs) do
+		if dap.configurations[name] == nil then
+			dap.configurations[name] = make_config(config)
+		end
 	end
 
-	dap.configurations.lua = function()
-		vim.ui.input({ prompt = "Host: ", default = "127.0.0.1" }, function(host)
-			vim.ui.input({ prompt = "Port: ", default = "7777" }, function(port)
-				dap.configurations.lua = {
-					{
-						type = "nlua",
-						request = "attach",
-						name = "Attach to running Neovim instance",
-						host = host,
-						port = tonumber(port),
-					},
-				}
-			end)
-		end)
-	end
-
-	-- lldb
-	dap.adapters.lldb = {
-		type = "executable",
-		command = "/usr/bin/lldb-vscode",
-		name = "lldb",
-	}
-
-	dap.configurations.cpp = function()
-		utils.fs.select_executable(function(bin)
-			dap.configurations.cpp = {
-				{
-					name = "Launch",
-					type = "lldb",
-					request = "launch",
-					program = bin,
-					cwd = "${workspaceFolder}",
-					stopOnEntry = false,
-					args = {},
-					runInTerminal = false,
-				},
-			}
-		end)
-	end
-
-	dap.configurations.c = function()
-		utils.fs.select_executable(function(bin)
-			dap.configurations.c = {
-				{
-					name = "Launch",
-					type = "lldb",
-					request = "launch",
-					program = bin,
-					cwd = "${workspaceFolder}",
-					stopOnEntry = false,
-					args = {},
-					runInTerminal = false,
-				},
-			}
-		end)
-	end
-
-	-- Language specific plugins
+	require("dap-python").setup()
 	require("dap-go").setup()
+
+	require("nvim-dap-virtual-text").setup({
+		-- only_first_definition = false,
+		-- all_references = true,
+		virt_text_pos = "right_align",
+	})
+
+	require("telescope").load_extension("dap")
+	local telescope = require("telescope").extensions.dap
+
+	utils.keymap.group("n", "<leader>d", { desc = "debug" })
+	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "toggle breakpoint" })
+	vim.keymap.set("n", "<leader>dB", set_custom_breakpoint, { desc = "custom breakpoint" })
+	vim.keymap.set("n", "<leader>dC", telescope.commands, { desc = "commands" })
+	vim.keymap.set("n", "<leader>dd", telescope.configurations, { desc = "configurations" })
+	vim.keymap.set("n", "<leader>dl", telescope.list_breakpoints, { desc = "list breakpoints" })
 
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "DapAttach",
-		callback = function(args)
-			vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "continue", buffer = args.buf })
-			vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "step over", buffer = args.buf })
-			vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "step into", buffer = args.buf })
-			vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "step out", buffer = args.buf })
-			vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "terminate", buffer = args.buf })
-			vim.keymap.set("n", "<F5>", dap.continue, { desc = "continue", buffer = args.buf })
-			vim.keymap.set("n", "<F10>", dap.step_over, { desc = "step over", buffer = args.buf })
-			vim.keymap.set("n", "<F11>", dap.step_into, { desc = "step into", buffer = args.buf })
-			vim.keymap.set("n", "<F12>", dap.step_out, { desc = "step out", buffer = args.buf })
-
-			local dap_ui_widgets = require("dap.ui.widgets")
-
-			vim.b[args.buf].dap_hover_id = utils.hover.register(dap_ui_widgets.hover, {
-				enabled = M.hover_available,
-				desc = "dap",
-				buffer = args.buf,
-				priority = 20,
-			})
+		callback = function()
+			vim.keymap.set("n", "<F5>", dap.continue, { desc = "continue" })
+			vim.keymap.set("n", "<F10>", dap.step_over, { desc = "step over" })
+			vim.keymap.set("n", "<F11>", dap.step_into, { desc = "step into" })
+			vim.keymap.set("n", "<F12>", dap.step_out, { desc = "step out" })
+			vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "continue" })
+			vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "step over" })
+			vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "step into" })
+			vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "step out" })
+			vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "terminate" })
+			vim.keymap.set("n", "<leader>dv", telescope.variables, { desc = "variables" })
+			vim.keymap.set("n", "<leader>df", telescope.frames, { desc = "frames" })
 		end,
 	})
 
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "DapDetach",
-		callback = function(args)
-			vim.keymap.del("n", "<leader>dc", { buffer = args.buf })
-			vim.keymap.del("n", "<leader>da", { buffer = args.buf })
-			vim.keymap.del("n", "<leader>di", { buffer = args.buf })
-			vim.keymap.del("n", "<leader>do", { buffer = args.buf })
-			vim.keymap.del("n", "<leader>dq", { buffer = args.buf })
-			vim.keymap.del("n", "<F5>", { buffer = args.buf })
-			vim.keymap.del("n", "<F10>", { buffer = args.buf })
-			vim.keymap.del("n", "<F11>", { buffer = args.buf })
-			vim.keymap.del("n", "<F12>", { buffer = args.buf })
-
-			utils.hover.unregister(vim.b[args.buf].dap_hover_id)
+		callback = function()
+			vim.keymap.del("n", "<leader>dv")
+			vim.keymap.del("n", "<leader>df")
+			vim.keymap.del("n", "<leader>dc")
+			vim.keymap.del("n", "<leader>da")
+			vim.keymap.del("n", "<leader>di")
+			vim.keymap.del("n", "<leader>do")
+			vim.keymap.del("n", "<leader>dq")
+			vim.keymap.del("n", "<F5>")
+			vim.keymap.del("n", "<F10>")
+			vim.keymap.del("n", "<F11>")
+			vim.keymap.del("n", "<F12>")
 		end,
 	})
 
-	dap.listeners.after.event_initialized["User"] = function()
-		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
-	end
-	dap.listeners.before.event_terminated["User"] = function()
-		vim.api.nvim_exec_autocmds("User", { pattern = "DapDetach" })
-	end
-
-	dap.listeners.before.event_progressStart["progress-notifications"] = M.progress_start
-	dap.listeners.before.event_progressUpdate["progress-notifications"] = M.progress_update
-	dap.listeners.before.event_progressEnd["progress-notifications"] = M.progress_end
-	dap.listeners.before.event_terminated["close_repl"] = dap.repl.close
-	dap.listeners.before.event_exited["close_repl"] = dap.repl.close
-
-	utils.keymap.group("n", "<leader>d", { desc = "debug" })
-	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "toggle breakpoint" })
-	vim.keymap.set("n", "<leader>dB", M.set_custom_breakpoint, { desc = "custom breakpoint" })
-
-	-- Signs
 	vim.fn.sign_define("DapBreakpoint", utils.debug.signs.breakpoint)
 	vim.fn.sign_define("DapBreakpointCondition", utils.debug.signs.condition)
 	vim.fn.sign_define("DapBreakpointRejected", utils.debug.signs.rejected)
