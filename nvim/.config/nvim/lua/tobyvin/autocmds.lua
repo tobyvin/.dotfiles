@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local Path = require("plenary").path
 local M = {}
 
@@ -61,18 +60,6 @@ M.setup = function()
 			vim.cmd("wincmd L")
 		end,
 		desc = "Vertical help window",
-	})
-
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		group = vim.api.nvim_create_augroup("tobyvin_auto_reload", { clear = true }),
-		pattern = "*.lua",
-		callback = function(args)
-			local module_name = utils.fs.module_from_path(args.match)
-			if module_name then
-				utils.fs.reload(module_name)
-			end
-		end,
-		desc = "Reload lua module on write",
 	})
 end
 
