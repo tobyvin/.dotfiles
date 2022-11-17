@@ -271,10 +271,8 @@ M.plugins = function(use)
 		run = ":TSUpdate",
 		requires = {
 			"nvim-treesitter/playground",
-			"nvim-treesitter/nvim-treesitter-refactor",
 			"nvim-treesitter/nvim-treesitter-textobjects",
 			"nvim-treesitter/nvim-treesitter-context",
-			"RRethy/nvim-treesitter-textsubjects",
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			"mfussenegger/nvim-ts-hint-textobject",
 		},

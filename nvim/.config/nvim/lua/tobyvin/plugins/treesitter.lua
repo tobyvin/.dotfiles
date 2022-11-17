@@ -48,14 +48,8 @@ M.setup = function()
 				},
 			},
 		},
-		textsubjects = {
+		context_commentstring = {
 			enable = true,
-			prev_selection = ",", -- (Optional) keymap to select the previous selection
-			keymaps = {
-				["."] = "textsubjects-smart",
-				["a."] = "textsubjects-container-outer",
-				["i."] = "textsubjects-container-inner",
-			},
 		},
 	})
 end
