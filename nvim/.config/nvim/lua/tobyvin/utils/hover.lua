@@ -5,9 +5,9 @@ local M = {}
 ---@alias ProviderId number
 
 ---@class ProviderOpts
----@field enabled fun():boolean
----@field buffer number
----@field priority number
+---@field enabled fun():boolean?
+---@field buffer number?
+---@field priority number?
 
 ---@class Provider
 ---@field handler ProviderHandler
@@ -24,7 +24,7 @@ local default_opts = {
 
 ---@param buffer number?
 ---@return Provider[]
-M._get_providers = function(buffer)
+local get_providers = function(buffer)
 	if buffer then
 		return vim.F.if_nil(vim.b[buffer].hover_providers, {})
 	else
@@ -34,7 +34,7 @@ end
 
 ---@param buffer number?
 ---@param providers Provider[]
-M._set_providers = function(buffer, providers)
+local set_providers = function(buffer, providers)
 	if buffer == nil then
 		vim.g.hover_providers = providers
 	else
@@ -42,14 +42,26 @@ M._set_providers = function(buffer, providers)
 	end
 end
 
+---@param a Provider
+---@param b Provider
+---@return boolean
+local sort_providers = function(a, b)
+	if a.opts.priority and b.opts.priority then
+		return a.opts.priority > b.opts.priority
+	else
+		return not b.opts.priority
+	end
+end
+
 ---@param buffer number
 ---@return Provider[]
-M.get_buf_providers = function(buffer)
+M.buf_providers = function(buffer)
 	local providers = {}
 	if vim.api.nvim_buf_is_valid(buffer) and type(vim.b[buffer].hover_providers) == "table" then
-		vim.list_extend(providers, M._get_providers(buffer))
+		vim.list_extend(providers, get_providers(buffer))
 	end
-	vim.list_extend(providers, M._get_providers())
+	vim.list_extend(providers, get_providers())
+	table.sort(providers, sort_providers)
 	return providers
 end
 
@@ -64,7 +76,7 @@ M.register = function(handler, opts)
 	---@type Provider
 	local provider = { handler = handler, opts = opts }
 
-	local providers = M._get_providers(provider.opts.buffer)
+	local providers = get_providers(provider.opts.buffer)
 	local id
 
 	if #providers > 0 and provider.opts.priority then
@@ -80,25 +92,25 @@ M.register = function(handler, opts)
 		id = #providers
 	end
 
-	M._set_providers(provider.opts.buffer, providers)
+	set_providers(provider.opts.buffer, providers)
 	return id
 end
 
 ---@param id ProviderId
 ---@param buffer number?
 M.unregister = function(id, buffer)
-	local providers = M._get_providers(buffer)
+	local providers = get_providers(buffer)
 
 	local provider = table.remove(providers, id)
 
-	M._set_providers(buffer, providers)
+	set_providers(buffer, providers)
 	return provider
 end
 
 ---@param buffer number?
 M.open = function(buffer)
 	buffer = vim.F.if_nil(buffer, vim.api.nvim_get_current_buf())
-	local providers = M.get_buf_providers(buffer)
+	local providers = M.buf_providers(buffer)
 	for _, provider in ipairs(providers) do
 		if provider.opts.enabled and provider.opts.enabled() and not provider.handler() then
 			return true
