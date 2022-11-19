@@ -104,6 +104,7 @@ M.setup = function()
 	vim.keymap.set("n", "<leader>fc", builtins.commands, { desc = "commands" })
 	vim.keymap.set("n", "<leader>fC", builtins.command_history, { desc = "command history" })
 	vim.keymap.set("n", "<leader>fd", extensions.file_browser.file_browser, { desc = "file browser" })
+	vim.keymap.set("n", "<leader>fe", builtins.diagnostics, { desc = "diagnostics" })
 	vim.keymap.set("n", "<leader>ff", builtins.find_files, { desc = "find files" })
 	vim.keymap.set("n", "<leader>fF", builtins.filetypes, { desc = "filetypes" })
 	vim.keymap.set("n", "<leader>fg", extensions.live_grep_args.live_grep_args, { desc = "live grep" })
@@ -124,30 +125,12 @@ M.setup = function()
 	vim.keymap.set("n", "<leader>ft", builtins.colorscheme, { desc = "colorscheme" })
 	vim.keymap.set("n", "<leader>fv", builtins.vim_options, { desc = "vim options" })
 	vim.keymap.set("n", "<leader>f'", builtins.registers, { desc = "registers" })
-
-	vim.api.nvim_create_autocmd("User", {
-		group = vim.api.nvim_create_augroup("tobyvin_telescope_lsp", { clear = true }),
-		pattern = "LspAttach",
-		desc = "Setup telescope lsp keymaps",
-		callback = function(args)
-			vim.keymap.set("n", "<leader>fe", builtins.diagnostics, { desc = "diagnostics", buffer = args.buf })
-		end,
-	})
-
-	vim.api.nvim_create_autocmd("User", {
-		group = vim.api.nvim_create_augroup("tobyvin_telescope_git", { clear = true }),
-		pattern = "GitAttach",
-		desc = "Setup telescope git keymaps",
-		callback = function(args)
-			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
-			vim.keymap.set("n", "<leader>gb", builtins.git_branches, { desc = "branches", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gc", builtins.git_bcommits, { desc = "bcommits", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gC", builtins.git_commits, { desc = "commits", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gf", builtins.git_files, { desc = "files", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gt", builtins.git_status, { desc = "status", buffer = bufnr })
-			vim.keymap.set("n", "<leader>gT", builtins.git_stash, { desc = "stash", buffer = bufnr })
-		end,
-	})
+	vim.keymap.set("n", "<leader>gb", builtins.git_branches, { desc = "branches" })
+	vim.keymap.set("n", "<leader>gc", builtins.git_bcommits, { desc = "bcommits" })
+	vim.keymap.set("n", "<leader>gC", builtins.git_commits, { desc = "commits" })
+	vim.keymap.set("n", "<leader>gf", builtins.git_files, { desc = "files" })
+	vim.keymap.set("n", "<leader>gt", builtins.git_status, { desc = "status" })
+	vim.keymap.set("n", "<leader>gT", builtins.git_stash, { desc = "stash" })
 end
 
 return M
