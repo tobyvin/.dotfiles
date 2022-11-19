@@ -70,6 +70,10 @@ if command -v fd >/dev/null 2>&1; then
 	}
 fi
 
+if command -v btm >/dev/null 2>&1; then
+	alias top="btm --basic"
+fi
+
 if command -v docker >/dev/null 2>&1; then
 	alias dexec="docker exec -it"
 	alias dps="docker ps"
