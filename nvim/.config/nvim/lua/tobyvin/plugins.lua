@@ -387,17 +387,6 @@ M.plugins = function(use)
 		end,
 	})
 
-	use("ellisonleao/glow.nvim")
-	use("ThePrimeagen/harpoon")
-	use("b0o/SchemaStore.nvim")
-
-	use({
-		"nacro90/numb.nvim",
-		config = function()
-			require("numb").setup()
-		end,
-	})
-
 	use({
 		"ur4ltz/surround.nvim",
 		config = function()
@@ -409,6 +398,17 @@ M.plugins = function(use)
 		"numToStr/Comment.nvim",
 		config = function()
 			require("tobyvin.plugins.comment").setup()
+		end,
+	})
+
+	use("ThePrimeagen/harpoon")
+
+	use("b0o/SchemaStore.nvim")
+
+	use({
+		"nacro90/numb.nvim",
+		config = function()
+			require("numb").setup()
 		end,
 	})
 
