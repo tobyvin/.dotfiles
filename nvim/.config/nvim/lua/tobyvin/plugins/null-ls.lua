@@ -1,4 +1,3 @@
-local lsp = require("tobyvin.lsp")
 local M = {}
 
 M.setup = function()
@@ -7,6 +6,8 @@ M.setup = function()
 		vim.notify("Failed to load module 'null-ls'", vim.log.levels.ERROR)
 		return
 	end
+
+	local info = require("null-ls.info")
 
 	null_ls.setup({
 		sources = {
@@ -26,7 +27,7 @@ M.setup = function()
 			null_ls.builtins.formatting.cbfmt,
 		},
 		on_attach = function(_, bufnr)
-			vim.keymap.set("n", "<leader>ln", "<CMD>NullLsInfo<CR>", { desc = "null-ls info", buffer = bufnr })
+			vim.keymap.set("n", "<leader>ln", info.show_window, { desc = "null-ls info", buffer = bufnr })
 		end,
 	})
 end
