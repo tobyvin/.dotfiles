@@ -74,16 +74,14 @@ M.plugins = function(use)
 
 	use({
 		"williamboman/mason.nvim",
+		requires = {
+			"RubixDev/mason-update-all",
+			"williamboman/mason-lspconfig.nvim",
+			"jayp0521/mason-null-ls.nvim",
+			"jayp0521/mason-nvim-dap.nvim",
+		},
 		config = function()
 			require("tobyvin.plugins.mason").setup()
-		end,
-	})
-
-	use({
-		"RubixDev/mason-update-all",
-		requires = { "williamboman/mason.nvim" },
-		config = function()
-			require("tobyvin.plugins.mason-update-all").setup()
 		end,
 	})
 
@@ -94,18 +92,6 @@ M.plugins = function(use)
 		},
 		config = function()
 			require("tobyvin.plugins.null-ls").setup()
-		end,
-	})
-
-	use({
-		"jayp0521/mason-null-ls.nvim",
-		after = { "mason.nvim", "null-ls.nvim" },
-		requires = {
-			"williamboman/mason.nvim",
-			"jose-elias-alvarez/null-ls.nvim",
-		},
-		config = function()
-			require("tobyvin.plugins.mason-null-ls").setup()
 		end,
 	})
 
@@ -169,17 +155,6 @@ M.plugins = function(use)
 		"onsails/lspkind-nvim",
 		config = function()
 			require("tobyvin.plugins.lspkind").setup()
-		end,
-	})
-
-	use({
-		"williamboman/mason-lspconfig.nvim",
-		after = "mason.nvim",
-		requires = {
-			"williamboman/mason.nvim",
-		},
-		config = function()
-			require("tobyvin.plugins.mason-lspconfig").setup()
 		end,
 	})
 
@@ -388,18 +363,6 @@ M.plugins = function(use)
 		},
 		config = function()
 			require("tobyvin.plugins.dap").setup()
-		end,
-	})
-
-	use({
-		"jayp0521/mason-nvim-dap.nvim",
-		after = { "mason.nvim", "nvim-dap" },
-		requires = {
-			"williamboman/mason.nvim",
-			"mfussenegger/nvim-dap",
-		},
-		config = function()
-			require("tobyvin.plugins.mason-nvim-dap").setup()
 		end,
 	})
 
