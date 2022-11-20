@@ -5,7 +5,13 @@ end
 
 setmetatable(log, {
 	__call = function(t, msg, level, opts)
-		pcall(t[level], msg, level, opts)
+		local log_level = vim.F.if_nil(level, 2) + 1
+		local log_msg = {}
+		if opts and opts.title then
+			table.insert(log_msg, opts.title)
+		end
+		table.insert(log_msg, msg)
+		pcall(t[log_level], table.concat(log_msg, ": "))
 		vim.api.nvim_exec_autocmds("User", {
 			pattern = "Notify",
 			data = { msg, level, opts },
