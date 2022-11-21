@@ -24,7 +24,7 @@ M.setup = function()
 	end
 
 	vim.api.nvim_create_autocmd("LspAttach", {
-		group = vim.api.nvim_create_augroup("tobyvin_lsp", { clear = true }),
+		group = vim.api.nvim_create_augroup("tobyvin_lsp_config", { clear = true }),
 		desc = "lsp",
 		callback = function(args)
 			local lspinfo = require("lspconfig.ui.lspinfo")
