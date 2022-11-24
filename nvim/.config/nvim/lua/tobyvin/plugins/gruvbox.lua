@@ -9,6 +9,8 @@ M.setup = function()
 
 	local colors = require("gruvbox.palette")
 	gruvbox.setup({
+		contrast = "hard",
+		transparent_mode = true,
 		overrides = {
 			GruvboxRedSign = { bg = "" },
 			GruvboxGreenSign = { bg = "" },
@@ -37,7 +39,6 @@ M.setup = function()
 			-- SEE: https://github.com/neovim/neovim/issues/13746
 			markdownError = { link = "Normal" },
 		},
-		transparent_mode = true,
 	})
 
 	vim.cmd([[colorscheme gruvbox]])
