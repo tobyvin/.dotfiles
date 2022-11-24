@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local M = {}
 
 local file_history = function()
@@ -24,12 +23,9 @@ M.setup = function()
 
 	diffview.setup()
 
-	utils.keymap.group("n", "<leader>g", { desc = "git" })
 	vim.keymap.set("n", "<leader>gd", diffview.open, { desc = "diffview" })
 	vim.keymap.set("n", "<leader>gh", file_history, { desc = "file history" })
 	vim.keymap.set("n", "<leader>gH", workspace_history, { desc = "workspace history" })
-
-	utils.keymap.group("v", "<leader>g", { desc = "git" })
 	vim.keymap.set("v", "<leader>gh", selection_history, { desc = "selection history" })
 end
 

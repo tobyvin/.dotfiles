@@ -82,7 +82,6 @@ M.setup = function()
 	require("telescope").load_extension("dap")
 	local telescope = require("telescope").extensions.dap
 
-	utils.keymap.group("n", "<leader>d", { desc = "debug" })
 	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "toggle breakpoint" })
 	vim.keymap.set("n", "<leader>dB", set_custom_breakpoint, { desc = "custom breakpoint" })
 	vim.keymap.set("n", "<leader>dC", telescope.commands, { desc = "commands" })

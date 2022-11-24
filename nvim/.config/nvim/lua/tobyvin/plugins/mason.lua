@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local M = {}
 
 local nil_wrap = function(func)
@@ -39,7 +38,6 @@ M.setup = function()
 	api.DapInstall = nil_wrap(mason_nvim_dap.DapInstall)
 	api.DapUninstall = nil_wrap(mason_nvim_dap.DapUninstall)
 
-	utils.keymap.group("n", "<leader>i", { desc = "mason installer" })
 	vim.keymap.set("n", "<leader>ii", api.Mason, { desc = "mason" })
 	vim.keymap.set("n", "<leader>iI", api.MasonLog, { desc = "log" })
 	vim.keymap.set("n", "<leader>iu", api.UpdateAll, { desc = "update all" })

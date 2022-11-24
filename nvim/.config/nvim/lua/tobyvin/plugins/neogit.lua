@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local M = {}
 
 M.setup = function()
@@ -16,7 +15,6 @@ M.setup = function()
 		},
 	})
 
-	utils.keymap.group("n", "<leader>g", { desc = "git" })
 	vim.keymap.set("n", "<leader>gg", neogit.open, { desc = "neogit" })
 end
 

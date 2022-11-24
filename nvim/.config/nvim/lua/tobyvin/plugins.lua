@@ -1,5 +1,3 @@
----@diagnostic disable: missing-parameter
-local utils = require("tobyvin.utils")
 local M = {}
 
 M.ensure_packer = function()
@@ -348,13 +346,6 @@ M.plugins = function(use)
 	})
 
 	use({
-		"folke/which-key.nvim",
-		config = function()
-			require("tobyvin.plugins.which-key").setup()
-		end,
-	})
-
-	use({
 		"mfussenegger/nvim-dap",
 		requires = {
 			"nvim-telescope/telescope-dap.nvim",
@@ -428,7 +419,6 @@ M.setup = function()
 		return
 	end
 
-	utils.keymap.group("n", "<leader>p", { desc = "packer" })
 	vim.keymap.set("n", "<leader>pc", packer.compile, { desc = "compile" })
 	vim.keymap.set("n", "<leader>pC", packer.clean, { desc = "clean" })
 	vim.keymap.set("n", "<leader>pi", packer.install, { desc = "install" })

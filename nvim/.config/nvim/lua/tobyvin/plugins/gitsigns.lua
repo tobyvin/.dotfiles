@@ -38,8 +38,6 @@ end
 
 M.on_attach = function(bufnr)
 	local gitsigns = package.loaded.gitsigns
-	utils.keymap.group("n", "<leader>g", { desc = "git", buffer = bufnr })
-
 	vim.keymap.set("n", "]c", next_hunk, { expr = true, desc = "next hunk", buffer = bufnr })
 	vim.keymap.set("n", "[c", prev_hunk, { expr = true, desc = "previous hunk", buffer = bufnr })
 
@@ -56,7 +54,6 @@ M.on_attach = function(bufnr)
 	vim.keymap.set("n", "<leader>gS", gitsigns.stage_buffer, { desc = "stage buffer", buffer = bufnr })
 	vim.keymap.set("n", "<leader>gU", gitsigns.reset_buffer_index, { desc = "undo stage buffer", buffer = bufnr })
 
-	utils.keymap.group("v", "<leader>g", { desc = "git", buffer = bufnr })
 	vim.keymap.set("v", "<leader>gp", with_range(gitsigns.preview_hunk), { desc = "preview hunk", buffer = bufnr })
 	vim.keymap.set("v", "<leader>gr", with_range(gitsigns.reset_hunk), { desc = "reset hunk", buffer = bufnr })
 	vim.keymap.set("v", "<leader>gs", with_range(gitsigns.stage_hunk), { desc = "stage hunk", buffer = bufnr })

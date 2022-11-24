@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local lsp = {
 	configs = require("tobyvin.lsp.configs"),
 	handlers = require("tobyvin.lsp.handlers"),
@@ -15,9 +14,7 @@ lsp.setup = function()
 		group = vim.api.nvim_create_augroup("tobyvin_lsp", { clear = true }),
 		desc = "lsp",
 		callback = function(args)
-			local bufnr = args.buf
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
-			utils.keymap.group("n", "<leader>l", { desc = "LSP", buffer = bufnr })
 			vim.api.nvim_exec_autocmds("User", { pattern = "LspAttach", data = { client_id = client.id } })
 		end,
 	})

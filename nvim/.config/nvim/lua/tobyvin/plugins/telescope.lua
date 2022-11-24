@@ -1,4 +1,3 @@
-local utils = require("tobyvin.utils")
 local M = {}
 
 M.frecency_sorter = function()
@@ -96,8 +95,6 @@ M.setup = function()
 
 	local builtins = require("telescope.builtin")
 	local extensions = telescope.extensions
-
-	utils.keymap.group("n", "<leader>f", { desc = "find" })
 
 	vim.keymap.set("n", "<leader>fa", builtins.autocommands, { desc = "autocommands" })
 	vim.keymap.set("n", "<leader>fb", builtins.buffers, { desc = "buffers" })
