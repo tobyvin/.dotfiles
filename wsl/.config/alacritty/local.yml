@@ -3,13 +3,15 @@ shell:
   args:
     - "--user"
     - "root"
-    - machinectl shell --uid=1000 --quiet .host /bin/zsh -l -c 'tmux new -As $USER'
+    - machinectl shell --uid=1000 --quiet .host /bin/zsh -l -c 'tmux new -As
+      $USER'
 
 working_directory: '\\wsl$\Arch\home\tobyv'
 
 font:
   normal:
     family: FiraCode NF
+  size: 12.5
 
 window:
   opacity: 0.98
