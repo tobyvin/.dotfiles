@@ -1,17 +1,21 @@
 local log = require("plenary.log").new({ plugin = "notify" })
+local levels = {}
 for k, v in pairs(vim.log.levels) do
-	log[v + 1] = log[k:lower()]
+	levels[v] = k:lower()
+	levels[k] = k:lower()
+	levels[k:lower()] = k:lower()
 end
 
 setmetatable(log, {
 	__call = function(t, msg, level, opts)
-		local log_level = vim.F.if_nil(level, 2) + 1
-		local log_msg = {}
+		local log_msg = msg
 		if opts and opts.title then
-			table.insert(log_msg, opts.title)
+			log_msg = string.format("%s: %s", opts.title, log_msg)
 		end
-		table.insert(log_msg, msg)
-		pcall(t[log_level], table.concat(log_msg, ": "))
+
+		local level_name = vim.F.if_nil(levels[level], "info")
+		pcall(t[level_name], log_msg)
+
 		vim.api.nvim_exec_autocmds("User", {
 			pattern = "Notify",
 			data = { msg, level, opts },
