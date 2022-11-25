@@ -1,5 +1,4 @@
 local configs = {
-	default = {},
 	bashls = {},
 	taplo = {},
 	yamlls = {},

@@ -1,4 +1,5 @@
 local lsp = {
+	default_config = {},
 	configs = require("tobyvin.lsp.configs"),
 	handlers = require("tobyvin.lsp.handlers"),
 	highlighting = require("tobyvin.lsp.highlighting"),

@@ -177,18 +177,8 @@ M.plugins = function(use)
 	use({
 		"neovim/nvim-lspconfig",
 		after = {
-			"mason-lspconfig.nvim",
 			"neodev.nvim",
-			"rust-tools.nvim",
 			"cmp-nvim-lsp",
-		},
-		requires = {
-			"folke/neodev.nvim",
-			"simrat39/rust-tools.nvim",
-			"hrsh7th/cmp-nvim-lsp",
-			"ray-x/lsp_signature.nvim",
-			"SmiteshP/nvim-navic",
-			"barreiroleo/ltex-extra.nvim",
 		},
 		config = function()
 			require("tobyvin.plugins.lspconfig").setup()
