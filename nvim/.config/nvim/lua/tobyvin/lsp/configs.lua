@@ -50,6 +50,11 @@ configs.rust_analyzer = {
 			checkOnSave = {
 				command = "clippy",
 			},
+			completion = {
+				postfix = {
+					enable = false,
+				},
+			},
 		},
 	},
 }
