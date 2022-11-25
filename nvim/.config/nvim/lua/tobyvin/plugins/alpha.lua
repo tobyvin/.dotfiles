@@ -125,139 +125,137 @@ M.actions = function()
 	return M.actions_cache
 end
 
-M.setup = function()
-	local status_ok, alpha = pcall(require, "alpha")
-	if not status_ok then
-		vim.notify("Failed to load module 'alpha'", vim.log.levels.ERROR)
-		return
-	end
+local status_ok, alpha = pcall(require, "alpha")
+if not status_ok then
+	vim.notify("Failed to load module 'alpha'", vim.log.levels.ERROR)
+	return
+end
 
-	alpha.keymaps_element.button = function(el, _, state)
-		if el.opts and el.opts.keymap then
-			if type(el.opts.keymap[1]) == "table" then
-				for _, map in el.opts.keymap do
-					map[4].buffer = state.buffer
-					vim.keymap.set(unpack(map))
-				end
-			else
-				local map = el.opts.keymap
+alpha.keymaps_element.button = function(el, _, state)
+	if el.opts and el.opts.keymap then
+		if type(el.opts.keymap[1]) == "table" then
+			for _, map in el.opts.keymap do
 				map[4].buffer = state.buffer
 				vim.keymap.set(unpack(map))
 			end
+		else
+			local map = el.opts.keymap
+			map[4].buffer = state.buffer
+			vim.keymap.set(unpack(map))
 		end
 	end
-
-	local fortune = require("alpha.fortune")
-
-	local logo = {
-		type = "text",
-		val = {
-			"                                                    ",
-			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-			" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-			" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-			" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-			" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-			" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-		},
-		opts = {
-			position = M.position,
-			hl = "DevIconVim",
-		},
-	}
-
-	local function info_value()
-		local total_plugins = #vim.tbl_keys(packer_plugins)
-		local v = vim.version()
-		return string.format("VIM: v%d.%d.%d PLUGINS: %d", v.major, v.minor, v.patch, total_plugins)
-	end
-
-	local info = {
-		type = "text",
-		val = info_value(),
-		opts = {
-			hl = "DevIconVim",
-			position = M.position,
-		},
-	}
-
-	local message = {
-		type = "text",
-		val = fortune({ max_width = M.width }),
-		opts = {
-			position = M.position,
-			hl = "Statement",
-		},
-	}
-
-	local header = {
-		type = "group",
-		val = {
-			logo,
-			info,
-			message,
-		},
-	}
-
-	local mru = {
-		type = "group",
-		val = {
-			{
-				type = "text",
-				val = M.format_string("MRU"),
-				opts = {
-					hl = "String",
-					position = M.position,
-				},
-			},
-			{
-				type = "group",
-				val = M.mru,
-			},
-		},
-	}
-
-	local actions = {
-		type = "group",
-		val = {
-			{
-				type = "text",
-				val = M.format_string("CMD"),
-				opts = {
-					hl = "String",
-					position = M.position,
-				},
-			},
-			{
-				type = "group",
-				val = M.actions,
-			},
-		},
-	}
-
-	local config = {
-		layout = {
-			header,
-			{ type = "padding", val = 1 },
-			mru,
-			{ type = "padding", val = 1 },
-			actions,
-		},
-	}
-
-	alpha.setup(config)
-
-	vim.api.nvim_create_autocmd("User", {
-		group = vim.api.nvim_create_augroup("alpha_user", { clear = true }),
-		pattern = "BDeleteLast",
-		callback = function(args)
-			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
-			if vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "alpha" then
-				alpha.start(false)
-			end
-		end,
-		desc = "Run Alpha when last buffer closed",
-	})
 end
+
+local fortune = require("alpha.fortune")
+
+local logo = {
+	type = "text",
+	val = {
+		"                                                    ",
+		" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+		" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+		" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+		" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+		" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+		" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+	},
+	opts = {
+		position = M.position,
+		hl = "DevIconVim",
+	},
+}
+
+local function info_value()
+	local total_plugins = #vim.tbl_keys(packer_plugins)
+	local v = vim.F.if_nil(vim.version(), {})
+	return string.format("VIM: v%d.%d.%d PLUGINS: %d", v.major, v.minor, v.patch, total_plugins)
+end
+
+local info = {
+	type = "text",
+	val = info_value(),
+	opts = {
+		hl = "DevIconVim",
+		position = M.position,
+	},
+}
+
+local message = {
+	type = "text",
+	val = fortune({ max_width = M.width }),
+	opts = {
+		position = M.position,
+		hl = "Statement",
+	},
+}
+
+local header = {
+	type = "group",
+	val = {
+		logo,
+		info,
+		message,
+	},
+}
+
+local mru = {
+	type = "group",
+	val = {
+		{
+			type = "text",
+			val = M.format_string("MRU"),
+			opts = {
+				hl = "String",
+				position = M.position,
+			},
+		},
+		{
+			type = "group",
+			val = M.mru,
+		},
+	},
+}
+
+local actions = {
+	type = "group",
+	val = {
+		{
+			type = "text",
+			val = M.format_string("CMD"),
+			opts = {
+				hl = "String",
+				position = M.position,
+			},
+		},
+		{
+			type = "group",
+			val = M.actions,
+		},
+	},
+}
+
+local config = {
+	layout = {
+		header,
+		{ type = "padding", val = 1 },
+		mru,
+		{ type = "padding", val = 1 },
+		actions,
+	},
+}
+
+alpha.setup(config)
+
+vim.api.nvim_create_autocmd("User", {
+	group = vim.api.nvim_create_augroup("alpha_user", { clear = true }),
+	pattern = "BDeleteLast",
+	callback = function(args)
+		local bufnr = vim.F.if_nil(args.data.buf, args.buf)
+		if vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "alpha" then
+			alpha.start(false)
+		end
+	end,
+	desc = "Run Alpha when last buffer closed",
+})
 
 return M

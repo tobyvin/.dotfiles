@@ -1,6 +1,10 @@
-local M = {}
+local status_ok, packer = pcall(require, "packer")
+if not status_ok then
+	vim.notify("Failed to load module 'packer'", vim.log.levels.ERROR)
+	return
+end
 
-M.ensure_packer = function()
+local ensure_packer = function()
 	local install_path = vim.fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
 	if vim.fn.empty(vim.fn.glob(install_path)) > 0 then
 		vim.fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
@@ -10,7 +14,10 @@ M.ensure_packer = function()
 	return false
 end
 
-M.try_local = function(opts)
+local packer_bootstrap = ensure_packer()
+
+---@diagnostic disable-next-line: unused-local, unused-function
+local try_local = function(opts)
 	if type(opts) == "string" then
 		opts = { opts }
 	end
@@ -21,7 +28,7 @@ M.try_local = function(opts)
 	return opts
 end
 
-M.plugins = function(use)
+local plugins = function(use)
 	use("wbthomason/packer.nvim")
 
 	use("lewis6991/impatient.nvim")
@@ -30,7 +37,7 @@ M.plugins = function(use)
 		"goolord/alpha-nvim",
 		requires = { "kyazdani42/nvim-web-devicons" },
 		config = function()
-			require("tobyvin.plugins.alpha").setup()
+			require("tobyvin.plugins.alpha")
 		end,
 	})
 
@@ -38,35 +45,35 @@ M.plugins = function(use)
 		"rcarriga/nvim-notify",
 		event = "VimEnter",
 		config = function()
-			require("tobyvin.plugins.notify").setup()
+			require("tobyvin.plugins.notify")
 		end,
 	})
 
 	use({
 		"stevearc/dressing.nvim",
 		config = function()
-			require("tobyvin.plugins.dressing").setup()
+			require("tobyvin.plugins.dressing")
 		end,
 	})
 
 	use({
 		"ellisonleao/gruvbox.nvim",
 		config = function()
-			require("tobyvin.plugins.gruvbox").setup()
+			require("tobyvin.plugins.gruvbox")
 		end,
 	})
 
 	use({
 		"folke/tokyonight.nvim",
 		config = function()
-			require("tobyvin.plugins.tokyonight").setup()
+			require("tobyvin.plugins.tokyonight")
 		end,
 	})
 
 	use({
 		"Shatur/neovim-session-manager",
 		config = function()
-			require("tobyvin.plugins.session_manager").setup()
+			require("tobyvin.plugins.session_manager")
 		end,
 	})
 
@@ -79,7 +86,7 @@ M.plugins = function(use)
 			"jayp0521/mason-nvim-dap.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.mason").setup()
+			require("tobyvin.plugins.mason")
 		end,
 	})
 
@@ -89,7 +96,7 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.null-ls").setup()
+			require("tobyvin.plugins.null-ls")
 		end,
 	})
 
@@ -101,7 +108,7 @@ M.plugins = function(use)
 			"jose-elias-alvarez/null-ls.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.crates").setup()
+			require("tobyvin.plugins.crates")
 		end,
 	})
 
@@ -126,7 +133,7 @@ M.plugins = function(use)
 			"kdheepak/cmp-latex-symbols",
 		},
 		config = function()
-			require("tobyvin.plugins.cmp").setup()
+			require("tobyvin.plugins.cmp")
 		end,
 	})
 
@@ -134,7 +141,7 @@ M.plugins = function(use)
 		"petertriho/cmp-git",
 		requires = "nvim-lua/plenary.nvim",
 		config = function()
-			require("tobyvin.plugins.cmp-git").setup()
+			require("tobyvin.plugins.cmp-git")
 		end,
 	})
 
@@ -145,21 +152,21 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.cmp-npm").setup()
+			require("tobyvin.plugins.cmp-npm")
 		end,
 	})
 
 	use({
 		"onsails/lspkind-nvim",
 		config = function()
-			require("tobyvin.plugins.lspkind").setup()
+			require("tobyvin.plugins.lspkind")
 		end,
 	})
 
 	use({
 		"folke/neodev.nvim",
 		config = function()
-			require("tobyvin.plugins.neodev").setup()
+			require("tobyvin.plugins.neodev")
 		end,
 	})
 
@@ -170,7 +177,7 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.rust-tools").setup()
+			require("tobyvin.plugins.rust-tools")
 		end,
 	})
 
@@ -181,7 +188,7 @@ M.plugins = function(use)
 			"cmp-nvim-lsp",
 		},
 		config = function()
-			require("tobyvin.plugins.lspconfig").setup()
+			require("tobyvin.plugins.lspconfig")
 		end,
 	})
 
@@ -193,7 +200,7 @@ M.plugins = function(use)
 		},
 		ft = "qf",
 		config = function()
-			require("tobyvin.plugins.nvim-bqf").setup()
+			require("tobyvin.plugins.nvim-bqf")
 		end,
 	})
 
@@ -208,14 +215,14 @@ M.plugins = function(use)
 			"nvim-telescope/telescope-dap.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.telescope").setup()
+			require("tobyvin.plugins.telescope")
 		end,
 	})
 
 	use({
 		"gbprod/yanky.nvim",
 		config = function()
-			require("tobyvin.plugins.yanky").setup()
+			require("tobyvin.plugins.yanky")
 		end,
 	})
 
@@ -226,7 +233,7 @@ M.plugins = function(use)
 			"molleweide/LuaSnip-snippets.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.luasnip").setup()
+			require("tobyvin.plugins.luasnip")
 		end,
 	})
 
@@ -241,7 +248,7 @@ M.plugins = function(use)
 			"mfussenegger/nvim-ts-hint-textobject",
 		},
 		config = function()
-			require("tobyvin.plugins.treesitter").setup()
+			require("tobyvin.plugins.treesitter")
 		end,
 	})
 
@@ -250,7 +257,7 @@ M.plugins = function(use)
 	use({
 		"lukas-reineke/indent-blankline.nvim",
 		config = function()
-			require("tobyvin.plugins.indent_blankline").setup()
+			require("tobyvin.plugins.indent_blankline")
 		end,
 	})
 
@@ -268,14 +275,14 @@ M.plugins = function(use)
 			"SmiteshP/nvim-navic",
 		},
 		config = function()
-			require("tobyvin.plugins.lualine").setup()
+			require("tobyvin.plugins.lualine")
 		end,
 	})
 
 	use({
 		"j-hui/fidget.nvim",
 		config = function()
-			require("tobyvin.plugins.fidget").setup()
+			require("tobyvin.plugins.fidget")
 		end,
 	})
 
@@ -283,7 +290,7 @@ M.plugins = function(use)
 		"SmiteshP/nvim-navic",
 		requires = "onsails/lspkind-nvim",
 		config = function()
-			require("tobyvin.plugins.nvim-navic").setup()
+			require("tobyvin.plugins.nvim-navic")
 		end,
 	})
 
@@ -291,7 +298,7 @@ M.plugins = function(use)
 		"TimUntersberger/neogit",
 		requires = { "sindrets/diffview.nvim" },
 		config = function()
-			require("tobyvin.plugins.neogit").setup()
+			require("tobyvin.plugins.neogit")
 		end,
 	})
 
@@ -302,14 +309,14 @@ M.plugins = function(use)
 			"kyazdani42/nvim-web-devicons",
 		},
 		config = function()
-			require("tobyvin.plugins.diffview").setup()
+			require("tobyvin.plugins.diffview")
 		end,
 	})
 
 	use({
 		"akinsho/git-conflict.nvim",
 		config = function()
-			require("tobyvin.plugins.git-conflict").setup()
+			require("tobyvin.plugins.git-conflict")
 		end,
 	})
 
@@ -317,7 +324,7 @@ M.plugins = function(use)
 		"lewis6991/gitsigns.nvim",
 		requires = "nvim-lua/plenary.nvim",
 		config = function()
-			require("tobyvin.plugins.gitsigns").setup()
+			require("tobyvin.plugins.gitsigns")
 		end,
 	})
 
@@ -331,7 +338,7 @@ M.plugins = function(use)
 			"nvim-lua/plenary.nvim",
 		},
 		config = function()
-			require("tobyvin.plugins.undotree").setup()
+			require("tobyvin.plugins.undotree")
 		end,
 	})
 
@@ -343,7 +350,7 @@ M.plugins = function(use)
 			"leoluz/nvim-dap-go",
 		},
 		config = function()
-			require("tobyvin.plugins.dap").setup()
+			require("tobyvin.plugins.dap")
 		end,
 	})
 
@@ -354,31 +361,21 @@ M.plugins = function(use)
 			"nvim-treesitter/nvim-treesitter",
 		},
 		config = function()
-			require("tobyvin.plugins.nvim-dap-virtual-text").setup()
-		end,
-	})
-
-	use({
-		"rcarriga/nvim-dap-ui",
-		requires = {
-			"mfussenegger/nvim-dap",
-		},
-		config = function()
-			require("tobyvin.plugins.dapui").setup()
+			require("tobyvin.plugins.nvim-dap-virtual-text")
 		end,
 	})
 
 	use({
 		"ur4ltz/surround.nvim",
 		config = function()
-			require("tobyvin.plugins.surround").setup()
+			require("tobyvin.plugins.surround")
 		end,
 	})
 
 	use({
 		"numToStr/Comment.nvim",
 		config = function()
-			require("tobyvin.plugins.comment").setup()
+			require("tobyvin.plugins.comment")
 		end,
 	})
 
@@ -401,37 +398,26 @@ M.plugins = function(use)
 	})
 end
 
-M.setup = function()
-	local packer_bootstrap = M.ensure_packer()
-	local status_ok, packer = pcall(require, "packer")
-	if not status_ok then
-		vim.notify("Failed to load module 'packer'", vim.log.levels.ERROR)
-		return
-	end
+vim.keymap.set("n", "<leader>pc", packer.compile, { desc = "compile" })
+vim.keymap.set("n", "<leader>pC", packer.clean, { desc = "clean" })
+vim.keymap.set("n", "<leader>pi", packer.install, { desc = "install" })
+vim.keymap.set("n", "<leader>pp", packer.profile_output, { desc = "profile" })
+vim.keymap.set("n", "<leader>ps", packer.sync, { desc = "sync" })
+vim.keymap.set("n", "<leader>pu", packer.update, { desc = "update" })
 
-	vim.keymap.set("n", "<leader>pc", packer.compile, { desc = "compile" })
-	vim.keymap.set("n", "<leader>pC", packer.clean, { desc = "clean" })
-	vim.keymap.set("n", "<leader>pi", packer.install, { desc = "install" })
-	vim.keymap.set("n", "<leader>pp", packer.profile_output, { desc = "profile" })
-	vim.keymap.set("n", "<leader>ps", packer.sync, { desc = "sync" })
-	vim.keymap.set("n", "<leader>pu", packer.update, { desc = "update" })
-
-	return packer.startup({
-		function(...)
-			M.plugins(...)
-			if packer_bootstrap then
-				packer.sync()
-			end
-		end,
-		config = {
-			display = {
-				open_fn = function()
-					return require("packer.util").float({ border = "single" })
-				end,
-			},
-			autoremove = true,
+return packer.startup({
+	function(...)
+		plugins(...)
+		if packer_bootstrap then
+			packer.sync()
+		end
+	end,
+	config = {
+		display = {
+			open_fn = function()
+				return require("packer.util").float({ border = "single" })
+			end,
 		},
-	})
-end
-
-return M
+		autoremove = true,
+	},
+})

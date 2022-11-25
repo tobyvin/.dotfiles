@@ -1,5 +1,10 @@
+local status_ok, gitsigns = pcall(require, "gitsigns")
+if not status_ok then
+	vim.notify("Failed to load module 'gitsigns'", vim.log.levels.ERROR)
+	return
+end
+
 local utils = require("tobyvin.utils")
-local M = {}
 
 local with_range = function(callback)
 	return function()
@@ -8,14 +13,14 @@ local with_range = function(callback)
 end
 
 local show_blameline = function()
-	require("gitsigns").blame_line({ full = true })
+	gitsigns.blame_line({ full = true })
 end
 
 local toggle_blameline = function()
-	require("gitsigns").toggle_current_line_blame()
+	gitsigns.toggle_current_line_blame()
 end
+
 local next_hunk = function()
-	local gitsigns = package.loaded.gitsigns
 	if vim.wo.diff then
 		return "]c"
 	end
@@ -26,7 +31,6 @@ local next_hunk = function()
 end
 
 local prev_hunk = function()
-	local gitsigns = package.loaded.gitsigns
 	if vim.wo.diff then
 		return "[c"
 	end
@@ -36,8 +40,7 @@ local prev_hunk = function()
 	return "<Ignore>"
 end
 
-M.on_attach = function(bufnr)
-	local gitsigns = package.loaded.gitsigns
+local on_attach = function(bufnr)
 	vim.keymap.set("n", "]c", next_hunk, { expr = true, desc = "next hunk", buffer = bufnr })
 	vim.keymap.set("n", "[c", prev_hunk, { expr = true, desc = "previous hunk", buffer = bufnr })
 
@@ -62,24 +65,14 @@ M.on_attach = function(bufnr)
 	vim.api.nvim_exec_autocmds("User", { pattern = "GitAttach", data = { buf = bufnr } })
 end
 
-M.setup = function()
-	local status_ok, gitsigns = pcall(require, "gitsigns")
-	if not status_ok then
-		vim.notify("Failed to load module 'gitsigns'", vim.log.levels.ERROR)
-		return
-	end
-
-	gitsigns.setup({
-		signs = {
-			add = { text = "▎" },
-			change = { text = "▎" },
-			delete = { text = "契" },
-			topdelete = { text = "契" },
-			changedelete = { text = "▎" },
-		},
-		preview_config = { border = "single" },
-		on_attach = M.on_attach,
-	})
-end
-
-return M
+gitsigns.setup({
+	signs = {
+		add = { text = "▎" },
+		change = { text = "▎" },
+		delete = { text = "契" },
+		topdelete = { text = "契" },
+		changedelete = { text = "▎" },
+	},
+	preview_config = { border = "single" },
+	on_attach = on_attach,
+})

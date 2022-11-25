@@ -1,4 +1,8 @@
-local M = {}
+local status_ok, diffview = pcall(require, "diffview")
+if not status_ok then
+	vim.notify("Failed to load module 'diffview'", vim.log.levels.ERROR)
+	return
+end
 
 local file_history = function()
 	require("diffview").file_history(nil, vim.fn.bufname())
@@ -14,19 +18,9 @@ local selection_history = function()
 	require("diffview").file_history({ first, last })
 end
 
-M.setup = function()
-	local status_ok, diffview = pcall(require, "diffview")
-	if not status_ok then
-		vim.notify("Failed to load module 'diffview'", vim.log.levels.ERROR)
-		return
-	end
+diffview.setup()
 
-	diffview.setup()
-
-	vim.keymap.set("n", "<leader>gd", diffview.open, { desc = "diffview" })
-	vim.keymap.set("n", "<leader>gh", file_history, { desc = "file history" })
-	vim.keymap.set("n", "<leader>gH", workspace_history, { desc = "workspace history" })
-	vim.keymap.set("v", "<leader>gh", selection_history, { desc = "selection history" })
-end
-
-return M
+vim.keymap.set("n", "<leader>gd", diffview.open, { desc = "diffview" })
+vim.keymap.set("n", "<leader>gh", file_history, { desc = "file history" })
+vim.keymap.set("n", "<leader>gH", workspace_history, { desc = "workspace history" })
+vim.keymap.set("v", "<leader>gh", selection_history, { desc = "selection history" })
