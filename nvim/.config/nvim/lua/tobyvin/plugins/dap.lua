@@ -59,7 +59,6 @@ M.setup = function()
 
 	dap.defaults.fallback.focus_terminal = true
 	dap.defaults.fallback.terminal_win_cmd = "15split new"
-	dap.set_exception_breakpoints("default")
 
 	M.events.setup()
 	M.hover.setup()
