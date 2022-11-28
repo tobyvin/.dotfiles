@@ -2,25 +2,17 @@
 # shellcheck disable=2016,2089
 
 if [ "$#" -eq 0 ]; then
-	PROJECT_DIR="$HOME/src"
-	DOCKER_DIR="$HOME/dkr"
-	SESSION_DIR="$XDG_DATA_HOME/nvim/sessions"
 	PREVIEW_CMD='sel={}; less ${sel:-{q}} 2>/dev/null'
 
-	ATTACHED=$(tmux display -p '#{session_path}')
 	lines=$(tmux display -p "#{pane_height}")
 	columns=$(tmux display -p "#{pane_width}")
 	WIDTH=$([ "$columns" -gt "120" ] && printf %s "120" || printf %s "90%")
 	HEIGHT=$([ "$lines" -gt "40" ] && printf %s "40" || printf %s "90%")
 
 	# shellcheck disable=2046
-	set -- $({
-		printf %s\\n "$HOME/.dotfiles"
-		fd . "$PROJECT_DIR" "$DOCKER_DIR" --type=d --max-depth=1
-		fd . "$SESSION_DIR" --type=f --max-depth=1 | sed "s|^$SESSION_DIR/||" | sed 's#%%\|__#/#g'
-	} | sed 's|/$||' | sed "\|^$HOME\$|d" | sed "\|^$ATTACHED\$|d" | sort -u |
-		timestamp.sh --type=directory --git --sessions="$SESSION_DIR" --format="{}:{1}" | sort -r | cut -d':' -f2 |
-		fzf-tmux -p "$WIDTH,$HEIGHT" -- --multi --print-query -d/ --with-nth -1 --preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
+	set -- $(projectr ~/src ~/.dotfiles --git | sed "\|^$(tmux display -p '#{session_path}')\$|d" |
+		fzf-tmux -p "$WIDTH,$HEIGHT" -- --tac --multi --print-query -d/ --with-nth -1 \
+			--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ') && [ $# -gt 1 ] && shift
 fi
 
