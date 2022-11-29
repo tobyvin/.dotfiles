@@ -44,7 +44,7 @@ configs.rust_analyzer = {
 	settings = {
 		["rust-analyzer"] = {
 			cargo = {
-				allFeatures = true,
+				features = "all",
 			},
 			checkOnSave = {
 				command = "clippy",
