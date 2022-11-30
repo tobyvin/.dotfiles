@@ -20,41 +20,45 @@ M.format_string = function(str, position)
 	return string.format(fmt, str)
 end
 
---- @param sc string
---- @param txt string
---- @param keybind string? optional
---- @param keybind_opts table? optional
-M.button = function(sc, txt, keybind, keybind_opts)
-	local sc_ = sc:gsub("%s", "")
-
-	local opts = {
-		position = M.position,
-		shortcut = "[" .. sc .. "] ",
-		cursor = M.width - 3,
-		width = M.width,
-		align_shortcut = "right",
-		hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
-		shrink_margin = false,
-	}
-
-	if keybind then
-		keybind_opts = vim.F.if_nil(keybind_opts, {})
-		keybind_opts.desc = vim.F.if_nil(keybind_opts.desc, txt)
-		opts.keymap = { "n", sc_, keybind, keybind_opts }
+M.find_keymap = function(lhs)
+	local keymaps = vim.api.nvim_get_keymap("n")
+	lhs = lhs:gsub("<leader>", " ")
+	for _, keymap in ipairs(keymaps) do
+		if keymap.lhs == lhs then
+			return keymap
+		end
 	end
+end
 
-	local function on_press()
-		local key = vim.api.nvim_replace_termcodes(keybind .. "<Ignore>", true, false, true)
-		---@diagnostic disable-next-line: param-type-mismatch
-		vim.api.nvim_feedkeys(key, "t", false)
-	end
-
-	return {
+M.button = function(sc, desc)
+	local button = {
 		type = "button",
-		val = txt,
-		on_press = on_press,
-		opts = opts,
+		val = desc,
+		opts = {
+			position = M.position,
+			cursor = M.width - 2,
+			width = M.width,
+			align_shortcut = "right",
+			hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
+			shrink_margin = false,
+		},
 	}
+
+	local keymap = M.find_keymap(sc)
+	if keymap then
+		button.val = vim.F.if_nil(desc, keymap.desc)
+		button.opts.shortcut = "[" .. sc .. "]"
+		button.opts.on_press = keymap.callback
+	else
+		button.val = vim.F.if_nil(desc, sc)
+		button.opts.shortcut = "[:" .. sc .. "]"
+		button.opts.hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 2 }, { "Special", #sc + 2, #sc + 3 } }
+		button.opts.on_press = function()
+			vim.cmd(sc)
+		end
+	end
+
+	return button
 end
 
 M.file_button = function(filename, sc)
@@ -70,9 +74,27 @@ M.file_button = function(filename, sc)
 	if fn_start ~= nil then
 		table.insert(hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt })
 	end
-	local button = M.button(sc, ico_txt .. short_fn, "<Cmd>e " .. filename .. " <CR>", { desc = "oldfile_" .. sc })
-	button.opts.hl = hl
-	button.opts.cursor = M.width - 1
+
+	local keybind = "<Cmd>e " .. filename .. " <CR>"
+	local button = {
+		type = "button",
+		val = ico_txt .. short_fn,
+		on_press = function()
+			local key = vim.api.nvim_replace_termcodes(keybind .. "<Ignore>", true, false, true)
+			vim.api.nvim_feedkeys(key, "t", false)
+		end,
+		opts = {
+			position = M.position,
+			shortcut = "[" .. sc .. "]",
+			cursor = M.width,
+			width = M.width,
+			align_shortcut = "right",
+			hl = hl,
+			hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
+			shrink_margin = false,
+			keymap = { "n", sc:gsub("%s", ""), keybind, { desc = "oldfile_" .. sc } },
+		},
+	}
 	return button
 end
 
@@ -107,17 +129,15 @@ end
 M.actions_cache = nil
 M.actions = function()
 	if M.actions_cache == nil then
-		local builtins = require("telescope.builtin")
-		local neogit = require("neogit")
 		M.actions_cache = {
 			{
 				type = "group",
 				val = {
-					M.button("e", "new", "<cmd>enew<cr>"),
-					M.button("f", "find", builtins.find_files),
-					M.button("g", "git", neogit.open),
-					M.button("s", "session", "<cmd>SessionManager load_current_dir_session<cr>"),
-					M.button("q", "quit", "<cmd>qa<cr>"),
+					M.button("<leader>ff"),
+					M.button("<leader>gg"),
+					M.button("<leader>sl"),
+					M.button("quit", "quit"),
+					M.button("enew", "edit new"),
 				},
 			},
 		}
