@@ -8,46 +8,6 @@ local utils = require("tobyvin.utils")
 local lsp = require("tobyvin.lsp")
 local dap = require("tobyvin.plugins.dap")
 
-local function parse_lines(t)
-	local ret = {}
-
-	local name = t.name
-	local text = "// Recursive expansion of the " .. name .. " macro"
-	table.insert(ret, "// " .. string.rep("=", string.len(text) - 3))
-	table.insert(ret, text)
-	table.insert(ret, "// " .. string.rep("=", string.len(text) - 3))
-	table.insert(ret, "")
-
-	local expansion = t.expansion
-	for string in string.gmatch(expansion, "([^\n]+)") do
-		table.insert(ret, string)
-	end
-
-	return ret
-end
-
-local handler = function(_, result)
-	if result == nil then
-		vim.api.nvim_out_write("No macro under cursor!\n")
-		return
-	end
-
-	local contents = parse_lines(result)
-	local opts = {
-		focus_id = "expand_macro",
-		close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-		border = "single",
-		scope = "cursor",
-	}
-	vim.lsp.util.open_floating_preview(contents, "rust", opts)
-end
-
-require("rust-tools.expand_macro").expand_macro = function()
-	---@diagnostic disable-next-line: missing-parameter
-	local params = vim.lsp.util.make_position_params()
-	rust_tools.utils.request(0, "rust-analyzer/expandMacro", params, handler)
-end
-
 rust_tools.setup({
 	tools = {
 		hover_actions = {
