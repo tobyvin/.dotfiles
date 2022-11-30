@@ -6,25 +6,7 @@ local configs = {
 	cssls = {},
 	cssmodules_ls = {},
 	stylelint_lsp = {},
-	ccls = {},
-}
-
-configs.pylsp = {
-	settings = {
-		pylsp = {
-			plugins = {
-				autopep8 = {
-					enabled = false,
-				},
-				yapf = {
-					enabled = false,
-				},
-				pylint = {
-					enabled = true,
-				},
-			},
-		},
-	},
+  clangd = {},
 }
 
 configs.gopls = {

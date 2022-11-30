@@ -12,7 +12,7 @@ local select_executable = function(cwd)
 
 	local command, args
 	for finder, finder_args in pairs(finders) do
-		if vim.fn.executable("fdfind") == 1 then
+		if vim.fn.executable(finder) == 1 then
 			command = finder
 			args = finder_args
 		end
@@ -20,6 +20,7 @@ local select_executable = function(cwd)
 
 	if command == nil then
 		vim.notify("Failed to locate finder tool", vim.log.levels.ERROR, { title = "[dap.configs] select_executable" })
+		return
 	end
 
 	local items = Job:new({
@@ -57,17 +58,39 @@ M.lua = {
 }
 
 M.c = {
-	name = "Launch file",
-	type = "codelldb",
-	request = "launch",
-	program = select_executable,
-	cwd = "${workspaceFolder}",
-	stopOnEntry = false,
-	runInTerminal = false,
+	{
+		name = "Launch c file",
+		type = "codelldb",
+		request = "launch",
+		program = select_executable,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
+		runInTerminal = false,
+	},
 }
 
-M.cpp = M.c
+M.cpp = {
+	{
+		name = "Launch c++ file",
+		type = "codelldb",
+		request = "launch",
+		program = select_executable,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
+		runInTerminal = false,
+	},
+}
 
-M.rust = M.c
+M.rust = {
+	{
+		name = "Launch rust file",
+		type = "codelldb",
+		request = "launch",
+		program = select_executable,
+		cwd = "${workspaceFolder}",
+		stopOnEntry = false,
+		runInTerminal = false,
+	},
+}
 
 return M

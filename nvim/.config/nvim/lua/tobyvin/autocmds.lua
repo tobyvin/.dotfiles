@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("tobyvin_tabstop", { clear = true }),
-	pattern = { "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
+	pattern = { "c", "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
 	callback = function(args)
 		vim.bo[args.buf].tabstop = 2
 	end,

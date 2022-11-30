@@ -65,7 +65,7 @@ M.hover.setup()
 
 for name, config in pairs(M.configs) do
 	if dap.configurations[name] == nil then
-		dap.configurations[name] = make_config(config)
+		dap.configurations[name] = config
 	end
 end
 
