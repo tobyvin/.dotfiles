@@ -6,7 +6,8 @@ local configs = {
 	cssls = {},
 	cssmodules_ls = {},
 	stylelint_lsp = {},
-  clangd = {},
+	clangd = {},
+	pylsp = {},
 }
 
 configs.gopls = {
