@@ -38,7 +38,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = bufnr })
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = bufnr })
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "declaration", buffer = bufnr })
-		vim.keymap.set("n", "gt", vim.lsp.buf.type_definition, { desc = "type definition", buffer = bufnr })
+		vim.keymap.set("n", "go", vim.lsp.buf.type_definition, { desc = "type definition", buffer = bufnr })
 		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "implementation", buffer = bufnr })
 		vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "references", buffer = bufnr })
 

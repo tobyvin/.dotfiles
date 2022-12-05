@@ -29,5 +29,5 @@ vim.api.nvim_create_autocmd("CursorHold", {
 
 vim.keymap.set("n", "]d", utils.diagnostic.goto_next, { desc = "next diagnostic" })
 vim.keymap.set("n", "[d", utils.diagnostic.goto_prev, { desc = "prev diagnostic" })
-vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "open diagnostic float" })
-vim.keymap.set("n", "<leader>E", vim.diagnostic.setqflist, { desc = "qf diagnostic" })
+vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "open diagnostic float" })
+vim.keymap.set("n", "gL", vim.diagnostic.setqflist, { desc = "qf diagnostic" })
