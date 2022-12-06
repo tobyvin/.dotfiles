@@ -1,68 +1,8 @@
----@diagnostic disable: missing-parameter
 local Icons = require("nvim-web-devicons")
 local utils = require("tobyvin.utils")
-local M = {
-	position = "center",
-	width = 60,
-}
 
---- @param str string
---- @param position '"left"' | '"right"' | '"center"'
-M.format_string = function(str, position)
-	local fmt
-	if position == "right" then
-		fmt = "%+" .. M.width .. "s"
-	elseif position == "center" then
-		fmt = "%+" .. math.ceil(M.width / 2) .. "s"
-	else
-		fmt = "%-" .. M.width .. "s"
-	end
-	return string.format(fmt, str)
-end
-
-M.find_keymap = function(lhs)
-	local keymaps = vim.api.nvim_get_keymap("n")
-	lhs = lhs:gsub("<leader>", " ")
-	for _, keymap in ipairs(keymaps) do
-		if keymap.lhs == lhs then
-			return keymap
-		end
-	end
-end
-
-M.button = function(sc, desc)
-	local button = {
-		type = "button",
-		val = desc,
-		opts = {
-			position = M.position,
-			cursor = M.width - 2,
-			width = M.width,
-			align_shortcut = "right",
-			hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
-			shrink_margin = false,
-		},
-	}
-
-	local keymap = M.find_keymap(sc)
-	if keymap then
-		button.val = vim.F.if_nil(desc, keymap.desc)
-		button.opts.shortcut = "[" .. sc .. "]"
-		button.opts.on_press = keymap.callback
-	else
-		button.val = vim.F.if_nil(desc, sc)
-		button.opts.shortcut = "[:" .. sc .. "]"
-		button.opts.hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 2 }, { "Special", #sc + 2, #sc + 3 } }
-		button.opts.on_press = function()
-			vim.cmd(sc)
-		end
-	end
-
-	return button
-end
-
-M.file_button = function(filename, sc)
-	local short_fn = utils.fs.shorten_path(filename, M.width)
+local file_button = function(filename, sc)
+	local short_fn = utils.fs.shorten_path(filename, 60)
 	local hl = {}
 
 	local filetype, _ = vim.filetype.match({ filename = filename })
@@ -84,10 +24,10 @@ M.file_button = function(filename, sc)
 			vim.api.nvim_feedkeys(key, "t", false)
 		end,
 		opts = {
-			position = M.position,
+			position = "center",
 			shortcut = "[" .. sc .. "]",
-			cursor = M.width,
-			width = M.width,
+			cursor = 60,
+			width = 60,
 			align_shortcut = "right",
 			hl = hl,
 			hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
@@ -98,7 +38,7 @@ M.file_button = function(filename, sc)
 	return button
 end
 
-M.mru_filter = function(filename)
+local mru_filter = function(filename)
 	local ignored_ft = { "gitcommit" }
 	local cwd = vim.fn.getcwd()
 	local filetype, _ = vim.filetype.match({ filename = filename })
@@ -110,39 +50,20 @@ M.mru_filter = function(filename)
 	return not ignored and (vim.fn.filereadable(filename) == 1) and vim.startswith(filename, cwd)
 end
 
-M.mru_cache = nil
-M.mru = function()
-	if M.mru_cache == nil then
-		local oldfiles = { unpack(vim.tbl_filter(M.mru_filter, vim.v.oldfiles), 1, 10) }
+local mru_cache = nil
+local get_mru = function()
+	if mru_cache == nil then
+		local oldfiles = { unpack(vim.tbl_filter(mru_filter, vim.v.oldfiles), 1, 20) }
 		local tbl = {}
 		for i, filename in ipairs(oldfiles) do
-			tbl[i] = M.file_button(filename, tostring(i % 10))
+			tbl[i] = file_button(filename, tostring(i % 10))
 		end
-		M.mru_cache = { {
+		mru_cache = { {
 			type = "group",
 			val = tbl,
 		} }
 	end
-	return M.mru_cache
-end
-
-M.actions_cache = nil
-M.actions = function()
-	if M.actions_cache == nil then
-		M.actions_cache = {
-			{
-				type = "group",
-				val = {
-					M.button("<leader>ff"),
-					M.button("<leader>gg"),
-					M.button("<leader>sl"),
-					M.button("quit", "quit"),
-					M.button("enew", "edit new"),
-				},
-			},
-		}
-	end
-	return M.actions_cache
+	return mru_cache
 end
 
 local status_ok, alpha = pcall(require, "alpha")
@@ -168,99 +89,51 @@ end
 
 local fortune = require("alpha.fortune")
 
-local logo = {
-	type = "text",
-	val = {
-		"                                                    ",
-		" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-		" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-		" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-		" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-		" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-		" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-	},
-	opts = {
-		position = M.position,
-		hl = "DevIconVim",
-	},
-}
-
 local function info_value()
 	local total_plugins = #vim.tbl_keys(packer_plugins)
 	local v = vim.F.if_nil(vim.version(), {})
 	return string.format("VIM: v%d.%d.%d PLUGINS: %d", v.major, v.minor, v.patch, total_plugins)
 end
 
-local info = {
-	type = "text",
-	val = info_value(),
-	opts = {
-		hl = "DevIconVim",
-		position = M.position,
-	},
-}
-
-local message = {
-	type = "text",
-	val = fortune({ max_width = M.width }),
-	opts = {
-		position = M.position,
-		hl = "Statement",
-	},
-}
-
-local header = {
-	type = "group",
-	val = {
-		logo,
-		info,
-		message,
-	},
-}
-
-local mru = {
-	type = "group",
-	val = {
-		{
-			type = "text",
-			val = M.format_string("MRU"),
-			opts = {
-				hl = "String",
-				position = M.position,
-			},
-		},
-		{
-			type = "group",
-			val = M.mru,
-		},
-	},
-}
-
-local actions = {
-	type = "group",
-	val = {
-		{
-			type = "text",
-			val = M.format_string("CMD"),
-			opts = {
-				hl = "String",
-				position = M.position,
-			},
-		},
-		{
-			type = "group",
-			val = M.actions,
-		},
-	},
-}
-
 local config = {
 	layout = {
-		header,
+		{
+			type = "text",
+			val = {
+				"                                                    ",
+				" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+				" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+				" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+				" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+				" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+				" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+			},
+			opts = {
+				position = "center",
+				hl = "DevIconVim",
+			},
+		},
+		{
+			type = "text",
+			val = info_value(),
+			opts = {
+				hl = "DevIconVim",
+				position = "center",
+			},
+		},
+		{
+			type = "text",
+			val = fortune({ max_width = 60 }),
+			opts = {
+				position = "center",
+				hl = "Statement",
+			},
+		},
 		{ type = "padding", val = 1 },
-		mru,
-		{ type = "padding", val = 1 },
-		actions,
+		{
+			type = "group",
+			val = get_mru,
+		},
 	},
 }
 
@@ -277,5 +150,3 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 	desc = "Run Alpha when last buffer closed",
 })
-
-return M
