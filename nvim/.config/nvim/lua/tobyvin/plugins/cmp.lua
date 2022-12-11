@@ -86,6 +86,11 @@ cmp.setup.filetype({
 	"markdown",
 }, {
 	sources = {
+		{ name = "nvim_lsp", group_index = 1 },
+		{ name = "nvim_lsp_signature_help", group_index = 1 },
+		{ name = "luasnip", group_index = 1 },
+		{ name = "path", group_index = 1 },
+		{ name = "dap", group_index = 1 },
 		{ name = "buffer", keyword_length = 3, group_index = 2 },
 	},
 })
