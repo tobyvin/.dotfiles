@@ -12,8 +12,8 @@ local definition_handler = function(err, result, ctx, config)
 end
 
 local show_message = function(_, result, ctx)
-	vim.notify(result.message, 5 - result.type, {
-		title = "[LSP] " .. vim.lsp.get_client_by_id(ctx.client_id),
+	vim.notify(string.format("%s", result.message), 5 - result.type, {
+		title = string.format("[LSP] %s", vim.lsp.get_client_by_id(ctx.client_id)),
 	})
 end
 

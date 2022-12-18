@@ -4,12 +4,19 @@ if not status_ok then
 	return
 end
 
+local global_instance, _ = notify.instance({
+	max_width = 100,
+	on_open = function(win)
+		vim.api.nvim_win_set_option(win, "wrap", true)
+	end,
+})
+
 vim.notify.use_console = false
 vim.api.nvim_create_autocmd("User", {
 	group = vim.api.nvim_create_augroup("tobyvin_nvim-notify", { clear = true }),
 	pattern = "Notify",
 	callback = function(args)
-		notify.notify(unpack(args.data))
+		global_instance.notify(unpack(args.data))
 	end,
 })
 
