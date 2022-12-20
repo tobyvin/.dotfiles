@@ -1,15 +1,18 @@
-local status_ok, fidget = pcall(require, "fidget")
-if not status_ok then
-	vim.notify("Failed to load module 'fidget'", vim.log.levels.ERROR)
-	return
+local M = {
+	"j-hui/fidget.nvim",
+}
+
+function M.config()
+	local fidget = require("fidget")
+	local utils = require("tobyvin.utils")
+
+	fidget.setup({
+		text = {
+			spinner = utils.status.signs.spinner.text,
+			done = vim.trim(utils.status.signs.completed.text),
+		},
+		window = { blend = 0 },
+	})
 end
 
-local utils = require("tobyvin.utils")
-
-fidget.setup({
-	text = {
-		spinner = utils.status.signs.spinner.text,
-		done = vim.trim(utils.status.signs.completed.text),
-	},
-	window = { blend = 0 },
-})
+return M

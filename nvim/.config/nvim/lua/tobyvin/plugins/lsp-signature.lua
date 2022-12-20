@@ -1,13 +1,15 @@
-local M = {}
+local M = {
+	"ray-x/lsp_signature.nvim",
+}
 
-M.setup = function()
+M.config = function()
 	local status_ok, lsp_signature = pcall(require, "lsp_signature")
 	if not status_ok then
 		return
 	end
 
 	vim.api.nvim_create_autocmd("LspAttach", {
-    group = vim.api.nvim_create_augroup("tobyvin_lsp_signature", { clear = true }),
+		group = vim.api.nvim_create_augroup("tobyvin_lsp_signature", { clear = true }),
 		desc = "setup lsp_signature",
 		callback = function(args)
 			local bufnr = args.buf

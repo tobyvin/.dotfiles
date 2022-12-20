@@ -1,13 +1,17 @@
-local status_ok, tokyonight = pcall(require, "tokyonight")
-if not status_ok then
-	vim.notify("Failed to load module 'tokyonight'", vim.log.levels.ERROR)
-	return
+local M = {
+	"folke/tokyonight.nvim",
+}
+
+function M.config()
+	local tokyonight = require("tokyonight")
+
+	tokyonight.setup({
+		styles = {
+			sidebars = "transparent",
+			floats = "transparent",
+		},
+		transparent = true,
+	})
 end
 
-tokyonight.setup({
-	styles = {
-		sidebars = "transparent",
-		floats = "transparent",
-	},
-	transparent = true,
-})
+return M

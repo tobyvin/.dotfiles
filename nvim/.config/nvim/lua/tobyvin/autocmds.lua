@@ -1,5 +1,3 @@
-local Path = require("plenary").path
-
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = vim.api.nvim_create_augroup("tobyvin_hl", { clear = true }),
 	pattern = "*",
@@ -12,7 +10,12 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = vim.api.nvim_create_augroup("tobyvin_mkdir", { clear = true }),
 	callback = function(args)
-		local parent = Path:new(args.file):parent()
+		local status_ok, plenary = pcall(require, "plenary")
+		if not status_ok then
+			return
+		end
+
+		local parent = plenary.path:new(args.file):parent()
 		local prompt = string.format("%s does not exist. Create it?", parent:make_relative())
 		if not parent:is_dir() and vim.fn.confirm(prompt, "&Yes\n&No") == 1 then
 			parent:mkdir()
