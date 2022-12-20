@@ -44,13 +44,13 @@ bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 bindkey -M vicmd '^[q' push-input
 
-alias ls="ls --color=tty"
-alias grep='grep --color'
+alias ls="ls --color=auto"
+alias grep='grep --color=auto'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
 alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
 alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
-alias unlock='echo "" | gpg --clearsign --verbose && ssh -T git@github.com'
+alias unlock='echo "" | gpg --clearsign 1>/dev/null && ssh localhost -- : 1>/dev/null'
 
 SHELDON_PROFILE="$(uname -r 2>/dev/null | rev | cut -d- -f1 | rev)"
 export SHELDON_PROFILE

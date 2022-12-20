@@ -14,10 +14,13 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u "$USER")}"
-EDITOR="$(command -v nvim 2>/dev/null || command -v vim 2>/dev/null || command -v vi)"
-export EDITOR
-BROWSER="$(command -v firefox || command -v chromium 2>/dev/null)"
-export BROWSER
+
+export BASE16_DEFAULT_THEME="gruvbox-dark-hard"
+LS_COLORS="$(vivid generate $BASE16_DEFAULT_THEME 2>/dev/null)"
+export LS_COLORS
+
+export EDITOR="nvim"
+export BROWSER="firefox"
 export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
@@ -25,7 +28,6 @@ export LESS="--RAW-CONTROL-CHARS --quit-if-one-screen --mouse"
 export LESSOPEN="|lesspipe.sh %s"
 export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
 export WGETRC="$XDG_CONFIG_HOME/wgetrc"
-export BASE16_DEFAULT_THEME="gruvbox-dark-hard"
 export PASSWORD_STORE_DIR="$HOME/.password-store"
 export PASSWORD_STORE_ENABLE_EXTENSIONS=true
 export ZK_NOTEBOOK_DIR="$HOME/notebook"
