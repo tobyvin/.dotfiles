@@ -15,7 +15,14 @@ end
 
 setmetatable(log, {
 	__call = function(t, m, l, o)
-		local msg = m
+		local msg
+
+		if type(m) == "table" then
+			msg = table.concat(msg, "\n")
+		else
+			msg = m
+		end
+
 		if o and o.title then
 			msg = string.format("%s: %s", o.title, msg)
 		end
