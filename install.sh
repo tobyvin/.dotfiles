@@ -163,8 +163,9 @@ stow $verbose_args $simulate $@
 
 if $nvim; then
 	need nvim
-	# Update Packer plugins
-	nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-	# Update Mason packages
+	# Update plugins
+	nvim --headless "+Lazy! sync" +qa
+
+	# Update LSP servers
 	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
 fi
