@@ -1,22 +1,22 @@
 return {
 	"nvim-lua/plenary.nvim",
-	"ThePrimeagen/harpoon",
-	"norcalli/nvim-colorizer.lua",
-	"b0o/SchemaStore.nvim",
 	{
-		"nacro90/numb.nvim",
-		config = true,
+		"norcalli/nvim-colorizer.lua",
+		event = "BufReadPre",
 	},
 	{
 		"tiagovla/scope.nvim",
+		event = "VeryLazy",
 		config = true,
 	},
 	{
 		"lukas-reineke/virt-column.nvim",
+		event = "VeryLazy",
 		config = true,
 	},
 	{
 		"petertriho/cmp-git",
+		event = "VeryLazy",
 		dependencies = { "nvim-lua/plenary.nvim" },
 		config = true,
 	},
@@ -33,11 +33,23 @@ return {
 	},
 	{
 		"ur4ltz/surround.nvim",
+		event = "VeryLazy",
 		config = true,
 	},
 	{
 		"numToStr/Comment.nvim",
 		event = "VeryLazy",
 		config = true,
+	},
+	{
+		"akinsho/git-conflict.nvim",
+		event = "BufReadPre",
+		config = {
+			disable_diagnostics = true,
+			highlights = {
+				incoming = "diffText",
+				current = "diffAdd",
+			},
+		},
 	},
 }

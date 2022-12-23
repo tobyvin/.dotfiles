@@ -1,20 +1,19 @@
 local M = {
 	"TimUntersberger/neogit",
 	dependencies = { "sindrets/diffview.nvim" },
-}
-
-function M.config()
-	local neogit = require("neogit")
-
-	neogit.setup({
+	config = {
 		disable_commit_confirmation = true,
 		disable_signs = true,
 		integrations = {
 			diffview = true,
 		},
-	})
+	},
+}
 
-	vim.keymap.set("n", "<leader>gg", neogit.open, { desc = "neogit" })
+function M.init()
+	vim.keymap.set("n", "<leader>gg", function()
+		require("neogit").open()
+	end, { desc = "neogit" })
 end
 
 return M

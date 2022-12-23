@@ -1,14 +1,19 @@
 local M = {
 	"neovim/nvim-lspconfig",
+	event = "BufReadPre",
 	dependencies = {
 		"folke/neodev.nvim",
 		"hrsh7th/cmp-nvim-lsp",
+		"b0o/SchemaStore.nvim",
 	},
 }
 
 function M.config()
 	local lspconfig = require("lspconfig")
-	local lsp = require("tobyvin.lsp")
+	local configs = require("tobyvin.lsp.configs")
+
+	require("neodev")
+	require("mason")
 
 	require("lspconfig.ui.windows").default_options.border = "single"
 
@@ -17,7 +22,7 @@ function M.config()
 	})
 
 	local available = lspconfig.util.available_servers()
-	for name, config in pairs(lsp.configs) do
+	for name, config in pairs(configs) do
 		if not vim.tbl_contains(available, name) then
 			lspconfig[name].setup(config)
 		end

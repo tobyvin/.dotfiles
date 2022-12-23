@@ -12,7 +12,6 @@ local M = {
 		"petertriho/cmp-git",
 		"Dosx001/cmp-commit",
 		"davidsierradz/cmp-conventionalcommits",
-		"rcarriga/cmp-dap",
 		"ray-x/lsp_signature.nvim",
 		"L3MON4D3/LuaSnip",
 		"saadparwaiz1/cmp_luasnip",
@@ -26,7 +25,6 @@ function M.config()
 
 	local default = require("cmp.config.default")()
 	local context = require("cmp.config.context")
-	local cmp_dap = require("cmp_dap")
 
 	local in_comment = function()
 		return vim.api.nvim_get_mode().mode ~= "c"
@@ -35,7 +33,7 @@ function M.config()
 	end
 
 	local enabled = function()
-		return (default.enabled() or cmp_dap.is_dap_buffer()) and not in_comment()
+		return (default.enabled() or require("cmp_dap").is_dap_buffer()) and not in_comment()
 	end
 
 	local expand_snip = function(args)
@@ -85,12 +83,6 @@ function M.config()
 		sources = {
 			{ name = "nvim_lsp_document_symbol", max_item_count = 10, group_index = 1 },
 			{ name = "buffer", keyword_length = 3, max_item_count = 10, group_index = 2 },
-		},
-	})
-
-	cmp.setup.filetype({ "dap-repl", "dapui_watches", "dapui_hover" }, {
-		sources = {
-			{ name = "dap" },
 		},
 	})
 
