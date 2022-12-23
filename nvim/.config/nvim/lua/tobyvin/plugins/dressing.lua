@@ -1,5 +1,6 @@
 local M = {
 	"stevearc/dressing.nvim",
+	lazy = true,
 	dependencies = {
 		"nvim-telescope/telescope.nvim",
 	},
@@ -7,7 +8,6 @@ local M = {
 
 function M.config()
 	local dressing = require("dressing")
-	local themes = require("telescope.themes")
 
 	local format_item_override = {
 		["rust-tools/debuggables"] = function(item)
@@ -24,7 +24,7 @@ function M.config()
 	local config_overrides = {
 		select = {
 			["Ring history"] = {
-				telescope = themes.get_dropdown({ preview = true }),
+				telescope = require("telescope.themes").get_dropdown({ preview = true }),
 			},
 		},
 		input = {

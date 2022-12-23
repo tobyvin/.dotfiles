@@ -1,5 +1,6 @@
 local M = {
 	"hrsh7th/nvim-cmp",
+	event = { "InsertEnter", "CmdlineEnter" },
 	dependencies = {
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
@@ -23,11 +24,9 @@ local M = {
 function M.config()
 	local cmp = require("cmp")
 
-	local lsp = require("tobyvin.lsp")
 	local default = require("cmp.config.default")()
 	local context = require("cmp.config.context")
 	local cmp_dap = require("cmp_dap")
-	local cmp_nvim_lsp = require("cmp_nvim_lsp")
 
 	local in_comment = function()
 		return vim.api.nvim_get_mode().mode ~= "c"
@@ -137,10 +136,6 @@ function M.config()
 		sources = {
 			{ name = "crates" },
 		},
-	})
-
-	lsp.default_config = vim.tbl_extend("force", lsp.default_config, {
-		capabilities = cmp_nvim_lsp.default_capabilities(),
 	})
 end
 

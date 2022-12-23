@@ -109,7 +109,7 @@ end
 
 ---@param buffer number?
 M.open = function(buffer)
-	buffer = vim.F.if_nil(buffer, vim.api.nvim_get_current_buf())
+	buffer = buffer or vim.api.nvim_get_current_buf()
 	local providers = M.buf_providers(buffer)
 	for _, provider in ipairs(providers) do
 		if provider.opts.enabled and provider.opts.enabled() and not provider.handler() then

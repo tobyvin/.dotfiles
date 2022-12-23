@@ -1,7 +1,8 @@
 local M = {
 	"rcarriga/nvim-notify",
+	event = "VeryLazy",
 	dependencies = {
-		"nvim-telescope/telescope.nvim",
+		{ "nvim-telescope/telescope.nvim" },
 	},
 }
 
@@ -26,9 +27,9 @@ function M.config()
 
 	vim.api.nvim_set_hl(0, "NotifyBackground", { link = "WinBar" })
 
-	local telescope = require("telescope")
-	telescope.load_extension("notify")
-	vim.keymap.set("n", "<leader>fn", telescope.extensions.notify.notify, { desc = "notifications" })
+	vim.keymap.set("n", "<leader>fn", function()
+		require("telescope").extensions.notify.notify()
+	end, { desc = "notifications" })
 end
 
 return M

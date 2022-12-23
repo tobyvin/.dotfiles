@@ -1,3 +1,5 @@
+local M = {}
+
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("tobyvin_lsp", { clear = true }),
 	desc = "lsp",
@@ -11,7 +13,16 @@ require("tobyvin.lsp.handlers")
 require("tobyvin.lsp.highlighting")
 require("tobyvin.lsp.formatting")
 
-return {
-	default_config = {},
-	configs = require("tobyvin.lsp.configs"),
-}
+setmetatable(M, {
+	__index = function(t, k)
+		local ok, val = pcall(require, string.format("tobyvin.lsp.%s", k))
+
+		if ok then
+			rawset(t, k, val)
+		end
+
+		return val
+	end,
+})
+
+return M

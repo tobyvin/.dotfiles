@@ -1,7 +1,22 @@
 local M = {
 	"goolord/alpha-nvim",
+	lazy = false,
 	dependencies = { "kyazdani42/nvim-web-devicons" },
 }
+
+function M.init()
+	vim.api.nvim_create_autocmd("User", {
+		group = vim.api.nvim_create_augroup("alpha_user", { clear = true }),
+		pattern = "BDeleteLast",
+		callback = function(args)
+			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
+			if vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "alpha" then
+				require("alpha").start(false)
+			end
+		end,
+		desc = "Run Alpha when last buffer closed",
+	})
+end
 
 function M.config()
 	local alpha = require("alpha")
@@ -145,18 +160,6 @@ function M.config()
 	}
 
 	alpha.setup(config)
-
-	vim.api.nvim_create_autocmd("User", {
-		group = vim.api.nvim_create_augroup("alpha_user", { clear = true }),
-		pattern = "BDeleteLast",
-		callback = function(args)
-			local bufnr = vim.F.if_nil(args.data.buf, args.buf)
-			if vim.api.nvim_buf_get_option(bufnr, "filetype") ~= "alpha" then
-				alpha.start(false)
-			end
-		end,
-		desc = "Run Alpha when last buffer closed",
-	})
 end
 
 return M

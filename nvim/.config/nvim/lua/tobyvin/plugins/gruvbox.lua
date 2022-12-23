@@ -38,8 +38,6 @@ function M.config()
 			markdownError = { link = "Normal" },
 		},
 	})
-
-	vim.cmd([[colorscheme gruvbox]])
 end
 
 return M

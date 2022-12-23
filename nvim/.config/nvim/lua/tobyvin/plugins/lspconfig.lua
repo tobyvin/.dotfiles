@@ -12,7 +12,9 @@ function M.config()
 
 	require("lspconfig.ui.windows").default_options.border = "single"
 
-	lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, lsp.default_config)
+	lspconfig.util.default_config = vim.tbl_extend("force", lspconfig.util.default_config, {
+		capabilities = require("cmp_nvim_lsp").default_capabilities(),
+	})
 
 	local available = lspconfig.util.available_servers()
 	for name, config in pairs(lsp.configs) do

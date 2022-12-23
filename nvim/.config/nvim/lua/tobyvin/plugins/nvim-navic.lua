@@ -11,6 +11,8 @@ function M.config()
 		icons[i] = icons[i] .. " "
 	end
 
+	vim.g.navic_silence = true
+
 	nvim_navic.setup({
 		icons = icons,
 	})
@@ -21,10 +23,7 @@ function M.config()
 		callback = function(args)
 			local bufnr = args.buf
 			local client = vim.lsp.get_client_by_id(args.data.client_id)
-
-			if client.name ~= "cssls" and client.server_capabilities.documentSymbolProvider then
-				require("nvim-navic").attach(client, bufnr)
-			end
+			require("nvim-navic").attach(client, bufnr)
 		end,
 	})
 end

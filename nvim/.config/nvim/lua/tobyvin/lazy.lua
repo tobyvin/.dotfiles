@@ -12,9 +12,24 @@ end
 vim.opt.runtimepath:prepend(lazypath)
 
 require("lazy").setup("tobyvin.plugins", {
-	dev = { path = "~/src" },
-	install = { colorscheme = { "gruvbox" } },
-	checker = { enabled = true },
+	defaults = {
+		lazy = false,
+	},
+	dev = {
+		path = "~/src",
+	},
+	install = {
+		colorscheme = {
+			"gruvbox",
+			"tokyonight",
+		},
+	},
+	checker = {
+		enabled = true,
+	},
+	ui = {
+		border = "single",
+	},
 })
 
 vim.keymap.set("n", "<leader>p", "<cmd>:Lazy<cr>")

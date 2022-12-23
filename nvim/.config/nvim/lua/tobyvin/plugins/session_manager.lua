@@ -1,5 +1,6 @@
 local M = {
 	"Shatur/neovim-session-manager",
+	lazy = false,
 }
 
 function M.config()
