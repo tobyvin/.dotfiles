@@ -13,7 +13,7 @@ vim.opt.runtimepath:prepend(lazypath)
 
 require("lazy").setup("tobyvin.plugins", {
 	defaults = {
-		lazy = false,
+		lazy = true,
 	},
 	dev = {
 		path = "~/src",
