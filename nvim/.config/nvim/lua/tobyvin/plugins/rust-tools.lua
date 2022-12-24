@@ -6,9 +6,20 @@ local M = {
 		"nvim-lua/plenary.nvim",
 		"mfussenegger/nvim-dap",
 	},
+	config = {
+		tools = {
+			hover_actions = {
+				border = "single",
+			},
+		},
+		server = require("tobyvin.lsp.configs").rust_analyzer,
+		dap = { adapter = require("tobyvin.plugins.dap.adapters").codelldb },
+	},
 }
 
 function M.init()
+	require("tobyvin.lsp.configs").rust_analyzer = nil
+
 	vim.api.nvim_create_autocmd("LspAttach", {
 		group = vim.api.nvim_create_augroup("tobyvin_rust-tools", { clear = true }),
 		desc = "setup rust-tools",
@@ -37,18 +48,6 @@ function M.init()
 			utils.documentation.register("rust", external_docs)
 			utils.hover.register(hover_actions, { desc = "rust-tools hover actions", buffer = bufnr, priority = 10 })
 		end,
-	})
-end
-
-function M.config()
-	require("rust-tools").setup({
-		tools = {
-			hover_actions = {
-				border = "single",
-			},
-		},
-		server = require("tobyvin.lsp.configs").rust_analyzer,
-		dap = { adapter = require("tobyvin.plugins.dap.adapters").codelldb },
 	})
 end
 
