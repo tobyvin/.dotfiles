@@ -26,6 +26,6 @@ vim.keymap.set("n", "gL", vim.diagnostic.setqflist, { desc = "qf diagnostic" })
 
 vim.api.nvim_create_autocmd("CursorHold", {
 	callback = function()
-		vim.diagnostic.open_float()
+		vim.diagnostic.open_float({ focus = false })
 	end,
 })
