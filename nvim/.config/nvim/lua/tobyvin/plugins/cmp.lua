@@ -12,7 +12,6 @@ local M = {
 		"petertriho/cmp-git",
 		"Dosx001/cmp-commit",
 		"davidsierradz/cmp-conventionalcommits",
-		"ray-x/lsp_signature.nvim",
 		"saecki/crates.nvim",
 		"kdheepak/cmp-latex-symbols",
 	},
