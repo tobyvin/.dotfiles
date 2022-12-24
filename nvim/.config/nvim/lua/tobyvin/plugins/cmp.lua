@@ -13,8 +13,6 @@ local M = {
 		"Dosx001/cmp-commit",
 		"davidsierradz/cmp-conventionalcommits",
 		"ray-x/lsp_signature.nvim",
-		"L3MON4D3/LuaSnip",
-		"saadparwaiz1/cmp_luasnip",
 		"saecki/crates.nvim",
 		"kdheepak/cmp-latex-symbols",
 	},
@@ -36,18 +34,11 @@ function M.config()
 		return (default.enabled() or require("cmp_dap").is_dap_buffer()) and not in_comment()
 	end
 
-	local expand_snip = function(args)
-		require("luasnip").lsp_expand(args.body)
-	end
-
 	cmp.setup.global({
 		enabled = enabled,
 		window = {
 			completion = cmp.config.window.bordered({ border = "single" }),
 			documentation = cmp.config.window.bordered({ border = "single" }),
-		},
-		snippet = {
-			expand = expand_snip,
 		},
 		mapping = cmp.mapping.preset.insert({
 			["<Tab>"] = { i = cmp.mapping.select_next_item() },
@@ -60,7 +51,6 @@ function M.config()
 		sources = {
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" },
-			{ name = "luasnip" },
 			{ name = "path" },
 			{ name = "dap" },
 		},
@@ -97,7 +87,6 @@ function M.config()
 		sources = {
 			{ name = "nvim_lsp", group_index = 1 },
 			{ name = "nvim_lsp_signature_help", group_index = 1 },
-			{ name = "luasnip", group_index = 1 },
 			{ name = "path", group_index = 1 },
 			{ name = "dap", group_index = 1 },
 			{ name = "buffer", keyword_length = 3, group_index = 2 },
