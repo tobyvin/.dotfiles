@@ -30,7 +30,7 @@ function M.config()
 	end
 
 	local enabled = function()
-		return (default.enabled() or require("cmp_dap").is_dap_buffer()) and not in_comment()
+		return default.enabled() and not in_comment()
 	end
 
 	cmp.setup.global({
@@ -51,7 +51,6 @@ function M.config()
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" },
 			{ name = "path" },
-			{ name = "dap" },
 		},
 	})
 
