@@ -32,4 +32,6 @@ require("lazy").setup("tobyvin.plugins", {
 	},
 })
 
-vim.keymap.set("n", "<leader>p", "<cmd>:Lazy<cr>")
+vim.keymap.set("n", "<leader>p", function()
+	require("lazy.view").show("home")
+end, { desc = "plugins" })
