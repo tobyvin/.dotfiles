@@ -14,22 +14,75 @@ function M.config()
 	local treesitter = require("nvim-treesitter.configs")
 
 	treesitter.setup({
-		ensure_installed = "all",
+		ensure_installed = {
+			"bash",
+			"c",
+			"cmake",
+			"cpp",
+			"css",
+			"diff",
+			"gitignore",
+			"go",
+			"graphql",
+			"html",
+			"java",
+			"javascript",
+			"jsdoc",
+			"jsonc",
+			"json",
+			"latex",
+			"lua",
+			"make",
+			"markdown",
+			"markdown_inline",
+			"python",
+			"query",
+			"regex",
+			"rust",
+			"scss",
+			"sql",
+			"svelte",
+			"teal",
+			"toml",
+			"tsx",
+			"typescript",
+			"vim",
+			"vue",
+			"yaml",
+		},
 		indent = {
 			enable = true,
 		},
 		highlight = {
 			enable = true,
-			additional_vim_regex_highlighting = { "markdown" },
-			disable = function(_, bufnr)
-				-- TODO: temp solution to ts highlighting screwing up formatting
-				return vim.api.nvim_buf_line_count(bufnr) > 2500 or vim.bo[bufnr].filetype == "help"
-			end,
 		},
 		playground = {
 			enable = true,
 		},
 		textobjects = {
+			move = {
+				enable = true,
+				set_jumps = true,
+				goto_next_start = {
+					["]p"] = "@parameter.inner",
+					["]f"] = "@function.outer",
+					["]]"] = "@class.outer",
+				},
+				goto_next_end = {
+					["]F"] = "@function.outer",
+					["]["] = "@class.outer",
+				},
+				goto_previous_start = {
+					["[p"] = "@parameter.inner",
+					["[f"] = "@function.outer",
+					["[["] = "@class.outer",
+				},
+				goto_previous_end = {
+					["[F"] = "@function.outer",
+					["[]"] = "@class.outer",
+				},
+			},
+
 			select = {
 				enable = true,
 				lookahead = true,
@@ -57,6 +110,11 @@ function M.config()
 		},
 		context_commentstring = {
 			enable = true,
+			enable_autocmd = false,
+			config = {
+				c = "// %s",
+				lua = "-- %s",
+			},
 		},
 	})
 end
