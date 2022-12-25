@@ -3,18 +3,22 @@ local M = {
 	event = "BufRead Cargo.toml",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
-		"jose-elias-alvarez/null-ls.nvim",
 	},
 }
 
 function M.config()
 	local crates = require("crates")
-
 	local utils = require("tobyvin.utils")
 
 	crates.setup({
 		null_ls = {
 			enabled = true,
+		},
+	})
+
+	require("cmp").setup.filetype("toml", {
+		sources = {
+			{ name = "crates" },
 		},
 	})
 

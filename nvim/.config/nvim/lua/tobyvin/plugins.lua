@@ -15,25 +15,8 @@ return {
 		config = true,
 	},
 	{
-		"petertriho/cmp-git",
-		event = "VeryLazy",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = true,
-	},
-	{
-		"David-Kunz/cmp-npm",
-		event = "BufRead package.json",
-		dependencies = { "nvim-lua/plenary.nvim" },
-		config = true,
-	},
-	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "BufReadPre",
-		config = true,
-	},
-	{
-		"ur4ltz/surround.nvim",
-		event = "VeryLazy",
 		config = true,
 	},
 	{

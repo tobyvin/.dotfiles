@@ -9,11 +9,19 @@ local M = {
 		"hrsh7th/cmp-nvim-lsp-signature-help",
 		"hrsh7th/cmp-nvim-lua",
 		"hrsh7th/cmp-cmdline",
-		"petertriho/cmp-git",
 		"Dosx001/cmp-commit",
 		"davidsierradz/cmp-conventionalcommits",
-		"saecki/crates.nvim",
-		"kdheepak/cmp-latex-symbols",
+		{
+			"petertriho/cmp-git",
+			ft = "gitcommit",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			config = true,
+		},
+		{
+			"David-Kunz/cmp-npm",
+			dependencies = { "nvim-lua/plenary.nvim" },
+			config = true,
+		},
 	},
 }
 
@@ -76,7 +84,6 @@ function M.config()
 
 	cmp.setup.filetype({ "tex", "bib", "markdown" }, {
 		sources = {
-			{ name = "latex_symbols" },
 			{ name = "buffer", keyword_length = 3 },
 		},
 	})
