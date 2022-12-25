@@ -90,10 +90,6 @@ if command -v docker >/dev/null 2>&1; then
 	alias dcu="docker context use"
 fi
 
-if command -v lsd >/dev/null 2>&1; then
-	alias ls='lsd'
-fi
-
 if command -v rga >/dev/null 2>&1; then
 	rgi() {
 		RG_PREFIX="rga --files-with-matches"
