@@ -1,7 +1,6 @@
 local M = {
 	"goolord/alpha-nvim",
 	lazy = false,
-	dependencies = { "kyazdani42/nvim-web-devicons" },
 }
 
 function M.init()
@@ -20,44 +19,38 @@ end
 
 function M.config()
 	local alpha = require("alpha")
-	local Icons = require("nvim-web-devicons")
 	local utils = require("tobyvin.utils")
+	local width = 60
 
 	local file_button = function(filename, sc)
-		local short_fn = utils.fs.shorten_path(filename, 60)
+		local short_fn = utils.fs.shorten_path(filename, width - 4)
 		local hl = {}
 
-		local filetype, _ = vim.filetype.match({ filename = filename })
-		filetype = vim.F.if_nil(filetype, "")
-		local ico, ico_hl = Icons.get_icon_by_filetype(filetype, { default = true })
-		table.insert(hl, { ico_hl, 0, 3 })
-		local ico_txt = ico .. "  "
 		local fn_start = short_fn:match(".*[/\\]")
 		if fn_start ~= nil then
-			table.insert(hl, { "Comment", #ico_txt - 2, #fn_start + #ico_txt })
+			table.insert(hl, { "Comment", 0, #fn_start })
 		end
 
-		local keybind = "<Cmd>e " .. filename .. " <CR>"
-		local button = {
+		local edit = function()
+			vim.cmd.edit(filename)
+		end
+
+		return {
 			type = "button",
-			val = ico_txt .. short_fn,
-			on_press = function()
-				local key = vim.api.nvim_replace_termcodes(keybind .. "<Ignore>", true, false, true)
-				vim.api.nvim_feedkeys(key, "t", false)
-			end,
+			val = short_fn,
+			on_press = edit,
 			opts = {
 				position = "center",
 				shortcut = "[" .. sc .. "]",
-				cursor = 60,
-				width = 60,
+				cursor = width - 2,
+				width = width,
 				align_shortcut = "right",
 				hl = hl,
 				hl_shortcut = { { "Special", 0, 1 }, { "Number", 1, #sc + 1 }, { "Special", #sc + 1, #sc + 2 } },
 				shrink_margin = false,
-				keymap = { "n", sc:gsub("%s", ""), keybind, { desc = "oldfile_" .. sc } },
+				keymap = { "n", sc:gsub("%s", ""), edit, { desc = "oldfile_" .. sc } },
 			},
 		}
-		return button
 	end
 
 	local mru_filter = function(filename)
