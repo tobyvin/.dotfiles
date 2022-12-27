@@ -7,11 +7,13 @@ local M = {
 function M.config()
 	local gitsigns = require("gitsigns")
 
-	local utils = require("tobyvin.utils")
-
 	local with_range = function(callback)
 		return function()
-			callback(utils.buffer.get_visual_range())
+			callback(function()
+				local start_pos = vim.fn.getpos("v")
+				local end_pos = vim.fn.getcurpos()
+				return { start_pos[2], end_pos[2] }
+			end)
 		end
 	end
 
