@@ -1,4 +1,4 @@
-local configs = {
+local M = {
 	bashls = {},
 	taplo = {},
 	yamlls = {},
@@ -10,7 +10,18 @@ local configs = {
 	pylsp = {},
 }
 
-configs.gopls = {
+M.jsonls = {
+	settings = {
+		json = {
+			format = {
+				enable = true,
+			},
+			validate = { enable = true },
+		},
+	},
+}
+
+M.gopls = {
 	cmd = { "gopls", "serve" },
 	settings = {
 		gopls = {
@@ -22,7 +33,7 @@ configs.gopls = {
 	},
 }
 
-configs.rust_analyzer = {
+M.rust_analyzer = {
 	standalone = true,
 	settings = {
 		["rust-analyzer"] = {
@@ -41,7 +52,7 @@ configs.rust_analyzer = {
 	},
 }
 
-configs.sumneko_lua = {
+M.sumneko_lua = {
 	settings = {
 		Lua = {
 			completion = {
@@ -60,7 +71,7 @@ configs.sumneko_lua = {
 	},
 }
 
-configs.texlab = {
+M.texlab = {
 	settings = {
 		texlab = {
 			build = {
@@ -92,4 +103,4 @@ configs.texlab = {
 	end,
 }
 
-return configs
+return M
