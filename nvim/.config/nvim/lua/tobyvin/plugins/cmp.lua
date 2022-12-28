@@ -22,6 +22,13 @@ local M = {
 			dependencies = { "nvim-lua/plenary.nvim" },
 			config = true,
 		},
+		{
+			"saadparwaiz1/cmp_luasnip",
+			dependencies = {
+				"L3MON4D3/LuaSnip",
+				config = true,
+			},
+		},
 	},
 }
 
@@ -37,12 +44,15 @@ function M.config()
 			and context.in_syntax_group("Comment")
 	end
 
-	local enabled = function()
-		return default.enabled() and not in_comment()
-	end
-
 	cmp.setup.global({
-		enabled = enabled,
+		enabled = function()
+			return default.enabled() and not in_comment()
+		end,
+		snippet = {
+			expand = function(args)
+				require("luasnip").lsp_expand(args.body)
+			end,
+		},
 		window = {
 			completion = cmp.config.window.bordered({ border = "single" }),
 			documentation = cmp.config.window.bordered({ border = "single" }),
@@ -58,6 +68,7 @@ function M.config()
 		sources = {
 			{ name = "nvim_lsp" },
 			{ name = "nvim_lsp_signature_help" },
+			{ name = "luasnip" },
 			{ name = "path" },
 		},
 	})
