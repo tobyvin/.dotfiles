@@ -10,8 +10,6 @@ local hover = function()
 	return "K"
 end
 
-vim.keymap.set("n", "gn", "<cmd>bnext<cr>", { desc = "bnext" })
-vim.keymap.set("n", "gp", "<cmd>bprev<cr>", { desc = "bprev" })
 vim.keymap.set("n", "gk", utils.documentation.open, { desc = "documentation" })
 vim.keymap.set("n", "K", hover, { expr = true, desc = "hover" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "up half page and center" })
