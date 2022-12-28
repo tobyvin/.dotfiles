@@ -36,6 +36,8 @@
   "neodev.nvim": { "branch": "main", "commit": "8e06acf88e0621badd9499cfcafbce5ca97dfe8e" },
   "neogit": { "branch": "master", "commit": "0d6002c6af432343937283fb70791fc76fa7227c" },
   "neovim-session-manager": { "branch": "master", "commit": "f8c85da390c5d1ad3bfd229ac2ed805c5742263d" },
+  "noice.nvim": { "branch": "main", "commit": "7816fcd8a43a9de84d7f4695b0688b4f54b25570" },
+  "nui.nvim": { "branch": "main", "commit": "4939282919885e1c83aff68ecb35b3cadf6015a9" },
   "null-ls.nvim": { "branch": "main", "commit": "647a1eeeefc43ce15d941972642210637c370471" },
   "nvim-bqf": { "branch": "main", "commit": "b418b0a241d36509196944a6f6bee886c775d54f" },
   "nvim-cmp": { "branch": "main", "commit": "e55033fce468c9c578b946948807f2ac48a6ee08" },
