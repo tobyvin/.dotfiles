@@ -12,10 +12,9 @@ local M = {
 }
 
 function M.init()
-	-- TODO: fix this not registering as a command
 	vim.api.nvim_create_user_command("UndoTree", function()
 		require("undotree").open()
-	end)
+	end, {})
 end
 
 return M
