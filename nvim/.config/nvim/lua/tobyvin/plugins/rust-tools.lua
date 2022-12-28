@@ -33,9 +33,7 @@ function M.init()
 			local runnables = require("rust-tools").runnables.runnables
 			local debuggables = require("rust-tools").debuggables.debuggables
 			local open_cargo_toml = require("rust-tools").open_cargo_toml.open_cargo_toml
-			local external_docs = require("rust-tools").external_docs.open_external_docs
 			local expand_macro = require("rust-tools").expand_macro.expand_macro
-			local hover_actions = require("rust-tools").hover_actions.hover_actions
 			local ssr = require("rust-tools").ssr.ssr
 
 			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "debug", buffer = bufnr })
@@ -44,9 +42,7 @@ function M.init()
 			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "expand macro", buffer = bufnr })
 			vim.keymap.set("n", "<leader>rs", ssr, { desc = "ssr", buffer = bufnr })
 
-			local utils = require("tobyvin.utils")
-			utils.documentation.register("rust", external_docs)
-			utils.hover.register(hover_actions, { desc = "rust-tools hover actions", buffer = bufnr, priority = 10 })
+			vim.lsp.handlers["textDocument/hover"] = require("rust-tools").hover_actions.hover_actions.handler
 		end,
 	})
 end

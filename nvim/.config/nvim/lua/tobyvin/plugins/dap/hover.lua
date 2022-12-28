@@ -1,15 +1,6 @@
 local utils = require("tobyvin.utils")
 local M = {}
 
-M.hover = function()
-	local widgets = require("dap.ui.widgets")
-	if M.hover_available() then
-		widgets.hover()
-	else
-		utils.hover.open()
-	end
-end
-
 M.hover_available = function()
 	local session = require("dap").session()
 	if not session then
@@ -34,24 +25,22 @@ M.hover_available = function()
 end
 
 M.setup = function()
+	local dap_hover_id
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "DapAttach",
 		callback = function()
-			-- TODO: figure out why calling dap.ui.widgets.hover from util.hover is causing error
-			-- vim.g.dap_hover_id = utils.hover.register(M.hover, {
-			-- 	enabled = M.hover_available,
-			-- 	desc = "dap",
-			-- 	priority = 20,
-			-- })
-			vim.keymap.set("n", "K", M.hover, { desc = "hover" })
+			dap_hover_id = utils.hover.register(require("dap.ui.widgets").hover, {
+				desc = "lsp",
+				enabled = M.hover_available,
+				priority = 20,
+			})
 		end,
 	})
 
 	vim.api.nvim_create_autocmd("User", {
 		pattern = "DapDetach",
 		callback = function()
-			-- utils.hover.unregister(vim.g.dap_hover_id)
-			vim.keymap.set("n", "K", utils.hover.open, { desc = "hover" })
+			utils.hover.unregister(dap_hover_id)
 		end,
 	})
 end

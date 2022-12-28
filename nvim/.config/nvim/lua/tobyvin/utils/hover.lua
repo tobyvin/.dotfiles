@@ -107,6 +107,16 @@ M.unregister = function(id, buffer)
 	return provider
 end
 
+--- Returns `true` if a provider successfully handled the request, otherwise returns `false`.
+-- Example usage:
+-- ```lua
+-- vim.keymap.set("n", "K", function()
+--   if utils.hover.open() then
+--     return "<Ignore>"
+--   end
+--   return "K"
+-- end, { desc = "hover", expr = true }
+-- ```
 ---@param buffer number?
 M.open = function(buffer)
 	buffer = buffer or vim.api.nvim_get_current_buf()

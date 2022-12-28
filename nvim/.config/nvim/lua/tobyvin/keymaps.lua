@@ -10,7 +10,14 @@ local hover = function()
 	return "K"
 end
 
-vim.keymap.set("n", "gk", utils.documentation.open, { desc = "documentation" })
+local external_docs = function()
+	if utils.documentation.open() then
+		return "<Ignore>"
+	end
+	return "gx"
+end
+
+vim.keymap.set("n", "gx", external_docs, { desc = "external_docs", expr = true })
 vim.keymap.set("n", "K", hover, { expr = true, desc = "hover" })
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "up half page and center" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "down half page and center" })
