@@ -48,7 +48,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		end
 
 		utils.hover.register(vim.lsp.buf.hover, { desc = "lsp", buffer = bufnr, priority = 1 })
-		utils.hover.register(vim.lsp.buf.external_docs, { desc = "lsp", buffer = bufnr, priority = 1 })
+		utils.documentation.register(vim.lsp.buf.external_docs, { desc = "lsp", buffer = bufnr, priority = 1 })
 
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = bufnr })
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = bufnr })

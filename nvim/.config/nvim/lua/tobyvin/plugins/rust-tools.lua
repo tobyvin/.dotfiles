@@ -42,7 +42,7 @@ function M.init()
 			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "expand macro", buffer = bufnr })
 			vim.keymap.set("n", "<leader>rs", ssr, { desc = "ssr", buffer = bufnr })
 
-			vim.lsp.handlers["textDocument/hover"] = require("rust-tools").hover_actions.hover_actions.handler
+			vim.lsp.handlers["textDocument/hover"] = require("rust-tools.hover_actions").handler
 		end,
 	})
 end
