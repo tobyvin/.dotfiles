@@ -14,6 +14,7 @@ ln -sf "$(wslpath 'C:\Windows\system32\wsl.exe')" ~/.local/bin/wsl.exe
 ln -sf "$(wslpath 'C:\Windows\system32\clip.exe')" ~/.local/bin/clip.exe
 ln -sf "$(wslpath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe')" ~/.local/bin/powershell.exe
 ln -sf "$(wslpath 'C:\Program Files\PowerShell\7\pwsh.exe')" ~/.local/bin/pwsh.exe
+ln -sf "$(wslpath 'C:\Users\tobyv\AppData\Local\wsl-notify-send\wsl-notify-send.exe')" ~/.local/bin/notify-send
 
 # ssh-config
 sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4321|' "${DOTFILES}"/ssh/.ssh/config |
