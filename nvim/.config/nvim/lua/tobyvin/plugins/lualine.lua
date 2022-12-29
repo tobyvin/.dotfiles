@@ -12,127 +12,116 @@ function M.config()
 
 	local utils = require("tobyvin.utils")
 
-	local get_short_cwd = function()
-		return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-	end
-
-	local to_char = function(str)
-		return str:sub(1, 1)
-	end
-
 	local winbar_cond = function()
-		return vim.bo.buflisted
+		return vim.bo.buflisted and (vim.fn.bufname() ~= "" or require("nvim-navic").is_available())
 	end
-
-	local normal_fg = vim.api.nvim_get_hl_by_name("Normal", true).foreground
-	local winbar_bg = vim.api.nvim_get_hl_by_name("WinBar", true).background
-	vim.api.nvim_set_hl(0, "WinBarNormal", { fg = normal_fg, bg = winbar_bg })
-
-	local filename_fmt = function(path)
-		local head = vim.fn.fnamemodify(path, ":h")
-		local tail = vim.fn.fnamemodify(path, ":t")
-		return head .. "/%#WinBarNormal#" .. tail
-	end
-
-	local git = {
-		"branch",
-		{
-			"diff",
-			source = function()
-				local gitsigns = vim.b["gitsigns_status_dict"]
-				if gitsigns then
-					return {
-						added = gitsigns.added,
-						modified = gitsigns.changed,
-						removed = gitsigns.removed,
-					}
-				end
-			end,
-			padding = { left = 0, right = 1 },
-		},
-	}
-
-	local workspace = {
-		{
-			function()
-				return vim.fn.getcwd():gsub(vim.env.HOME, "~")
-			end,
-		},
-		{
-			function()
-				return utils.diagnostic
-					.indicator(nil)
-					:gsub("DiagnosticSignError", "lualine_b_diagnostics_error_normal")
-					:gsub("DiagnosticSignWarn", "lualine_b_diagnostics_warn_normal")
-					:gsub("DiagnosticSignInfo", "lualine_b_diagnostics_info_normal")
-					:gsub("DiagnosticSignHint", "lualine_b_diagnostics_hint_normal")
-			end,
-			padding = { left = 0, right = 1 },
-		},
-	}
-
-	local buffer = {
-		{
-			"filename",
-			path = 1,
-			shorten = true,
-			cond = winbar_cond,
-			fmt = filename_fmt,
-			color = "WinBar",
-		},
-		{
-			"diagnostics",
-			source = { utils.diagnostic.buf_count },
-			symbols = {
-				error = utils.diagnostic.signs.error.text,
-				warn = utils.diagnostic.signs.warn.text,
-				info = utils.diagnostic.signs.info.text,
-				hint = utils.diagnostic.signs.hint.text,
-			},
-			update_in_insert = true,
-			color = "WinBar",
-			padding = { left = 0, right = 1 },
-			cond = winbar_cond,
-		},
-	}
 
 	lualine.setup({
 		options = {
 			component_separators = "",
 			section_separators = "",
-			disabled_filetypes = {
-				"netrw",
-				"alpha",
-				winbar = vim.fn.getcompletion("Neogit*", "filetype"),
-			},
 		},
 
 		sections = {
-			lualine_a = { { "mode", fmt = to_char } },
-			lualine_b = git,
-			lualine_c = workspace,
+			lualine_a = { {
+				"mode",
+				fmt = function(str)
+					return str:sub(1, 1)
+				end,
+			} },
+			lualine_b = {
+				{
+					"branch",
+					color = "StatusLine",
+				},
+				{
+					"diff",
+					source = function()
+						local gitsigns = vim.b["gitsigns_status_dict"]
+						if gitsigns then
+							return {
+								added = gitsigns.added,
+								modified = gitsigns.changed,
+								removed = gitsigns.removed,
+							}
+						end
+					end,
+					padding = { left = 0, right = 1 },
+					color = "StatusLine",
+				},
+			},
+			lualine_c = {
+				{
+					"diagnostics",
+					source = { utils.diagnostic.count },
+					symbols = {
+						error = utils.diagnostic.signs.error.text,
+						warn = utils.diagnostic.signs.warn.text,
+						info = utils.diagnostic.signs.info.text,
+						hint = utils.diagnostic.signs.hint.text,
+					},
+
+					diagnostics_color = {
+						error = utils.diagnostic.signs.error.hl,
+						warn = utils.diagnostic.signs.warn.hl,
+						info = utils.diagnostic.signs.info.hl,
+						hint = utils.diagnostic.signs.hint.hl,
+					},
+					update_in_insert = true,
+					color = "StatusLineNC",
+				},
+			},
 			lualine_x = {
-				"encoding",
-				"fileformat",
-				"filetype",
+				{
+					"encoding",
+					color = "StatusLineNC",
+				},
+				{
+					"fileformat",
+					color = "StatusLineNC",
+				},
+				{
+					"filetype",
+					color = "StatusLineNC",
+				},
 			},
 		},
 
 		inactive_sections = {
-			lualine_c = { "filename" },
+			lualine_c = {
+				{
+					"filename",
+					color = "StatusLineNC",
+				},
+			},
 			lualine_x = {
-				"filetype",
-				"location",
+				{
+					"filetype",
+					color = "StatusLineNC",
+				},
+				{
+					"location",
+					color = "StatusLineNC",
+				},
 			},
 		},
 
 		winbar = {
-			lualine_b = buffer,
+			lualine_b = {
+				{
+					"filename",
+					cond = winbar_cond,
+					color = "WinBar",
+				},
+			},
 			lualine_c = {
 				{
-					-- Hack to prevent lualine_b from taking over the lualine_c when navic has no results
 					function()
-						return require("nvim-navic").get_location():gsub("^$", " ")
+						return require("nvim-navic").get_location()
+					end,
+					-- Hack to prevent lualine_b from taking over the lualine_c when navic has no results
+					fmt = function(value)
+						return value:gsub("^$", " ")
 					end,
 					color = "WinBarNC",
 					cond = winbar_cond,
@@ -141,8 +130,29 @@ function M.config()
 		},
 
 		tabline = {
-			lualine_b = { { "buffers", mode = 4 } },
-			lualine_y = { "tabs" },
+			lualine_b = {
+				{
+					function()
+						return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+					end,
+					color = "StatusLine",
+				},
+			},
+			lualine_c = {
+				{
+					"filename",
+					path = 1,
+					shorten = true,
+					file_status = false,
+					color = "StatusLineNC",
+				},
+			},
+			lualine_y = {
+				{
+					"tabs",
+					color = "StatusLine",
+				},
+			},
 		},
 
 		extensions = {
@@ -152,16 +162,6 @@ function M.config()
 			"symbols-outline",
 			"quickfix",
 			"toggleterm",
-			{
-				sections = {
-					lualine_c = {
-						get_short_cwd,
-					},
-				},
-				filetypes = {
-					"netrw",
-				},
-			},
 		},
 	})
 end
