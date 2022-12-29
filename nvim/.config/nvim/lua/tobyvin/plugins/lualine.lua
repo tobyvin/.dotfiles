@@ -24,6 +24,16 @@ function M.config()
 		return vim.bo.buflisted
 	end
 
+	local normal_fg = vim.api.nvim_get_hl_by_name("Normal", true).foreground
+	local winbar_bg = vim.api.nvim_get_hl_by_name("WinBar", true).background
+	vim.api.nvim_set_hl(0, "WinBarNormal", { fg = normal_fg, bg = winbar_bg })
+
+	local filename_fmt = function(path)
+		local head = vim.fn.fnamemodify(path, ":h")
+		local tail = vim.fn.fnamemodify(path, ":t")
+		return head .. "/%#WinBarNormal#" .. tail
+	end
+
 	local git = {
 		"branch",
 		{
@@ -45,6 +55,11 @@ function M.config()
 	local workspace = {
 		{
 			function()
+				return vim.fn.getcwd():gsub(vim.env.HOME, "~")
+			end,
+		},
+		{
+			function()
 				return utils.diagnostic
 					.indicator(nil)
 					:gsub("DiagnosticSignError", "lualine_b_diagnostics_error_normal")
@@ -52,20 +67,18 @@ function M.config()
 					:gsub("DiagnosticSignInfo", "lualine_b_diagnostics_info_normal")
 					:gsub("DiagnosticSignHint", "lualine_b_diagnostics_hint_normal")
 			end,
-			padding = { left = 1, right = 0 },
-			color = "StatusLineNC",
-		},
-		{
-			"filename",
-			path = 1,
+			padding = { left = 0, right = 1 },
 		},
 	}
 
 	local buffer = {
 		{
 			"filename",
-			color = "WinBar",
+			path = 1,
+			shorten = true,
 			cond = winbar_cond,
+			fmt = filename_fmt,
+			color = "WinBar",
 		},
 		{
 			"diagnostics",
