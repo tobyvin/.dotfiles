@@ -10,7 +10,9 @@ local M = {
 	config = {
 		cmdline = { enabled = false },
 		messages = { enabled = false },
-		popupmenu = { enabled = false },
+		popupmenu = {
+			backend = "cmp",
+		},
 		lsp = {
 			override = {
 				["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -18,8 +20,6 @@ local M = {
 				["cmp.entry.get_documentation"] = true,
 			},
 			progress = { enabled = false },
-			-- hover = { enabled = false },
-			-- signature = { enabled = false },
 			messages = { enabled = false },
 		},
 		commands = {
@@ -38,6 +38,14 @@ local M = {
 				},
 				view = "notify_send",
 				opts = { stop = false },
+			},
+		},
+		views = {
+			hover = {
+				border = {
+					style = "single",
+				},
+				position = { row = 2, col = 2 },
 			},
 		},
 	},
@@ -68,17 +76,18 @@ function M.init()
 		require("noice").cmd("all")
 	end)
 
+	-- TODO: figure out why setting `remap = true` failes to call the `<C-d>zz` mapping
 	vim.keymap.set("n", "<C-d>", function()
 		if not require("noice.lsp").scroll(4) then
-			return "<C-d>"
+			return "<C-d>zz"
 		end
-	end, { expr = true })
+	end, { desc = "up half page and center", expr = true })
 
 	vim.keymap.set("n", "<C-u>", function()
 		if not require("noice.lsp").scroll(-4) then
-			return "<C-u>"
+			return "<C-u>zz"
 		end
-	end, { expr = true })
+	end, { desc = "down half page and center", expr = true })
 
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = "markdown",
