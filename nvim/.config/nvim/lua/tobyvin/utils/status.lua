@@ -4,7 +4,7 @@ M.signs = {
 	started = { text = "ﳁ ", texthl = "diffChanged" },
 	running = { text = "ﳁ ", texthl = "DiagnosticSignInfo" },
 	failed = { text = " ", texthl = "DiagnosticSignError" },
-	completed = { text = " ", texthl = "diffAdded" },
+	done = { text = " ", texthl = "diffAdded" },
 	spinner = { text = { "⣷", "⣯", "⣟", "⡿", "⢿", "⣻", "⣽", "⣾" }, texthl = "DiagnosticSignInfo" },
 }
 

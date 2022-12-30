@@ -26,6 +26,7 @@ require("lazy").setup("tobyvin.plugins", {
 	},
 	checker = {
 		enabled = true,
+		notify = false,
 	},
 	ui = {
 		border = "single",

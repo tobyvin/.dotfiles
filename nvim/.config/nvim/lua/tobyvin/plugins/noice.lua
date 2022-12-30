@@ -20,7 +20,24 @@ local M = {
 				["vim.lsp.util.stylize_markdown"] = true,
 				["cmp.entry.get_documentation"] = true,
 			},
-			progress = { enabled = false },
+			progress = {
+				enabled = true,
+				format = {
+					{ "{data.progress.message} " },
+					"({data.progress.percentage}%) ",
+					{ "{spinner} ", hl_group = "NoiceLspProgressSpinner" },
+					{ "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
+					{ "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
+				},
+				format_done = {
+					{
+						require("tobyvin.utils.status").signs.done.text,
+						hl_group = "NoiceLspProgressDone",
+					},
+					{ "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
+					{ "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
+				},
+			},
 			messages = { enabled = false },
 		},
 		commands = {
@@ -32,12 +49,12 @@ local M = {
 		},
 		routes = {
 			{
+				view = "notify_send",
 				filter = {
 					cond = function()
 						return not focused
 					end,
 				},
-				view = "notify_send",
 				opts = { stop = false },
 			},
 		},
@@ -48,11 +65,27 @@ local M = {
 				},
 				position = { row = 2, col = 2 },
 			},
+			mini = {
+				position = {
+					row = -2,
+				},
+				win_options = {
+					winblend = 0,
+				},
+			},
 		},
 	},
 }
 
 function M.init()
+	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
+		link = require("tobyvin.utils.status").signs.spinner.texthl,
+	})
+
+	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
+		link = require("tobyvin.utils.status").signs.done.texthl,
+	})
+
 	vim.api.nvim_create_autocmd("FocusGained", {
 		callback = function()
 			focused = true
