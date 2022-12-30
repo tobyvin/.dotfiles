@@ -3,7 +3,6 @@ local M = {
 	ft = "qf",
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter",
-		"junegunn/fzf",
 	},
 }
 

@@ -1,6 +1,15 @@
 return {
 	"nvim-lua/plenary.nvim",
 	{
+		"folke/lazy.nvim",
+		version = "*",
+		init = function()
+			vim.keymap.set("n", "<leader>p", function()
+				require("lazy.view").show("home")
+			end, { desc = "plugins" })
+		end,
+	},
+	{
 		"norcalli/nvim-colorizer.lua",
 		event = "BufReadPre",
 	},
@@ -21,6 +30,7 @@ return {
 	},
 	{
 		"numToStr/Comment.nvim",
+		version = "*",
 		event = "VeryLazy",
 		config = true,
 	},

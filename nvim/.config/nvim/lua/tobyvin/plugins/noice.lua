@@ -2,6 +2,7 @@ local focused = true
 
 local M = {
 	"folke/noice.nvim",
+	version = "*",
 	event = "VeryLazy",
 	dependencies = {
 		"MunifTanjim/nui.nvim",
