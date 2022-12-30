@@ -9,33 +9,57 @@ local M = {
 }
 
 function M.init()
-	local session_name = function()
-		if vim.v.this_session ~= "" then
-			return vim.fn.fnamemodify(vim.v.this_session, ":t")
-		end
-		local name, _ = vim.loop.cwd():gsub(":", "++"):gsub(require("plenary.path").path.sep, "%%")
-		return name
-	end
+	vim.keymap.set("n", "<leader>sr", function()
+		require("mini.sessions").read()
+	end, { desc = "read session" })
 
 	vim.keymap.set("n", "<leader>sw", function()
-		require("mini.sessions").write(session_name())
+		require("mini.sessions").write()
 	end, { desc = "write session" })
 
-	vim.keymap.set("n", "<leader>sr", function()
-		require("mini.sessions").read(session_name())
-	end, { desc = "read session" })
+	vim.keymap.set("n", "<leader>sd", function()
+		require("mini.sessions").delete()
+	end, { desc = "delete session" })
 
 	vim.keymap.set("n", "<leader>ss", function()
 		require("mini.sessions").select()
 	end, { desc = "select session" })
-
-	vim.keymap.set("n", "<leader>sd", function()
-		require("mini.sessions").delete(session_name())
-	end, { desc = "delete session" })
 end
 
 function M.config()
-	require("plenary.path"):new(vim.fn.stdpath("data")):joinpath("session"):mkdir()
+	local session_dir = require("plenary.path"):new(vim.fn.stdpath("data")):joinpath("session")
+
+	session_dir:mkdir()
+
+	local session_name = function()
+		if vim.v.this_session ~= "" then
+			return vim.fn.fnamemodify(vim.v.this_session, ":t")
+		end
+
+		return vim.loop.cwd():gsub(":", "++"):gsub(session_dir.path.sep, "%%")
+	end
+
+	local read = require("mini.sessions").read
+	require("mini.sessions").read = function(name)
+		name = vim.F.if_nil(name, session_name())
+		if session_dir:joinpath(name):exists() then
+			read(name)
+		else
+			vim.notify("No session found", vim.log.levels.WARN)
+		end
+	end
+
+	local write = require("mini.sessions").write
+	require("mini.sessions").write = function(name)
+		name = vim.F.if_nil(name, session_name())
+		write(name)
+	end
+
+	local delete = require("mini.sessions").delete
+	require("mini.sessions").delete = function(name)
+		name = vim.F.if_nil(name, session_name())
+		delete(name)
+	end
 
 	require("mini.sessions").setup()
 end
