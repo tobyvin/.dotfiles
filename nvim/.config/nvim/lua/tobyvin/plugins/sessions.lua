@@ -11,7 +11,7 @@ local M = {
 function M.init()
 	local session_name = function()
 		if vim.v.this_session ~= "" then
-			return vim.v.this_session
+			return vim.fn.fnamemodify(vim.v.this_session, ":t")
 		end
 		local name, _ = vim.loop.cwd():gsub(":", "++"):gsub(require("plenary.path").path.sep, "%%")
 		return name
