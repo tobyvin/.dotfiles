@@ -45,6 +45,7 @@ bindkey -M vicmd '^[[1;5D' backward-word
 bindkey -M vicmd '^[q' push-input
 
 alias ls="ls --color=auto"
+alias tree="tree --gitignore"
 alias grep='grep --color=auto'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
