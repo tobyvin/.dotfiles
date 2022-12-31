@@ -1,6 +1,8 @@
 [templates]
 defer = '{% for file in files %} zsh-defer source "{{ file }}" {% endfor %}'
 contrib_fpath = 'fpath=( "{{ dir }}/contrib/completion/zsh" $fpath )'
+base16_config = 'export BASE16_CONFIG_PATH="{{ dir }}"'
+base16_fzf = 'export BASE16_FZF_PATH="{{ dir }}"'
 
 [plugins]
 
@@ -33,9 +35,13 @@ apply = ["fpath"]
 github = "docker/cli"
 apply = ["contrib_fpath"]
 
-[plugins.base16]
-github = "chriskempson/base16-shell"
-apply = ["defer"]
+[plugins.base16-shell]
+github = "tinted-theming/base16-shell"
+apply = ["base16_config"]
+
+[plugins.base16-fzf]
+github = "tinted-theming/base16-fzf"
+apply = ["base16_fzf"]
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
