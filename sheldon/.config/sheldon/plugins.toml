@@ -37,7 +37,7 @@ apply = ["contrib_fpath"]
 
 [plugins.base16-shell]
 github = "tinted-theming/base16-shell"
-apply = ["base16_config"]
+apply = ["defer", "base16_config"]
 
 [plugins.base16-fzf]
 github = "tinted-theming/base16-fzf"
