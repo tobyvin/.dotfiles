@@ -20,6 +20,7 @@ LS_COLORS="$(vivid generate $BASE16_DEFAULT_THEME 2>/dev/null)"
 export LS_COLORS
 
 export EDITOR="nvim"
+export DIFFPROG="$EDITOR -d"
 export BROWSER="firefox"
 export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
