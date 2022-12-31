@@ -62,6 +62,7 @@ br = branch
 r = reset
 rv = remote -v
 cp = cherry-pick
+pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 dev = checkout develop
 main = checkout main
 
