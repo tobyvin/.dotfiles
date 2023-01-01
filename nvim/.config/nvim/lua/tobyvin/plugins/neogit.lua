@@ -9,10 +9,10 @@ function M.init()
 	end, { desc = "neogit" })
 end
 
-function M.config()
-	-- TODO: revert once pr is merged
-	--
-	-- Refs: #415
+-- TODO: revert once #415 is merged
+--
+-- Refs: https://github.com/TimUntersberger/neogit/pull/415
+local function remove_custom_ft()
 	local Buffer = require("neogit.lib.buffer")
 	local config = require("neogit.config")
 	local input = require("neogit.lib.input")
@@ -63,14 +63,29 @@ function M.config()
 			end,
 		})
 	end
+end
+
+function M.config()
+	remove_custom_ft()
 
 	require("neogit").setup({
+		disable_context_highlighting = true,
 		disable_commit_confirmation = true,
+		disable_builtin_notifications = true,
 		disable_signs = true,
+		disable_hint = true,
 		integrations = {
 			diffview = true,
 		},
+		mappings = {
+			status = {
+				["b"] = "",
+			},
+		},
 	})
+
+	vim.api.nvim_set_hl(0, "NeogitHunkHeaderHighlight", { link = "Comment" })
+	vim.api.nvim_set_hl(0, "NeogitHunkHeader", { link = "Comment" })
 end
 
 return M
