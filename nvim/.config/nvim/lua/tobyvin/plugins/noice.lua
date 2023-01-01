@@ -57,6 +57,21 @@ local M = {
 				},
 				opts = { stop = false },
 			},
+			{
+				view = "mini",
+				filter = {
+					event = "notify",
+					any = {
+						{
+							error = false,
+							warning = false,
+							cond = function(message)
+								return vim.tbl_get(message, "opts", "title") == "Neogit"
+							end,
+						},
+					},
+				},
+			},
 		},
 		views = {
 			hover = {
@@ -98,16 +113,16 @@ function M.init()
 		end,
 	})
 
-	vim.keymap.set("n", "<leader>nl", function()
-		require("noice").cmd("last")
-	end)
-
 	vim.keymap.set("n", "<leader>nn", function()
 		require("noice").cmd("history")
 	end)
 
-	vim.keymap.set("n", "<leader>nh", function()
-		require("noice").cmd("all")
+	vim.keymap.set("n", "<leader>nl", function()
+		require("noice").cmd("last")
+	end)
+
+	vim.keymap.set("n", "<leader>ne", function()
+		require("noice").cmd("errors")
 	end)
 
 	-- TODO: figure out why setting `remap = true` failes to call the `<C-d>zz` mapping
@@ -123,6 +138,7 @@ function M.init()
 		end
 	end, { desc = "down half page and center", expr = true })
 
+	-- NOTE: copied from folke's config, not confident it's necessary
 	vim.api.nvim_create_autocmd("FileType", {
 		pattern = "markdown",
 		callback = function(event)
