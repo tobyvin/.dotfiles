@@ -125,7 +125,7 @@ function M.init()
 		require("noice").cmd("errors")
 	end)
 
-	-- TODO: figure out why setting `remap = true` failes to call the `<C-d>zz` mapping
+	-- TODO: figure out why setting `remap = true` fails to call the `<C-d>zz` mapping
 	vim.keymap.set("n", "<C-d>", function()
 		if not require("noice.lsp").scroll(4) then
 			return "<C-d>zz"
@@ -137,16 +137,6 @@ function M.init()
 			return "<C-u>zz"
 		end
 	end, { desc = "down half page and center", expr = true })
-
-	-- NOTE: copied from folke's config, not confident it's necessary
-	vim.api.nvim_create_autocmd("FileType", {
-		pattern = "markdown",
-		callback = function(event)
-			vim.schedule(function()
-				require("noice.text.markdown").keys(event.buf)
-			end)
-		end,
-	})
 end
 
 return M

@@ -1,10 +1,8 @@
 local M = {
 	"folke/neodev.nvim",
-}
-
-function M.config()
-	require("neodev").setup({
+	config = {
 		experimental = {
+			-- much faster, but needs a nightly built of lua-language-server
 			pathStrict = true,
 		},
 		override = function(root_dir, library)
@@ -13,7 +11,14 @@ function M.config()
 				library.plugins = true
 			end
 		end,
-	})
+		lspconfig = false,
+	},
+}
+
+function M.init()
+	require("tobyvin.lsp.configs").sumneko_lua.before_init = function()
+		require("neodev.lsp").before_init()
+	end
 end
 
 return M
