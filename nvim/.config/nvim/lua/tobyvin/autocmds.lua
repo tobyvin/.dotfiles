@@ -1,5 +1,7 @@
+local augroup = vim.api.nvim_create_augroup("tobyvin", { clear = true })
+
 vim.api.nvim_create_autocmd("TextYankPost", {
-	group = vim.api.nvim_create_augroup("tobyvin_hl", { clear = true }),
+	group = augroup,
 	pattern = "*",
 	callback = function()
 		vim.highlight.on_yank()
@@ -8,24 +10,32 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-	group = vim.api.nvim_create_augroup("tobyvin_mkdir", { clear = true }),
+	group = augroup,
 	callback = function(args)
-		local status_ok, plenary = pcall(require, "plenary")
-		if not status_ok then
+		local file = vim.loop.fs_realpath(args.match) or args.match
+		local parent = vim.fn.fnamemodify(file, ":h")
+		local stat = vim.loop.fs_stat(parent)
+
+		if stat then
+			if stat.type ~= "directory" then
+				vim.notify(
+					string.format("cannot create directory ‘%s’: Not a directory", parent),
+					vim.log.levels.ERROR
+				)
+			end
 			return
 		end
 
-		local parent = plenary.path:new(args.file):parent()
-		local prompt = string.format("%s does not exist. Create it?", parent:make_relative())
-		if not parent:is_dir() and vim.fn.confirm(prompt, "&Yes\n&No") == 1 then
-			parent:mkdir()
+		local prompt = string.format("'%s' does not exist. Create it?", parent)
+		if vim.fn.confirm(prompt, "&Yes\n&No") == 1 then
+			vim.fn.mkdir(vim.fn.fnamemodify(parent, ":p"), "p")
 		end
 	end,
 	desc = "Check for missing directory on write",
 })
 
 vim.api.nvim_create_autocmd("BufWritePre", {
-	group = vim.api.nvim_create_augroup("tobyvin_whitespace", { clear = true }),
+	group = augroup,
 	pattern = "*",
 	callback = function()
 		local cursor = vim.api.nvim_win_get_cursor(0)
@@ -36,7 +46,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("tobyvin_tabstop", { clear = true }),
+	group = augroup,
 	pattern = { "c", "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
 	callback = function(args)
 		vim.bo[args.buf].tabstop = 2
@@ -45,7 +55,7 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("tobyvin_unlisted", { clear = true }),
+	group = augroup,
 	pattern = { "qf", "help", "gitcommit", "gitrebase", "Neogit*" },
 	callback = function(args)
 		vim.bo[args.buf].buflisted = false
@@ -54,7 +64,22 @@ vim.api.nvim_create_autocmd("FileType", {
 })
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("tobyvin_help", { clear = true }),
+	group = augroup,
+	pattern = { "vim", "lua" },
+	callback = function(args)
+		require("tobyvin.utils.documentation").register(function()
+			local word = vim.fn.expand("<cword>")
+			if word then
+				local ret = pcall(vim.cmd.help, word)
+				return not ret
+			end
+		end, { desc = "help", priority = 5, buffer = args.bufnr })
+	end,
+	desc = "Register help documentation provider",
+})
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup,
 	pattern = "help",
 	callback = function()
 		vim.wo.colorcolumn = nil
