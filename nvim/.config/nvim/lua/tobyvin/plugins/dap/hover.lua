@@ -30,7 +30,7 @@ M.setup = function()
 		pattern = "DapAttach",
 		callback = function()
 			dap_hover_id = utils.hover.register(require("dap.ui.widgets").hover, {
-				desc = "lsp",
+				desc = "dap",
 				enabled = M.hover_available,
 				priority = 20,
 			})

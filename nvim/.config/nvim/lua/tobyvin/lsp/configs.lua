@@ -69,15 +69,6 @@ M.sumneko_lua = {
 			},
 		},
 	},
-	on_attach = function(_, bufnr)
-		require("tobyvin.utils.documentation").register(function()
-			local word = vim.fn.expand("<cword>")
-			if word then
-				local ret = pcall(vim.cmd.help, word)
-				return not ret
-			end
-		end, { desc = "help", priority = 10, buffer = bufnr })
-	end,
 }
 
 M.texlab = {

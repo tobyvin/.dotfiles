@@ -73,7 +73,7 @@ vim.api.nvim_create_autocmd("FileType", {
 				local ret = pcall(vim.cmd.help, word)
 				return not ret
 			end
-		end, { desc = "help", priority = 5, buffer = args.bufnr })
+		end, { desc = "help", priority = 5, buffer = args.buf })
 	end,
 	desc = "Register help documentation provider",
 })
