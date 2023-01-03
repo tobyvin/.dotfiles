@@ -52,7 +52,10 @@ function M.config()
 	local write = require("mini.sessions").write
 	require("mini.sessions").write = function(name)
 		name = vim.F.if_nil(name, session_name())
-		write(name)
+
+		if not session_dir:joinpath(name):exists() or #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
+			write(name)
+		end
 	end
 
 	local delete = require("mini.sessions").delete
