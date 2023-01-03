@@ -53,6 +53,7 @@
   "nvim-web-devicons": { "branch": "master", "commit": "05e1072f63f6c194ac6e867b567e6b437d3d4622" },
   "playground": { "branch": "master", "commit": "8a887bcf66017bd775a0fb19c9d8b7a4d6759c48" },
   "plenary.nvim": { "branch": "master", "commit": "4b7e52044bbb84242158d977a50c4cbcd85070c7" },
+  "presence.nvim": { "branch": "main", "commit": "c1c54758824cbecd4e18065d37191f7666fdd097" },
   "refactoring.nvim": { "branch": "master", "commit": "2c72385b627e46bb66f23b8a11da40b4bb127506" },
   "ripgrep": { "branch": "master", "commit": "61101289fabc032fd8e90009c41d0b78e6dfc9a2" },
   "rust-tools.nvim": { "branch": "master", "commit": "99fd1238c6068d0637df30b6cee9a264334015e9" },
