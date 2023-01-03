@@ -5,6 +5,7 @@ local M = {}
 ---@alias ProviderId number
 
 ---@class ProviderOpts
+---@field desc string?
 ---@field enabled fun():boolean?
 ---@field buffer number?
 ---@field priority number?

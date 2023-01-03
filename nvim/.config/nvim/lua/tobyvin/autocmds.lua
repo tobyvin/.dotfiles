@@ -63,6 +63,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	desc = "Set buffer as unlisted",
 })
 
+-- FIX: fix `help` command causes `Vim:E565: Not allowed to change text or change window`
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
 	pattern = { "vim", "lua" },
@@ -70,8 +71,7 @@ vim.api.nvim_create_autocmd("FileType", {
 		require("tobyvin.utils.documentation").register(function()
 			local word = vim.fn.expand("<cword>")
 			if word then
-				local ret = pcall(vim.cmd.help, word)
-				return not ret
+				vim.cmd.help(word)
 			end
 		end, { desc = "help", priority = 5, buffer = args.buf })
 	end,
