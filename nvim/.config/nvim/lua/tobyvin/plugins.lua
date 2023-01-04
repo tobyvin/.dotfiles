@@ -10,13 +10,6 @@ return {
 		end,
 	},
 	{
-		"andweeb/presence.nvim",
-		event = "VeryLazy",
-		config = function()
-			require("presence"):setup()
-		end,
-	},
-	{
 		"norcalli/nvim-colorizer.lua",
 		event = "BufReadPre",
 	},
