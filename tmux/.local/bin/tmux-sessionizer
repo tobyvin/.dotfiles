@@ -10,7 +10,7 @@ if [ "$#" -eq 0 ]; then
 	HEIGHT=$([ "$lines" -gt "40" ] && printf %s "40" || printf %s "90%")
 
 	# shellcheck disable=2046
-	set -- $(projectr ~/src ~/.dotfiles --git --max-depth=3 | sed "\|^$(tmux display -p '#{session_path}')\$|d" |
+	set -- $(projectr ~/src ~/dkr ~/.dotfiles --git --max-depth=3 | sed "\|^$(tmux display -p '#{session_path}')\$|d" |
 		fzf-tmux -p "$WIDTH,$HEIGHT" -- --tac --multi --print-query -d/ --with-nth -1 \
 			--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ') && [ $# -gt 1 ] && shift
