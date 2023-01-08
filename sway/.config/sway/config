@@ -184,12 +184,12 @@ mode 'resize' {
     bindsym Escape mode 'default'
 }
 
-
 #
 # Status Bar
 #
 bar {
     status_command i3status-rs
+    font "Fira Code Nerd Font" Normal 12
     colors {
         background $base00
         separator  $base01
