@@ -1,10 +1,7 @@
 shell:
-  program: C:\WINDOWS\system32\wsl.exe
+  program: wsl.exe
   args:
-    - "--user"
-    - "root"
-    - machinectl shell --uid=1000 --quiet .host /bin/zsh -l -c 'tmux new -As
-      $USER'
+    - tmux new -As $USER
 
 working_directory: '\\wsl$\Arch\home\tobyv'
 
