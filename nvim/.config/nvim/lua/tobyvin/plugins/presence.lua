@@ -21,7 +21,9 @@ function M.config()
 	end
 
 	function Presence:cancel_idle_timer()
-		vim.fn.timer_stop(self.idle_timer)
+		if self.idle_timer then
+			vim.fn.timer_stop(self.idle_timer)
+		end
 		self.idle_timer = nil
 	end
 
