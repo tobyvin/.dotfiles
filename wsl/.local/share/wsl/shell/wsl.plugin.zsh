@@ -1,30 +1,10 @@
 #!/bin/sh
 # shellcheck disable=2155
 
-# [ -n "${WSL_DISTRO_NAME+1}" ] || return 0
-
-WINHOME="/mnt/c/Users/$USER"
-# shellcheck disable=2164
-[ "$PWD" = "$WINHOME" ] && cd
-
-mkdir -p /tmp/xdg
-
-export DISPLAY="$(grep -m 1 nameserver /etc/resolv.conf | awk '{print $2}')":0
-export BROWSER=wslview
-export XDG_RUNTIME_DIR=/tmp/xdg
-export GPG_TTY="$(tty)"
-export SHELDON_PROFILE="wsl"
-
 alias wsl="/mnt/c/Windows/system32/wsl.exe"
 alias powershell="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 alias pwsh="/mnt/c/Program Files/PowerShell/7/pwsh.exe"
 alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
-
-alias pip2="DISPLAY= pip2"
-alias pip3="DISPLAY= pip3"
-alias pip3.7="DISPLAY= pip3.7"
-alias pip3.10="DISPLAY= pip3.10"
-alias pip="DISPLAY= pip3"
 
 wsl_path() {
     win_path="$(powershell.exe "(get-command $1 -ErrorAction SilentlyContinue).Source")"
@@ -33,7 +13,6 @@ wsl_path() {
     fi
 }
 
-alias alacritty="$(wsl_path "alacritty")"
 alias pwsh="$(wsl_path "pwsh")"
 alias ykhold='sudo systemctl stop usbip@wsl.service && echo "Press any key..." && read && sudo systemctl start usbip@wsl.service'
 
