@@ -1,7 +1,7 @@
 shell:
   program: wsl.exe
   args:
-    - tmux new -As $USER
+    - zsh -l -c 'tmux new -As $USER'
 
 working_directory: '\\wsl$\Arch\home\tobyv'
 
