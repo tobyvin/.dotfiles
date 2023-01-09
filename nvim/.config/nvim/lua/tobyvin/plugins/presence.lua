@@ -1,6 +1,14 @@
 local M = {
 	"andweeb/presence.nvim",
-	event = "VeryLazy",
+	event = {
+		"FocusGained",
+		"TextChanged",
+		"VimLeavePre",
+		"WinEnter",
+		"WinLeave",
+		"BufEnter",
+		"BufAdd",
+	},
 }
 
 function M.config()
