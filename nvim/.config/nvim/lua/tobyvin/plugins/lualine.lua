@@ -91,6 +91,7 @@ function M.config()
 			lualine_c = {
 				{
 					"filename",
+					path = 1,
 					color = "StatusLineNC",
 				},
 			},
