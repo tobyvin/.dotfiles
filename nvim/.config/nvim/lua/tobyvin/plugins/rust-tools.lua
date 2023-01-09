@@ -6,7 +6,7 @@ local M = {
 		"nvim-lua/plenary.nvim",
 		"mfussenegger/nvim-dap",
 	},
-	config = {
+	opts = {
 		tools = {
 			hover_actions = {
 				border = "single",

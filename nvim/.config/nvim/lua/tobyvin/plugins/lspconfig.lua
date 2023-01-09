@@ -11,7 +11,6 @@ function M.config()
 	local lspconfig = require("lspconfig")
 	local configs = require("tobyvin.lsp.configs")
 
-	require("neodev")
 	require("mason")
 
 	require("lspconfig.ui.windows").default_options.border = "single"

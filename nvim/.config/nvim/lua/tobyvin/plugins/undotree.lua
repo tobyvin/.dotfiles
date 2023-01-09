@@ -4,7 +4,7 @@ local M = {
 		"nvim-lua/plenary.nvim",
 	},
 	cmd = "UndoTree",
-	config = {
+	opts = {
 		window = {
 			winblend = 0,
 		},
@@ -14,7 +14,7 @@ local M = {
 function M.init()
 	vim.api.nvim_create_user_command("UndoTree", function()
 		require("undotree").open()
-	end, {})
+	end, { desc = "toggle undotree" })
 end
 
 return M

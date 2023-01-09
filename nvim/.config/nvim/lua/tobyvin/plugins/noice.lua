@@ -8,7 +8,7 @@ local M = {
 		"MunifTanjim/nui.nvim",
 		"rcarriga/nvim-notify",
 	},
-	config = {
+	opts = {
 		cmdline = { enabled = false },
 		messages = { enabled = false },
 		popupmenu = {
@@ -115,15 +115,15 @@ function M.init()
 
 	vim.keymap.set("n", "<leader>nn", function()
 		require("noice").cmd("history")
-	end)
+	end, { desc = "message history" })
 
 	vim.keymap.set("n", "<leader>nl", function()
 		require("noice").cmd("last")
-	end)
+	end, { desc = "last message" })
 
 	vim.keymap.set("n", "<leader>ne", function()
 		require("noice").cmd("errors")
-	end)
+	end, { desc = "error messages" })
 
 	-- TODO: figure out why setting `remap = true` fails to call the `<C-d>zz` mapping
 	vim.keymap.set("n", "<C-d>", function()

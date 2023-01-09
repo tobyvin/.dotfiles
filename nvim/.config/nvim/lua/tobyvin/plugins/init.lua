@@ -5,7 +5,7 @@ return {
 		version = "*",
 		init = function()
 			vim.keymap.set("n", "<leader>p", function()
-				require("lazy.view").show("home")
+				require("lazy").home()
 			end, { desc = "plugins" })
 		end,
 	},
@@ -37,7 +37,7 @@ return {
 	{
 		"akinsho/git-conflict.nvim",
 		event = "BufReadPre",
-		config = {
+		opts = {
 			disable_diagnostics = true,
 			highlights = {
 				incoming = "diffText",

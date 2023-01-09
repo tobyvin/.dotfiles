@@ -55,11 +55,14 @@ M.rust_analyzer = {
 M.sumneko_lua = {
 	settings = {
 		Lua = {
+			workspace = {
+				checkThirdParty = false,
+			},
 			completion = {
 				callSnippet = "Replace",
 			},
 			diagnostics = {
-				globals = { "vim", "packer_plugins" },
+				globals = { "vim" },
 			},
 			format = {
 				enable = false,

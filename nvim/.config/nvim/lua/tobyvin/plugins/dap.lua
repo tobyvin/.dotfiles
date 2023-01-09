@@ -5,7 +5,7 @@ local M = {
 		"rcarriga/cmp-dap",
 		{
 			"mfussenegger/nvim-dap-python",
-			config = "",
+			opts = "",
 		},
 		{
 			"leoluz/nvim-dap-go",
@@ -51,27 +51,25 @@ function M.init()
 end
 
 function M.config()
-	local dap = require("dap")
-	local utils = require("tobyvin.utils")
-
-	dap.defaults.fallback.focus_terminal = true
-	dap.defaults.fallback.terminal_win_cmd = "15split new"
+	require("dap").defaults.fallback.focus_terminal = true
+	require("dap").defaults.fallback.terminal_win_cmd = "15split new"
 
 	require("tobyvin.plugins.dap.events").setup()
 	require("tobyvin.plugins.dap.hover").setup()
 
 	local configs = require("tobyvin.plugins.dap.configs")
 	for name, config in pairs(configs) do
-		if dap.configurations[name] == nil then
-			dap.configurations[name] = config
+		if require("dap").configurations[name] == nil then
+			require("dap").configurations[name] = config
 		end
 	end
 
-	vim.fn.sign_define("DapBreakpoint", utils.debug.signs.breakpoint)
-	vim.fn.sign_define("DapBreakpointCondition", utils.debug.signs.condition)
-	vim.fn.sign_define("DapBreakpointRejected", utils.debug.signs.rejected)
-	vim.fn.sign_define("DapStopped", utils.debug.signs.stopped)
-	vim.fn.sign_define("DapLogPoint", utils.debug.signs.logpoint)
+	local signs = require("tobyvin.utils.debug").signs
+	vim.fn.sign_define("DapBreakpoint", signs.breakpoint)
+	vim.fn.sign_define("DapBreakpointCondition", signs.condition)
+	vim.fn.sign_define("DapBreakpointRejected", signs.rejected)
+	vim.fn.sign_define("DapStopped", signs.stopped)
+	vim.fn.sign_define("DapLogPoint", signs.logpoint)
 end
 
 return M
