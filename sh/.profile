@@ -56,6 +56,7 @@ export PATH="$PATH:$CARGO_HOME/bin"
 
 export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 
+export GOPRIVATE=git.sr.ht
 export GOPATH="$XDG_DATA_HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
