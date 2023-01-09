@@ -1,4 +1,5 @@
 vim.g.mapleader = " "
+vim.g.maplocalleader = vim.g.mapleader
 
 vim.opt.autoindent = true
 vim.opt.background = "dark"
