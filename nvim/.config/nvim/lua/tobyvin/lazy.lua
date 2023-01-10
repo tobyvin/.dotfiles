@@ -24,10 +24,6 @@ require("lazy").setup("tobyvin.plugins", {
 			"tokyonight",
 		},
 	},
-	checker = {
-		enabled = true,
-		notify = false,
-	},
 	ui = {
 		border = "single",
 	},

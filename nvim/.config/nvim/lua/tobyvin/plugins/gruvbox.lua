@@ -1,14 +1,11 @@
 local M = {
 	"ellisonleao/gruvbox.nvim",
-}
-
-function M.config()
-	local gruvbox = require("gruvbox")
-
-	local colors = require("gruvbox.palette")
-	gruvbox.setup({
+	lazy = false,
+	priority = 1000,
+	opts = {
 		contrast = "hard",
 		transparent_mode = true,
+		inverse = false,
 		overrides = {
 			GruvboxRedSign = { bg = "" },
 			GruvboxGreenSign = { bg = "" },
@@ -23,21 +20,24 @@ function M.config()
 			CursorLine = { bg = "" },
 			CursorLineNr = { bg = "" },
 			SignColumn = { bg = "" },
-			DiffDelete = { reverse = false },
-			DiffAdd = { reverse = false },
-			DiffChange = { reverse = false },
-			DiffText = { reverse = false },
-			StatusLine = { fg = colors.light1, bg = colors.dark2, reverse = false },
-			StatusLineNC = { fg = colors.light4, bg = colors.dark1, reverse = false },
-			WinBar = { link = "StatusLineNC" },
-			WinBarNC = { fg = colors.light4, bg = "" },
 			QuickFixLine = { fg = "", bg = "" },
-
-			-- TODO: workaround for weird highlights in lsp hover/signature
-			-- SEE: https://github.com/neovim/neovim/issues/13746
-			markdownError = { link = "Normal" },
+			StatusLine = { link = "Pmenu" },
+			StatusLineNC = { link = "GruvboxNC" },
+			WinBar = { link = "GruvboxNC" },
+			WinBarNC = { link = "GruvboxFg4" },
 		},
+	},
+}
+
+function M.config(_, opts)
+	vim.api.nvim_set_hl(0, "GruvboxNC", {
+		fg = require("gruvbox.palette").light4,
+		bg = require("gruvbox.palette").dark1,
 	})
+
+	require("gruvbox").setup(opts)
+
+	vim.cmd([[colorscheme gruvbox]])
 end
 
 return M
