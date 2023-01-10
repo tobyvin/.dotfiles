@@ -1,5 +1,6 @@
 local M = {
 	"folke/neodev.nvim",
+	version = "*",
 	opts = {
 		experimental = {
 			pathStrict = true,
