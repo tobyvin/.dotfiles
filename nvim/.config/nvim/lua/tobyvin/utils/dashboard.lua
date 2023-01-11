@@ -5,7 +5,7 @@ local dashboard = {}
 local _index = {
 	header = 1,
 	lazy = 2,
-	cowsay = 3,
+	fortune = 3,
 }
 
 ---@type string[]
@@ -131,12 +131,16 @@ local function with_spacer(lines, count)
 	return spaced
 end
 
-local function cowsay()
+local function fortune()
 	local Job = require("plenary.job")
-	return Job:new({
-		command = "cowsay",
-		writer = Job:new({ command = "fortune", args = { "-s" } }),
-	}):sync()
+	local job = Job:new({ command = "fortune", args = { "-s" } })
+
+	local ok, is_exe = pcall(vim.fn.executable, "cowsay")
+	if ok and 1 == is_exe then
+		job = Job:new({ command = "cowsay", writer = job })
+	end
+
+	return job:sync()
 end
 
 local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
@@ -164,13 +168,12 @@ vim.api.nvim_create_autocmd("BufHidden", {
 	desc = "clear dashboard autocmds",
 })
 
-local c_ok, c_exe = pcall(vim.fn.executable, "cowsay")
-local f_ok, f_exe = pcall(vim.fn.executable, "fortune")
-if c_ok and 1 == c_exe and f_ok and 1 == f_exe then
-	sections.cowsay = with_spacer(cowsay(), 15)
+local ok, is_exe = pcall(vim.fn.executable, "fortune")
+if ok and 1 == is_exe then
+	sections.fortune = fortune()
 
 	vim.keymap.set("n", "<C-n>", function()
-		sections.cowsay = with_spacer(cowsay(), 15)
+		sections.fortune = fortune()
 	end, { desc = "next cowsay", buffer = buf })
 end
 
