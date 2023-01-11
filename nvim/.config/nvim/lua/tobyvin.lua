@@ -1,7 +1,7 @@
 require("tobyvin.options")
 require("tobyvin.keymaps")
 require("tobyvin.lazy")
-require("tobyvin.utils.start")
+require("tobyvin.utils.dashboard")
 
 vim.api.nvim_create_autocmd("User", {
 	pattern = "VeryLazy",
