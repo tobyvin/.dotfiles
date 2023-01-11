@@ -3,14 +3,8 @@ local M = {
 	dependencies = {
 		"nvim-telescope/telescope-dap.nvim",
 		"rcarriga/cmp-dap",
-		{
-			"mfussenegger/nvim-dap-python",
-			opts = "",
-		},
-		{
-			"leoluz/nvim-dap-go",
-			config = true,
-		},
+		"mfussenegger/nvim-dap-python",
+		"leoluz/nvim-dap-go",
 		{
 			"theHamsta/nvim-dap-virtual-text",
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
