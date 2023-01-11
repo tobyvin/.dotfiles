@@ -2,7 +2,11 @@
 local dashboard = {}
 
 ---@type table<string,integer>
-local _index = {}
+local _index = {
+	header = 1,
+	lazy = 2,
+	cowsay = 3,
+}
 
 ---@type string[]
 local sections = setmetatable({}, {
@@ -119,6 +123,22 @@ vim.opt_local.list = false
 vim.opt_local.spell = false
 vim.opt_local.signcolumn = "no"
 
+local function with_spacer(lines, count)
+	local spaced = lines
+	while #spaced < count do
+		table.insert(spaced, 1, "")
+	end
+	return spaced
+end
+
+local function cowsay()
+	local Job = require("plenary.job")
+	return Job:new({
+		command = "cowsay",
+		writer = Job:new({ command = "fortune", args = { "-s" } }),
+	}):sync()
+end
+
 local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
 
 vim.api.nvim_create_autocmd("User", {
@@ -144,7 +164,17 @@ vim.api.nvim_create_autocmd("BufHidden", {
 	desc = "clear dashboard autocmds",
 })
 
-sections.header = {
+local c_ok, c_exe = pcall(vim.fn.executable, "cowsay")
+local f_ok, f_exe = pcall(vim.fn.executable, "fortune")
+if c_ok and 1 == c_exe and f_ok and 1 == f_exe then
+	sections.cowsay = with_spacer(cowsay(), 15)
+
+	vim.keymap.set("n", "<C-n>", function()
+		sections.cowsay = with_spacer(cowsay(), 15)
+	end, { desc = "next cowsay", buffer = buf })
+end
+
+sections.header = with_spacer({
 	"                                                    ",
 	" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
 	" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
@@ -153,7 +183,7 @@ sections.header = {
 	" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
 	" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
 	"                                                    ",
-}
+}, 15)
 
 vim.api.nvim_create_autocmd("User", {
 	group = augroup,
