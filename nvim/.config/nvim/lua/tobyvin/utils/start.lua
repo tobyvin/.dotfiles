@@ -1,13 +1,25 @@
-local header = {
-	"                                                    ",
-	" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-	" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-	" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-	" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-	" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-	" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-	"                                                    ",
-}
+---@type string[][]
+local dashboard = {}
+
+---@type table<string,integer>
+local _index = {}
+
+---@type string[]
+local sections = setmetatable({}, {
+	__index = function(_, k)
+		return dashboard[_index[k]]
+	end,
+
+	__newindex = function(_, k, v)
+		if _index[k] then
+			dashboard[_index[k]] = v
+		else
+			table.insert(dashboard, v)
+			_index[k] = #dashboard
+		end
+		vim.api.nvim_exec_autocmds("User", { pattern = "DashboardUpdate" })
+	end,
+})
 
 local function should_skip()
 	-- don't start when opening a file
@@ -57,38 +69,25 @@ local function max_len(lines)
 	return max
 end
 
-local overwrite_len = 0
-
-local function buf_append_lines(buf, lines, left_align, overwrite)
-	if type(lines) == "string" then
-		lines = { lines }
-	end
-
-	local max_line_len = 0
-
-	if left_align then
-		max_line_len = max_len(lines)
-	end
-
+local function pad_lines(lines)
+	local max_line_len = max_len(lines)
 	local width = vim.api.nvim_win_get_width(0)
-	for i, line in ipairs(lines) do
+	local padded = {}
+	for _, line in ipairs(lines) do
 		local line_len = max_line_len
-		if not left_align then
-			line_len = vim.fn.strdisplaywidth(line)
-		end
-
 		local pad_len = math.floor((width / 2) - (line_len / 2))
-		lines[i] = string.rep(" ", pad_len) .. line
+		table.insert(padded, string.rep(" ", pad_len) .. line)
 	end
+	return padded
+end
 
-	local start = -1
-	if overwrite then
-		start = start - overwrite_len
-		overwrite_len = #lines
+local function render(buf)
+	local rendered = {}
+	for _, lines in pairs(dashboard) do
+		vim.list_extend(rendered, pad_lines(lines))
 	end
-
 	vim.bo[buf].modifiable = true
-	vim.api.nvim_buf_set_lines(buf, start, -1, false, lines)
+	vim.api.nvim_buf_set_lines(buf, 0, -1, false, rendered)
 	vim.bo[buf].modifiable = false
 end
 
@@ -120,23 +119,57 @@ vim.opt_local.list = false
 vim.opt_local.spell = false
 vim.opt_local.signcolumn = "no"
 
-buf_append_lines(buf, header)
+local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
 
 vim.api.nvim_create_autocmd("User", {
-	group = vim.api.nvim_create_augroup("dashboard", { clear = true }),
+	group = augroup,
+	pattern = { "DashboardUpdate" },
+	callback = function()
+		if vim.api.nvim_get_current_buf() == buf then
+			render(buf)
+		end
+	end,
+	desc = "render dashboard on updates",
+})
+
+vim.api.nvim_create_autocmd("BufHidden", {
+	group = augroup,
+	pattern = { "*" },
+	callback = function(args)
+		if args.buf == buf then
+			vim.api.nvim_del_autocmd(augroup)
+			return true
+		end
+	end,
+	desc = "clear dashboard autocmds",
+})
+
+sections.header = {
+	"                                                    ",
+	" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+	" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+	" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+	" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+	" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+	" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+	"                                                    ",
+}
+
+vim.api.nvim_create_autocmd("User", {
+	group = augroup,
 	pattern = { "Lazy*" },
 	callback = function()
-		local stats = require("lazy").stats()
-		local lines = {
-			string.format("startup: %s ms", stats.startuptime),
-			string.format("plugins: %s (%s loaded)", stats.count, stats.loaded),
-		}
-
+		local updates = nil
 		if require("lazy.status").has_updates() then
-			table.insert(lines, string.format("updates: %s", require("lazy.status").updates()))
+			updates = string.format("updates: %s", require("lazy.status").updates())
 		end
 
-		buf_append_lines(buf, lines, true, true)
+		local stats = require("lazy").stats()
+		sections.lazy = {
+			string.format("startup: %s ms", stats.startuptime),
+			string.format("plugins: %s (%s loaded)", stats.count, stats.loaded),
+			updates,
+		}
 	end,
 	desc = "dashboard lazy stats",
 })
