@@ -54,11 +54,13 @@ export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 export PATH="$PATH:$CARGO_HOME/bin"
 
-export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
-
 export GOPRIVATE=git.sr.ht
 export GOPATH="$XDG_DATA_HOME/go"
 export PATH="$PATH:$GOPATH/bin"
+
+export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
+
+export PATH="$PATH:$XDG_DATA_HOME/gem/ruby/3.0.0/bin"
 
 export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
 export npm_config_cache="$XDG_CACHE_HOME/npm"
@@ -67,6 +69,13 @@ export PATH="$PATH:$npm_config_prefix/bin"
 
 export DOTNET_CLI_HOME="$XDG_DATA_HOME/dotnet"
 export PATH="$PATH:$DOTNET_CLI_HOME/tools"
+
+export PERL_CPANM_HOME="$XDG_CACHE_HOME/perl"
+export PERL_LOCAL_LIB_ROOT="$XDG_DATA_HOME/perl"
+export PERL5LIB="$PERL_LOCAL_LIB_ROOT/lib/perl5"
+export PERL_MB_OPT="--install_base '$PERL_LOCAL_LIB_ROOT'"
+export PERL_MM_OPT="INSTALL_BASE=$PERL_LOCAL_LIB_ROOT"
+export PATH="$PATH:$PERL_LOCAL_LIB_ROOT/bin"
 
 export TEXMFHOME="$XDG_DATA_HOME/texmf"
 export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
