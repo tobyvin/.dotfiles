@@ -149,9 +149,7 @@ vim.api.nvim_create_autocmd("User", {
 	group = augroup,
 	pattern = { "DashboardUpdate" },
 	callback = function()
-		if vim.api.nvim_get_current_buf() == buf then
-			render(buf)
-		end
+		pcall(render, buf)
 	end,
 	desc = "render dashboard on updates",
 })
