@@ -21,7 +21,6 @@ local M = {
 				["cmp.entry.get_documentation"] = true,
 			},
 			progress = {
-				enabled = true,
 				format = {
 					{ "{data.progress.message} " },
 					"({data.progress.percentage}%) ",
@@ -38,7 +37,6 @@ local M = {
 					{ "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
 				},
 			},
-			messages = { enabled = false },
 		},
 		commands = {
 			all = {
