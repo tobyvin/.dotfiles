@@ -73,9 +73,9 @@ local function max_len(lines)
 	return max
 end
 
-local function pad_lines(lines)
+local function pad_lines(lines, win)
 	local max_line_len = max_len(lines)
-	local width = vim.api.nvim_win_get_width(0)
+	local width = vim.api.nvim_win_get_width(win)
 	local padded = {}
 	for _, line in ipairs(lines) do
 		local line_len = max_line_len
@@ -85,10 +85,10 @@ local function pad_lines(lines)
 	return padded
 end
 
-local function render(buf)
+local function render(buf, win)
 	local rendered = {}
 	for _, lines in pairs(dashboard) do
-		vim.list_extend(rendered, pad_lines(lines))
+		vim.list_extend(rendered, pad_lines(lines, win))
 	end
 	vim.bo[buf].modifiable = true
 	vim.api.nvim_buf_set_lines(buf, 0, -1, false, rendered)
@@ -100,6 +100,7 @@ if should_skip() then
 end
 
 local buf = vim.api.nvim_create_buf(false, true)
+local win = vim.api.nvim_get_current_win()
 
 vim.api.nvim_set_current_buf(buf)
 
@@ -149,7 +150,7 @@ vim.api.nvim_create_autocmd("User", {
 	group = augroup,
 	pattern = { "DashboardUpdate" },
 	callback = function()
-		pcall(render, buf)
+		pcall(render, buf, win)
 	end,
 	desc = "render dashboard on updates",
 })
