@@ -25,6 +25,13 @@ local M = {
 			StatusLineNC = { link = "GruvboxNC" },
 			WinBar = { link = "GruvboxNC" },
 			WinBarNC = { link = "GruvboxFg4" },
+			IndentBlanklineContext1 = { link = "GruvboxRed" },
+			IndentBlanklineContext2 = { link = "GruvboxOrange" },
+			IndentBlanklineContext3 = { link = "GruvboxYellow" },
+			IndentBlanklineContext4 = { link = "GruvboxGreen" },
+			IndentBlanklineContext5 = { link = "GruvboxAqua" },
+			IndentBlanklineContext6 = { link = "GruvboxBlue" },
+			IndentBlanklineContext7 = { link = "GruvboxViolet" },
 		},
 	},
 }

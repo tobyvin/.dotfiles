@@ -5,12 +5,13 @@ local M = {
 }
 
 function M.init()
-	vim.api.nvim_set_hl(0, "IndentBlanklineIndent1", { fg = "#E06C75", nocombine = true })
-	vim.api.nvim_set_hl(0, "IndentBlanklineIndent2", { fg = "#E5C07B", nocombine = true })
-	vim.api.nvim_set_hl(0, "IndentBlanklineIndent3", { fg = "#98C379", nocombine = true })
-	vim.api.nvim_set_hl(0, "IndentBlanklineIndent4", { fg = "#56B6C2", nocombine = true })
-	vim.api.nvim_set_hl(0, "IndentBlanklineIndent5", { fg = "#61AFEF", nocombine = true })
-	vim.api.nvim_set_hl(0, "IndentBlanklineIndent6", { fg = "#C678DD", nocombine = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext1", { fg = "Red", default = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext2", { fg = "Brown", default = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext3", { fg = "Yellow", default = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext4", { fg = "Green", default = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext5", { fg = "Cyan", default = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext6", { fg = "Blue", default = true })
+	vim.api.nvim_set_hl(0, "IndentBlanklineContext7", { fg = "Magenta", default = true })
 end
 
 function M.config()
@@ -18,12 +19,13 @@ function M.config()
 
 	indent_blankline.setup({
 		context_highlight_list = {
-			"IndentBlanklineIndent1",
-			"IndentBlanklineIndent2",
-			"IndentBlanklineIndent3",
-			"IndentBlanklineIndent4",
-			"IndentBlanklineIndent5",
-			"IndentBlanklineIndent6",
+			"IndentBlanklineContext1",
+			"IndentBlanklineContext2",
+			"IndentBlanklineContext3",
+			"IndentBlanklineContext4",
+			"IndentBlanklineContext5",
+			"IndentBlanklineContext6",
+			"IndentBlanklineContext7",
 		},
 		space_char_blankline = " ",
 		show_end_of_line = true,
