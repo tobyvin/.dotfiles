@@ -57,11 +57,9 @@ function M.config()
 			documentation = cmp.config.window.bordered({ border = "single" }),
 		},
 		mapping = cmp.mapping.preset.insert({
-			["<Tab>"] = { i = cmp.mapping.select_next_item() },
-			["<S-Tab>"] = { i = cmp.mapping.select_prev_item() },
 			["<C-d>"] = { i = cmp.mapping.scroll_docs(4) },
 			["<C-u>"] = { i = cmp.mapping.scroll_docs(-4) },
-			["<C-Space>"] = { i = cmp.mapping.complete() },
+			["<C-Space>"] = { i = cmp.mapping.complete({}) },
 			["<CR>"] = { i = cmp.mapping.confirm() },
 		}),
 		sources = {
@@ -73,7 +71,7 @@ function M.config()
 	})
 
 	local cmd_mapping = cmp.mapping.preset.cmdline({
-		["<C-Space>"] = { c = cmp.mapping.complete() },
+		["<C-Space>"] = { c = cmp.mapping.complete({}) },
 		["<C-e>"] = { c = cmp.mapping.abort() },
 	})
 
