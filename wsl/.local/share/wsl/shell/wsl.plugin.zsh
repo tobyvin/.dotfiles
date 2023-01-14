@@ -1,50 +1,11 @@
 #!/bin/sh
-# shellcheck disable=2155
 
-alias wsl="/mnt/c/Windows/system32/wsl.exe"
-alias powershell="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
-alias pwsh="/mnt/c/Program Files/PowerShell/7/pwsh.exe"
-alias ykman='/mnt/c/Program\ Files/Yubico/YubiKey\ Manager/ykman.exe'
-
-wsl_path() {
-    win_path="$(powershell.exe "(get-command $1 -ErrorAction SilentlyContinue).Source")"
-    if [ ! -z "$win_path" ]; then
-        echo "$(wslpath "$win_path" | sed 's/\s/\\\ /g' | sed 's/\\\s*$//')"
-    fi
-}
-
-alias pwsh="$(wsl_path "pwsh")"
+alias wsl='/mnt/c/Windows/system32/wsl.exe'
+alias powershell='/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
+alias pwsh='/mnt/c/Program Files/PowerShell/7/pwsh.exe'
+alias winget='/mnt/c/Users/tobyv/AppData/Local/Microsoft/WindowsApps/winget.exe'
+alias scoop='/mnt/c/Users/tobyv/scoop/shims/scoop'
 alias ykhold='sudo systemctl stop usbip@wsl.service && echo "Press any key..." && read && sudo systemctl start usbip@wsl.service'
-
-wsl_cmd_proxy() {
-	exe="$1"
-	shift # past exe
-
-	cmd=" ${1}"
-	shift # past cmd
-
-	args=""
-	while [ $# -gt 0 ]; do
-		case "$1" in
-		-*)
-			args="$args${1} '${2}' "
-			shift
-			shift
-			;;
-		*)
-			args="$args'${1}'"
-			shift
-			;;
-		esac
-		args="$args "
-	done
-
-	# shellcheck disable=2016
-	powershell.exe -NoProfile -c 'cd $HOME;' "$exe" "$cmd" "$args"
-}
-
-winget() { wsl_cmd_proxy "winget.exe" "$@"; }
-scoop() { wsl_cmd_proxy "scoop" "$@"; }
 
 zvm_vi_yank () {
 	zvm_yank
