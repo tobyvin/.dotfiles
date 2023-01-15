@@ -57,6 +57,8 @@ function M.config()
 			documentation = cmp.config.window.bordered({ border = "single" }),
 		},
 		mapping = cmp.mapping.preset.insert({
+			["<Tab>"] = { i = cmp.mapping.select_next_item() },
+			["<S-Tab>"] = { i = cmp.mapping.select_prev_item() },
 			["<C-d>"] = { i = cmp.mapping.scroll_docs(4) },
 			["<C-u>"] = { i = cmp.mapping.scroll_docs(-4) },
 			["<C-Space>"] = { i = cmp.mapping.complete({}) },
