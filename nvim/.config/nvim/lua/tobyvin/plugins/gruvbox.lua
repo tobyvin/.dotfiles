@@ -44,7 +44,7 @@ function M.config(_, opts)
 
 	require("gruvbox").setup(opts)
 
-	vim.cmd([[colorscheme gruvbox]])
+	vim.cmd.colorscheme("gruvbox")
 end
 
 return M

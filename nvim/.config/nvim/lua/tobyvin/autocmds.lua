@@ -82,8 +82,8 @@ vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
 	pattern = "help",
 	callback = function()
-		vim.wo.colorcolumn = nil
-		vim.cmd("wincmd L")
+		vim.opt_local.colorcolumn = nil
+		vim.cmd.wincmd("L")
 	end,
 	desc = "Vertical help window",
 })

@@ -10,14 +10,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-		if client.server_capabilities.definitionProvider then
-			vim.bo[args.buf].tagfunc = "v:lua.vim.lsp.tagfunc"
-		end
-
-		if client.server_capabilities.documentFormattingProvider then
-			vim.api.nvim_buf_set_option(args.buf, "formatexpr", "v:lua.vim.lsp.formatexpr()")
-		end
-
 		if client.server_capabilities.documentHighlightProvider then
 			vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 				group = augroup,
@@ -34,6 +26,22 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
+		if client.server_capabilities.hoverProvider then
+			require("tobyvin.utils.hover").register(vim.lsp.buf.hover, {
+				desc = "lsp hover",
+				buffer = args.buf,
+				priority = 1,
+			})
+		end
+
+		if client.server_capabilities.experimental.externalDocs then
+			require("tobyvin.utils.documentation").register(vim.lsp.buf.external_docs, {
+				desc = "lsp external_docs",
+				buffer = args.buf,
+				priority = 1,
+			})
+		end
+
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = args.buf })
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = args.buf })
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "declaration", buffer = args.buf })
@@ -45,9 +53,5 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "rename", buffer = args.buf })
 		vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "code action", buffer = args.buf })
 		vim.keymap.set("n", "<leader>ll", vim.lsp.codelens.run, { desc = "codelens", buffer = args.buf })
-
-		local register_opts = { desc = "lsp", buffer = args.buf, priority = 1 }
-		require("tobyvin.utils.hover").register(vim.lsp.buf.hover, register_opts)
-		require("tobyvin.utils.documentation").register(vim.lsp.buf.external_docs, register_opts)
 	end,
 })

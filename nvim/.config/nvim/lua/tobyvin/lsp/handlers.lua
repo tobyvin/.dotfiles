@@ -1,8 +1,9 @@
 local augroup = vim.api.nvim_create_augroup("lsp_workspace", {})
-local handlers = vim.lsp.handlers
+local handlers = vim.deepcopy(vim.lsp.handlers)
 
 function vim.lsp.buf.external_docs()
-	local params = vim.lsp.util.make_position_params(nil, "")
+	---@diagnostic disable-next-line: missing-parameter
+	local params = vim.lsp.util.make_position_params()
 	return vim.lsp.buf_request(0, "experimental/externalDocs", params)
 end
 
@@ -50,6 +51,7 @@ return {
 		elseif result then
 			vim.fn["netrw#BrowseX"](result, 0)
 		end
+		return result, err
 	end,
 
 	["window/showMessage"] = function(_, result, ctx)
