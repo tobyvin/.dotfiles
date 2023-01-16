@@ -48,6 +48,11 @@ M.rust_analyzer = {
 					enable = false,
 				},
 			},
+			imports = {
+				granularity = {
+					enforce = true,
+				},
+			},
 		},
 	},
 }
@@ -65,9 +70,6 @@ M.sumneko_lua = {
 				globals = { "vim" },
 			},
 			format = {
-				enable = false,
-			},
-			telemetry = {
 				enable = false,
 			},
 		},

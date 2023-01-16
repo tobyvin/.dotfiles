@@ -21,26 +21,25 @@ function M.init()
 	require("tobyvin.lsp.configs").rust_analyzer = nil
 
 	vim.api.nvim_create_autocmd("LspAttach", {
-		group = vim.api.nvim_create_augroup("tobyvin_rust-tools", { clear = true }),
+		group = vim.api.nvim_create_augroup("rust-tools", {}),
 		desc = "setup rust-tools",
 		callback = function(args)
-			local bufnr = args.buf
-			local client = vim.lsp.get_client_by_id(args.data.client_id)
-			if client.name ~= "rust_analyzer" then
+			if vim.lsp.get_client_by_id(args.data.client_id).name ~= "rust_analyzer" then
 				return
 			end
 
-			local runnables = require("rust-tools").runnables.runnables
-			local debuggables = require("rust-tools").debuggables.debuggables
-			local open_cargo_toml = require("rust-tools").open_cargo_toml.open_cargo_toml
-			local expand_macro = require("rust-tools").expand_macro.expand_macro
-			local ssr = require("rust-tools").ssr.ssr
-
-			vim.keymap.set("n", "<leader>dd", debuggables, { desc = "debug", buffer = bufnr })
-			vim.keymap.set("n", "<leader>tt", runnables, { desc = "test", buffer = bufnr })
-			vim.keymap.set("n", "<leader>lo", open_cargo_toml, { desc = "open Cargo.toml", buffer = bufnr })
-			vim.keymap.set("n", "<leader>le", expand_macro, { desc = "expand macro", buffer = bufnr })
-			vim.keymap.set("n", "<leader>rs", ssr, { desc = "ssr", buffer = bufnr })
+			vim.keymap.set("n", "<leader>dd", require("rust-tools").debuggables.debuggables, {
+				desc = "debug",
+				buffer = args.buf,
+			})
+			vim.keymap.set("n", "<leader>tt", require("rust-tools").runnables.runnables, {
+				desc = "test",
+				buffer = args.buf,
+			})
+			vim.keymap.set("n", "<leader>le", require("rust-tools").expand_macro.expand_macro, {
+				desc = "expand macro",
+				buffer = args.buf,
+			})
 		end,
 	})
 end
