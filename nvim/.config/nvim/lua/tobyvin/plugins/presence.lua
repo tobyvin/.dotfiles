@@ -14,7 +14,7 @@ local M = {
 function M.config()
 	local Presence = require("presence"):setup({
 		enable_line_number = true,
-		focus_lost_delay = 60,
+		focus_lost_delay = 300,
 	})
 
 	function Presence:handle_focus_lost()
