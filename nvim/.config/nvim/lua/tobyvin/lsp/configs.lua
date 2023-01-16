@@ -40,7 +40,7 @@ M.rust_analyzer = {
 			cargo = {
 				features = "all",
 			},
-			checkOnSave = {
+			check = {
 				command = "clippy",
 			},
 			completion = {
