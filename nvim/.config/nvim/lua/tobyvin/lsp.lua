@@ -34,7 +34,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		if client.server_capabilities.experimental.externalDocs then
+		if vim.tbl_get(client.server_capabilities, "experimental", "externalDocs") then
 			require("tobyvin.utils.documentation").register(vim.lsp.buf.external_docs, {
 				desc = "lsp external_docs",
 				buffer = args.buf,
