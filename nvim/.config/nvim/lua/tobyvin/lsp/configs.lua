@@ -79,23 +79,34 @@ M.sumneko_lua = {
 M.texlab = {
 	settings = {
 		texlab = {
+			rootDirectory = ".",
 			build = {
 				args = {
 					"-pdf",
 					"-interaction=nonstopmode",
 					"-synctex=1",
-					string.format("-auxdir=%s/aux", vim.fn.getcwd()),
-					string.format("-outdir=%s/out", vim.fn.getcwd()),
+					"-auxdir=../build",
+					"-outdir=../build",
 					"-emulate-aux-dir",
 					"%f",
 				},
 				onSave = true,
 			},
+			forwardSearch = {
+				executable = "zathura",
+				args = {
+					"--synctex-editor-command",
+					[[nvim-texlabconfig -file '%{input}' -line %{line}]],
+					"--synctex-forward",
+					"%l:1:%f",
+					"%p",
+				},
+			},
 			chktex = {
 				onEdit = true,
 				onOpenAndSave = true,
 			},
-			auxDirectory = string.format("%s/aux", vim.fn.getcwd()),
+			auxDirectory = "../build",
 			latexindent = {
 				["local"] = string.format("%s/latexindent/indentconfig.yaml", vim.env.XDG_CONFIG_HOME),
 				modifyLineBreaks = true,
@@ -105,6 +116,24 @@ M.texlab = {
 	on_attach = function(_, bufnr)
 		vim.b[bufnr].tex_flavor = "latex"
 		vim.wo.spell = true
+
+		local preview_autocmd
+		local augroup = vim.api.nvim_create_augroup("texlab", {})
+
+		vim.api.nvim_create_user_command("TexlabPreview", function()
+			preview_autocmd = vim.api.nvim_create_autocmd("CursorMoved", {
+				group = augroup,
+				command = "TexlabForward",
+			})
+
+			vim.cmd.TexlabForward()
+		end, { desc = "Texlab preview start" })
+
+		vim.api.nvim_create_user_command("TexlabPreviewStop", function()
+			if preview_autocmd then
+				vim.api.nvim_del_autocmd(preview_autocmd)
+			end
+		end, { desc = "Texlab preview stop" })
 	end,
 }
 

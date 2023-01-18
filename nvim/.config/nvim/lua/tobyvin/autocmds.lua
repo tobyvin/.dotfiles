@@ -87,3 +87,14 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 	desc = "Vertical help window",
 })
+
+vim.api.nvim_create_autocmd("BufRead", {
+	group = augroup,
+	pattern = "*.tex",
+	callback = function(args)
+		vim.opt_local.filetype = "tex"
+		vim.opt_local.spell = true
+		vim.b[args.buf].tex_flavor = "latex"
+	end,
+	desc = "Vertical help window",
+})

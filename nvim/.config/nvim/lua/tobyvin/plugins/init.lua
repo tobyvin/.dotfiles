@@ -45,4 +45,10 @@ return {
 			},
 		},
 	},
+	{
+		"f3fora/nvim-texlabconfig",
+		ft = { "tex", "bib" },
+		config = true,
+		build = "go build -o ~/.local/bin",
+	},
 }
