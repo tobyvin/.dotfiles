@@ -17,6 +17,11 @@ critical_bg = "#fb4934"
 critical_fg = "#1d2021"
 
 [[block]]
+block = "music"
+player = "spotifyd"
+buttons = ["prev", "play", "next"]
+
+[[block]]
 block = "disk_space"
 path = "/"
 alias = "/"
@@ -46,11 +51,6 @@ block = "sound"
 if_command = "pactl list >/dev/null || aplay -l >/dev/null "
 
 [[block]]
-block = "music"
-player = "spotifyd"
-buttons = ["prev", "play", "next"]
-
-[[block]]
 block = "battery"
 device = "/sys/class/power_supply/BAT0"
 if_command = "test -e /sys/class/power_supply/BAT0"
@@ -65,13 +65,11 @@ block = "battery"
 device = "/sys/class/power_supply/BAT2"
 if_command = "test -e /sys/class/power_supply/BAT2"
 
-# TODO: figure out why this is creating a json error
-# install: go install github.com/monban/iwdstatus
-# [[block]]
-# block = "custom"
-# command = "iwdstatus"
-# json = true
-# if_command = "command -v iwdstatus"
+[[block]]
+block = "net"
+device = "wlan0"
+format = "{ssid} {ip}"
+format_alt = "{ssid} {signal_strength} {frequency} {ip} {speed_up;K} {speed_down;K}"
 
 [[block]]
 block = "time"
