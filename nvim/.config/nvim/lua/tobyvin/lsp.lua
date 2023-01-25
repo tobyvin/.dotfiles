@@ -26,22 +26,11 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		if client.server_capabilities.hoverProvider then
-			require("tobyvin.utils.hover").register(vim.lsp.buf.hover, {
-				desc = "lsp hover",
-				buffer = args.buf,
-				priority = 1,
-			})
-		end
-
 		if vim.tbl_get(client.server_capabilities, "experimental", "externalDocs") then
-			require("tobyvin.utils.documentation").register(vim.lsp.buf.external_docs, {
-				desc = "lsp external_docs",
-				buffer = args.buf,
-				priority = 1,
-			})
+			vim.keymap.set("n", "gx", vim.lsp.buf.external_docs, { desc = "external_docs", buffer = args.buf })
 		end
 
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "hover", buffer = args.buf })
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = args.buf })
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = args.buf })
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "declaration", buffer = args.buf })
