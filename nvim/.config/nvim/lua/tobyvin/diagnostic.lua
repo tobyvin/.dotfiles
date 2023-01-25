@@ -1,4 +1,4 @@
-local utils = require("tobyvin.utils")
+local utils = require("tobyvin.utils.diagnostic")
 
 vim.diagnostic.config({
 	virtual_text = {
@@ -14,13 +14,13 @@ vim.diagnostic.config({
 	},
 })
 
-vim.fn.sign_define("DiagnosticSignError", utils.diagnostic.signs.error)
-vim.fn.sign_define("DiagnosticSignWarn", utils.diagnostic.signs.warn)
-vim.fn.sign_define("DiagnosticSignInfo", utils.diagnostic.signs.info)
-vim.fn.sign_define("DiagnosticSignHint", utils.diagnostic.signs.hint)
+vim.fn.sign_define("DiagnosticSignError", utils.signs.error)
+vim.fn.sign_define("DiagnosticSignWarn", utils.signs.warn)
+vim.fn.sign_define("DiagnosticSignInfo", utils.signs.info)
+vim.fn.sign_define("DiagnosticSignHint", utils.signs.hint)
 
-vim.keymap.set("n", "]d", utils.diagnostic.goto_next, { desc = "next diagnostic" })
-vim.keymap.set("n", "[d", utils.diagnostic.goto_prev, { desc = "prev diagnostic" })
+vim.keymap.set("n", "]d", utils.goto_next, { desc = "next diagnostic" })
+vim.keymap.set("n", "[d", utils.goto_prev, { desc = "prev diagnostic" })
 vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "open diagnostic float" })
 vim.keymap.set("n", "gL", vim.diagnostic.setqflist, { desc = "qf diagnostic" })
 

@@ -1,7 +1,5 @@
-local utils = require("tobyvin.utils")
-
 local hover = function()
-	if utils.hover.open() then
+	if require("tobyvin.utils.hover").open() then
 		-- Fix for diagnostics immediately overriding hover window
 		vim.api.nvim_command("set eventignore=CursorHold")
 		vim.api.nvim_command('autocmd CursorMoved <buffer> ++once set eventignore=""')
@@ -11,7 +9,7 @@ local hover = function()
 end
 
 local external_docs = function()
-	if utils.documentation.open() then
+	if require("tobyvin.utils.documentation").open() then
 		return "<Ignore>"
 	end
 	return "gx"

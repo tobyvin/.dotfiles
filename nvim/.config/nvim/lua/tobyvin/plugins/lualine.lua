@@ -10,7 +10,7 @@ local M = {
 function M.config()
 	local lualine = require("lualine")
 
-	local utils = require("tobyvin.utils")
+	local utils = require("tobyvin.utils.diagnostic")
 
 	local winbar_cond = function()
 		return vim.bo.buflisted and (vim.fn.bufname() ~= "" or require("nvim-navic").is_available())
@@ -53,19 +53,19 @@ function M.config()
 			lualine_c = {
 				{
 					"diagnostics",
-					source = { utils.diagnostic.count },
+					source = { utils.count },
 					symbols = {
-						error = utils.diagnostic.signs.error.text,
-						warn = utils.diagnostic.signs.warn.text,
-						info = utils.diagnostic.signs.info.text,
-						hint = utils.diagnostic.signs.hint.text,
+						error = utils.signs.error.text,
+						warn = utils.signs.warn.text,
+						info = utils.signs.info.text,
+						hint = utils.signs.hint.text,
 					},
 
 					diagnostics_color = {
-						error = utils.diagnostic.signs.error.hl,
-						warn = utils.diagnostic.signs.warn.hl,
-						info = utils.diagnostic.signs.info.hl,
-						hint = utils.diagnostic.signs.hint.hl,
+						error = utils.signs.error.hl,
+						warn = utils.signs.warn.hl,
+						info = utils.signs.info.hl,
+						hint = utils.signs.hint.hl,
 					},
 					update_in_insert = true,
 					color = "StatusLineNC",

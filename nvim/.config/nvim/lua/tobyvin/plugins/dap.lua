@@ -48,8 +48,14 @@ function M.config()
 	require("dap").defaults.fallback.focus_terminal = true
 	require("dap").defaults.fallback.terminal_win_cmd = "15split new"
 
-	require("tobyvin.plugins.dap.events").setup()
-	require("tobyvin.plugins.dap.hover").setup()
+	require("dap").listeners.after.event_initialized["User"] = function()
+		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
+	end
+
+	require("dap").listeners.before.event_terminated["User"] = function()
+		vim.api.nvim_exec_autocmds("User", { pattern = "DapDetach" })
+		require("dap").repl.close()
+	end
 
 	local configs = require("tobyvin.plugins.dap.configs")
 	for name, config in pairs(configs) do
