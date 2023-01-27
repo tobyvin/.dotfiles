@@ -3,10 +3,67 @@ local M = {
 	dependencies = {
 		"nvim-lua/plenary.nvim",
 		"BurntSushi/ripgrep",
-		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		{
+			"nvim-telescope/telescope-fzf-native.nvim",
+			build = "make",
+		},
+		{
+			"prochri/telescope-all-recent.nvim",
+			dependencies = "kkharji/sqlite.lua",
+			config = true,
+		},
+		{
+			"AckslD/nvim-neoclip.lua",
+			config = true,
+		},
 		"nvim-telescope/telescope-file-browser.nvim",
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"nvim-telescope/telescope-dap.nvim",
+		"nvim-telescope/telescope-symbols.nvim",
+		"debugloop/telescope-undo.nvim",
+	},
+	opts = {
+		defaults = {
+			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+			file_ignore_patterns = { "^.git/" },
+			vimgrep_arguments = {
+				"rg",
+				"--color=never",
+				"--no-heading",
+				"--with-filename",
+				"--line-number",
+				"--column",
+				"--hidden",
+				"--smart-case",
+				"--trim",
+			},
+			cache_picker = {
+				num_pickers = 10,
+			},
+		},
+		pickers = {
+			find_files = {
+				find_command = {
+					"fd",
+					"--type",
+					"f",
+					"--hidden",
+					"--strip-cwd-prefix",
+				},
+			},
+			live_grep = {
+				theme = "ivy",
+			},
+			buffers = {
+				show_all_buffers = true,
+				sort_lastused = true,
+			},
+		},
+		extensions = {
+			live_grep_args = {
+				theme = "ivy",
+			},
+		},
 	},
 }
 
@@ -34,7 +91,7 @@ function M.init()
 	vim.keymap.set("n", "<leader>fm", builtin.marks, { desc = "marks" })
 	vim.keymap.set("n", "<leader>fM", builtin.man_pages, { desc = "man pages" })
 	vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "old files" })
-	vim.keymap.set("n", "<leader>fp", builtin.pickers, { desc = "pickers" })
+	vim.keymap.set("n", "<leader>fP", builtin.pickers, { desc = "pickers" })
 	vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "resume" })
 	vim.keymap.set("n", "<leader>fR", builtin.reloader, { desc = "reloader" })
 	vim.keymap.set("n", "<leader>fs", builtin.spell_suggest, { desc = "spell suggest" })
@@ -57,61 +114,22 @@ function M.init()
 	vim.keymap.set("n", "<leader>fg", function()
 		require("telescope").extensions.live_grep_args.live_grep_args()
 	end, { desc = "live grep" })
+
+	vim.keymap.set("n", "<leader>fu", function()
+		require("telescope").extensions.undo.undo()
+	end, { desc = "undo" })
+
+	vim.keymap.set("n", "<leader>fp", function()
+		require("telescope").extensions.neoclip.default()
+	end, { desc = "clipboard" })
 end
 
-function M.config()
-	local telescope = require("telescope")
-
-	local actions = require("telescope.actions")
-
-	telescope.setup({
-		defaults = {
-			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
-			mappings = {
-				i = {
-					["<esc>"] = actions.close,
-					["<C-h>"] = actions.which_key,
-				},
-			},
-			file_ignore_patterns = { "^.git/", "^target/" },
-			vimgrep_arguments = {
-				"rg",
-				"--color=never",
-				"--no-heading",
-				"--with-filename",
-				"--line-number",
-				"--column",
-				"--hidden",
-				"--smart-case",
-				"--trim",
-			},
-			history = {
-				path = vim.fn.stdpath("data") .. "/databases/telescope_history.sqlite3",
-				limit = 100,
-			},
-			cache_picker = {
-				num_pickers = 10,
-			},
-		},
-		pickers = {
-			find_files = {
-				find_command = { "fd", "--type", "f", "--hidden", "--strip-cwd-prefix" },
-			},
-			live_grep = { theme = "ivy" },
-			buffers = {
-				show_all_buffers = true,
-				sort_lastused = true,
-			},
-		},
-		extensions = {
-			live_grep_args = {
-				theme = "ivy",
-			},
-		},
-	})
-
-	-- Extensions
-	telescope.load_extension("fzf")
+function M.config(_, opts)
+	require("telescope").setup(opts)
+	require("telescope").load_extension("fzf")
+	require("telescope").load_extension("undo")
+	require("telescope").load_extension("neoclip")
+	require("telescope-all-recent")
 end
 
 return M
