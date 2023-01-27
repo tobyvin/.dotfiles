@@ -1,5 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = vim.g.mapleader
+vim.g.tex_flavor = "latex"
 
 vim.opt.autoindent = true
 vim.opt.background = "dark"

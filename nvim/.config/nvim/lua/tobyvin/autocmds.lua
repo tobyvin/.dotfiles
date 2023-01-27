@@ -4,7 +4,7 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	group = augroup,
 	pattern = "*",
 	callback = function()
-		vim.highlight.on_yank()
+		vim.highlight.on_yank({ macro = true })
 	end,
 	desc = "Highlight yank",
 })
@@ -16,19 +16,14 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		local parent = vim.fn.fnamemodify(file, ":h")
 		local stat = vim.loop.fs_stat(parent)
 
-		if stat then
-			if stat.type ~= "directory" then
-				vim.notify(
-					string.format("cannot create directory ‘%s’: Not a directory", parent),
-					vim.log.levels.ERROR
-				)
+		if not stat then
+			local prompt = string.format("'%s' does not exist. Create it?", parent)
+			if vim.fn.confirm(prompt, "&Yes\n&No") == 1 then
+				vim.fn.mkdir(vim.fn.fnamemodify(parent, ":p"), "p")
 			end
-			return
-		end
-
-		local prompt = string.format("'%s' does not exist. Create it?", parent)
-		if vim.fn.confirm(prompt, "&Yes\n&No") == 1 then
-			vim.fn.mkdir(vim.fn.fnamemodify(parent, ":p"), "p")
+		elseif stat.type ~= "directory" then
+			local msg = string.format("cannot create directory ‘%s’: Not a directory", parent)
+			vim.notify(msg, vim.log.levels.ERROR)
 		end
 	end,
 	desc = "Check for missing directory on write",
@@ -47,7 +42,19 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
-	pattern = { "c", "sh", "zsh", "xml", "html", "xhtml", "css", "scss", "javascript", "lua", "dart", "markdown" },
+	pattern = {
+		"c",
+		"sh",
+		"zsh",
+		"xml",
+		"html",
+		"xhtml",
+		"css",
+		"scss",
+		"javascript",
+		"lua",
+		"markdown",
+	},
 	callback = function(args)
 		vim.bo[args.buf].tabstop = 2
 	end,
@@ -56,45 +63,15 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
-	pattern = { "qf", "help", "gitcommit", "gitrebase", "Neogit*" },
+	pattern = {
+		"qf",
+		"help",
+		"gitcommit",
+		"gitrebase",
+		"Neogit*",
+	},
 	callback = function(args)
 		vim.bo[args.buf].buflisted = false
 	end,
 	desc = "Set buffer as unlisted",
-})
-
--- FIX: fix `help` command causes `Vim:E565: Not allowed to change text or change window`
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup,
-	pattern = { "vim", "lua" },
-	callback = function(args)
-		require("tobyvin.utils.documentation").register(function()
-			local word = vim.fn.expand("<cword>")
-			if word then
-				vim.cmd.help(word)
-			end
-		end, { desc = "help", priority = 5, buffer = args.buf })
-	end,
-	desc = "Register help documentation provider",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup,
-	pattern = "help",
-	callback = function()
-		vim.opt_local.colorcolumn = nil
-		vim.cmd.wincmd("L")
-	end,
-	desc = "Vertical help window",
-})
-
-vim.api.nvim_create_autocmd("BufRead", {
-	group = augroup,
-	pattern = "*.tex",
-	callback = function(args)
-		vim.opt_local.filetype = "tex"
-		vim.opt_local.spell = true
-		vim.b[args.buf].tex_flavor = "latex"
-	end,
-	desc = "Vertical help window",
 })
