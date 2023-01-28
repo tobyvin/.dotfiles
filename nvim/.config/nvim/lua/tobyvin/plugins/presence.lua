@@ -12,8 +12,10 @@ local M = {
 }
 
 function M.config()
+	local plugin_managers = require("presence/plugin_managers")
+	plugin_managers["lazy"] = "lazy"
+
 	local Presence = require("presence"):setup({
-		enable_line_number = true,
 		focus_lost_delay = 300,
 	})
 
