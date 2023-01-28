@@ -1,8 +1,22 @@
+add_newline = false
 format = """
 $all\
 """
 
-add_newline = false
+[cmd_duration]
+disabled = true
+
+[directory]
+read_only = " "
+truncate_to_repo = false
+repo_root_style = "bold purple"
+
+[directory.substitutions]
+"~/win" = " ~"
+"/mnt/c/Users/tobyv" = " ~"
+"/mnt/c" = ' C:'
+"/mnt/d" = ' D:'
+"/mnt/e" = ' E:'
 
 [fill]
 disabled = true
@@ -11,41 +25,23 @@ symbol = ""
 [hostname]
 format = "[$hostname]($style) in "
 
-[character]
-success_symbol = "[❯](green)"
-error_symbol = "[❯](red)"
-
-[container]
+[status]
 disabled = true
 
 [aws]
 symbol = "  "
 
+[buf]
+symbol = " "
+
+[c]
+symbol = " "
+
 [conda]
 symbol = " "
 
-[cmd_duration]
-disabled = true
-format = "[$duration](bold yellow)"
-show_notifications = true
-min_time_to_notify = 1_000
-
 [dart]
 symbol = " "
-
-[directory]
-read_only = " "
-# truncation_length = 2
-fish_style_pwd_dir_length = 1
-truncate_to_repo = false
-repo_root_style = "bold purple"
-
-[directory.substitutions]
-"~/win" = " ~"
-"/mnt/c/Users/tobyv" = " ~"
-"/mnt/c" = ' C:'
-"/mnt/d" = ' D:'
-"/mnt/e" = ' E:'
 
 [docker_context]
 symbol = " "
@@ -59,11 +55,17 @@ symbol = " "
 [git_branch]
 symbol = " "
 
-[git_status]
-format = '([\[$conflicted$deleted$renamed$modified$staged$untracked$ahead_behind\]]($style) )'
-
 [golang]
 symbol = " "
+
+[guix_shell]
+symbol = " "
+
+[haskell]
+symbol = " "
+
+[haxe]
+symbol = "⌘ "
 
 [hg_branch]
 symbol = " "
@@ -74,14 +76,61 @@ symbol = " "
 [julia]
 symbol = " "
 
+[lua]
+symbol = " "
+
 [memory_usage]
 symbol = " "
+
+[meson]
+symbol = "喝 "
 
 [nim]
 symbol = " "
 
 [nix_shell]
-symbol = " "
+symbol = " "
+
+[nodejs]
+symbol = " "
+
+[os.symbols]
+Alpine = " "
+Amazon = " "
+Android = " "
+Arch = " "
+CentOS = " "
+Debian = " "
+DragonFly = " "
+Emscripten = " "
+EndeavourOS = " "
+Fedora = " "
+FreeBSD = " "
+Garuda = "﯑ "
+Gentoo = " "
+HardenedBSD = "ﲊ "
+Illumos = " "
+Linux = " "
+Macos = " "
+Manjaro = " "
+Mariner = " "
+MidnightBSD = " "
+Mint = " "
+NetBSD = " "
+NixOS = " "
+OpenBSD = " "
+openSUSE = " "
+OracleLinux = " "
+Pop = " "
+Raspbian = " "
+Redhat = " "
+RedHatEnterprise = " "
+Redox = " "
+Solus = "ﴱ "
+SUSE = " "
+Ubuntu = " "
+Unknown = " "
+Windows = " "
 
 [package]
 symbol = " "
@@ -95,8 +144,11 @@ symbol = " "
 [python]
 symbol = " "
 
+[rlang]
+symbol = "ﳒ "
+
 [ruby]
-symbol = " "
+symbol = " "
 
 [rust]
 symbol = " "
@@ -107,23 +159,8 @@ symbol = " "
 [shlvl]
 symbol = " "
 
-[status]
-disabled = true
-format = "[$symbol$maybe_int]($style)"
-pipestatus_format = "\\[$pipestatus\\]"
-pipestatus = true
-map_symbol = true
-style = "red"
-symbol = "☓"
-recognize_signal_code = true
-success_symbol = "[✓](bright-green)"
-signal_symbol = "[⚡](bright-yellow)"
-not_executable_symbol = "!"
-not_found_symbol = "?"
-sigint_symbol = ""
-
-# pipestatus_format = "\\[$pipestatus\\]=>[$symbol$common_meaning$signal_name$maybe_int]($style)"
-
+[spack]
+symbol = "🅢 "
 
 [swift]
 symbol = "ﯣ "
