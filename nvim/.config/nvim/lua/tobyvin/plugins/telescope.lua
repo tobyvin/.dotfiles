@@ -26,6 +26,21 @@ local M = {
 		defaults = {
 			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 			file_ignore_patterns = { "^.git/" },
+			mappings = {
+				i = {
+					["<Esc>"] = function(...)
+						vim.notify(
+							"You used `<Esc>` to close telescope. Try to use `<C-c>`!",
+							vim.log.levels.WARN,
+							{ title = "Oops!" }
+						)
+						require("telescope.actions").close(...)
+					end,
+					["<C-h>"] = function(...)
+						require("telescope.actions").which_key(...)
+					end,
+				},
+			},
 			vimgrep_arguments = {
 				"rg",
 				"--color=never",
