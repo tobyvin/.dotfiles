@@ -2,6 +2,7 @@ local M = {
 	"TimUntersberger/neogit",
 	dependencies = { "sindrets/diffview.nvim" },
 	opts = {
+		console_timeout = 20000,
 		auto_show_console = false,
 		disable_context_highlighting = true,
 		disable_commit_confirmation = true,
