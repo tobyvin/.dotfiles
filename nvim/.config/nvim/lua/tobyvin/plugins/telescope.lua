@@ -29,11 +29,6 @@ local M = {
 			mappings = {
 				i = {
 					["<Esc>"] = function(...)
-						vim.notify(
-							"You used `<Esc>` to close telescope. Try to use `<C-c>`!",
-							vim.log.levels.WARN,
-							{ title = "Oops!" }
-						)
 						require("telescope.actions").close(...)
 					end,
 					["<C-h>"] = function(...)
