@@ -1,6 +1,7 @@
 --downloader=aria2c
 --downloader-args="aria2c:-x 16 -k 1M"
 --cookies-from-browser=firefox
+--mark-watched
 --yes-playlist
 --write-subs
 --write-auto-subs
