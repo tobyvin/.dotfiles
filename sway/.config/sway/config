@@ -217,6 +217,9 @@ bindsym $mod+v exec clipman pick --tool=rofi
 # Password manager
 bindsym $mod+b exec rofi-rbw
 
+# Yubikey TOTP manager
+bindsym $mod+y exec rofi-ykman
+
 include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
