@@ -49,6 +49,7 @@ interval = 1
 [[block]]
 block = "sound"
 if_command = "pactl list >/dev/null || aplay -l >/dev/null "
+on_click = "pavucontrol"
 
 [[block]]
 block = "battery"
