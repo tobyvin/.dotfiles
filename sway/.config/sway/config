@@ -55,7 +55,9 @@ for_window [shell=".*"] inhibit_idle fullscreen
 ### Input configuration
 
 # Hide mouse cursor when not used
-seat * hide_cursor 8000
+# NOTE: Configure asynchronously with swaymsg as workaround for Firefox crash on reload
+# See: https://bugzilla.mozilla.org/show_bug.cgi?id=1652820#c51
+exec_always swaymsg seat * hide_cursor 8000
 
 input type:pointer {
     accel_profile flat
