@@ -42,6 +42,9 @@ local M = {
 			["rust-analyzer"] = {
 				cargo = {
 					features = "all",
+					buildScripts = {
+						enable = true,
+					},
 				},
 				check = {
 					command = "clippy",
@@ -54,6 +57,14 @@ local M = {
 				imports = {
 					granularity = {
 						enforce = true,
+					},
+				},
+				procMacro = {
+					enable = true,
+					ignored = {
+						["tracing-attributes"] = {
+							"instrument",
+						},
 					},
 				},
 			},
