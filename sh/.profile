@@ -80,3 +80,5 @@ export PATH="$PATH:$PERL_LOCAL_LIB_ROOT/bin"
 export TEXMFHOME="$XDG_DATA_HOME/texmf"
 export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
 export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config"
+
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
