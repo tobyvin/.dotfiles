@@ -61,6 +61,9 @@ local M = {
 					"--strip-cwd-prefix",
 				},
 			},
+			oldfiles = {
+				only_cwd = true,
+			},
 			live_grep = {
 				theme = "ivy",
 			},
