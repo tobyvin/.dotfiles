@@ -1,0 +1,7 @@
+player=mpv.exe
+player-no-close
+retry-open=1
+retry-streams=1
+default-stream=best
+hls-live-edge=5
+stream-segment-threads=4

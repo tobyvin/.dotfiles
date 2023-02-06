@@ -30,6 +30,7 @@ mkln.sh "$@" "$HOME"/.config/alacritty/alacritty.yml "${WINHOME}"/AppData/Roamin
 mkln.sh "$@" "$HOME"/.config/yt-dlp/config "${WINHOME}"/AppData/Roaming/yt-dlp/config
 mkln.sh "$@" "$HOME"/.config/mpv/mpv.conf "${WINHOME}"/AppData/Roaming/mpv/mpv.conf
 mkln.sh "$@" "$HOME"/.config/mpv/input.conf "${WINHOME}"/AppData/Roaming/mpv/input.conf
+mkln.sh "$@" "$HOME"/.config/streamlink/config "${WINHOME}"/AppData/Roaming/streamlink/config
 mkln.sh "$@" "$HOME"/.config/streamlink/config.twitch "${WINHOME}"/AppData/Roaming/streamlink/config.twitch
 
 for f in "$HOME"/.config/alacritty/*; do
