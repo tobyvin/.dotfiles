@@ -20,7 +20,7 @@ return {
 	},
 	{
 		"lukas-reineke/virt-column.nvim",
-		event = "VeryLazy",
+		event = "BufReadPre",
 		config = true,
 	},
 	{
