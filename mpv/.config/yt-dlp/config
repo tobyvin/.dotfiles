@@ -1,8 +1,10 @@
---downloader=aria2c
 --downloader-args="aria2c:-x 16 -k 1M"
+--yes-playlist
+
 --cookies-from-browser=firefox
 --mark-watched
---yes-playlist
+--sponsorblock-mark=all
+
+--sub-langs="en,live_chat"
 --write-subs
 --write-auto-subs
---sub-langs="en,en.*,live_chat"
