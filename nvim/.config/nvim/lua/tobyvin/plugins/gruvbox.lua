@@ -37,9 +37,11 @@ local M = {
 }
 
 function M.config(_, opts)
+	local colors = require("gruvbox.palette").get_base_colors(opts.bg, opts.contrast)
+
 	vim.api.nvim_set_hl(0, "GruvboxNC", {
-		fg = require("gruvbox.palette").light4,
-		bg = require("gruvbox.palette").dark1,
+		fg = colors.fg4,
+		bg = colors.bg1,
 	})
 
 	require("gruvbox").setup(opts)

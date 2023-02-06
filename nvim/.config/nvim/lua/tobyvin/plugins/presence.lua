@@ -15,7 +15,7 @@ function M.config()
 	local plugin_managers = require("presence/plugin_managers")
 	plugin_managers["lazy"] = "lazy"
 
-	local Presence = require("presence"):setup({
+	local Presence = require("presence").setup({
 		focus_lost_delay = 300,
 	})
 

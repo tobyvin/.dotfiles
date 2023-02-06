@@ -25,7 +25,11 @@ local M = {
 		{
 			"saadparwaiz1/cmp_luasnip",
 			dependencies = {
-				"L3MON4D3/LuaSnip",
+				{
+					"L3MON4D3/LuaSnip",
+					version = "*",
+					build = "make install_jsregexp",
+				},
 			},
 		},
 	},
@@ -38,7 +42,7 @@ function M.config()
 	local context = require("cmp.config.context")
 
 	local in_comment = function()
-		return vim.api.nvim_get_mode().mode ~= "c"
+		return vim.api.nvim_get_mode()["mode"] ~= "c"
 			and context.in_treesitter_capture("comment")
 			and context.in_syntax_group("Comment")
 	end
