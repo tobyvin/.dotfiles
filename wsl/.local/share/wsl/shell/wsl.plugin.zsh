@@ -5,7 +5,6 @@ alias powershell='/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe'
 alias pwsh='/mnt/c/Program Files/PowerShell/7/pwsh.exe'
 alias winget='/mnt/c/Users/tobyv/AppData/Local/Microsoft/WindowsApps/winget.exe'
 alias scoop='/mnt/c/Users/tobyv/scoop/shims/scoop'
-alias ykhold='sudo systemctl stop usbip@wsl.service && echo "Press any key..." && read && sudo systemctl start usbip@wsl.service'
 
 zvm_vi_yank () {
 	zvm_yank

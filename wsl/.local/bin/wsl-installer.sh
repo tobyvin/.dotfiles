@@ -1,10 +1,6 @@
 #!/bin/sh
 
-DOTFILES="${HOME}/.dotfiles"
-
 WINHOME="$(wslpath c:\\Users\\"${USER}")"
-
-echo "Setting up WSL"
 
 # link WINHOME
 ln -sfn "$WINHOME" ~/win
@@ -16,11 +12,8 @@ ln -sf "$(wslpath 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe')" 
 ln -sf "$(wslpath 'C:\Program Files\PowerShell\7\pwsh.exe')" ~/.local/bin/pwsh.exe
 ln -sf "$(wslpath 'C:\Users\tobyv\AppData\Local\wsl-notify-send\wsl-notify-send.exe')" ~/.local/bin/notify-send
 
-# ssh-config
-sed -r 's|(RemoteForward\s+.+\s+)\/home\/tobyv\/\.gnupg\/S\.gpg-agent\.extra|\1127.0.0.1:4321|' "${DOTFILES}"/ssh/.ssh/config |
-	sed '/Control/d' >"${WINHOME}/.ssh/config"
-
 # Create windows symlinks to dotfiles
+mkln.sh "$@" "$HOME"/.ssh/config "${WINHOME}"/.ssh/config
 mkln.sh "$@" "$HOME"/.config/git/config "${WINHOME}"/.gitconfig
 mkln.sh "$@" "$HOME"/.gnupg/gpg.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg.conf
 mkln.sh "$@" "$HOME"/.gnupg/gpg-agent.conf "${WINHOME}"/AppData/Roaming/gnupg/gpg-agent.conf
@@ -39,12 +32,3 @@ for f in "$HOME"/.config/alacritty/*; do
 	*) mkln.sh "$@" "$f" "${WINHOME}"/.config/alacritty/"$(basename "$f")" ;;
 	esac
 done
-
-# https://github.com/wslutilities/wslu
-command -v wslview >/dev/null 2>&1 || cat <<-EOF
-	    wslu is not installed.
-	    wslu (wslview) is needed to open browser windows from linux commands.
-	    install instructions: https://github.com/wslutilities/wslu#installation
-EOF
-
-echo "WSL has been set up"
