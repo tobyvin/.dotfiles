@@ -26,6 +26,11 @@ setopt nonomatch
 zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 
 bindkey -v
+bindkey -m 2>/dev/null
+
+# TODO: improve this with terminfo validation
+#
+# See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^ ' autosuggest-accept
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^[[1~' beginning-of-line
@@ -33,7 +38,6 @@ bindkey '^[[4~' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
-bindkey '^[q' push-input
 
 bindkey -M vicmd '^ ' autosuggest-accept
 bindkey -M vicmd '^[[Z' reverse-menu-complete
@@ -42,7 +46,6 @@ bindkey -M vicmd '^[[4~' end-of-line
 bindkey -M vicmd '^[[3~' delete-char
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
-bindkey -M vicmd '^[q' push-input
 
 alias ls="ls --color=auto"
 alias tree="tree --gitignore"
