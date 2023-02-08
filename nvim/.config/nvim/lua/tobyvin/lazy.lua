@@ -15,6 +15,7 @@ require("lazy").setup("tobyvin.plugins", {
 	defaults = {
 		lazy = true,
 	},
+	concurrency = 5,
 	dev = {
 		path = "~/src",
 	},
