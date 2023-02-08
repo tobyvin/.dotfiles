@@ -1,3 +1,4 @@
+---@type LazySpec
 local M = {
 	"nvim-telescope/telescope.nvim",
 	dependencies = {
@@ -26,16 +27,6 @@ local M = {
 		defaults = {
 			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
 			file_ignore_patterns = { "^.git/" },
-			mappings = {
-				i = {
-					["<Esc>"] = function(...)
-						require("telescope.actions").close(...)
-					end,
-					["<C-h>"] = function(...)
-						require("telescope.actions").which_key(...)
-					end,
-				},
-			},
 			vimgrep_arguments = {
 				"rg",
 				"--color=never",
@@ -138,6 +129,13 @@ function M.init()
 end
 
 function M.config(_, opts)
+	opts.defaults.mappings = {
+		i = {
+			["<Esc>"] = require("telescope.actions").close,
+			["<C-h>"] = require("telescope.actions").which_key,
+		},
+	}
+
 	require("telescope").setup(opts)
 	require("telescope").load_extension("fzf")
 	require("telescope").load_extension("undo")
