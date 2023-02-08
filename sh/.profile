@@ -21,7 +21,7 @@ export LS_COLORS
 
 export EDITOR="nvim"
 export DIFFPROG="$EDITOR -d"
-export BROWSER="firefox"
+export BROWSER="xdg-open"
 export TERMINAL="alacritty"
 export MANPAGER="sh -c 'col -bx | bat -l man -p'"
 export MANROFFOPT="-c"
