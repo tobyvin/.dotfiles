@@ -91,16 +91,18 @@ local M = {
 	texlab = {
 		settings = {
 			texlab = {
-				rootDirectory = ".",
 				build = {
+					executable = "tectonic",
 					args = {
-						"-pdf",
-						"-interaction=nonstopmode",
-						"-synctex=1",
-						"-auxdir=../build",
-						"-outdir=../build",
-						"-emulate-aux-dir",
+						"-X",
+						"compile",
 						"%f",
+						"--synctex",
+						"--keep-logs",
+						"--keep-intermediates",
+						"--outdir=build",
+						"-Z",
+            "search-path=src",
 					},
 					onSave = true,
 				},
@@ -118,7 +120,7 @@ local M = {
 					onEdit = true,
 					onOpenAndSave = true,
 				},
-				auxDirectory = "../build",
+				auxDirectory = "build",
 				latexindent = {
 					["local"] = string.format("%s/latexindent/indentconfig.yaml", vim.env.XDG_CONFIG_HOME),
 					modifyLineBreaks = true,
