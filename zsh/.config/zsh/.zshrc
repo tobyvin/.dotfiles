@@ -32,6 +32,7 @@ bindkey -m 2>/dev/null
 #
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^ ' autosuggest-accept
+bindkey '^[q' push-line
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^[[1~' beginning-of-line
 bindkey '^[[4~' end-of-line
@@ -40,6 +41,7 @@ bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 
 bindkey -M vicmd '^ ' autosuggest-accept
+bindkey -M vicmd '^[q' push-line
 bindkey -M vicmd '^[[Z' reverse-menu-complete
 bindkey -M vicmd '^[[1~' beginning-of-line
 bindkey -M vicmd '^[[4~' end-of-line
