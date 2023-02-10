@@ -41,6 +41,12 @@ local M = {
 			cache_picker = {
 				num_pickers = 10,
 			},
+			mappings = {
+				i = {
+					["<Esc>"] = "close",
+					["<C-h>"] = "which_key",
+				},
+			},
 		},
 		pickers = {
 			find_files = {
@@ -50,6 +56,11 @@ local M = {
 					"f",
 					"--hidden",
 					"--strip-cwd-prefix",
+				},
+				mappings = {
+					i = {
+						["<C-r>"] = "move_file",
+					},
 				},
 			},
 			oldfiles = {
@@ -61,6 +72,11 @@ local M = {
 			buffers = {
 				show_all_buffers = true,
 				sort_lastused = true,
+				mappings = {
+					i = {
+						["<C-d>"] = "delete_buffer",
+					},
+				},
 			},
 		},
 		extensions = {
@@ -129,12 +145,41 @@ function M.init()
 end
 
 function M.config(_, opts)
-	opts.defaults.mappings = {
-		i = {
-			["<Esc>"] = require("telescope.actions").close,
-			["<C-h>"] = require("telescope.actions").which_key,
-		},
-	}
+	local actions = require("telescope.actions")
+
+	--- Rename files for |telescope.picker.find_files|.<br>
+	---@param prompt_bufnr number: The prompt bufnr
+	actions.move_file = function(prompt_bufnr)
+		local Path = require("plenary.path")
+
+		local finders = require("telescope.finders")
+		local action_state = require("telescope.actions.state")
+		local picker = action_state.get_current_picker(prompt_bufnr)
+		local entry = action_state.get_selected_entry()
+
+		if not entry then
+			return
+		end
+
+		local old_path = Path:new(entry[1])
+		vim.ui.input(
+			{ prompt = "Insert a new name: ", default = old_path:make_relative(), completion = "file" },
+			function(file)
+				vim.cmd([[ redraw ]]) -- redraw to clear out vim.ui.prompt to avoid hit-enter prompt
+
+				local new_path = Path:new(file)
+				if new_path.filename == "" or old_path.filename == new_path.filename then
+					return
+				end
+
+				new_path:parent():mkdir({ parents = true })
+				old_path:rename({ new_name = new_path.filename })
+
+				-- TODO: figure out how to properly refresh picker
+				picker:refresh(finders.new_oneshot_job(opts.pickers.find_files.find_command, {}))
+			end
+		)
+	end
 
 	require("telescope").setup(opts)
 	require("telescope").load_extension("fzf")
