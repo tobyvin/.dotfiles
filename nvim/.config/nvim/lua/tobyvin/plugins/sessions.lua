@@ -1,3 +1,4 @@
+---@diagnostic disable: missing-parameter, duplicate-set-field
 local M = {
 	"echasnovski/mini.sessions",
 	name = "sessions",

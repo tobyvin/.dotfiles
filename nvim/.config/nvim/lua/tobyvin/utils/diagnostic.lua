@@ -61,10 +61,12 @@ end
 
 local function get_buffers(opts)
 	local buffers = {}
+
 	local diagnostics = vim.diagnostic.get(nil, opts)
 	for _, diagnostic in ipairs(diagnostics) do
-		if not vim.tbl_contains(buffers, diagnostic.bufnr) then
-			table.insert(buffers, diagnostic.bufnr)
+		local bufnr = diagnostic.bufnr --[[@as number]]
+		if not vim.tbl_contains(buffers, bufnr) then
+			table.insert(buffers, bufnr)
 		end
 	end
 
@@ -112,8 +114,8 @@ end
 ---@param opts table?
 ---@param search_forward boolean Search forward
 local function goto_diagnostic(opts, search_forward)
-	opts = vim.F.if_nil(opts, {})
-	opts.wrap = vim.F.if_nil(opts.wrap, true)
+	opts = opts or {}
+	opts.wrap = opts.wrap == nil or opts.wrap
 	local win_id = opts.win_id or vim.api.nvim_get_current_win()
 
 	local get_pos, goto_pos
@@ -141,14 +143,14 @@ end
 --- Move to the next diagnostic in the workspace.
 ---
 ---@param opts table?
-function M.goto_next(opts)
+function M.goto_next_workspace(opts)
 	goto_diagnostic(opts, true)
 end
 
 --- Move to the prev diagnostic in the workspace.
 ---
 ---@param opts table?
-function M.goto_prev(opts)
+function M.goto_prev_workspace(opts)
 	goto_diagnostic(opts, false)
 end
 
