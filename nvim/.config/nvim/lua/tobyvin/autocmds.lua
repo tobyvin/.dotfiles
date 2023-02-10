@@ -91,18 +91,3 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 	desc = "Set tabstop",
 })
-
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup,
-	pattern = {
-		"qf",
-		"help",
-		"gitcommit",
-		"gitrebase",
-		"Neogit*",
-	},
-	callback = function(args)
-		vim.bo[args.buf].buflisted = false
-	end,
-	desc = "Set buffer as unlisted",
-})
