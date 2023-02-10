@@ -1,5 +1,15 @@
 local M = {
-	bashls = {},
+	bashls = {
+		settings = {
+			bashIde = {
+				explainshellEndpoint = "https://explainshell.com",
+				includeAllWorkspaceSymbols = true,
+				shellcheckArguments = {
+					string.format("--source-path=%s", vim.loop.cwd()),
+				},
+			},
+		},
+	},
 	taplo = {},
 	yamlls = {},
 	tsserver = {},
@@ -102,7 +112,7 @@ local M = {
 						"--keep-intermediates",
 						"--outdir=build",
 						"-Z",
-            "search-path=src",
+						"search-path=src",
 					},
 					onSave = true,
 				},
