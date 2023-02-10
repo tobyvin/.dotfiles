@@ -1,13 +1,4 @@
 #!/bin/sh
-# shellcheck disable=1091
-
-if test -e /usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator; then
-	set -a
-	. /dev/fd/0 <<EOF
-    $(/usr/lib/systemd/user-environment-generators/30-systemd-environment-d-generator 2>/dev/null)
-EOF
-	set +a
-fi
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
@@ -15,70 +6,13 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_STATE_HOME="$HOME/.local/state"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/run/user/$(id -u "$USER")}"
 
-export BASE16_DEFAULT_THEME="gruvbox-dark-hard"
-LS_COLORS="$(vivid generate $BASE16_DEFAULT_THEME 2>/dev/null)"
-export LS_COLORS
-
-export EDITOR="nvim"
-export DIFFPROG="$EDITOR -d"
 export BROWSER="xdg-open"
-export TERMINAL="alacritty"
-export MANPAGER="sh -c 'col -bx | bat -l man -p'"
-export MANROFFOPT="-c"
-export LESS="--RAW-CONTROL-CHARS --quit-if-one-screen --mouse"
-export LESSOPEN="|lesspipe.sh %s"
-export LESSHISTFILE="$XDG_STATE_HOME/lesshst"
-export WGETRC="$XDG_CONFIG_HOME/wgetrc"
-export PASSWORD_STORE_DIR="$HOME/.password-store"
-export PASSWORD_STORE_ENABLE_EXTENSIONS=true
-export ZK_NOTEBOOK_DIR="$HOME/notebook"
-export STARSHIP_LOG="error"
-export FZF_TMUX_OPTS="-p"
-export FZF_PREVIEW_COMMAND='less {} 2>/dev/null'
-export FZF_DEFAULT_COMMAND="fd --type f || git ls-tree -r --name-only HEAD || rg --files || find ."
-export FZF_DEFAULT_OPTS='--bind ctrl-q:abort
---bind ctrl-y:preview-up
---bind ctrl-e:preview-down
---bind ctrl-u:preview-half-page-up
---bind ctrl-d:preview-half-page-down
---bind ctrl-b:preview-page-up
---bind ctrl-f:preview-page-down
---bind alt-up:half-page-up
---bind alt-down:half-page-down
---color fg:#ebdbb2,hl:#fabd2f,fg+:#ebdbb2,hl+:#fabd2f
---color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54'
 
 export PATH="$PATH:$HOME/.local/bin"
 
-export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
-export CARGO_HOME="$XDG_DATA_HOME/cargo"
-export PATH="$PATH:$CARGO_HOME/bin"
-
-export GOPRIVATE=git.sr.ht
-export GOPATH="$XDG_DATA_HOME/go"
-export PATH="$PATH:$GOPATH/bin"
-
-export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
-
-export PATH="$PATH:$XDG_DATA_HOME/gem/ruby/3.0.0/bin"
-
-export npm_config_userconfig="$XDG_CONFIG_HOME/npm/config"
-export npm_config_cache="$XDG_CACHE_HOME/npm"
-export npm_config_prefix="$XDG_DATA_HOME/npm"
-export PATH="$PATH:$npm_config_prefix/bin"
-
-export DOTNET_CLI_HOME="$XDG_DATA_HOME/dotnet"
-export PATH="$PATH:$DOTNET_CLI_HOME/tools"
-
-export PERL_CPANM_HOME="$XDG_CACHE_HOME/perl"
-export PERL_LOCAL_LIB_ROOT="$XDG_DATA_HOME/perl"
-export PERL5LIB="$PERL_LOCAL_LIB_ROOT/lib/perl5"
-export PERL_MB_OPT="--install_base '$PERL_LOCAL_LIB_ROOT'"
-export PERL_MM_OPT="INSTALL_BASE=$PERL_LOCAL_LIB_ROOT"
-export PATH="$PATH:$PERL_LOCAL_LIB_ROOT/bin"
-
-export TEXMFHOME="$XDG_DATA_HOME/texmf"
-export TEXMFVAR="$XDG_CACHE_HOME/texlive/texmf-var"
-export TEXMFCONFIG="$XDG_CONFIG_HOME/texlive/texmf-config"
-
-export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+for script in "$XDG_CONFIG_HOME"/profile.d/*.sh; do
+	if [ -r "$script" ]; then
+		# shellcheck disable=1090
+		. "$script"
+	fi
+done
