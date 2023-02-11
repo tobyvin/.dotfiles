@@ -30,8 +30,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			vim.keymap.set("n", "gx", vim.lsp.buf.external_docs, { desc = "external_docs", buffer = args.buf })
 		end
 
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, { desc = "hover", buffer = args.buf })
-		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = args.buf })
+		vim.keymap.set({ "n", "v" }, "K", vim.lsp.buf.hover, { desc = "hover", buffer = args.buf })
+		vim.keymap.set({ "n", "v" }, "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = args.buf })
 		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = args.buf })
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "declaration", buffer = args.buf })
 		vim.keymap.set("n", "go", vim.lsp.buf.type_definition, { desc = "type definition", buffer = args.buf })
