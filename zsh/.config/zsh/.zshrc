@@ -1,7 +1,5 @@
 #!/bin/zsh
 # vim: ft=sh
-# shellcheck shell=sh
-# shellcheck disable=3000-4000,1090
 
 export HYPHEN_INSENSITIVE="true"
 export DISABLE_UPDATE_PROMPT="true"
@@ -23,15 +21,12 @@ setopt hist_verify            # show command with history expansion to user befo
 setopt share_history          # share command history data
 setopt nonomatch
 
-zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
-
 bindkey -v
 bindkey -m 2>/dev/null
 
 # TODO: improve this with terminfo validation
 #
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
-bindkey '^ ' autosuggest-accept
 bindkey '^[q' push-line
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^[[1~' beginning-of-line
@@ -40,7 +35,6 @@ bindkey '^[[3~' delete-char
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 
-bindkey -M vicmd '^ ' autosuggest-accept
 bindkey -M vicmd '^[q' push-line
 bindkey -M vicmd '^[[Z' reverse-menu-complete
 bindkey -M vicmd '^[[1~' beginning-of-line
@@ -54,62 +48,9 @@ alias tree="tree --gitignore"
 alias grep='grep --color=auto'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
-alias wget='wget --hsts-file="$XDG_CACHE_HOME/wget-hsts"'
-alias tlmgr='/usr/share/texmf-dist/scripts/texlive/tlmgr.pl --usermode'
-alias unlock='echo "" | gpg --clearsign 1>/dev/null && ssh localhost -- : 1>/dev/null'
 
-SHELDON_PROFILE="$(uname -r 2>/dev/null | rev | cut -d- -f1 | rev)"
-export SHELDON_PROFILE
-export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern line)
-export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd completion)
-export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#4f4738"
-
-if command -v fd >/dev/null 2>&1; then
-	_fzf_compgen_path() {
-		fd --hidden --follow --exclude ".git" . "$1"
-	}
-fi
-
-if command -v fd >/dev/null 2>&1; then
-	_fzf_compgen_dir() {
-		fd --type d --hidden --follow --exclude ".git" . "$1"
-	}
-fi
-
-if command -v btm >/dev/null 2>&1; then
-	alias top="btm --basic"
-fi
-
-if command -v docker >/dev/null 2>&1; then
-	alias dexec="docker exec -it"
-	alias dps="docker ps"
-	alias dc="docker compose"
-	alias dce="docker compose exec"
-	alias dcps="docker compose ps"
-	alias dcls="docker compose ls"
-	alias dcdn="docker compose down"
-	alias dcup="docker compose up"
-	alias dcupd="docker compose up -d"
-	alias dcl="docker compose logs"
-	alias dclf="docker compose logs -f"
-	alias dct="docker context"
-	alias dcu="docker context use"
-fi
-
-if command -v rga >/dev/null 2>&1; then
-	rgi() {
-		RG_PREFIX="rga --files-with-matches"
-		file="$(
-			FZF_DEFAULT_COMMAND="$RG_PREFIX '$1'" \
-				fzf --sort --preview="[[ ! -z {} ]] && rga --pretty --context 5 {q} {}" \
-				--phony -q "$1" \
-				--bind "change:reload:$RG_PREFIX {q}" \
-				--preview-window="70%:wrap"
-		)" &&
-			echo "opening $file" &&
-			xdg-open "$file"
-	}
-fi
-
-command -v starship >/dev/null 2>&1 && source <(starship init zsh)
-command -v sheldon >/dev/null 2>&1 && source <(sheldon source)
+for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
+	if [ -r "$script" ]; then
+		source "$script"
+	fi
+done

@@ -1,5 +1,7 @@
 #!/bin/zsh
 
+zstyle ':completion:*' cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
+
 # Load all stock functions (from $fpath files) called below.
 autoload -U compaudit compinit
 
@@ -21,8 +23,8 @@ zcompdump_revision="#revision: $(sha1sum $0:A)"
 zcompdump_fpath="#fpath: $fpath"
 
 # Delete the zcompdump file if zcompdump metadata changed
-if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null \
-   || ! command grep -q -Fx "$zcompdump_fpath" "$ZSH_COMPDUMP" 2>/dev/null; then
+if ! command grep -q -Fx "$zcompdump_revision" "$ZSH_COMPDUMP" 2>/dev/null ||
+   ! command grep -q -Fx "$zcompdump_fpath"    "$ZSH_COMPDUMP" 2>/dev/null; then
   command rm -f "$ZSH_COMPDUMP"
   zcompdump_refresh=1
 fi

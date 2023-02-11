@@ -12,10 +12,6 @@ github = 'romkatv/zsh-defer'
 [plugins.zsh-vi-mode]
 github = "jeffreytse/zsh-vi-mode"
 
-[plugins.zsh-wsl]
-local = '~/.local/share/wsl/shell'
-profiles = ["WSL2"]
-
 [plugins.zsh-autosuggestions]
 github = "zsh-users/zsh-autosuggestions"
 use = ["{{ name }}.zsh"]
@@ -49,8 +45,4 @@ apply = ["defer"]
 
 [plugins.zsh-fzf-history-search]
 github = "joshskidmore/zsh-fzf-history-search"
-apply = ["defer"]
-
-[plugins.compinit]
-local = '~/.local/share/zsh/plugins'
 apply = ["defer"]
