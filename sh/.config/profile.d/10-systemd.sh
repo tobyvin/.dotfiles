@@ -1,3 +1,3 @@
 #!/bin/sh
 
-export "$(run-parts /usr/lib/systemd/user-environment-generators | xargs)"
+export $(run-parts /usr/lib/systemd/user-environment-generators | xargs)
