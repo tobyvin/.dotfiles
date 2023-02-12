@@ -1,4 +1,7 @@
 #!/bin/sh
+# shellcheck disable=2046
+
+export $(run-parts /usr/lib/systemd/user-environment-generators | xargs)
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
