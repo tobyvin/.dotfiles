@@ -21,16 +21,19 @@ vim.api.nvim_create_autocmd("FocusLost", {
 	desc = "clipboard sync",
 })
 
-vim.api.nvim_create_autocmd("FocusGained", {
+vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
 	group = augroup,
 	pattern = "*",
-	callback = function()
+	callback = function(args)
 		local system_clipboard = {
 			regtype = vim.fn.getregtype("+"),
 			contents = vim.split(vim.fn.getreg("+"), "\n"),
 		}
 
-		if vim.g.system_clipboard ~= nil and not vim.deep_equal(vim.g.system_clipboard, system_clipboard) then
+		if
+			args.event == "VimEnter"
+			or vim.g.system_clipboard ~= nil and not vim.deep_equal(vim.g.system_clipboard, system_clipboard)
+		then
 			require("neoclip")
 			require("neoclip.storage").insert(system_clipboard, "yanks")
 		end
@@ -69,25 +72,4 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		vim.api.nvim_win_set_cursor(0, cursor)
 	end,
 	desc = "Trim whitespace on write",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup,
-	pattern = {
-		"c",
-		"sh",
-		"zsh",
-		"xml",
-		"html",
-		"xhtml",
-		"css",
-		"scss",
-		"javascript",
-		"lua",
-		"markdown",
-	},
-	callback = function(args)
-		vim.bo[args.buf].tabstop = 2
-	end,
-	desc = "Set tabstop",
 })
