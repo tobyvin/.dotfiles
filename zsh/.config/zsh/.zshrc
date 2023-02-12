@@ -49,6 +49,9 @@ alias grep='grep --color=auto'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
 
+# Adopt the behavior of the system wide configuration for application specific settings
+#
+# See: https://wiki.archlinux.org/title/Command-line_shell#/etc/profile
 for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
 	if [ -r "$script" ]; then
 		source "$script"

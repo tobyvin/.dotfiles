@@ -13,6 +13,9 @@ export BROWSER="xdg-open"
 
 export PATH="$PATH:$HOME/.local/bin"
 
+# Adopt the behavior of the system wide configuration for application specific settings
+#
+# See: https://wiki.archlinux.org/title/Command-line_shell#/etc/profile
 for script in "$XDG_CONFIG_HOME"/profile.d/*.sh; do
 	if [ -r "$script" ]; then
 		# shellcheck disable=1090
