@@ -15,11 +15,13 @@ local M = {
 		on_attach = function(bufnr)
 			local with_range = function(callback)
 				return function()
-					callback(function()
-						local start_pos = vim.fn.getpos("v")
-						local end_pos = vim.fn.getcurpos()
-						return { start_pos[2], end_pos[2] }
-					end)
+					local cursor = vim.fn.getpos(".")
+					local visual = vim.fn.getpos("v")
+					if cursor == visual then
+						callback()
+					else
+						callback({ cursor[2], visual[2] })
+					end
 				end
 			end
 
@@ -57,18 +59,18 @@ local M = {
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>gp", require("gitsigns").preview_hunk, {
-				desc = "preview hunk",
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("n", "<leader>gr", require("gitsigns").reset_hunk, {
+			vim.keymap.set({ "n", "v" }, "<leader>gr", with_range(require("gitsigns").reset_hunk), {
 				desc = "reset hunk",
 				buffer = bufnr,
 			})
 
-			vim.keymap.set("n", "<leader>gs", require("gitsigns").stage_hunk, {
+			vim.keymap.set({ "n", "v" }, "<leader>gs", with_range(require("gitsigns").stage_hunk), {
 				desc = "stage hunk",
+				buffer = bufnr,
+			})
+
+			vim.keymap.set({ "n", "v" }, "<leader>gp", with_range(require("gitsigns").preview_hunk), {
+				desc = "preview hunk",
 				buffer = bufnr,
 			})
 
@@ -89,26 +91,6 @@ local M = {
 
 			vim.keymap.set("n", "<leader>gU", require("gitsigns").reset_buffer_index, {
 				desc = "undo stage buffer",
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("v", "<leader>gr", with_range(require("gitsigns").reset_hunk), {
-				desc = "reset hunk",
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("v", "<leader>gs", with_range(require("gitsigns").stage_hunk), {
-				desc = "stage hunk",
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("v", "<leader>gu", with_range(require("gitsigns").undo_stage_hunk), {
-				desc = "unstage hunk",
-				buffer = bufnr,
-			})
-
-			vim.keymap.set("v", "<leader>gp", with_range(require("gitsigns").preview_hunk), {
-				desc = "preview hunk",
 				buffer = bufnr,
 			})
 
