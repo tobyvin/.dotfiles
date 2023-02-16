@@ -38,6 +38,7 @@ function M.config()
 			"python",
 			"query",
 			"regex",
+			"ron",
 			"rust",
 			"scss",
 			"sql",
