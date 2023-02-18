@@ -1,6 +1,5 @@
 local M = {
 	"TimUntersberger/neogit",
-	dependencies = { "sindrets/diffview.nvim" },
 	opts = {
 		console_timeout = 20000,
 		auto_show_console = false,
@@ -9,9 +8,6 @@ local M = {
 		disable_builtin_notifications = true,
 		disable_signs = true,
 		disable_hint = true,
-		integrations = {
-			diffview = true,
-		},
 		mappings = {
 			status = {
 				["b"] = "",
