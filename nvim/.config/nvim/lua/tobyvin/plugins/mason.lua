@@ -10,8 +10,8 @@ local M = {
 	dependencies = {
 		{ "RubixDev/mason-update-all", config = true },
 		{ "williamboman/mason-lspconfig.nvim", config = true },
-		{ "jayp0521/mason-null-ls.nvim", config = true },
-		{ "jayp0521/mason-nvim-dap.nvim", config = true },
+		{ "jayp0521/mason-null-ls.nvim", version = "*", config = true },
+		{ "jayp0521/mason-nvim-dap.nvim", version = "*", config = true },
 	},
 	opts = {
 		ui = {

@@ -1,13 +1,13 @@
-local focused = true
-
+---@type LazyPlugin
 local M = {
 	"folke/noice.nvim",
 	version = "*",
-	event = "VeryLazy",
+	event = { "VeryLazy" },
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 		"rcarriga/nvim-notify",
 	},
+	---@type NoiceConfig
 	opts = {
 		cmdline = { enabled = false },
 		messages = { enabled = false },
@@ -49,11 +49,12 @@ local M = {
 			{
 				view = "notify_send",
 				filter = {
+					event = "notify",
 					cond = function()
-						return not focused
+						return vim.g.notify_send_enabled
 					end,
 				},
-				opts = { stop = false },
+				opts = { stop = false, app_name = "nvim" },
 			},
 			{
 				view = "mini",
@@ -91,26 +92,6 @@ local M = {
 }
 
 function M.init()
-	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
-		link = require("tobyvin.utils.status").signs.spinner.texthl,
-	})
-
-	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
-		link = require("tobyvin.utils.status").signs.done.texthl,
-	})
-
-	vim.api.nvim_create_autocmd("FocusGained", {
-		callback = function()
-			focused = true
-		end,
-	})
-
-	vim.api.nvim_create_autocmd("FocusLost", {
-		callback = function()
-			focused = false
-		end,
-	})
-
 	vim.keymap.set("n", "<leader>nn", function()
 		require("noice").cmd("history")
 	end, { desc = "message history" })
@@ -123,18 +104,49 @@ function M.init()
 		require("noice").cmd("errors")
 	end, { desc = "error messages" })
 
-	-- TODO: figure out why setting `remap = true` fails to call the `<C-d>zz` mapping
-	vim.keymap.set("n", "<C-d>", function()
+	vim.keymap.set({ "n", "i", "s" }, "<c-d>", function()
 		if not require("noice.lsp").scroll(4) then
 			return "<C-d>zz"
 		end
 	end, { desc = "up half page and center", expr = true })
 
-	vim.keymap.set("n", "<C-u>", function()
+	vim.keymap.set({ "n", "i", "s" }, "<c-u>", function()
 		if not require("noice.lsp").scroll(-4) then
 			return "<C-u>zz"
 		end
 	end, { desc = "down half page and center", expr = true })
+end
+
+---@param opts NoiceConfig
+function M.config(plugin, opts)
+	local augroup = vim.api.nvim_create_augroup(plugin.name, {})
+
+	vim.g.notify_send_enabled = false
+	vim.api.nvim_create_autocmd("FocusLost", {
+		group = augroup,
+		callback = function()
+			vim.g.notify_send_enabled = true
+		end,
+		desc = "Enable notify-send",
+	})
+
+	vim.api.nvim_create_autocmd("FocusGained", {
+		group = augroup,
+		callback = function()
+			vim.g.notify_send_enabled = false
+		end,
+		desc = "Disable notify-send",
+	})
+
+	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
+		link = require("tobyvin.utils.status").signs.spinner.texthl,
+	})
+
+	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
+		link = require("tobyvin.utils.status").signs.done.texthl,
+	})
+
+	require("noice").setup(opts)
 end
 
 return M
