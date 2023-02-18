@@ -30,7 +30,7 @@ local M = {
 					return "]c"
 				end
 				vim.schedule(function()
-					require("gitsigns").next_hunk()
+					require("gitsigns").next_hunk({ preview = true })
 				end)
 				return "<Ignore>"
 			end
@@ -40,7 +40,7 @@ local M = {
 					return "[c"
 				end
 				vim.schedule(function()
-					require("gitsigns").prev_hunk()
+					require("gitsigns").prev_hunk({ preview = true })
 				end)
 				return "<Ignore>"
 			end
@@ -98,5 +98,22 @@ local M = {
 		end,
 	},
 }
+
+function M.config(_, opts)
+	local popup = require("gitsigns.popup")
+	local popup_create = popup.create
+
+	function popup.create(...)
+		local winid, bufnr = popup_create(...)
+
+		vim.keymap.set("n", "q", function()
+			pcall(vim.api.nvim_win_close, winid, true)
+		end, { buffer = bufnr })
+
+		return winid, bufnr
+	end
+
+	require("gitsigns").setup(opts)
+end
 
 return M
