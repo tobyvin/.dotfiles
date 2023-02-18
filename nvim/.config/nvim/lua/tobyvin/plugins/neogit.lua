@@ -1,3 +1,4 @@
+---@diagnostic disable: duplicate-set-field
 local M = {
 	"TimUntersberger/neogit",
 	opts = {
@@ -33,8 +34,26 @@ function M.init()
 		callback = function()
 			vim.bo.filetype = "gitcommit"
 		end,
-		desc = "Vertical help window",
+		desc = "Neogit filetype fix",
 	})
+end
+
+function M.config(_, opts)
+	local Buffer = require("neogit.lib.buffer")
+
+	local buffer_show = Buffer.show
+	function Buffer:show()
+		self.window = buffer_show(self)
+		return self.window
+	end
+
+	local buffer_close = Buffer.close
+	function Buffer:close(force)
+		buffer_close(self, force)
+		pcall(vim.api.nvim_win_close, self.window, force)
+	end
+
+	require("neogit").setup(opts)
 end
 
 return M
