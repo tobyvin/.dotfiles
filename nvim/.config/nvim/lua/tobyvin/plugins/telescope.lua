@@ -181,6 +181,16 @@ function M.config(_, opts)
 		)
 	end
 
+	opts.extensions.undo = {
+		mappings = {
+			i = {
+				["<cr>"] = require("telescope-undo.actions").restore,
+				["<C-cr>"] = require("telescope-undo.actions").yank_additions,
+				["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
+			},
+		},
+	}
+
 	require("telescope").setup(opts)
 	require("telescope").load_extension("fzf")
 	require("telescope").load_extension("undo")
