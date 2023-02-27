@@ -15,12 +15,12 @@ local M = {
 		on_attach = function(bufnr)
 			local with_range = function(callback)
 				return function()
-					local cursor = vim.fn.getpos(".")
-					local visual = vim.fn.getpos("v")
-					if cursor == visual then
-						callback()
-					else
+					if vim.fn.mode():lower() == "v" then
+						local cursor = vim.fn.getpos(".")
+						local visual = vim.fn.getpos("v")
 						callback({ cursor[2], visual[2] })
+					else
+						callback()
 					end
 				end
 			end
