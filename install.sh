@@ -125,7 +125,8 @@ if $clean; then
 	fd . "$HOME" --hidden --type l \
 		--exclude "$(realpath --relative-base="$INSTALL_DIR" "$XDG_CACHE_HOME")" \
 		--exclude "$(realpath --relative-base="$INSTALL_DIR" "$SCRIPT_DIR")" \
-		--exec sh $simulate $fd_verbose -c "[ -e '{}' ] || rm -v {}"
+		--exec sh $simulate $fd_verbose -c \
+		"[ -e {} ] || case \$(readlink '{}') in '$SCRIPT_DIR'*) rm -v '{}';; esac"
 
 	if $clean_only; then
 		exit 0
