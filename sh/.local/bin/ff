@@ -6,21 +6,12 @@
 #
 
 SEARCH_PATH=$(printf %s "$1" | sed 's|/$||')
-lines=$(tmux display -p "#{pane_height}")
-columns=$(tmux display -p "#{pane_width}")
-WIDTH=$([ "$columns" -gt "150" ] && printf %s "150" || printf %s "90%")
-HEIGHT=$([ "$lines" -gt "50" ] && printf %s "50" || printf %s "90%")
 RG_DEFAULT_COMMAND="rga -i -l --hidden --no-ignore-vcs -e {q} $SEARCH_PATH | sed 's|^$SEARCH_PATH/||'"
 
 selected=$(
 	FZF_DEFAULT_COMMAND="rga --files $SEARCH_PATH | sed 's|^$SEARCH_PATH/||'" \
-		fzf-tmux -p "$WIDTH,$HEIGHT" \
-		-m \
-		-e \
-		--ansi \
-		--disabled \
+		fzf-tmux "$FZF_TMUX_OPTS" -- -m -e --ansi --disabled --header-first \
 		--header "$(printf %s "$SEARCH_PATH" | sed "s|^$HOME|~|")/" \
-		--header-first \
 		--bind "change:reload:$RG_DEFAULT_COMMAND || true" \
 		--preview-window='right,66%,<80(up,50%,border-bottom)' \
 		--preview "rga -i --pretty --context 3 -e {q} $SEARCH_PATH/{}" | cut -d":" -f1,2

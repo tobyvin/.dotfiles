@@ -4,14 +4,9 @@
 if [ "$#" -eq 0 ]; then
 	PREVIEW_CMD='sel={}; less ${sel:-{q}} 2>/dev/null'
 
-	lines=$(tmux display -p "#{pane_height}")
-	columns=$(tmux display -p "#{pane_width}")
-	WIDTH=$([ "$columns" -gt "120" ] && printf %s "120" || printf %s "90%")
-	HEIGHT=$([ "$lines" -gt "40" ] && printf %s "40" || printf %s "90%")
-
 	# shellcheck disable=2046
 	set -- $(projectr ~/dkr ~/pkg ~/src ~/.dotfiles --git --max-depth=3 | sed "\|^$(tmux display -p '#{session_path}')\$|d" |
-		fzf-tmux -p "$WIDTH,$HEIGHT" -- --tac --multi --print-query -d/ --with-nth -1 \
+		fzf-tmux "$FZF_TMUX_OPTS" -- --tac --multi --print-query -d/ --with-nth -1 \
 			--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ') && [ $# -gt 1 ] && shift
 fi

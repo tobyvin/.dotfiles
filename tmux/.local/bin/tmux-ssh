@@ -5,29 +5,24 @@
 
 if [ "$#" -eq 0 ]; then
 	ATTACHED=$(tmux display -p '#{session_path}')
-	lines=$(tmux display -p "#{pane_height}")
-	columns=$(tmux display -p "#{pane_width}")
-	WIDTH=$([ "$columns" -gt "20" ] && printf %s "20" || printf %s "90%")
-	HEIGHT=$([ "$lines" -gt "15" ] && printf %s "15" || printf %s "90%")
 
 	# shellcheck disable=2046
 	set -- $(
 		grep -P '^[Hh]ost ([^*]+)$' "$HOME/.ssh/config" | grep -Po ' \K(\w+)' |
-			sed "\|^$HOST\$|d" | sed "\|^${ATTACHED#SSH:}\$|d" | sort -u |
+			sed "\|^$HOST\$|d" | sed "\|^${ATTACHED#SSH_}\$|d" | sort -u |
 			timestamp.sh --type="ssh" --format="{}:{1}" | sort -r | cut -d':' -f2 |
-			fzf-tmux -p "$WIDTH,$HEIGHT" -- --multi --print-query -d/ --with-nth -1 |
+			fzf-tmux "$FZF_TMUX_OPTS" -- --multi --print-query -d/ --with-nth -1 |
 			tr -s '\n' ' '
 	) && [ $# -gt 1 ] && shift
 fi
 
-exit 0
 while [ $# -gt 0 ]; do
 	ssh_host="$1"
 	shift
 
-	name="SSH:$ssh_host"
+	name="SSH_$ssh_host"
 	if ! tmux has-session -t "$name" 2>/dev/null; then
-		tmux new-session -ds "$name" ssh -t "$ssh_host" 'tmux new -As $USER'
+		tmux new-session -ds "$name" ssh -t "$ssh_host" # 'tmux new -As $USER'
 	fi
 done
 
