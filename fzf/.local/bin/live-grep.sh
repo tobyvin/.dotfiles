@@ -24,9 +24,9 @@ fi
 set -- $(
 	FZF_DEFAULT_COMMAND="$INITIAL_CMD" fzf \
 		--ansi --color="hl:-1:underline,hl+:-1:underline:reverse" \
-		--bind="change:reload:sleep 0.1; [ -n {q} ] && ($RG_PREFIX {q} || true) || $RG_PREFIX --files" \
+		--bind="change:reload:sleep 0.1; [ -n {q} ] && ($RG_PREFIX -- {q} || true) || $RG_PREFIX --files" \
 		--disabled --query="$INITIAL_QUERY" --delimiter=":" \
-		--preview="$PREVIEW_CMD" --preview-window='up,60%,border-bottom,+{2}+3/3,~3'
+		--preview="cat {1} | rg --passthru -i --color always -- {q}" --preview-window='up,60%,border-bottom,+{2}+3/3,~3'
 )
 
 if [ $# -gt 0 ]; then
