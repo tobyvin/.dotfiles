@@ -16,7 +16,7 @@ fi
 if [ -z "$1" ]; then
 	exit 1
 elif [ -f "$1" ]; then
-	$EDITOR "$1"
+	$EDITOR -c "cd $ZK_NOTEBOOK_DIR" "$1"
 else
 	zk new --title="$1"
 fi
