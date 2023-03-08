@@ -11,6 +11,11 @@ local M = {
 		{
 			"prochri/telescope-all-recent.nvim",
 			dependencies = "kkharji/sqlite.lua",
+			opts = {
+				pickers = {
+					find_files = { disable = true },
+				},
+			},
 			config = true,
 		},
 		{
