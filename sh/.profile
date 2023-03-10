@@ -1,7 +1,14 @@
 #!/bin/sh
 # shellcheck disable=2046
 
-export $(run-parts /usr/lib/systemd/user-environment-generators | xargs)
+# use systemd-environment-d-generator(8) to generate environment, and export those variables
+#
+# See: https://wiki.archlinux.org/title/Environment_variables#Per_Wayland_session
+for gen in /usr/lib/systemd/user-environment-generators/*; do
+	if [ -e "$gen" ]; then
+		export $($gen | xargs)
+	fi
+done
 
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_CACHE_HOME="$HOME/.cache"
