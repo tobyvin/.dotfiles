@@ -3,4 +3,4 @@ shell:
   args:
     - -l
     - -c
-    - tmux new -As $USER
+    - tmux new -A

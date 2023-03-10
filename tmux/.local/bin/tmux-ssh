@@ -28,10 +28,10 @@ if [ -z "$1" ]; then
 fi
 
 if [ "$1" = "localhost" ] || [ "$1" = "$HOST" ]; then
-	tmux detach -E 'tmux attach'
+	tmux detach -E 'tmux new -A'
 else
 	if ! tmux -L ssh has-session -t "$1"; then
-		tmux -L ssh new-session -ds "$1" ssh -t "$1" zsh -l -c tmux new -As "$USER"
+		tmux -L ssh new-session -ds "$1" ssh -t "$1" "zsh -l -c 'tmux new -A'"
 	fi
 
 	if [ -z "$TMUX" ]; then
