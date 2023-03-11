@@ -16,10 +16,28 @@ warning_fg = "#1d2021"
 critical_bg = "#fb4934"
 critical_fg = "#1d2021"
 
+[icons]
+icons = "none"
+
+[icons.overrides]
+bat_charging = "BAT+"
+music = "\uf886" # nf-mdi-music_note
+music_next = "\uf9ac" # nf-mdi-skip_next
+music_pause = "\uf8e3" # nf-mdi-pause
+music_play = "\uf909" # nf-mdi-play
+music_prev = "\uf9ad" # nf-mdi-skip_previous
+weather_clouds = "\ufa8f" # nf-mdi-weather_cloudy
+weather_default = "\ufa8f" # Cloud symbol as default
+weather_rain = "\ufa95" # nf-mdi-weather_pouring
+weather_snow = "\ufa97" # nf-mdi-weather_snowy
+weather_sun = "\ufa98" # nf-mdi-weather_sunny
+weather_thunder = "\ue31d" # nf-weather-thunderstorm
+
 [[block]]
-block = "music"
-player = "spotifyd"
-format = " $icon {$combo.str(max_w:20) $prev $play $next |}"
+block = "weather"
+autolocate = true
+autolocate_interval = "once"
+service.name = "metno"
 
 [[block]]
 block = "disk_space"
@@ -61,21 +79,25 @@ missing_format = ""
 block = "battery"
 device = "BAT1"
 format = " $icon $percentage { ($time) |}"
-full_format = " $icon FULL "
+full_format = " FULL "
 empty_format = " $icon $percentage "
 missing_format = ""
 
 [[block]]
 block = "battery"
-device = "BAT1"
+device = "BAT2"
 format = " $icon $percentage { ($time) |}"
-full_format = " $icon FULL "
+full_format = " FULL "
 empty_format = " $icon $percentage "
 missing_format = ""
 
 [[block]]
 block = "time"
 interval = 1
-[block.format]
-full = " $icon $timestamp.datetime(f:'%a %m/%d %T') "
-short = " $icon $timestamp.datetime(f:%T) "
+format.full = " $timestamp.datetime(f:'%a %m/%d %T') "
+format.short = " $timestamp.datetime(f:%T) "
+
+[[block]]
+block = "music"
+player = "spotifyd"
+format = " $icon {$combo.str(max_w:20) $prev $play $next |}"
