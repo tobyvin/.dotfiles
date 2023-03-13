@@ -26,6 +26,7 @@ function M.config()
 			null_ls.builtins.formatting.stylua,
 			null_ls.builtins.formatting.shfmt,
 			null_ls.builtins.formatting.cbfmt,
+			null_ls.builtins.formatting.nginx_beautifier,
 		},
 		on_attach = function(_, bufnr)
 			vim.keymap.set("n", "<leader>ln", info.show_window, { desc = "null-ls info", buffer = bufnr })
