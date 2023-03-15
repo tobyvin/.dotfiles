@@ -102,17 +102,10 @@ local M = {
 		settings = {
 			texlab = {
 				build = {
-					executable = "tectonic",
 					args = {
-						"-X",
-						"compile",
+						"-interaction=nonstopmode",
+						"-synctex=1",
 						"%f",
-						"--synctex",
-						"--keep-logs",
-						"--keep-intermediates",
-						"--outdir=build",
-						"-Z",
-						"search-path=src",
 					},
 					onSave = true,
 				},
