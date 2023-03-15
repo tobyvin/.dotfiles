@@ -123,7 +123,6 @@ local M = {
 					onEdit = true,
 					onOpenAndSave = true,
 				},
-				auxDirectory = "build",
 				latexindent = {
 					["local"] = string.format("%s/latexindent/indentconfig.yaml", vim.env.XDG_CONFIG_HOME),
 					modifyLineBreaks = true,
