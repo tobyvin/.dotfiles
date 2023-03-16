@@ -4,21 +4,22 @@
 export HYPHEN_INSENSITIVE="true"
 export DISABLE_UPDATE_PROMPT="true"
 export DISABLE_AUTO_TITLE="true"
-export HISTFILE="$XDG_STATE_HOME"/zsh/history
+export HISTFILE="$XDG_STATE_HOME/zsh/history"
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-setopt no_beep
-setopt menu_complete
-setopt auto_pushd             # auto push to the directory stack on cd
-setopt auto_cd                # cd without args
-setopt extended_history       # record timestamp of command in HISTFILE
-setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
-setopt hist_ignore_dups       # ignore duplicated commands history list
-setopt hist_ignore_space      # ignore commands that start with space
-setopt hist_verify            # show command with history expansion to user before running it
-setopt share_history          # share command history data
-setopt nonomatch
+setopt NO_BEEP
+setopt MENU_COMPLETE
+setopt AUTO_PUSHD
+setopt AUTO_CD
+setopt EXTENDED_HISTORY
+setopt SHARE_HISTORY
+setopt HIST_EXPIRE_DUPS_FIRST
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_SPACE
+setopt HIST_VERIFY
+setopt NONOMATCH
+setopt CORRECT_ALL
 
 bindkey -v
 bindkey -m 2>/dev/null
