@@ -19,7 +19,7 @@ setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_SPACE
 setopt HIST_VERIFY
 setopt NONOMATCH
-setopt CORRECT_ALL
+setopt CORRECT
 
 bindkey -v
 bindkey -m 2>/dev/null
