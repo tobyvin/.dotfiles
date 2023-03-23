@@ -7,11 +7,15 @@ export DISABLE_AUTO_TITLE="true"
 export HISTFILE="$XDG_STATE_HOME/zsh/history"
 export HISTSIZE=10000
 export SAVEHIST=10000
+export DIRSTACKSIZE=20
 
 setopt NO_BEEP
 setopt MENU_COMPLETE
-setopt AUTO_PUSHD
 setopt AUTO_CD
+setopt AUTO_PUSHD
+setopt PUSHD_SILENT
+setopt PUSHD_TO_HOME
+setopt PUSHD_IGNORE_DUPS
 setopt EXTENDED_HISTORY
 setopt SHARE_HISTORY
 setopt HIST_EXPIRE_DUPS_FIRST
@@ -57,3 +61,6 @@ for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
 		source "$script"
 	fi
 done
+
+autoload -Uz compinit
+compinit
