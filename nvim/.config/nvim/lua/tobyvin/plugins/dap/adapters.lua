@@ -10,6 +10,8 @@ M.lldb = {
 	name = "lldb",
 }
 
+M.rt_lldb = M.lldb
+
 M.codelldb = {
 	type = "server",
 	port = "${port}",

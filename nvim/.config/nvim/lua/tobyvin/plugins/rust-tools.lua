@@ -4,7 +4,6 @@ local M = {
 	dependencies = {
 		"neovim/nvim-lspconfig",
 		"nvim-lua/plenary.nvim",
-		"mfussenegger/nvim-dap",
 	},
 	opts = {
 		tools = {
@@ -13,7 +12,7 @@ local M = {
 			},
 		},
 		server = require("tobyvin.lsp.configs").rust_analyzer,
-		dap = { adapter = require("tobyvin.plugins.dap.adapters").codelldb },
+		dap = { adapter = false },
 	},
 }
 

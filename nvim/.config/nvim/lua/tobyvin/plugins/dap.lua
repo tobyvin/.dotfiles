@@ -57,6 +57,13 @@ function M.config()
 		require("dap").repl.close()
 	end
 
+	local adapters = require("tobyvin.plugins.dap.adapters")
+	for name, adapter in pairs(adapters) do
+		if require("dap").adapters[name] == nil then
+			require("dap").adapters[name] = adapter
+		end
+	end
+
 	local configs = require("tobyvin.plugins.dap.configs")
 	for name, config in pairs(configs) do
 		if require("dap").configurations[name] == nil then
