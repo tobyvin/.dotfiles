@@ -122,11 +122,8 @@ if $clean; then
 	fd_verbose=$(printf %s\\n "$verbose_args" | sed 's/-vv\?//' | sed 's/^v/-v/')
 
 	# shellcheck disable=2086
-	fd . "$HOME" --hidden --type l \
-		--exclude "$(realpath --relative-base="$INSTALL_DIR" "$XDG_CACHE_HOME")" \
-		--exclude "$(realpath --relative-base="$INSTALL_DIR" "$SCRIPT_DIR")" \
-		--exec sh $simulate $fd_verbose -c \
-		"[ -e {} ] || case \$(readlink '{}') in '$SCRIPT_DIR'*) rm -v '{}';; esac"
+	fd . "$HOME" --hidden --type l --exclude \.dotfiles/** --exec sh $simulate $fd_verbose -c \
+		"[ -e '{}' ] || case \$(readlink '{}') in *'../.dotfiles/'*) rm -v '{}';; esac"
 
 	if $clean_only; then
 		exit 0
