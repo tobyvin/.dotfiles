@@ -51,4 +51,14 @@ return {
 		config = true,
 		build = "go build -o ~/.local/bin",
 	},
+	{
+		"kwkarlwang/bufjump.nvim",
+		event = "VeryLazy",
+		config = true,
+		opts = {
+			forward = "gn",
+			backward = "gp",
+			on_success = nil,
+		},
+	},
 }
