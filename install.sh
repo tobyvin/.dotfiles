@@ -123,7 +123,7 @@ if $clean; then
 
 	# shellcheck disable=2086
 	fd . "$HOME" --hidden --type l --exclude \.dotfiles/** --exec sh $simulate $fd_verbose -c \
-		"[ -e '{}' ] || case \$(readlink '{}') in *'../.dotfiles/'*) rm -v '{}';; esac"
+		"[ -e '{}' ] || case \$(readlink -m '{}') in \"$SCRIPT_DIR/\"*) rm -v '{}';; esac"
 
 	if $clean_only; then
 		exit 0
