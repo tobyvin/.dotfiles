@@ -121,9 +121,9 @@ if $clean; then
 	need fd
 	fd_verbose=$(printf %s\\n "$verbose_args" | sed 's/-vv\?//' | sed 's/^v/-v/')
 
-	# shellcheck disable=2086
+	# shellcheck disable=2086,2016
 	fd . "$HOME" --hidden --type l --exclude \.dotfiles/** --exec sh $simulate $fd_verbose -c \
-		"[ -e '{}' ] || case \$(readlink -m '{}') in \"$SCRIPT_DIR/\"*) rm -v '{}';; esac"
+		'[ -e "{}" ] || (l=$(readlink -m "{}"); [ "${l#'"$SCRIPT_DIR"'}" == "$l" ] || rm -v "{}")'
 
 	if $clean_only; then
 		exit 0
