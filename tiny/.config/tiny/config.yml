@@ -1,0 +1,146 @@
+log_dir: "/home/tobyv/.local/state/tiny/logs"
+
+defaults:
+  nicks: [tobyvin]
+  realname: Toby Vincent
+
+servers:
+  - addr: irc.libera.chat
+    port: 6697
+    tls: true
+    nicks: [tobyvin]
+    realname: Toby Vincent
+    sasl:
+      username: tobyvin
+      password:
+        command: "pass show irc.libera.chat/tobyvin"
+    join:
+      - "#sr.ht"
+      - "#sr.ht.watercooler"
+
+colors:
+  nick: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14]
+
+  clear:
+    fg: default
+    bg: default
+
+  user_msg:
+    fg: black
+    bg: default
+
+  err_msg:
+    fg: black
+    bg: maroon
+    attrs: [bold]
+
+  topic:
+    fg: cyan
+    bg: default
+    attrs: [bold]
+
+  cursor:
+    fg: black
+    bg: default
+
+  join:
+    fg: lime
+    bg: default
+    attrs: [bold]
+
+  part:
+    fg: maroon
+    bg: default
+    attrs: [bold]
+
+  nick_change:
+    fg: lime
+    bg: default
+    attrs: [bold]
+
+  faded:
+    fg: 242
+    bg: default
+
+  exit_dialogue:
+    fg: default
+    bg: navy
+
+  highlight:
+    fg: red
+    bg: default
+    attrs: [bold]
+
+  completion:
+    fg: 84
+    bg: default
+
+  timestamp:
+    fg: 242
+    bg: default
+
+  tab_active:
+    fg: default
+    bg: default
+    attrs: [bold]
+
+  tab_normal:
+    fg: gray
+    bg: default
+
+  tab_new_msg:
+    fg: purple
+    bg: default
+
+  tab_highlight:
+    fg: red
+    bg: default
+    attrs: [bold]
+
+key_map:
+  ctrl_c: exit
+  ctrl_x: run_editor
+
+  alt_1:
+    tab_goto: 1
+  alt_2:
+    tab_goto: 2
+  alt_3:
+    tab_goto: 3
+  alt_4:
+    tab_goto: 4
+  alt_5:
+    tab_goto: 5
+  alt_6:
+    tab_goto: 6
+  alt_7:
+    tab_goto: 7
+  alt_8:
+    tab_goto: 8
+  alt_9:
+    tab_goto: 9
+  alt_0:
+    tab_goto: 0
+  ctrl_n: tab_next
+  ctrl_p: tab_prev
+
+  shift_up: messages_scroll_up
+  shift_down: messages_scroll_down
+  ctrl_d: messages_page_down
+  ctrl_u: messages_page_up
+  pgup: messages_page_up
+  pgdown: messages_page_down
+  home: messages_scroll_top
+  end: messages_scroll_bottom
+
+  left: input_move_curs_left
+  right: input_move_curs_right
+  ctrl_a: input_move_curs_start
+  ctrl_e: input_move_curs_end
+  ctrl_left: input_move_word_left
+  ctrl_right: input_move_word_right
+  ctrl_k: input_delete_to_end
+  ctrl_w: input_delete_prev_word
+  backspace: input_delete_prev_char
+  del: input_delete_next_char
+  tab: input_auto_complete
