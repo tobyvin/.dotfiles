@@ -1,0 +1,15 @@
+defaults
+auth on
+tls on
+tls_trust_file /etc/ssl/certs/ca-certificates.crt
+syslog on
+
+account gmail
+host smtp.gmail.com
+port 587
+tls_starttls    on
+user tobyv13
+from tobyv13@gmail.com
+passwordeval "pass gmail"
+
+account default: gmail
