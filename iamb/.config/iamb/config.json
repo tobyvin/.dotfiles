@@ -1,0 +1,12 @@
+{
+    "profiles": {
+        "default": {
+            "user_id": "@tobyvin:community.rs",
+            "url": "https://matrix.community.rs"
+        }
+    },
+    "settings": {
+        "default_room": "space"
+    },
+    "default_profile": "default"
+}
