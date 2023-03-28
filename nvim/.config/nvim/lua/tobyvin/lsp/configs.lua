@@ -11,7 +11,14 @@ local M = {
 		},
 	},
 	taplo = {},
-	yamlls = {},
+	yamlls = {
+
+		settings = {
+			yaml = {
+				keyOrdering = false,
+			},
+		},
+	},
 	tsserver = {},
 	cssls = {},
 	cssmodules_ls = {},
