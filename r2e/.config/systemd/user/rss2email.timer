@@ -1,0 +1,10 @@
+[Unit]
+Description=RSS email synchronization timer
+
+[Timer]
+OnBootSec=2m
+OnUnitActiveSec=5m
+Unit=rss2email.service
+
+[Install]
+WantedBy=timers.target
