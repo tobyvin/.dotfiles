@@ -1,0 +1,10 @@
+[Unit]
+Description=Watches Maildir for new mail and sends notifications
+
+[Service]
+Type=simple
+ExecStart=%h/.local/bin/maildir-notify %h/.local/share/mail/gmail/INBOX %h/.local/share/mail/feeds/INBOX
+RestartSec=10
+
+[Install]
+WantedBy=default.target

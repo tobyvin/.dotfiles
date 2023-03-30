@@ -1,0 +1,20 @@
+#!/bin/sh
+
+if [ $# = 0 ]; then
+	set -- "$MAIL"
+fi
+
+for i; do
+	set -- "$@" "${i}/new"
+	shift
+done
+
+inotifywait --monitor --event create --event moved_to "$@" |
+	while read -r dir _action file; do
+		catagory="$(dirname "$dir" | xargs dirname | xargs basename)"
+		from="$(grep -m1 -oP '(?<=^From: ).*' "${dir}${file}")"
+		subject="$(grep -m1 -oP '(?<=^Subject: ).*' "${dir}${file}")"
+
+		echo "Catagory: $catagory, From: $from, Subject: $subject"
+		notify-send -a "Mail" -c "$catagory" "From: $from" "$subject"
+	done
