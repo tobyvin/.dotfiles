@@ -1,11 +1,12 @@
 #!/bin/sh
+# shellcheck source-path=SCRIPTDIR
 
 SCRIPT="$(basename "$0")"
 SCRIPT_DIR="$(dirname -- "$(readlink -f -- "$0")")"
 INSTALL_DIR="$(dirname "$SCRIPT_DIR")"
 
-long='nvim,clean,clean-only,no,simulate,verbose,help'
-short='ecCnvh'
+long='install,clean,clean-only,no,simulate,verbose,help'
+short='icCnvh'
 
 opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"
 
@@ -30,12 +31,12 @@ help() {
 		    $SCRIPT [OPTION ...] [PACKAGE ...]
 
 		OPTIONS:
-		    -e, --nvim            Run neovim update commands
-		    -c, --clean           Remove broken symlinks found in $INSTALL_DIR for proceeding
-		    -C, --clean-only      Like --clean, but will exit after cleaning
-		    -n, --no, --simulate  Do not actually make any filesystem changes
-		    -v, --verbose         Increase verbosity
-		    -h, --help            Show this help
+		    -i, --install         After stowing, run any '<PKG>/install.sh' in packages.
+		    -c, --clean           Remove broken symlinks found in $INSTALL_DIR for proceeding.
+		    -C, --clean-only      Like --clean, but will exit after cleaning.
+		    -n, --no, --simulate  Do not actually make any filesystem changes.
+		    -v, --verbose         Increase verbosity.
+		    -h, --help            Show this help.
 	EOF
 }
 
@@ -72,11 +73,11 @@ need() {
 	done
 }
 
-nvim=false
 clean=false
 clean_only=false
 verbose=0
 simulate=""
+install=false
 while true; do
 	case "$1" in
 	-h | --help)
@@ -87,8 +88,8 @@ while true; do
 		verbose=$((verbose + 1))
 		shift
 		;;
-	-e | --nvim)
-		nvim=true
+	-i | --install)
+		install=true
 		shift
 		;;
 	-c | --clean)
@@ -100,7 +101,6 @@ while true; do
 		clean_only=true
 		shift
 		;;
-
 	-n | --no | --simulate)
 		simulate='-n'
 		shift
@@ -131,39 +131,37 @@ if $clean; then
 fi
 
 if [ $# -eq 0 ]; then
-	pkgs=""
-	for pkg in "$SCRIPT_DIR"/*; do
-		if [ -d "$pkg" ]; then
-			pkg_name="$(basename "$pkg")"
+	for pkg_path in "$SCRIPT_DIR"/*; do
+		if [ -d "$pkg_path" ]; then
+			pkg="$(basename "$pkg_path")"
 
-			case "$pkg_name" in
+			case "$pkg" in
 			wsl)
 				if [ -n "${WSL_DISTRO_NAME+1}" ]; then
-					pkgs="$pkgs $pkg_name"
-				else
-					say_verbose "Skipping $pkg_name"
+					set -- "$@" "$pkg"
 				fi
 				;;
 			*)
-				pkgs="$pkgs $pkg_name"
+				set -- "$@" "$pkg"
 				;;
 			esac
 		fi
 	done
-
-	set -- "${pkgs## }"
 fi
 
 say_verbose "Installing: $*"
 
 # shellcheck disable=2068,2086
-stow $verbose_args $simulate $@
+stow $verbose_args $simulate "$@"
 
-if $nvim; then
-	need nvim
-	# Update plugins
-	nvim --headless "+Lazy! sync" +qa
-
-	# Update LSP servers
-	nvim --headless -c 'autocmd User MasonUpdateAllComplete quitall' -c 'MasonUpdateAll'
+if $install; then
+	for pkg; do
+		if [ -e "$SCRIPT_DIR/$pkg/install.sh" ]; then
+			if [ -z "$simulate" ]; then
+				"$SCRIPT_DIR/$pkg/install.sh"
+			else
+				echo "simulated: $SCRIPT_DIR/$pkg/install.sh"
+			fi
+		fi
+	done
 fi

@@ -1,2 +1,4 @@
 --verbose
 --no-folding
+--ignore=^install.sh
+--ignore=^README.md

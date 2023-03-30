@@ -1,6 +1,7 @@
-#!/bin/sh
+#!/usr/bin/sh
 
-WINHOME="$(wslpath c:\\Users\\"${USER}")"
+# shellcheck disable=1003
+WINHOME="$(wslpath 'C:\Users\'"${USER}")"
 
 # link WINHOME
 ln -sfn "$WINHOME" ~/win
