@@ -11,9 +11,20 @@ done
 
 inotifywait --monitor --event create --event moved_to "$@" |
 	while read -r dir _action file; do
-		catagory="$(dirname "$dir" | xargs dirname | xargs basename)"
+		inbox="$(dirname "$dir")"
+		catagory="$(dirname "$inbox" | xargs basename)"
 		from="$(grep -m1 -oP '(?<=^From: ).*' "${dir}${file}")"
 		subject="$(grep -m1 -oP '(?<=^Subject: ).*' "${dir}${file}")"
+
+		if [ ! -e "$inbox/new/$file" ]; then
+			if [ -e "$inbox/cur/$file" ]; then
+				from="$(grep -m1 -oP '(?<=^From: ).*' "$inbox/cur/$file")"
+				subject="$(grep -m1 -oP '(?<=^Subject: ).*' "$inbox/cur/$file")"
+			else
+				echo "Failed to read message. File: $file"
+				continue
+			fi
+		fi
 
 		echo "Catagory: $catagory, From: $from, Subject: $subject"
 		notify-send -a "Mail" -c "$catagory" "From: $from" "$subject"
