@@ -61,4 +61,9 @@ return {
 			on_success = nil,
 		},
 	},
+	{
+		"anuvyklack/pretty-fold.nvim",
+		event = "VeryLazy",
+		config = true,
+	},
 }
