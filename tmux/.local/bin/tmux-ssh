@@ -12,9 +12,8 @@ if [ "$#" -eq 0 ]; then
 	HOST=$(tmux display -p '#h' 2>/dev/null)
 
 	set -- "$(
-		tac "$TMUX_SSH_HISTFILE" |
-			sed "/^${ATTACHED}\$/d" |
-			fzf-tmux -p20%,20% -- --print-query -d/ --with-nth -1 |
+		sshr --all --exclude="$ATTACHED" |
+			fzf-tmux -p20%,20% -- --print-query --tac |
 			tail -1
 	)"
 fi
