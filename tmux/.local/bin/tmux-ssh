@@ -1,15 +1,9 @@
 #!/bin/sh
 
-TMUX_SSH_HISTFILE="$XDG_STATE_HOME/tmux_ssh_history"
-
-write_hist() {
-	sed -i -e "/^$1\$/d" -e "\$a$1" "$TMUX_SSH_HISTFILE" ||
-		echo "$1" >"$TMUX_SSH_HISTFILE"
-}
+HOST=$(tmux display -p '#h' 2>/dev/null)
 
 if [ "$#" -eq 0 ]; then
 	ATTACHED=$(tmux display -p '#{?#{m:*ssh,#{socket_path}},#S,#{host}}' 2>/dev/null)
-	HOST=$(tmux display -p '#h' 2>/dev/null)
 
 	set -- "$(
 		sshr --all --exclude="$ATTACHED" |
@@ -38,9 +32,3 @@ else
 		tmux detach -E "tmux -L ssh attach -t $target" || exit 0
 	fi
 fi
-
-if [ "$ATTACHED" = "$HOST" ] && ! grep -q "$HOST" "$TMUX_SSH_HISTFILE"; then
-	write_hist "$HOST"
-fi
-
-write_hist "$target"
