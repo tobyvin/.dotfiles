@@ -12,8 +12,9 @@ local M = {
 			},
 		},
 		server = require("tobyvin.lsp.configs").rust_analyzer,
-		dap = { adapter = false },
+		dap = { adapter = require("tobyvin.plugins.dap.adapters").codelldb },
 	},
+	config = true,
 }
 
 local function set_target()
@@ -58,41 +59,6 @@ local function set_target()
 	end)
 end
 
-local term_open = {
-	command_buf = nil,
-}
-
-function term_open.execute_command(command, args, cwd)
-	local utils = require("rust-tools.utils.utils")
-
-	local full_command = utils.chain_commands({
-		utils.make_command_from_args("cd", { cwd }),
-		utils.make_command_from_args(command, args),
-	})
-
-	utils.delete_buf(term_open.buf)
-	term_open.buf = vim.api.nvim_create_buf(false, true)
-	utils.split(false, term_open.buf)
-
-	-- make the new buffer smaller
-	utils.resize(false, "-5")
-
-	-- close the buffer
-	vim.keymap.set("n", "q", function()
-		utils.delete_buf(term_open.buf)
-	end, { buffer = term_open.buf })
-
-	-- run the command
-	vim.fn.termopen(full_command)
-
-	-- when the buffer is closed, set the latest buf id to nil else there are
-	-- some edge cases with the id being sit but a buffer not being open
-	local function onDetach(_, _)
-		term_open.buf = nil
-	end
-	vim.api.nvim_buf_attach(term_open.buf, false, { on_detach = onDetach })
-end
-
 function M.init()
 	require("tobyvin.lsp.configs").rust_analyzer = nil
 
@@ -120,11 +86,6 @@ function M.init()
 			})
 		end,
 	})
-end
-
-function M.config(_, opts)
-	require("rust-tools").setup(opts)
-	require("rust-tools.executors.termopen").execute_command = term_open.execute_command
 end
 
 return M

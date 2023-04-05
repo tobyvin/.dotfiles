@@ -8,6 +8,12 @@ local M = {
 		{
 			"theHamsta/nvim-dap-virtual-text",
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
+			opts = {
+				commented = true,
+				display_callback = function(variable)
+					return " " .. variable.value
+				end,
+			},
 			config = true,
 		},
 	},
@@ -45,9 +51,6 @@ function M.init()
 end
 
 function M.config()
-	require("dap").defaults.fallback.focus_terminal = true
-	require("dap").defaults.fallback.terminal_win_cmd = "15split new"
-
 	require("dap").listeners.after.event_initialized["User"] = function()
 		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
 	end

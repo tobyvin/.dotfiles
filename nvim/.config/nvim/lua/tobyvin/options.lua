@@ -43,6 +43,7 @@ vim.opt.spelloptions = { "camel", "noplainbuffer" }
 vim.opt.splitbelow = true
 vim.opt.splitright = true
 vim.opt.swapfile = false
+vim.opt.switchbuf = "useopen,split,uselast"
 vim.opt.tabstop = 4
 vim.opt.termguicolors = true
 vim.opt.textwidth = 100
