@@ -1,3 +1,7 @@
+Create Both
+Expunge Both
+SyncState *
+
 IMAPAccount gmail
 Host imap.gmail.com
 User tobyv13@gmail.com
@@ -16,42 +20,21 @@ Channel gmail-inbox
 Far :gmail-remote:
 Near :gmail-local:
 Patterns "INBOX"
-Create Both
-Expunge Both
-SyncState *
-
-Channel gmail-archive
-Far :gmail-remote:"[Gmail]/All Mail"
-Near :gmail-local:Archive
-MaxMessages 1000
-Create Both
-Expunge Both
-SyncState *
 
 Channel gmail-drafts
 Far :gmail-remote:"[Gmail]/Drafts"
 Near :gmail-local:Drafts
-Create Both
-Expunge Both
-SyncState *
 
 Channel gmail-sent
 Far :gmail-remote:"[Gmail]/Sent Mail"
 Near :gmail-local:Sent
-Create Both
-Expunge Both
-SyncState *
 
 Channel gmail-trash
 Far :gmail-remote:"[Gmail]/Trash"
 Near :gmail-local:Trash
-Create Both
-Expunge Both
-SyncState *
 
 Group gmail
 Channel gmail-inbox
-Channel gmail-archive
 Channel gmail-drafts
 Channel gmail-sent
 Channel gmail-trash
