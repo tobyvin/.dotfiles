@@ -1,0 +1,8 @@
+address irc.libera.chat
+
+nickname tobyvin
+realname Toby Vincent
+
+password-cmd pass show irc.libera.chat/tobyvin
+
+channel "#sr.ht" "#sr.ht.watercooler"
