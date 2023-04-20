@@ -128,8 +128,22 @@ ft=$(filetype "$1")
 case "$ft" in
 directory)
 	if has onefetch && in_git_repo "$1" 2>/dev/null; then
-		show_logo=$([ "$width" -lt "80" ] && printf 'never' || printf 'always')
-		cmd="onefetch --include-hidden --show-logo=$show_logo"
+		if [ "$width" -lt "80" ]; then
+			version=$(
+				(
+					onefetch --version | sed 's/onefetch //'
+					printf '2.16'
+				) | sort -V | tail -n1
+			)
+
+			if [ "$version" = '2.16.0' ]; then
+				args='--no-art'
+			else
+				args='--show-logo=never'
+			fi
+		fi
+
+		cmd="onefetch --include-hidden $args"
 	elif [ -f "$1/README.md" ]; then
 		exec $SCRIPT "$1/README.md"
 	else
