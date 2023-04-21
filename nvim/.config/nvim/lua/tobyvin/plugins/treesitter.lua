@@ -19,6 +19,7 @@ function M.config()
 			"c",
 			"cmake",
 			"cpp",
+			"c_sharp",
 			"css",
 			"diff",
 			"gitignore",
