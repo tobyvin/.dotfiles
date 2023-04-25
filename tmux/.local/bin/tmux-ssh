@@ -2,6 +2,11 @@
 
 HOST=$(tmux display -p '#h' 2>/dev/null)
 
+if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+	tmux -L ssh run-shell "tmux-ssh"
+	exit 0
+fi
+
 if [ "$#" -eq 0 ]; then
 	ATTACHED=$(tmux display -p '#{?#{m:*ssh,#{socket_path}},#S,#{host}}' 2>/dev/null)
 
@@ -22,13 +27,17 @@ if [ "$target" = "$HOST" ]; then
 	tmux detach -E 'tmux new -A'
 else
 	if ! tmux -L ssh has-session -t "$target"; then
-		ssh localhost -- :
-		tmux -L ssh new-session -ds "$target" ssh -t "$target" "zsh -l -c 'tmux new -A'"
+		# TODO: figure out how to get the remote user id (or $XDG_RUNTIME_DIR), *before* initial
+		# connection, in order to map to other user id's.
+		tmux -L ssh new-session -ds "$target" \
+			ssh -t -R /tmp/tmux-1000/ssh:/tmp/tmux-1000/ssh "$target" "zsh -l -c 'tmux new -A'"
 	fi
 
 	if [ -z "$TMUX" ]; then
-		tmux -L ssh attach -t "$target" || exit 0
+		tmux -L ssh attach -t "$target"
 	else
-		tmux detach -E "tmux -L ssh attach -t $target" || exit 0
+		tmux detach -E "tmux -L ssh attach -t $target"
 	fi
+
+	exit 0
 fi
