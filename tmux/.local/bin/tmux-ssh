@@ -27,10 +27,20 @@ if [ "$target" = "$HOST" ]; then
 	tmux detach -E 'tmux new -A'
 else
 	if ! tmux -L ssh has-session -t "$target"; then
-		# TODO: figure out how to get the remote user id (or $XDG_RUNTIME_DIR), *before* initial
-		# connection, in order to map to other user id's.
+		local_socket=$(tmux -L ssh start-server \; display -p "#{socket_path}")
+		remote_socket=$(
+			ssh -T \
+				-o "ControlMaster=auto" \
+				-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
+				"$target" 'tmux -L ssh start-server \; display -p "#{socket_path}"'
+		)
+
 		tmux -L ssh new-session -ds "$target" \
-			ssh -t -R /tmp/tmux-1000/ssh:/tmp/tmux-1000/ssh "$target" "zsh -l -c 'tmux new -A'"
+			ssh -t \
+			-o "ControlMaster=auto" \
+			-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
+			-R "$local_socket":"$remote_socket" \
+			"$target" "zsh -l -c 'tmux new -A'"
 	fi
 
 	if [ -z "$TMUX" ]; then
