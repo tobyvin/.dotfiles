@@ -9,5 +9,6 @@ vim.api.nvim_create_autocmd("User", {
 	callback = function()
 		require("tobyvin.autocmds")
 		require("tobyvin.diagnostic")
+		require("tobyvin.utils.session").setup()
 	end,
 })
