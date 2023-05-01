@@ -66,4 +66,8 @@ return {
 		event = "VeryLazy",
 		config = true,
 	},
+	{
+		"eandrju/cellular-automaton.nvim",
+		cmd = "CellularAutomaton",
+	},
 }
