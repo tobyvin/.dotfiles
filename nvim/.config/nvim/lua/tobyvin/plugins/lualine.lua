@@ -13,7 +13,7 @@ function M.config()
 	local diagnostic = require("tobyvin.utils.diagnostic")
 
 	local winbar_cond = function()
-		return vim.bo.buflisted and (vim.fn.bufname() ~= "" or require("nvim-navic").is_available())
+		return vim.bo.buflisted and vim.fn.bufname() ~= ""
 	end
 
 	lualine.setup({
@@ -106,30 +106,6 @@ function M.config()
 				},
 			},
 		},
-
-		winbar = {
-			lualine_b = {
-				{
-					"filename",
-					cond = winbar_cond,
-					color = "WinBar",
-				},
-			},
-			lualine_c = {
-				{
-					function()
-						return require("nvim-navic").get_location()
-					end,
-					-- Hack to prevent lualine_b from taking over the lualine_c when navic has no results
-					fmt = function(value)
-						return value:gsub("^$", " ")
-					end,
-					color = "WinBarNC",
-					cond = winbar_cond,
-				},
-			},
-		},
-
 		tabline = {
 			lualine_b = {
 				{
