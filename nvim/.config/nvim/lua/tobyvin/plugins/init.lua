@@ -1,4 +1,5 @@
-return {
+---@type LazySpec[]
+local M = {
 	"nvim-lua/plenary.nvim",
 	{
 		"folke/lazy.nvim",
@@ -71,3 +72,5 @@ return {
 		cmd = "CellularAutomaton",
 	},
 }
+
+return M
