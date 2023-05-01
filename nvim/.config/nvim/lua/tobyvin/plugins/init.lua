@@ -15,11 +15,6 @@ local M = {
 		event = "BufReadPre",
 	},
 	{
-		"tiagovla/scope.nvim",
-		event = "VeryLazy",
-		config = true,
-	},
-	{
 		"lukas-reineke/virt-column.nvim",
 		event = "BufReadPre",
 		config = true,
