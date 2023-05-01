@@ -140,6 +140,10 @@ function M.init()
 		require("telescope").extensions.live_grep_args.live_grep_args()
 	end, { desc = "live grep" })
 
+	vim.keymap.set("v", "<leader>fg", function()
+		require("telescope-live-grep-args.shortcuts").grep_visual_selection()
+	end, { desc = "live grep selection" })
+
 	vim.keymap.set("n", "<leader>fu", function()
 		require("telescope").extensions.undo.undo()
 	end, { desc = "undo" })
