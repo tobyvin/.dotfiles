@@ -7,6 +7,7 @@ local M = {
 		"MunifTanjim/nui.nvim",
 		"rcarriga/nvim-notify",
 	},
+	config = true,
 	---@type NoiceConfig
 	opts = {
 		cmdline = { enabled = false },
@@ -92,17 +93,17 @@ local M = {
 }
 
 function M.init()
+	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
+		link = require("tobyvin.utils.status").signs.spinner.texthl,
+	})
+
+	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
+		link = require("tobyvin.utils.status").signs.done.texthl,
+	})
+
 	vim.keymap.set("n", "<leader>nn", function()
-		require("noice").cmd("history")
-	end, { desc = "message history" })
-
-	vim.keymap.set("n", "<leader>nl", function()
 		require("noice").cmd("last")
-	end, { desc = "last message" })
-
-	vim.keymap.set("n", "<leader>ne", function()
-		require("noice").cmd("errors")
-	end, { desc = "error messages" })
+	end, { desc = "last notification" })
 
 	vim.keymap.set({ "n", "i", "s" }, "<c-d>", function()
 		if not require("noice.lsp").scroll(4) then
@@ -115,38 +116,6 @@ function M.init()
 			return "<C-u>zz"
 		end
 	end, { desc = "down half page and center", expr = true })
-end
-
----@param opts NoiceConfig
-function M.config(plugin, opts)
-	local augroup = vim.api.nvim_create_augroup(plugin.name, {})
-
-	vim.g.notify_send_enabled = false
-	vim.api.nvim_create_autocmd("FocusLost", {
-		group = augroup,
-		callback = function()
-			vim.g.notify_send_enabled = true
-		end,
-		desc = "Enable notify-send",
-	})
-
-	vim.api.nvim_create_autocmd("FocusGained", {
-		group = augroup,
-		callback = function()
-			vim.g.notify_send_enabled = false
-		end,
-		desc = "Disable notify-send",
-	})
-
-	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
-		link = require("tobyvin.utils.status").signs.spinner.texthl,
-	})
-
-	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
-		link = require("tobyvin.utils.status").signs.done.texthl,
-	})
-
-	require("noice").setup(opts)
 end
 
 return M
