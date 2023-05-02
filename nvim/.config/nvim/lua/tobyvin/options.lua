@@ -11,6 +11,7 @@ vim.opt.colorcolumn = "+0"
 vim.opt.completeopt = { "menuone", "noselect", "noinsert" }
 vim.opt.conceallevel = 3
 vim.opt.cursorline = true
+vim.opt.cursorlineopt = "number"
 vim.opt.expandtab = true
 vim.opt.formatoptions = "cqrnj"
 vim.opt.hidden = true

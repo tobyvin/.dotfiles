@@ -27,7 +27,7 @@ local M = {
 	{
 		"numToStr/Comment.nvim",
 		version = "*",
-		event = "VeryLazy",
+		event = "BufReadPre",
 		config = true,
 	},
 	{

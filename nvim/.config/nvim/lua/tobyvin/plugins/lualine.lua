@@ -3,7 +3,6 @@ local M = {
 	event = "VeryLazy",
 	dependencies = {
 		"kyazdani42/nvim-web-devicons",
-		"SmiteshP/nvim-navic",
 	},
 }
 
@@ -12,28 +11,27 @@ function M.config()
 
 	local diagnostic = require("tobyvin.utils.diagnostic")
 
-	local winbar_cond = function()
-		return vim.bo.buflisted and vim.fn.bufname() ~= ""
-	end
-
 	lualine.setup({
 		options = {
 			component_separators = "",
 			section_separators = "",
+			ignore_focus = {
+				"TelescopePrompt",
+				"TelescopeResults",
+			},
 		},
 
 		sections = {
-			lualine_a = { {
-				"mode",
-				fmt = function(str)
-					return str:sub(1, 1)
-				end,
-			} },
-			lualine_b = {
+			lualine_a = {
 				{
-					"branch",
-					color = "StatusLine",
+					"mode",
+					fmt = function(str)
+						return str:sub(1, 1)
+					end,
 				},
+			},
+			lualine_b = {
+				"branch",
 				{
 					"diff",
 					source = function()
@@ -47,7 +45,6 @@ function M.config()
 						end
 					end,
 					padding = { left = 0, right = 1 },
-					color = "StatusLine",
 				},
 			},
 			lualine_c = {
@@ -68,22 +65,12 @@ function M.config()
 						hint = diagnostic.signs.hint.hl,
 					},
 					update_in_insert = true,
-					color = "StatusLineNC",
 				},
 			},
 			lualine_x = {
-				{
-					"encoding",
-					color = "StatusLineNC",
-				},
-				{
-					"fileformat",
-					color = "StatusLineNC",
-				},
-				{
-					"filetype",
-					color = "StatusLineNC",
-				},
+				"encoding",
+				"fileformat",
+				"filetype",
 			},
 		},
 
@@ -92,28 +79,18 @@ function M.config()
 				{
 					"filename",
 					path = 1,
-					color = "StatusLineNC",
 				},
 			},
 			lualine_x = {
-				{
-					"filetype",
-					color = "StatusLineNC",
-				},
-				{
-					"location",
-					color = "StatusLineNC",
-				},
+				"filetype",
+				"location",
 			},
 		},
 		tabline = {
 			lualine_b = {
-				{
-					function()
-						return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-					end,
-					color = "StatusLine",
-				},
+				function()
+					return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
+				end,
 			},
 			lualine_c = {
 				{
@@ -121,14 +98,10 @@ function M.config()
 					path = 1,
 					shorten = true,
 					file_status = false,
-					color = "StatusLineNC",
 				},
 			},
 			lualine_y = {
-				{
-					"tabs",
-					color = "StatusLine",
-				},
+				"tabs",
 			},
 		},
 
