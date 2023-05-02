@@ -16,6 +16,10 @@ end)()
 local session_dir = vim.fn.stdpath("data") .. sep .. "session"
 
 function M.path()
+	if vim.v.this_session then
+		return vim.v.this_session
+	end
+
 	local name = vim.loop.cwd():gsub(":", "++"):gsub(sep, "%%")
 	return session_dir .. sep .. name .. ".vim"
 end
