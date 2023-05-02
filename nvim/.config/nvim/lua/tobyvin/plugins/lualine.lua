@@ -1,5 +1,6 @@
 local M = {
 	"nvim-lualine/lualine.nvim",
+	cond = not vim.g.started_by_firenvim,
 	event = "VeryLazy",
 	dependencies = {
 		"kyazdani42/nvim-web-devicons",
