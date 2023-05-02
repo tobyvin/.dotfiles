@@ -26,6 +26,7 @@ mkln.sh "$@" "$HOME"/.config/mpv/mpv.conf "${WINHOME}"/AppData/Roaming/mpv/mpv.c
 mkln.sh "$@" "$HOME"/.config/mpv/input.conf "${WINHOME}"/AppData/Roaming/mpv/input.conf
 mkln.sh "$@" "$HOME"/.config/streamlink/config "${WINHOME}"/AppData/Roaming/streamlink/config
 mkln.sh "$@" "$HOME"/.config/streamlink/config.twitch "${WINHOME}"/AppData/Roaming/streamlink/config.twitch
+mkln.sh "$@" "$HOME"/.config/tridactyl/tridactylrc "${WINHOME}"/.config/tridactyl/tridactylrc
 
 for f in "$HOME"/.config/alacritty/*; do
 	case "$f" in
