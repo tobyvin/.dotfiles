@@ -9,6 +9,16 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight yank",
 })
 
+vim.api.nvim_create_autocmd("VimLeavePre", {
+	group = vim.api.nvim_create_augroup("session", { clear = true }),
+	callback = function()
+		if #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
+			require("tobyvin.utils.session").write()
+		end
+	end,
+	desc = "write session on vim exit",
+})
+
 vim.api.nvim_create_autocmd("FocusLost", {
 	group = augroup,
 	pattern = "*",

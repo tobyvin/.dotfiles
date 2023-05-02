@@ -1,17 +1,28 @@
-local Path = require("plenary.path")
-local session_dir = Path:new(vim.fn.stdpath("data"), "session")
 local M = {}
 
+local sep = (function()
+	if jit then
+		local os = string.lower(jit.os)
+		if os ~= "windows" then
+			return "/"
+		else
+			return "\\"
+		end
+	else
+		return package.config:sub(1, 1)
+	end
+end)()
+
+local session_dir = vim.fn.stdpath("data") .. sep .. "session"
+
 function M.path()
-	local name = vim.loop.cwd():gsub(":", "++"):gsub(Path.path.sep, "%%")
-	local file = ("%s.vim"):format(name)
-	return session_dir:joinpath(file).filename
+	local name = vim.loop.cwd():gsub(":", "++"):gsub(sep, "%%")
+	return session_dir .. sep .. name .. ".vim"
 end
 
 function M.write()
 	local path = M.path()
-
-	session_dir:mkdir()
+	vim.fn.mkdir(vim.fn.fnamemodify(path, ":p:h"), "p")
 	vim.cmd.mksession({ vim.fn.fnameescape(path), bang = true })
 end
 
@@ -22,21 +33,6 @@ function M.read()
 	else
 		vim.notify("No session found", vim.log.levels.WARN)
 	end
-end
-
-function M.setup()
-	vim.keymap.set("n", "<leader>sr", M.read, { desc = "read session" })
-	vim.keymap.set("n", "<leader>sw", M.write, { desc = "write session" })
-
-	vim.api.nvim_create_autocmd("VimLeavePre", {
-		group = vim.api.nvim_create_augroup("session", { clear = true }),
-		callback = function()
-			if #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
-				M.write()
-			end
-		end,
-		desc = "write session on vim exit",
-	})
 end
 
 return M
