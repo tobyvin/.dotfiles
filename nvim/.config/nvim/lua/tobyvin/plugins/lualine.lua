@@ -1,18 +1,10 @@
+local diagnostic = require("tobyvin.utils.diagnostic")
+
 local M = {
 	"nvim-lualine/lualine.nvim",
 	cond = not vim.g.started_by_firenvim,
 	event = "VeryLazy",
-	dependencies = {
-		"kyazdani42/nvim-web-devicons",
-	},
-}
-
-function M.config()
-	local lualine = require("lualine")
-
-	local diagnostic = require("tobyvin.utils.diagnostic")
-
-	lualine.setup({
+	opts = {
 		options = {
 			component_separators = "",
 			section_separators = "",
@@ -21,7 +13,6 @@ function M.config()
 				"TelescopeResults",
 			},
 		},
-
 		sections = {
 			lualine_a = {
 				{
@@ -74,7 +65,6 @@ function M.config()
 				"filetype",
 			},
 		},
-
 		inactive_sections = {
 			lualine_c = {
 				{
@@ -89,23 +79,19 @@ function M.config()
 		},
 		tabline = {
 			lualine_b = {
-				function()
-					return vim.fn.fnamemodify(vim.fn.getcwd(), ":~")
-				end,
+				vim.loop.cwd,
 			},
 			lualine_c = {
 				{
 					"filename",
 					path = 1,
 					shorten = true,
-					file_status = false,
 				},
 			},
 			lualine_y = {
 				"tabs",
 			},
 		},
-
 		extensions = {
 			"fzf",
 			"man",
@@ -114,8 +100,8 @@ function M.config()
 			"quickfix",
 			"toggleterm",
 		},
-	})
-end
+	},
+}
 
 function M:deactivate()
 	require("lualine").setup({
