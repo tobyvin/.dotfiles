@@ -22,12 +22,9 @@ local M = {
 	{
 		"nvim-treesitter/nvim-treesitter-context",
 		event = "BufReadPre",
-		config = true,
-	},
-	{
-		"numToStr/Comment.nvim",
-		version = "*",
-		event = "BufReadPre",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+		},
 		config = true,
 	},
 	{

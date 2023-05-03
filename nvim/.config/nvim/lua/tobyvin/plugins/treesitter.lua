@@ -6,14 +6,8 @@ local M = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		"JoosepAlviste/nvim-ts-context-commentstring",
 		"mfussenegger/nvim-ts-hint-textobject",
-		{ "nvim-treesitter/playground", cmd = "TSPlaygroundToggle" },
 	},
-}
-
-function M.config()
-	local treesitter = require("nvim-treesitter.configs")
-
-	treesitter.setup({
+	opts = {
 		ensure_installed = {
 			"bash",
 			"c",
@@ -56,9 +50,6 @@ function M.config()
 			enable = true,
 		},
 		highlight = {
-			enable = true,
-		},
-		playground = {
 			enable = true,
 		},
 		textobjects = {
@@ -118,7 +109,11 @@ function M.config()
 				lua = "-- %s",
 			},
 		},
-	})
+	},
+}
+
+function M:config(opts)
+	require("nvim-treesitter.configs").setup(opts)
 
 	vim.opt.foldmethod = "expr"
 	vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
