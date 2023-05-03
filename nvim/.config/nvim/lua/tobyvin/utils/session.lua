@@ -16,7 +16,7 @@ end)()
 local session_dir = vim.fn.stdpath("data") .. sep .. "session"
 
 function M.path()
-	if vim.v.this_session then
+	if vim.v.this_session and vim.v.this_session ~= "" then
 		return vim.v.this_session
 	end
 
@@ -26,8 +26,11 @@ end
 
 function M.write()
 	local path = M.path()
+
 	vim.fn.mkdir(vim.fn.fnamemodify(path, ":p:h"), "p")
-	vim.cmd.mksession({ vim.fn.fnameescape(path), bang = true })
+	if pcall(vim.cmd.mksession, { vim.fn.fnameescape(path), bang = true }) then
+		vim.v.this_session = path
+	end
 end
 
 function M.read()
