@@ -1,3 +1,6 @@
+vim.keymap.set("n", "gn", vim.cmd.bnext, { desc = "go to next buffer in the buffer list" })
+vim.keymap.set("n", "gp", vim.cmd.bprevious, { desc = "go to previous buffer in the buffer list" })
+
 vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "up half page and center" })
 vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "down half page and center" })
 

@@ -41,16 +41,6 @@ local M = {
 		build = "go build -o ~/.local/bin",
 	},
 	{
-		"kwkarlwang/bufjump.nvim",
-		event = "VeryLazy",
-		config = true,
-		opts = {
-			forward = "gn",
-			backward = "gp",
-			on_success = nil,
-		},
-	},
-	{
 		"anuvyklack/pretty-fold.nvim",
 		event = "VeryLazy",
 		config = true,
