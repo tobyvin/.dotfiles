@@ -99,10 +99,12 @@ if should_skip() then
 	return
 end
 
+local curr_buf = vim.api.nvim_get_current_buf()
 local buf = vim.api.nvim_create_buf(false, true)
 local win = vim.api.nvim_get_current_win()
 
 vim.api.nvim_set_current_buf(buf)
+vim.api.nvim_buf_delete(curr_buf, {})
 
 vim.opt_local.textwidth = 0
 vim.opt_local.bufhidden = "wipe"
