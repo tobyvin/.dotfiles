@@ -35,10 +35,6 @@ local M = {
 		event = "BufReadPre",
 		opts = {
 			disable_diagnostics = true,
-			highlights = {
-				incoming = "diffText",
-				current = "diffAdd",
-			},
 		},
 	},
 	{
