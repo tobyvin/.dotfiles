@@ -117,4 +117,19 @@ function M.config()
 	})
 end
 
+function M:deactivate()
+	require("lualine").setup({
+		options = {
+			refresh = {
+				statusline = 0,
+				tabline = 0,
+				winbar = 0,
+			},
+		},
+	})
+	vim.opt_local.statusline = ""
+	vim.opt_local.winbar = ""
+	vim.opt_local.tabline = ""
+end
+
 return M
