@@ -1,53 +1,40 @@
 " vim: filetype=vim
 
-" Most of this config was taken from two places
-" glacambre: https://github.com/glacambre/.dotfiles/blob/master/default/.config/tridactyl/tridactylrc
-" BurntSushi: https://gist.github.com/BurntSushi/393546a65db38d57cedcfd72c6d89bf3
+" tridactyl config
+" Ref: https://raw.githubusercontent.com/glacambre/.dotfiles/master/default/.config/tridactyl/tridactylrc
+" Ref: https://raw.githubusercontent.com/BurntSushi/dotfiles/master/.config/tridactyl/tridactylrc
 
-" This wipes all existing settings. This means that if a setting in this file
-" is removed, then it will return to default. In other words, this file serves
-" as an enforced single point of truth for Tridactyl's configuration.
 sanitize tridactyllocal tridactylsync
 
-" Just use a blank page for new tab. It would be nicer to use the standard
-" Firefox homepage, but Tridactyl doesn't support this yet.
-set newtab about:blank
+alias save_rss jsb -p tri.native.run("r2e add '" + JS_ARG + "'") set rsscmd save_rss %u
+alias gitclone jsb -p tri.native.run("git clone --depth=1 '" + JS_ARG + "' /home/tobyv/src/" + JS_ARG.split("/").slice(-1))
 
-" Use vim in tmux for editor.
-" set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
-" set editorcmd alacritty -e wsl --cd ~ --shell-type login -- tmux new -As tridactylrc -- nvim -S /home/tobyv/.local/share/nvim/session/tridactylrc.vim
-" js tri.browserBg.runtime.getPlatformInfo().then(os=>{const editorcmd = os.os=="linux" ? "st vim" : "auto"; tri.config.set("editorcmd", editorcmd)})
+set findcase sensitive
+set smoothscroll true
+set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
 
 unbind <C-f>
 bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext
 bind N findnext -?
-
-" Remove search highlighting.
 bind ,<Space> nohlsearch
-" Use sensitive case. Smart case would be nice here, but it doesn't work.
-set findcase sensitive
-
-" Smooth scrolling, yes please. This is still a bit janky in Tridactyl.
-set smoothscroll true
-
-" The default jump of 10 is a bit much.
 bind j scrollline 5
 bind k scrollline -5
-
-" K and J should move between tabs. x should close them.
 bind J tabprev
 bind K tabnext
 bind x tabclose
+bind zv composite js document.location.href | exclaim_quiet mpv --loop
+bind zz composite jsb tri.native.run('cat /home/tobyv/.config/firefox/userscripts/rustdoc-condensed.js') | js -p eval(JS_ARG.content)
 
-" Disabled sites
 autocmd DocStart mail.google.com mode ignore
+autocmd DocStart discordapp.com mode ignore
 
-" Native messenger stuff
 fixamo_quiet
+
 guiset_quiet hoverlink right
 guiset_quiet tabs count
+
 setpref accessibility.typeaheadfind.autostart false
 setpref accessibility.typeaheadfind.flashBar 0
 setpref app.normandy.api_url ""
@@ -65,7 +52,7 @@ setpref browser.download.folderList 2
 setpref browser.download.manager.addToRecentDocs false
 setpref browser.download.useDownloadDir false
 setpref browser.eme.ui.enabled false
-setpref browser.feeds.handler.default "client"
+" setpref browser.feeds.handler.default "client"
 " setpref browser.feeds.handlers.application "/home/me/bin/add_rss_feed"
 setpref browser.formfill.enable false
 setpref browser.helperApps.deleteTempFileOnExit true
