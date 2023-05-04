@@ -9,16 +9,6 @@ local M = {
 			build = "make",
 		},
 		{
-			"prochri/telescope-all-recent.nvim",
-			dependencies = "kkharji/sqlite.lua",
-			opts = {
-				pickers = {
-					find_files = { disable = true },
-				},
-			},
-			config = true,
-		},
-		{
 			"AckslD/nvim-neoclip.lua",
 			config = true,
 		},
@@ -50,6 +40,8 @@ local M = {
 				i = {
 					["<Esc>"] = "close",
 					["<C-h>"] = "which_key",
+					["<C-Down>"] = "cycle_history_next",
+					["<C-Up>"] = "cycle_history_prev",
 				},
 			},
 		},
@@ -61,11 +53,6 @@ local M = {
 					"f",
 					"--hidden",
 					"--strip-cwd-prefix",
-				},
-				mappings = {
-					i = {
-						["<C-r>"] = "move_file",
-					},
 				},
 			},
 			oldfiles = {
@@ -90,16 +77,30 @@ local M = {
 			},
 		},
 	},
+	keys = {
+		"<leader>f",
+		"<leader>g",
+	},
 }
 
-function M.init()
-	local builtin = setmetatable({}, {
-		__index = function(_, k)
-			return function()
-				require("telescope.builtin")[k]()
-			end
-		end,
-	})
+function M:config(opts)
+	opts.extensions.undo = {
+		mappings = {
+			i = {
+				["<cr>"] = require("telescope-undo.actions").restore,
+				["<C-cr>"] = require("telescope-undo.actions").yank_additions,
+				["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
+			},
+		},
+	}
+
+	require("telescope").setup(opts)
+	require("telescope").load_extension("fzf")
+	require("telescope").load_extension("undo")
+	require("telescope").load_extension("neoclip")
+
+	local builtin = require("telescope.builtin")
+	local extensions = require("telescope").extensions
 
 	vim.keymap.set("n", "<leader>fa", builtin.autocommands, { desc = "autocommands" })
 	vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "buffers" })
@@ -131,80 +132,14 @@ function M.init()
 	vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "files" })
 	vim.keymap.set("n", "<leader>gt", builtin.git_status, { desc = "status" })
 	vim.keymap.set("n", "<leader>gT", builtin.git_stash, { desc = "stash" })
-
-	vim.keymap.set("n", "<leader>fd", function()
-		require("telescope").extensions.file_browser.file_browser()
-	end, { desc = "file browser" })
-
-	vim.keymap.set("n", "<leader>fg", function()
-		require("telescope").extensions.live_grep_args.live_grep_args()
-	end, { desc = "live grep" })
+	vim.keymap.set("n", "<leader>fd", extensions.file_browser.file_browser, { desc = "file browser" })
+	vim.keymap.set("n", "<leader>fg", extensions.live_grep_args.live_grep_args, { desc = "live grep" })
+	vim.keymap.set("n", "<leader>fu", extensions.undo.undo, { desc = "undo" })
+	vim.keymap.set("n", "<leader>fp", extensions.neoclip.default, { desc = "clipboard" })
 
 	vim.keymap.set("v", "<leader>fg", function()
 		require("telescope-live-grep-args.shortcuts").grep_visual_selection()
 	end, { desc = "live grep selection" })
-
-	vim.keymap.set("n", "<leader>fu", function()
-		require("telescope").extensions.undo.undo()
-	end, { desc = "undo" })
-
-	vim.keymap.set("n", "<leader>fp", function()
-		require("telescope").extensions.neoclip.default()
-	end, { desc = "clipboard" })
-end
-
-function M.config(_, opts)
-	local actions = require("telescope.actions")
-
-	--- Rename files for |telescope.picker.find_files|.<br>
-	---@param prompt_bufnr number: The prompt bufnr
-	actions.move_file = function(prompt_bufnr)
-		local Path = require("plenary.path")
-
-		local finders = require("telescope.finders")
-		local action_state = require("telescope.actions.state")
-		local picker = action_state.get_current_picker(prompt_bufnr)
-		local entry = action_state.get_selected_entry()
-
-		if not entry then
-			return
-		end
-
-		local old_path = Path:new(entry[1])
-		vim.ui.input(
-			{ prompt = "Insert a new name: ", default = old_path:make_relative(), completion = "file" },
-			function(file)
-				vim.cmd([[ redraw ]]) -- redraw to clear out vim.ui.prompt to avoid hit-enter prompt
-
-				local new_path = Path:new(file)
-				if new_path.filename == "" or old_path.filename == new_path.filename then
-					return
-				end
-
-				new_path:parent():mkdir({ parents = true })
-				old_path:rename({ new_name = new_path.filename })
-
-				-- TODO: figure out how to properly refresh picker
-				picker:refresh(finders.new_oneshot_job(opts.pickers.find_files.find_command, {}))
-			end
-		)
-	end
-
-	opts.extensions.undo = {
-		mappings = {
-			i = {
-				["<cr>"] = require("telescope-undo.actions").restore,
-				["<C-cr>"] = require("telescope-undo.actions").yank_additions,
-				["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
-			},
-		},
-	}
-
-	require("telescope").setup(opts)
-	require("telescope").load_extension("fzf")
-	require("telescope").load_extension("undo")
-	require("telescope").load_extension("neoclip")
-	require("telescope-all-recent")
 end
 
 return M
