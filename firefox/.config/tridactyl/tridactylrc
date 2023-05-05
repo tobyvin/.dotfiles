@@ -14,6 +14,7 @@ set smoothscroll true
 set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
 
 unbind <C-f>
+unbind s
 bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext
@@ -24,6 +25,7 @@ bind k scrollline -5
 bind J tabprev
 bind K tabnext
 bind x tabclose
+bind gs fillcmdline open search
 bind zv composite js document.location.href | exclaim_quiet mpv --loop
 bind zz composite jsb tri.native.run('cat /home/tobyv/.config/firefox/userscripts/rustdoc-condensed.js') | js -p eval(JS_ARG.content)
 
