@@ -13,33 +13,46 @@ local sep = (function()
 	end
 end)()
 
-local session_dir = vim.fn.stdpath("data") .. sep .. "session"
-
+---@return string session_path
 function M.path()
 	if vim.v.this_session and vim.v.this_session ~= "" then
 		return vim.v.this_session
 	end
 
-	local name = vim.loop.cwd():gsub(":", "++"):gsub(sep, "%%")
-	return session_dir .. sep .. name .. ".vim"
+	local session_dir = table.concat({ vim.fn.stdpath("data"), "session" }, sep)
+	local name = vim.loop.cwd():gsub(":", "++"):gsub(sep, "%%"):gsub("$", ".vim")
+
+	if not name or name == "" then
+		error(("Invalid session name: '%s'"):format(name))
+	end
+
+	return table.concat({ session_dir, name }, sep)
 end
 
 function M.write()
-	local path = M.path()
+	local is_ok, res = pcall(M.path)
+	if not is_ok then
+		return vim.notify(res, vim.log.levels.ERROR)
+	end
 
-	vim.fn.mkdir(vim.fn.fnamemodify(path, ":p:h"), "p")
-	if pcall(vim.cmd.mksession, { vim.fn.fnameescape(path), bang = true }) then
-		vim.v.this_session = path
+	vim.fn.mkdir(vim.fn.fnamemodify(res, ":p:h"), "p")
+
+	if pcall(vim.cmd.mksession, { vim.fn.fnameescape(res), bang = true }) then
+		vim.v.this_session = res
 	end
 end
 
 function M.read()
-	local file = M.path()
-	if file and vim.fn.filereadable(file) ~= 0 then
-		vim.cmd.source(vim.fn.fnameescape(file))
-	else
-		vim.notify("No session found", vim.log.levels.WARN)
+	local is_ok, res = pcall(M.path)
+	if not is_ok then
+		return vim.notify(res, vim.log.levels.ERROR)
 	end
+
+	if vim.fn.filereadable(res) ~= 1 then
+		return vim.notify("No session found", vim.log.levels.WARN)
+	end
+
+	vim.cmd.source(vim.fn.fnameescape(res))
 end
 
 return M
