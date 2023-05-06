@@ -5,7 +5,7 @@ if [ "$#" -eq 0 ]; then
 	PREVIEW_CMD='sel={}; less ${sel:-{q}} 2>/dev/null'
 
 	# shellcheck disable=2046
-	set -- $(projectr ~/dkr ~/pkg ~/src -mgP ~/.dotfiles | sed "\|^$(tmux display -p '#{session_path}')\$|d" |
+	set -- $(projectr -mgt ~/dkr ~/pkg ~/src -P ~/.dotfiles | sed "\|^$(tmux display -p '#{session_path}')\$|d" |
 		fzf-tmux "$FZF_TMUX_OPTS" -- --tac --multi --print-query -d/ --with-nth -1 \
 			--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
 		tr -s '\n' ' ') && [ $# -gt 1 ] && shift
