@@ -24,6 +24,7 @@ setopt HIST_IGNORE_SPACE
 setopt HIST_VERIFY
 setopt NONOMATCH
 setopt CORRECT
+setopt INTERACTIVE_COMMENTS
 
 bindkey -v
 bindkey -m 2>/dev/null
