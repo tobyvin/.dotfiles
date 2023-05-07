@@ -9,7 +9,7 @@ sanitize tridactyllocal tridactylsync
 alias save_rss jsb -p tri.native.run("r2e add '" + JS_ARG + "'") set rsscmd save_rss %u
 alias gitclone jsb -p tri.native.run("git clone --depth=1 '" + JS_ARG + "' /home/tobyv/src/" + JS_ARG.split("/").slice(-1))
 
-set findcase sensitive
+set findcase smart
 set smoothscroll true
 set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
 
