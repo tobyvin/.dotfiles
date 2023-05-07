@@ -3,14 +3,8 @@ require("tobyvin.filetype")
 require("tobyvin.autocmds")
 require("tobyvin.keymaps")
 require("tobyvin.lsp")
+require("tobyvin.diagnostic")
 require("tobyvin.lazy")
 require("tobyvin.utils.dashboard")
 
 vim.cmd.colorscheme("gruvbox")
-
-vim.api.nvim_create_autocmd("User", {
-	pattern = "VeryLazy",
-	callback = function()
-		require("tobyvin.diagnostic")
-	end,
-})
