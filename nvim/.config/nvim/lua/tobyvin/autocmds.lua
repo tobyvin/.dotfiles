@@ -9,6 +9,19 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight yank",
 })
 
+-- HACK: Temporary fix for statusline background issue when nvim-cmp menu closes
+-- Ref: https://github.com/neovim/neovim/issues/22614
+vim.api.nvim_create_autocmd("CmdlineLeave", {
+	group = augroup,
+	pattern = "*",
+	callback = function()
+		vim.schedule(function()
+			vim.o.background = "dark"
+		end)
+	end,
+	desc = "Temporary highlight fix",
+})
+
 vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = vim.api.nvim_create_augroup("session", { clear = true }),
 	callback = function()
