@@ -12,10 +12,6 @@ if [ "$#" -eq 0 ]; then
 	)
 fi
 
-if [ "$#" -eq 0 ]; then
-	exit 0
-fi
-
 if [ -z "$TMUX" ]; then
 	tmux attach-session -t "$1"
 else

@@ -1,47 +1,24 @@
 #!/bin/sh
-# shellcheck disable=2016,2089
 
 if [ "$#" -eq 0 ]; then
-	PREVIEW_CMD='sel={}; less ${sel:-{q}} 2>/dev/null'
+	GIT_PREVIEW='onefetch --include-hidden'
+	DIR_PREVIEW='exa --tree --git-ignore --level=3 --icons'
+	PREVIEW_CMD="($GIT_PREVIEW {} || $DIR_PREVIEW {}) 2>/dev/null"
 
 	# shellcheck disable=2046
 	set -- $(
 		projectr -mgt ~/dkr ~/pkg ~/src -P ~/.dotfiles --exclude-cwd |
-			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --multi --print-query -d/ --with-nth -1 \
+			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --select-1 --exit-0 -d/ --with-nth -1 \
 				--bind 'focus:transform-header(echo {})' \
-				--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD" |
-			tr -s '\n' ' '
-	) && [ $# -gt 1 ] && shift
+				--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD"
+	)
 fi
 
-while [ $# -gt 0 ]; do
-	session_path="$1"
-	shift
+name=$(basename "$1" | tr . _)
 
-	if [ ! -d "$session_path" ]; then
-		repo="$session_path"
-		if [ "$repo" = "${repo%/*}/${repo#*/}" ]; then
-			for remote in ${GIT_REMOTES:-https://git.sr.ht https://github.com}; do
-				if git ls-remote "$remote/$repo" CHECK_GIT_REMOTE_REACHABILITY; then
-					session_path="$remote/$repo"
-					break
-				fi
-			done
-		fi
-
-		session_path="$HOME/src/$(basename "$session_path")"
-		git clone "$repo" "$session_path"
-	fi
-
-	if [ ! -d "$session_path" ]; then
-		continue
-	fi
-
-	name=$(basename "$session_path" | tr . _)
-	if ! tmux has-session -t="$name" 2>/dev/null; then
-		tmux new-session -ds "$name" -c "$session_path"
-	fi
-done
+if ! tmux has-session -t="$name" 2>/dev/null; then
+	tmux new-session -ds "$name" -c "$1"
+fi
 
 if [ -z "$TMUX" ] && [ -z "$name" ]; then
 	tmux attach-session -t "$name"
