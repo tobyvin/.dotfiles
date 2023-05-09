@@ -1,0 +1,4 @@
+#!/bin/sh
+
+exec pandoc -f html-native_divs-native_spans --wrap=none \
+	-t markdown_strict-raw_html-fenced_divs-bracketed_spans

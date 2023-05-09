@@ -1,21 +1,16 @@
-# should work with any terminal colorscheme, but was designed for gruvbox
-# terminal colors are preferred, but hex is used for grayscale
+# vim: ft=dosini
 
 *.default=true
 
-# present in 'Send this email?' dialog
 title.fg=yellow
-title.bg=#303030
+title.bg=236
 title.bold=true
 
-# used in setup and in 'From:' etc
 header.bold=true
 header.fg=purple
 
-# decorative lines
 border.fg=blue
 
-# requires attention
 *error.bold=true
 *error.fg=red
 *error.blink=true
@@ -23,32 +18,61 @@ border.fg=blue
 *warning.blink=true
 *success.fg=green
 
-# statusline
 statusline_default.fg=gray
-statusline_*.bg=#303030
+statusline_*.bg=236
 
-# message list colors
+msglist*.X-Sourcehut-Patchset-Update,APPLIED.fg = blue
+msglist*.X-Sourcehut-Patchset-Update,APPLIED.fg = blue
+msglist*.X-Sourcehut-Patchset-Update,APPROVED.fg = green
+msglist*.X-Sourcehut-Patchset-Update,NEEDS_REVISION.fg = yellow
+msglist*.X-Sourcehut-Patchset-Update,SUPERSEDED.fg = yellow
+msglist*.X-Sourcehut-Patchset-Update,REJECTED.fg = red
+msglist*.X-Sourcehut-Patchset-Update,APPLIED.selected.fg = blue
+msglist*.X-Sourcehut-Patchset-Update,APPROVED.selected.fg = green
+msglist*.X-Sourcehut-Patchset-Update,NEEDS_REVISION.selected.fg = yellow
+msglist*.X-Sourcehut-Patchset-Update,SUPERSEDED.selected.fg = yellow
+msglist*.X-Sourcehut-Patchset-Update,REJECTED.selected.fg = red
+msglist_unread.bold=true
 msglist_deleted.fg=gray
 msglist_unread.fg=green
 msglist_read.fg=blue
 msglist_marked.fg=yellow
 msglist_marked.reverse=true
 
-# inbox etc
 dirlist_default.fg=gray
 
-# highlight selected item
-*.selected.bg=#3a3a3a
+*.selected.bg=237
 *.selected.fg=white
 *.selected.bold=true
 
-# primarily used in account setup
 selector_default.fg=gray
 selector_chooser.bold=true
-selector_focused.bg=#3a3a3a
+selector_focused.bg=237
 selector_focused.bold=true
 
-# command completion
-completion_default.bg=#303030
-completion_gutter.bg=#303030
+completion_default.bg=236
+completion_gutter.bg=236
 completion_pill.bg=aqua
+
+[viewer]
+header.fg=purple
+header.bold=true
+
+url.fg=orange
+
+signature.dim=true
+
+quote_1.fg=6
+quote_2.fg=7
+quote_3.fg=6
+quote_3.dim=true
+quote_4.fg=7
+quote_4.dim=true
+quote_x.fg=gray
+quote_x.dim=true
+
+diff_meta.fg=red
+diff_meta.bold=true
+diff_chunk.dim=true
+diff_add.fg=green
+diff_del.fg=red
