@@ -15,6 +15,7 @@ set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/
 
 unbind <C-f>
 unbind s
+unbind d
 bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext
