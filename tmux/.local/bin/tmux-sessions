@@ -8,8 +8,12 @@ if [ "$#" -eq 0 ]; then
 		$FZF_CMD |
 			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --select-1 --exit-0 \
 				--bind "ctrl-q:execute(tmux kill-session -t{})+reload($FZF_CMD)" \
-				--preview-window=right,80% --preview='tmux capture-pane -ep -t {}'
+				--preview-window=right,80% --preview='tmux capture-pane -ep -t{}:'
 	)
+fi
+
+if [ "$#" -eq 0 ]; then
+	exit 0
 fi
 
 if [ -z "$TMUX" ]; then
