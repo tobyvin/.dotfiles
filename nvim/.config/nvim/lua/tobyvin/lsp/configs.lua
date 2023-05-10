@@ -24,6 +24,7 @@ local M = {
 	cssmodules_ls = {},
 	stylelint_lsp = {},
 	clangd = {},
+	powershell_es = {},
 	pylsp = {},
 	perlnavigator = {
 		settings = {
