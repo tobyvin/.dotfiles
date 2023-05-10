@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = vim.api.nvim_create_augroup("session", { clear = true }),
 	callback = function()
-		if #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
+		if #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 and #vim.fn.argv() == 0 then
 			pcall(require("tobyvin.utils.session").write)
 		end
 	end,
