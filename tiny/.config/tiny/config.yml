@@ -15,6 +15,7 @@ servers:
       password:
         command: "pass show irc.libera.chat/tobyvin"
     join:
+      - "##rust"
       - "#sr.ht"
       - "#sr.ht.watercooler"
 
