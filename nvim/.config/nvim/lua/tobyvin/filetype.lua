@@ -5,6 +5,6 @@ vim.filetype.add({
 		zsh = "sh",
 	},
 	pattern = {
-		[".*%.conf"] = { "dosini", { priority = -math.huge } },
+		[".*%.conf"] = { "confini", { priority = -math.huge } },
 	},
 })
