@@ -52,7 +52,12 @@ function M.read()
 		return vim.notify("No session found", vim.log.levels.WARN)
 	end
 
-	vim.cmd.source(vim.fn.fnameescape(res))
+	if
+		#vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) == 0
+		or vim.fn.confirm("Reading session will overwrite buffers. Continue?", "&Yes\n&No") == 1
+	then
+		vim.cmd.source(vim.fn.fnameescape(res))
+	end
 end
 
 return M
