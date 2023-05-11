@@ -72,7 +72,7 @@ commands.commands.deactivate = function(opts)
 	end
 end
 
-require("lazy").setup("tobyvin.plugins", {
+require("lazy").setup("plugins", {
 	defaults = {
 		lazy = true,
 	},

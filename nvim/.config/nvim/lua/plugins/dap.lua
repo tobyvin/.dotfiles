@@ -1,8 +1,8 @@
 local M = {
 	"mfussenegger/nvim-dap",
 	dependencies = {
-		"nvim-telescope/telescope-dap.nvim",
-		"rcarriga/cmp-dap",
+		require("plugins/dap/telescope-dap"),
+		require("plugins/dap/cmp-dap"),
 		"mfussenegger/nvim-dap-python",
 		"leoluz/nvim-dap-go",
 		{
@@ -14,7 +14,6 @@ local M = {
 					return " " .. variable.value
 				end,
 			},
-			config = true,
 		},
 	},
 }
@@ -60,14 +59,14 @@ function M.config()
 		require("dap").repl.close()
 	end
 
-	local adapters = require("tobyvin.plugins.dap.adapters")
+	local adapters = require("tobyvin.dap.adapters")
 	for name, adapter in pairs(adapters) do
 		if require("dap").adapters[name] == nil then
 			require("dap").adapters[name] = adapter
 		end
 	end
 
-	local configs = require("tobyvin.plugins.dap.configs")
+	local configs = require("tobyvin.dap.configs")
 	for name, config in pairs(configs) do
 		if require("dap").configurations[name] == nil then
 			require("dap").configurations[name] = config

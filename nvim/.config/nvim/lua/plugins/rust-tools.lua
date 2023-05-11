@@ -12,7 +12,7 @@ local M = {
 			},
 		},
 		server = require("tobyvin.lsp.configs").rust_analyzer,
-		dap = { adapter = require("tobyvin.plugins.dap.adapters").codelldb },
+		dap = { adapter = require("tobyvin.dap.adapters").codelldb },
 	},
 	config = true,
 }
