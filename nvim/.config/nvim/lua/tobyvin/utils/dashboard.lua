@@ -167,5 +167,3 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 	desc = "dashboard lazy stats",
 })
-
-print("setup dashboard")
