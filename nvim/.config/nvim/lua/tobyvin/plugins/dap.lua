@@ -74,12 +74,11 @@ function M.config()
 		end
 	end
 
-	local signs = require("tobyvin.utils.debug").signs
-	vim.fn.sign_define("DapBreakpoint", signs.breakpoint)
-	vim.fn.sign_define("DapBreakpointCondition", signs.condition)
-	vim.fn.sign_define("DapBreakpointRejected", signs.rejected)
-	vim.fn.sign_define("DapStopped", signs.stopped)
-	vim.fn.sign_define("DapLogPoint", signs.logpoint)
+	vim.fn.sign_define("DapBreakpoint", { text = " ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapBreakpointCondition", { text = "ﳁ ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapBreakpointRejected", { text = " ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapLogPoint", { text = " ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapStopped", { text = " ", texthl = "debugBreakpoint" })
 end
 
 return M

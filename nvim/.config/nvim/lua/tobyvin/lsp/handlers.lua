@@ -54,12 +54,6 @@ return {
 		return result, err
 	end,
 
-	["window/showMessage"] = function(_, result, ctx)
-		vim.notify(string.format("%s", result.message), 5 - result.type, {
-			title = string.format("[LSP] %s", vim.lsp.get_client_by_id(ctx.client_id)),
-		})
-	end,
-
 	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
 		border = "single",
 	}),

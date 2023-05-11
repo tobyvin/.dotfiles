@@ -31,7 +31,7 @@ local M = {
 				},
 				format_done = {
 					{
-						require("tobyvin.utils.status").signs.done.text,
+						" ",
 						hl_group = "NoiceLspProgressDone",
 					},
 					{ "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
@@ -94,28 +94,24 @@ local M = {
 
 function M.init()
 	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
-		link = require("tobyvin.utils.status").signs.spinner.texthl,
+		link = "DiagnosticSignInfo",
 	})
 
 	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
-		link = require("tobyvin.utils.status").signs.done.texthl,
+		link = "DiffAdd",
 	})
-
-	vim.keymap.set("n", "<leader>nn", function()
-		require("noice").cmd("last")
-	end, { desc = "last notification" })
 
 	vim.keymap.set({ "n", "i", "s" }, "<c-d>", function()
 		if not require("noice.lsp").scroll(4) then
-			return "<C-d>zz"
+			return "<c-d>"
 		end
-	end, { desc = "up half page and center", expr = true })
+	end, { desc = "up half page", expr = true })
 
 	vim.keymap.set({ "n", "i", "s" }, "<c-u>", function()
 		if not require("noice.lsp").scroll(-4) then
-			return "<C-u>zz"
+			return "<c-u>"
 		end
-	end, { desc = "down half page and center", expr = true })
+	end, { desc = "down half page", expr = true })
 end
 
 return M

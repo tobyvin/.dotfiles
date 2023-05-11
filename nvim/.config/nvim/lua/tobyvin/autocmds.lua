@@ -25,11 +25,21 @@ vim.api.nvim_create_autocmd("CmdlineLeave", {
 vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = vim.api.nvim_create_augroup("session", { clear = true }),
 	callback = function()
-		if #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 and #vim.fn.argv() == 0 then
+		if vim.fn.argc() == 0 and #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
 			pcall(require("tobyvin.utils.session").write)
 		end
 	end,
 	desc = "write session on vim exit",
+})
+
+vim.api.nvim_create_autocmd("VimEnter", {
+	group = vim.api.nvim_create_augroup("dashboard", { clear = true }),
+	callback = function()
+		if vim.fn.argc() == 0 then
+			require("tobyvin.utils.dashboard")
+		end
+	end,
+	desc = "show dashboard on startup",
 })
 
 vim.api.nvim_create_autocmd("FocusLost", {

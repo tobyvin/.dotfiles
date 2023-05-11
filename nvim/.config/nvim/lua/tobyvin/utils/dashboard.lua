@@ -25,46 +25,6 @@ local sections = setmetatable({}, {
 	end,
 })
 
-local function should_skip()
-	-- don't start when opening a file
-	if vim.fn.argc() > 0 then
-		return true
-	end
-
-	-- skip stdin
-	if vim.fn.line2byte(vim.fn.line("$")) ~= -1 then
-		return true
-	end
-
-	-- Handle nvim -M
-	if not vim.o.modifiable then
-		return true
-	end
-
-	for _, arg in pairs(vim.v.argv) do
-		-- whitelisted arguments
-		-- always open
-		if arg == "--startuptime" then
-			return false
-		end
-
-		-- blacklisted arguments
-		-- always skip
-		if
-			arg == "-b"
-			-- commands, typically used for scripting
-			or arg == "-c"
-			or vim.startswith(arg, "+")
-			or arg == "-S"
-		then
-			return true
-		end
-	end
-
-	-- base case: don't skip
-	return false
-end
-
 local function max_len(lines)
 	local max = 0
 	for _, line in ipairs(lines) do
@@ -95,9 +55,9 @@ local function render(buf, win)
 	vim.bo[buf].modifiable = false
 end
 
-if should_skip() then
-	return
-end
+-- if require("tobyvin.utils").normal_startup() then
+-- 	return
+-- end
 
 local curr_buf = vim.api.nvim_get_current_buf()
 local buf = vim.api.nvim_create_buf(false, true)
@@ -207,3 +167,5 @@ vim.api.nvim_create_autocmd("User", {
 	end,
 	desc = "dashboard lazy stats",
 })
+
+print("setup dashboard")

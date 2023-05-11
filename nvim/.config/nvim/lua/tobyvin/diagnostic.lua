@@ -1,5 +1,3 @@
-local diagnostic = require("tobyvin.utils.diagnostic")
-
 vim.diagnostic.config({
 	virtual_text = {
 		source = "if_many",
@@ -15,14 +13,12 @@ vim.diagnostic.config({
 	},
 })
 
-vim.fn.sign_define("DiagnosticSignError", diagnostic.signs.error)
-vim.fn.sign_define("DiagnosticSignWarn", diagnostic.signs.warn)
-vim.fn.sign_define("DiagnosticSignInfo", diagnostic.signs.info)
-vim.fn.sign_define("DiagnosticSignHint", diagnostic.signs.hint)
+vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignHint" })
+vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignInfo" })
+vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignWarn" })
+vim.fn.sign_define("DiagnosticSignHint", { text = " ", texthl = "DiagnosticSignError" })
 
 vim.keymap.set("n", "gl", vim.diagnostic.open_float, { desc = "open diagnostic float" })
 vim.keymap.set("n", "gL", vim.diagnostic.setqflist, { desc = "qf diagnostic" })
 vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "next diagnostic" })
 vim.keymap.set("n", "[g", vim.diagnostic.goto_prev, { desc = "prev diagnostic" })
-vim.keymap.set("n", "]G", diagnostic.goto_next_workspace, { desc = "next workspace diagnostic" })
-vim.keymap.set("n", "[G", diagnostic.goto_prev_workspace, { desc = "prev workspace diagnostic" })
