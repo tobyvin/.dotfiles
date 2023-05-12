@@ -22,7 +22,6 @@ local M = {
 	tsserver = {},
 	cssls = {},
 	cssmodules_ls = {},
-	stylelint_lsp = {},
 	clangd = {},
 	powershell_es = {},
 	pylsp = {},
