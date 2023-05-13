@@ -20,6 +20,15 @@ local M = {
 		},
 	},
 	tsserver = {},
+	html = {
+		init_options = {
+			provideFormatter = false,
+		},
+		filetypes = {
+			"html",
+			"htmldjango",
+		},
+	},
 	cssls = {},
 	cssmodules_ls = {},
 	clangd = {},
