@@ -1,9 +1,9 @@
 #!/bin/sh
 
 if [ "$#" -eq 0 ]; then
-	GIT_PREVIEW='onefetch --include-hidden'
-	DIR_PREVIEW='exa --tree --git-ignore --level=3 --icons'
-	PREVIEW_CMD="($GIT_PREVIEW {} || $DIR_PREVIEW {}) 2>/dev/null"
+	GIT_PREVIEW='onefetch --include-hidden {}'
+	DIR_PREVIEW='tree -CL 3 --gitignore --noreport --filelimit=50 {}'
+	PREVIEW_CMD="($GIT_PREVIEW || $DIR_PREVIEW) 2>/dev/null"
 
 	# shellcheck disable=2046
 	set -- $(
