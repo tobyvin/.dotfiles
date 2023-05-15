@@ -11,6 +11,11 @@ local M = {
 		end,
 	},
 	{
+		"luukvbaal/statuscol.nvim",
+		event = "VeryLazy",
+		config = true,
+	},
+	{
 		"norcalli/nvim-colorizer.lua",
 		event = "BufReadPre",
 	},
