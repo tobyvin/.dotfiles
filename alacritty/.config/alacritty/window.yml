@@ -3,5 +3,5 @@ window:
     columns: 120
     lines: 40
   dynamic_padding: false
-  decorations: full
+  decorations: none
   opacity: 0.9
