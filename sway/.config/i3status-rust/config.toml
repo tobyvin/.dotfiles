@@ -21,17 +21,17 @@ icons = "none"
 
 [icons.overrides]
 bat_charging = "BAT+"
-music = "\uf886" # nf-mdi-music_note
-music_next = "\uf9ac" # nf-mdi-skip_next
-music_pause = "\uf8e3" # nf-mdi-pause
-music_play = "\uf909" # nf-mdi-play
-music_prev = "\uf9ad" # nf-mdi-skip_previous
-weather_clouds = "\ufa8f" # nf-mdi-weather_cloudy
-weather_default = "\ufa8f" # Cloud symbol as default
-weather_rain = "\ufa95" # nf-mdi-weather_pouring
-weather_snow = "\ufa97" # nf-mdi-weather_snowy
-weather_sun = "\ufa98" # nf-mdi-weather_sunny
-weather_thunder = "\ue31d" # nf-weather-thunderstorm
+music = "\uf0388"           # nf-md-music_note
+music_next = "\uf04ad"      # nf-md-skip_next
+music_pause = "\uf03e4"     # nf-md-pause
+music_play = "\uf040a"      # nf-md-play
+music_prev = "\uf04ae"      # nf-md-skip_previous
+weather_clouds = "\uf0590"  # nf-md-weather_cloudy
+weather_default = "\uf0590" # nf-md-weather_cloudy
+weather_rain = "\uf0596"    # nf-md-weather_pouring
+weather_snow = "\uf0598"    # nf-md-weather_snowy
+weather_sun = "\uf0599"     # nf-md-weather_sunny
+weather_thunder = "\uf067e" # nf-md-weather_lightning_rainy
 
 [[block]]
 block = "weather"
