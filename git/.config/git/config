@@ -21,6 +21,7 @@ defaultBranch = main
 
 [push]
 autoSetupRemote = true
+followTags = true
 
 [pull]
 rebase = true
