@@ -17,7 +17,11 @@ function M.config()
 			-- null_ls.builtins.code_actions.gitsigns,
 			null_ls.builtins.code_actions.gitrebase,
 			null_ls.builtins.code_actions.shellcheck,
-			null_ls.builtins.diagnostics.markdownlint,
+			null_ls.builtins.diagnostics.markdownlint.with({
+				extra_args = {
+					("--config=%s/markdownlint/markdownlint.yaml"):format(vim.env.XDG_CONFIG_HOME),
+				},
+			}),
 			null_ls.builtins.diagnostics.djlint,
 			null_ls.builtins.formatting.prettier.with({
 				disabled_filetypes = { "json", "jsonc" },
