@@ -78,8 +78,7 @@ redate = rebase --committer-date-is-author-date
 
 # log commands
 lg = log --graph --oneline --decorate --branches --remotes --tags --abbrev-commit
-ls = log --pretty=format:"%C(green)%h\\ %C(yellow)[%ad]%Cred%d\\ %Creset%s%Cblue\\ [%an]" --decorate --date=relative
-ll = log --pretty=format:"%C(yellow)%h%Cred%d\\ %Creset%s%Cblue\\ [a:%an,c:%cn]" --decorate --numstat
+ll = log --stat --oneline --decorate --branches --remotes --tags --abbrev-commit
 
 # undo http://megakemp.com/2016/08/25/git-undo/
 undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
