@@ -8,19 +8,55 @@ sanitize tridactyllocal tridactylsync
 
 alias save_rss jsb -p tri.native.run("r2e add '" + JS_ARG + "'") set rsscmd save_rss %u
 alias gitclone jsb -p tri.native.run("git clone --depth=1 '" + JS_ARG + "' /home/tobyv/src/" + JS_ARG.split("/").slice(-1))
+alias jse js 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
+alias jsep js -p 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
+alias video_goby js -d@ let time = JS_ARGS.filter(Boolean); let sign = '+'; if (time[0].match(/^[-+]/)) { sign = time[0].charAt(0); time[0] = time[0].slice(1) } time = time.filter(Boolean).map(Number); const second = time.reduce((s, n) => s*60+n, 0); tri.controller.acceptExCmd(`video_with video.currentTime ${sign}= ${second}`) @
+alias video_goto js -d@ let time = JS_ARGS.filter(Boolean); let sign = '+'; if (time[0].match(/^[-+]/)) { sign = time[0].charAt(0); time[0] = time[0].slice(1) } time = time.filter(Boolean).map(Number); let second = time.reduce((s, n) => s*60+n, 0); if (sign == '-') second = `video.duration - ${second}`; tri.controller.acceptExCmd(`video_with video.currentTime = ${second}`) @
+alias video_with jse let video; if (document.activeElement.name == 'VIDEO') video = document.activeElement; else video = $all('video').find(v => !v.paused); if (!video) video = $('video'); video;
+alias video_mark_add jsep void $ex('video_with').then(video => { const mark = JS_ARG; tri.videoMark.addMark(mark, video.currentTime); $ex('video_mode') })
+alias video_mark_empty js const vm = tri.videoMark; vm.historyStore = Object.values(vm.mark).sort((a,b) => a-b);
+alias video_mark_goby jsep void $ex('video_with').then(video => { const current = video.currentTime; const n = Number(JS_ARG); const time = tri.videoMark.goby(current, n); video.currentTime = time; $ex('video_mode'); })
+alias video_mark_goto jsep void $ex('video_with').then(video => { const mark = JS_ARG; tri.videoMark.addBlur(video.currentTime); const time = tri.videoMark.mark[mark]; if (typeof time == 'number') video.currentTime = time; $ex('video_mode') })
+alias video_mark_init jse if(!tri.videoMark){tri.videoMark={historyStore:[],mark:{},goby(current,n){const index=this.historyStore.findIndex(t=>{if(t>current)return true});const move=n<0?n:n-1;let time;if(~index)time=this.historyStore.at(index+move);else time=this.historyStore.at(move);if(Math.abs(time-current)>this.tollorance)return time;else return this.goby(current,n>0?n+1:n-1)},add(time){this.historyStore.push(time);this.historyStore.sort((a,b)=>a-b)},addBlur(time){const exist=this.historyStore.some(t=>Math.abs(t-time)<this.tollorance);if(!exist)this.add(time);return!exist},addMark(mark,time){this.mark[mark]=time;const index=this.historyStore.findIndex(t=>Math.abs(t-time)<this.tollorance);if(~index)this.historyStore[index]=time;else this.add(time)},tollorance:Number(get('video_mark_tollorance')) || 1,markEventHandler(videoEvent){const video=videoEvent.target;const time=video.currentTime;this.addBlur(time);const previousTime=this.getTimerTime();this.addBlur(previousTime)},timerEventHandler(event){const video=event.target;this.videoTimer={epoch:Date.now(),video:video.currentTime,rate:video.playbackRate}},videoTimer:null,getTimerTime(){const now=Date.now();const t=this.videoTimer;if(t)return(now-t.epoch)/1e3*t.rate+t.video}};void async function(){const vm=tri.videoMark;while(true){await sleep(800);const video=await $ex("video_with");if(video){const handler=tri.videoMark.markEventHandler.bind(tri.videoMark);video.addEventListener("seeked",handler);video.addEventListener("pause",handler);const timer=vm.timerEventHandler.bind(vm);video.addEventListener("playing",timer);video.addEventListener("ratechange",timer);timer({target:video});break}}}()}
+alias video_mode composite mode video ; video_mark_init
+alias exit_video mode normal
 
 set findcase smart
 set smoothscroll true
 set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
+set video_seek 5
+set videomaps.w jsep $ex('video_with').then(video => {const count = Number(JS_ARG) || 1; const tic = Number(get('video_seek')); video.currentTime += tic * count }); 1;
+set videomaps.b jsep $ex('video_with').then(video => {const count = Number(JS_ARG) || 1; const tic = Number(get('video_seek')); video.currentTime -= tic * count }); 1;
+set video_seek_op 120
+set videomaps.C video_with video.currentTime = Number(get('video_seek_op'))
+set videomaps.a video_with video.currentTime = 0
+set videomaps.A video_with video.currentTime = video.duration
+set videomaps.gt fillcmdline video_goto
+set videomaps.i fillcmdline video_goto
+set videomaps.I fillcmdline video_goby
+set videomaps.m gobble 1 video_mark_add
+set videomaps.' gobble 1 video_mark_goto
+set videomaps.ge video_mark_empty
+set videomaps.E video_mark_goby +1
+set videomaps.e video_mark_goby -1
+set video_mark_tollorance 1
+set videomaps.V exit_video
+set videomaps.z mode normal
+set videomaps.gf fullscreen
+set videomaps.q fullscreen
+set videomaps.🕷🕷INHERITS🕷🕷 nmaps
+seturl ^https://www.youtube.com/watch\?v=116OjLa1DwY video_seek_op 42
 
 unbind <C-f>
 unbind s
 unbind d
+unbind f
+bind gx hint
 bind / fillcmdline find
-bind ? fillcmdline find -?
+bind ? fillcmdline find --reverse
 bind n findnext
-bind N findnext -?
-bind ,<Space> nohlsearch
+bind N findnext --reverse
+bind <C-l> nohlsearch
 bind j scrollline 5
 bind k scrollline -5
 bind J tabprev
@@ -29,9 +65,12 @@ bind x tabclose
 bind gs fillcmdline open search
 bind zv composite js document.location.href | exclaim_quiet mpv --loop
 bind zz composite jsb tri.native.run('cat /home/tobyv/.config/firefox/userscripts/rustdoc-condensed.js') | js -p eval(JS_ARG.content)
+bind gv video_mode
+bindurl ^https://www.youtube.com/watch\? v video_mode
 
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
+autocmd DocLoad ^https://www.youtube.com/watch\? video_mode
 
 fixamo_quiet
 
