@@ -15,6 +15,7 @@ local M = {
 			"cpp",
 			"c_sharp",
 			"css",
+			"dap_repl",
 			"diff",
 			"gitignore",
 			"go",

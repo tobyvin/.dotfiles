@@ -48,6 +48,11 @@ local M = {
 		"mfussenegger/nvim-dap-python",
 		"leoluz/nvim-dap-go",
 		{
+			"LiadOz/nvim-dap-repl-highlights",
+			dependencies = { "nvim-treesitter/nvim-treesitter" },
+			config = true,
+		},
+		{
 			"theHamsta/nvim-dap-virtual-text",
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
 			opts = {
@@ -120,6 +125,8 @@ function M.config()
 	vim.fn.sign_define("DapBreakpointRejected", { text = " ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapLogPoint", { text = " ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapStopped", { text = " ", texthl = "debugBreakpoint" })
+
+	require("nvim-dap-repl-highlights")
 end
 
 return M
