@@ -151,7 +151,7 @@ sections.header = with_spacer({
 
 vim.api.nvim_create_autocmd("User", {
 	group = augroup,
-	pattern = { "Lazy*" },
+	pattern = { "LazyVimStarted" },
 	callback = function()
 		local updates = nil
 		if require("lazy.status").has_updates() then
