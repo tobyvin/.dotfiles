@@ -39,7 +39,6 @@ vim.opt.smartcase = true
 vim.opt.smartindent = true
 vim.opt.smarttab = true
 vim.opt.softtabstop = 0
-vim.opt.spell = true
 vim.opt.spelllang = "en_us"
 vim.opt.spelloptions = { "camel" }
 vim.opt.splitbelow = true
