@@ -21,6 +21,7 @@ local M = {
 			"go",
 			"graphql",
 			"html",
+			"htmldjango",
 			"java",
 			"javascript",
 			"jsdoc",
