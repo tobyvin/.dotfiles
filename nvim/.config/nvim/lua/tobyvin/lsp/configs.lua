@@ -10,9 +10,9 @@ local M = {
 			},
 		},
 	},
+	dockerls = {},
 	taplo = {},
 	yamlls = {
-
 		settings = {
 			yaml = {
 				keyOrdering = false,
@@ -23,10 +23,6 @@ local M = {
 	html = {
 		init_options = {
 			provideFormatter = false,
-		},
-		filetypes = {
-			"html",
-			"htmldjango",
 		},
 	},
 	cssls = {},
