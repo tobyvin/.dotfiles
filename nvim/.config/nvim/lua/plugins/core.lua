@@ -16,8 +16,15 @@ local M = {
 		config = true,
 	},
 	{
-		"norcalli/nvim-colorizer.lua",
+		"NvChad/nvim-colorizer.lua",
 		event = "BufReadPre",
+		opts = {
+			filetypes = { "*" },
+			user_default_options = {
+				mode = "virtualtext", -- Set the display mode.
+				always_update = true,
+			},
+		},
 	},
 	{
 		"lukas-reineke/virt-column.nvim",
