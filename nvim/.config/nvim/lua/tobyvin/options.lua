@@ -18,6 +18,7 @@ vim.opt.hidden = true
 vim.opt.hlsearch = true
 vim.opt.ignorecase = true
 vim.opt.inccommand = "split"
+vim.opt.jumpoptions:append("stack")
 vim.opt.linebreak = true
 vim.opt.mouse = "a"
 vim.opt.number = true
