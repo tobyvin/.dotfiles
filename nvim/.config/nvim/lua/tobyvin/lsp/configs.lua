@@ -10,45 +10,15 @@ local M = {
 			},
 		},
 	},
-	dockerls = {},
-	taplo = {},
-	yamlls = {
-		settings = {
-			yaml = {
-				keyOrdering = false,
-			},
-		},
-	},
-	tsserver = {},
-	html = {
-		init_options = {
-			provideFormatter = false,
-		},
-	},
+	clangd = {},
 	cssls = {},
 	cssmodules_ls = {},
-	clangd = {},
-	powershell_es = {},
-	pylsp = {},
-	perlnavigator = {
-		settings = {
-			perlnavigator = {
-				enableWarnings = false,
-			},
-		},
-	},
-	jsonls = {
-		settings = {
-			json = {
-				format = {
-					enable = true,
-				},
-				validate = { enable = true },
-			},
-		},
-	},
+	dockerls = {},
 	gopls = {
-		cmd = { "gopls", "serve" },
+		cmd = {
+			"gopls",
+			"serve",
+		},
 		settings = {
 			gopls = {
 				analyses = {
@@ -58,6 +28,68 @@ local M = {
 			},
 		},
 	},
+	html = {
+		init_options = {
+			provideFormatter = false,
+		},
+	},
+	jsonls = {
+		settings = {
+			json = {
+				format = {
+					enable = true,
+				},
+				validate = {
+					enable = true,
+				},
+			},
+		},
+	},
+	lua_ls = {
+		settings = {
+			Lua = {
+				workspace = {
+					checkThirdParty = false,
+				},
+				completion = {
+					callSnippet = "Replace",
+				},
+				diagnostics = {
+					globals = {
+						"vim",
+					},
+				},
+				format = {
+					enable = false,
+				},
+			},
+		},
+	},
+	omnisharp = {
+		-- cmd = { "dotnet", "/home/tobyv/.local/share/nvim/mason/packages/omnisharp/OmniSharp.dll" },
+		cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
+		on_attach = function(client)
+			-- HACK: https://github.com/OmniSharp/omnisharp-roslyn/issues/2483
+			local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
+			for i, v in ipairs(tokenModifiers) do
+				tokenModifiers[i] = v:gsub(" ", "_"):gsub("-_", "")
+			end
+
+			local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
+			for i, v in ipairs(tokenTypes) do
+				tokenTypes[i] = v:gsub(" ", "_"):gsub("-_", "")
+			end
+		end,
+	},
+	perlnavigator = {
+		settings = {
+			perlnavigator = {
+				enableWarnings = false,
+			},
+		},
+	},
+	powershell_es = {},
+	pylsp = {},
 	rust_analyzer = {
 		standalone = true,
 		settings = {
@@ -92,40 +124,7 @@ local M = {
 			},
 		},
 	},
-	omnisharp = {
-		-- cmd = { "dotnet", "/home/tobyv/.local/share/nvim/mason/packages/omnisharp/OmniSharp.dll" },
-		cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-		on_attach = function(client)
-			-- HACK: https://github.com/OmniSharp/omnisharp-roslyn/issues/2483
-			local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
-			for i, v in ipairs(tokenModifiers) do
-				tokenModifiers[i] = v:gsub(" ", "_"):gsub("-_", "")
-			end
-
-			local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
-			for i, v in ipairs(tokenTypes) do
-				tokenTypes[i] = v:gsub(" ", "_"):gsub("-_", "")
-			end
-		end,
-	},
-	lua_ls = {
-		settings = {
-			Lua = {
-				workspace = {
-					checkThirdParty = false,
-				},
-				completion = {
-					callSnippet = "Replace",
-				},
-				diagnostics = {
-					globals = { "vim" },
-				},
-				format = {
-					enable = false,
-				},
-			},
-		},
-	},
+	taplo = {},
 	texlab = {
 		settings = {
 			texlab = {
@@ -179,6 +178,14 @@ local M = {
 				end
 			end, { desc = "Texlab preview stop" })
 		end,
+	},
+	tsserver = {},
+	yamlls = {
+		settings = {
+			yaml = {
+				keyOrdering = false,
+			},
+		},
 	},
 }
 
