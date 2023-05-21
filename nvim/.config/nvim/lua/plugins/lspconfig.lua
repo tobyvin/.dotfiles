@@ -2,7 +2,6 @@ local M = {
 	"neovim/nvim-lspconfig",
 	event = "BufReadPre",
 	dependencies = {
-		"folke/neodev.nvim",
 		"hrsh7th/cmp-nvim-lsp",
 	},
 }
@@ -10,8 +9,6 @@ local M = {
 function M.config()
 	local lspconfig = require("lspconfig")
 	local configs = require("tobyvin.lsp.configs")
-
-	require("mason")
 
 	require("lspconfig.ui.windows").default_options.border = "single"
 
