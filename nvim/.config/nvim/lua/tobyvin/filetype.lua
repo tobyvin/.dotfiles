@@ -4,6 +4,9 @@ vim.filetype.add({
 		ron = "ron",
 		zsh = "sh",
 	},
+	filename = {
+		["PKGBUILD"] = "PKGBUILD",
+	},
 	pattern = {
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
 	},
