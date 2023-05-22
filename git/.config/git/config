@@ -55,7 +55,7 @@ required = true
 
 [alias]
 # basic
-st = status -u -s
+st = status -u
 cl = clone
 ci = commit
 co = checkout
