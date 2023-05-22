@@ -12,7 +12,6 @@ local M = {
 			"AckslD/nvim-neoclip.lua",
 			config = true,
 		},
-		"nvim-telescope/telescope-file-browser.nvim",
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"nvim-telescope/telescope-dap.nvim",
 		"nvim-telescope/telescope-symbols.nvim",
@@ -133,7 +132,6 @@ function M:config(opts)
 	vim.keymap.set("n", "<leader>gf", builtin.git_files, { desc = "files" })
 	vim.keymap.set("n", "<leader>gt", builtin.git_status, { desc = "status" })
 	vim.keymap.set("n", "<leader>gT", builtin.git_stash, { desc = "stash" })
-	vim.keymap.set("n", "<leader>fd", extensions.file_browser.file_browser, { desc = "file browser" })
 	vim.keymap.set("n", "<leader>fg", extensions.live_grep_args.live_grep_args, { desc = "live grep" })
 	vim.keymap.set("n", "<leader>fu", extensions.undo.undo, { desc = "undo" })
 	vim.keymap.set("n", "<leader>fp", extensions.neoclip.default, { desc = "clipboard" })
