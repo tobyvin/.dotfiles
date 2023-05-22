@@ -19,9 +19,14 @@ local M = {
 		"NvChad/nvim-colorizer.lua",
 		event = "BufReadPre",
 		opts = {
-			filetypes = { "*" },
+			filetypes = {
+				"css",
+				"javascript",
+				"html",
+				"htmldjango",
+			},
 			user_default_options = {
-				mode = "virtualtext", -- Set the display mode.
+				mode = "virtualtext",
 				always_update = true,
 			},
 		},
