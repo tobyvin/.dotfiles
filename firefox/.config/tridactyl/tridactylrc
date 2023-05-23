@@ -51,7 +51,7 @@ unbind <C-f>
 unbind s
 unbind d
 unbind f
-bind gx hint
+bind <C-Space> hint
 bind / fillcmdline find
 bind ? fillcmdline find --reverse
 bind n findnext
