@@ -45,11 +45,6 @@ local M = {
 		config = true,
 	},
 	{
-		"yorik1984/zola.nvim",
-		ft = "markdown",
-		dependencies = "Glench/Vim-Jinja2-Syntax",
-	},
-	{
 		"akinsho/git-conflict.nvim",
 		event = "BufReadPre",
 		opts = {
