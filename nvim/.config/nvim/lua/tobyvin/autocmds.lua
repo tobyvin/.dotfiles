@@ -42,6 +42,13 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	desc = "show dashboard on startup",
 })
 
+vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
+	group = augroup,
+	pattern = "term://*",
+	command = "startinsert",
+	desc = "start terminal mode when entering terminal",
+})
+
 vim.api.nvim_create_autocmd("FocusLost", {
 	group = augroup,
 	pattern = "*",
