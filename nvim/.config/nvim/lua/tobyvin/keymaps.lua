@@ -11,6 +11,11 @@ vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { desc = "CTRL-W" })
 vim.keymap.set("n", "<leader>sr", require("tobyvin.utils.session").read, { desc = "read session" })
 vim.keymap.set("n", "<leader>sw", require("tobyvin.utils.session").write, { desc = "write session" })
 
+vim.keymap.set("n", "<leader>co", vim.cmd.copen, { desc = "qf open" })
+vim.keymap.set("n", "<leader>cc", vim.cmd.cclose, { desc = "qf close" })
+vim.keymap.set("n", "<leader>]", vim.cmd.cnext, { desc = "qf next" })
+vim.keymap.set("n", "<leader>[", vim.cmd.cprev, { desc = "qf prev" })
+
 vim.keymap.set("n", "gqq", function()
 	local cursor = vim.api.nvim_win_get_cursor(0)
 	vim.cmd.normal("gggqG")

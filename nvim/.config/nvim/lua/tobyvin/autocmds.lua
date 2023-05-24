@@ -120,3 +120,10 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 	desc = "Trim whitespace on write",
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup,
+	pattern = "qf",
+	command = "wincmd J",
+	desc = "unfocus quickfix window",
+})
