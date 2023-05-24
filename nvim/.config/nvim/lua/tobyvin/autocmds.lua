@@ -46,7 +46,14 @@ vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
 	group = augroup,
 	pattern = "term://*",
 	command = "startinsert",
-	desc = "start terminal mode when entering terminal",
+	desc = "start terminal mode",
+})
+
+vim.api.nvim_create_autocmd("TermOpen", {
+	group = augroup,
+	pattern = "term://*",
+	command = "normal G",
+	desc = "move to bottom of terminal",
 })
 
 vim.api.nvim_create_autocmd("FocusLost", {
