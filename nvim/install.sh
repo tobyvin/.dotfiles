@@ -7,8 +7,8 @@ say() {
 }
 
 # Update plugins
-say "Updating plugins"
-nvim --headless -c 'Lazy! sync' -c qa
+say "Updating plugins to lock-file"
+nvim --headless -c 'Lazy! restore' -c qa
 
 # Update LSP servers
 say "Updating LSP servers"
