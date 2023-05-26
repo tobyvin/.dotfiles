@@ -57,8 +57,13 @@ function M.config()
 			end,
 		},
 		window = {
-			completion = cmp.config.window.bordered({ border = "single" }),
-			documentation = cmp.config.window.bordered({ border = "single" }),
+			completion = cmp.config.window.bordered({
+				border = "single",
+				scrolloff = 1,
+			}),
+			documentation = cmp.config.window.bordered({
+				border = "single",
+			}),
 		},
 		mapping = cmp.mapping.preset.insert({
 			["<Tab>"] = { i = cmp.mapping.select_next_item() },
