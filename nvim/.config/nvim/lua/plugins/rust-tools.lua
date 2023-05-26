@@ -45,7 +45,7 @@ local function set_target()
 			-- TODO: Figure out how to do this without defer, or maybe even reloading.
 			-- The workspace seems to need to be reloaded after the notification due to the
 			-- [inactive-code] diagnostic, but the request being processed before the
-			-- notification is completed, so I can only get it to work by defering. This is
+			-- notification is completed, so I can only get it to work by deferring. This is
 			-- technically still a race condition?
 			vim.defer_fn(function()
 				client.request("rust-analyzer/reloadWorkspace", nil, function(err)
