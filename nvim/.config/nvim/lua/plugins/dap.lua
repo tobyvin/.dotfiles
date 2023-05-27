@@ -120,8 +120,8 @@ function M.config()
 		end
 	end
 
-	vim.fn.sign_define("DapBreakpoint", { text = " ", texthl = "debugBreakpoint" })
-	vim.fn.sign_define("DapBreakpointCondition", { text = "ﳁ ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapBreakpoint", { text = "󰝥 ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapBreakpointCondition", { text = "󰟃 ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapBreakpointRejected", { text = " ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapLogPoint", { text = " ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapStopped", { text = " ", texthl = "debugBreakpoint" })
