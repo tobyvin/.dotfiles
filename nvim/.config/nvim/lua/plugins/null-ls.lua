@@ -20,7 +20,9 @@ function M.config()
 			-- Disabled until sorting for code_actions gets pushed. See: https://github.com/stevearc/dressing.nvim/issues/22
 			-- null_ls.builtins.code_actions.gitsigns,
 			null_ls.builtins.code_actions.gitrebase,
-			null_ls.builtins.code_actions.shellcheck,
+			null_ls.builtins.code_actions.shellcheck.with({
+				extra_filetypes = { "PKGBUILD" },
+			}),
 			null_ls.builtins.code_actions.typos,
 			null_ls.builtins.diagnostics.markdownlint.with({
 				extra_args = {
@@ -38,7 +40,9 @@ function M.config()
 			}),
 			null_ls.builtins.formatting.black,
 			null_ls.builtins.formatting.stylua,
-			null_ls.builtins.formatting.shfmt,
+			null_ls.builtins.formatting.shfmt.with({
+				extra_filetypes = { "PKGBUILD" },
+			}),
 			null_ls.builtins.formatting.nginx_beautifier,
 		},
 	})
