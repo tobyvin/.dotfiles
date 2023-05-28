@@ -31,8 +31,6 @@ function M.config()
 			}),
 			null_ls.builtins.diagnostics.djlint,
 			null_ls.builtins.diagnostics.typos,
-			null_ls.builtins.formatting.trim_newlines,
-			null_ls.builtins.formatting.trim_whitespace,
 			null_ls.builtins.formatting.prettier.with({
 				disabled_filetypes = { "json", "jsonc" },
 				extra_args = { "--prose-wrap=always" },
