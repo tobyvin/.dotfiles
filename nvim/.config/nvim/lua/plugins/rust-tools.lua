@@ -1,5 +1,5 @@
 local M = {
-	"simrat39/rust-tools.nvim",
+	"MunifTanjim/rust-tools.nvim",
 	ft = "rust",
 	dependencies = {
 		"neovim/nvim-lspconfig",
@@ -14,7 +14,6 @@ local M = {
 		server = require("tobyvin.lsp.configs").rust_analyzer,
 		dap = { adapter = require("tobyvin.dap.adapters").codelldb },
 	},
-	config = true,
 }
 
 local function set_target()
