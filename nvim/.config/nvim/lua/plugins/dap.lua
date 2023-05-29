@@ -1,52 +1,23 @@
+---@type LazySpec
+
 local M = {
 	"mfussenegger/nvim-dap",
+	cmd = {
+		"Break",
+		"DapShowLog",
+		"DapContinue",
+		"DapToggleBreakpoint",
+		"DapLoadLaunchJSON",
+	},
+	keys = {
+		"<leader>db",
+		"<leader>dc",
+		"<F5>",
+	},
 	dependencies = {
-		{
-			"nvim-telescope/telescope-dap.nvim",
-			dependencies = {
-				"nvim-telescope/telescope.nvim",
-			},
-			init = function()
-				vim.keymap.set("n", "<leader>dC", function()
-					require("telescope").extensions.dap.commands()
-				end, { desc = "commands" })
-
-				vim.keymap.set("n", "<leader>dd", function()
-					require("telescope").extensions.dap.configurations()
-				end, { desc = "configurations" })
-
-				vim.keymap.set("n", "<leader>dl", function()
-					require("telescope").extensions.dap.list_breakpoints()
-				end, { desc = "breakpoints" })
-
-				vim.keymap.set("n", "<leader>df", function()
-					require("telescope").extensions.dap.frames()
-				end, { desc = "frames" })
-
-				vim.keymap.set("n", "<leader>dv", function()
-					require("telescope").extensions.dap.variables()
-				end, { desc = "variables" })
-			end,
-			config = function()
-				require("telescope").load_extension("dap")
-			end,
-		},
-		{
-			"rcarriga/cmp-dap",
-			ft = { "dap-repl" },
-			dependencies = {
-				"hrsh7th/nvim-cmp",
-			},
-			config = function()
-				require("cmp").setup.filetype({ "dap-repl" }, {
-					sources = {
-						{ name = "dap" },
-					},
-				})
-			end,
-		},
 		"mfussenegger/nvim-dap-python",
 		"leoluz/nvim-dap-go",
+		"nvim-telescope/telescope-dap.nvim",
 		{
 			"LiadOz/nvim-dap-repl-highlights",
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -57,44 +28,10 @@ local M = {
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
 			opts = {
 				commented = true,
-				display_callback = function(variable)
-					return " " .. variable.value
-				end,
 			},
 		},
 	},
 }
-
-function M.init()
-	local dap = setmetatable({}, {
-		__index = function(_, k)
-			return function()
-				require("dap")[k]()
-			end
-		end,
-	})
-
-	vim.keymap.set("n", "<F5>", dap.continue, { desc = "continue" })
-	vim.keymap.set("n", "<F10>", dap.step_over, { desc = "step over" })
-	vim.keymap.set("n", "<F11>", dap.step_into, { desc = "step into" })
-	vim.keymap.set("n", "<F12>", dap.step_out, { desc = "step out" })
-	vim.keymap.set("n", "<leader>dc", dap.continue, { desc = "continue" })
-	vim.keymap.set("n", "<leader>da", dap.step_over, { desc = "step over" })
-	vim.keymap.set("n", "<leader>di", dap.step_into, { desc = "step into" })
-	vim.keymap.set("n", "<leader>do", dap.step_out, { desc = "step out" })
-	vim.keymap.set("n", "<leader>dq", dap.terminate, { desc = "terminate" })
-	vim.keymap.set("n", "<leader>db", dap.toggle_breakpoint, { desc = "toggle breakpoint" })
-
-	vim.keymap.set("n", "<leader>dB", function()
-		vim.ui.input({ prompt = "Condition: " }, function(cond)
-			vim.ui.input({ prompt = "Hit condition: " }, function(hit)
-				vim.ui.input({ prompt = "Log point message: " }, function(msg)
-					require("dap").set_breakpoint(cond, hit, msg)
-				end)
-			end)
-		end)
-	end, { desc = "custom breakpoint" })
-end
 
 function M.config()
 	require("dap").listeners.after.event_initialized["User"] = function()
@@ -126,7 +63,17 @@ function M.config()
 	vim.fn.sign_define("DapLogPoint", { text = " ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapStopped", { text = " ", texthl = "debugBreakpoint" })
 
-	require("nvim-dap-repl-highlights")
+	vim.keymap.set("n", "<F5>", require("dap").continue, { desc = "continue" })
+	vim.keymap.set("n", "<F10>", require("dap").step_over, { desc = "step over" })
+	vim.keymap.set("n", "<F11>", require("dap").step_into, { desc = "step into" })
+	vim.keymap.set("n", "<F12>", require("dap").step_out, { desc = "step out" })
+	vim.keymap.set("n", "<leader>dq", require("dap").terminate, { desc = "terminate" })
+	vim.keymap.set("n", "<leader>db", require("dap").toggle_breakpoint, { desc = "toggle breakpoint" })
+	vim.keymap.set("n", "<leader>dl", require("dap.ui.widgets").hover)
+
+	vim.api.nvim_create_user_command("Break", function(opts)
+		require("dap").toggle_breakpoint(unpack(opts.fargs))
+	end, { nargs = "*", desc = "toggle breakpoint" })
 end
 
 return M
