@@ -1,4 +1,4 @@
-local augroup = vim.api.nvim_create_augroup("lsp", {})
+local augroup = vim.api.nvim_create_augroup("lsp", { clear = true })
 
 for method, handler in pairs(require("tobyvin.lsp.handlers")) do
 	vim.lsp.handlers[method] = handler
@@ -15,7 +15,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 				group = augroup,
 				buffer = args.buf,
 				callback = vim.lsp.buf.document_highlight,
-				desc = "document highlight",
+				desc = "highlight references",
 			})
 
 			vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
@@ -26,7 +26,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		if vim.tbl_get(client.server_capabilities, "experimental", "externalDocs") then
+		if client.server_capabilities.codeLensProvider then
+			vim.lsp.codelens.refresh()
+			vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
+				group = augroup,
+				buffer = args.buf,
+				callback = vim.lsp.codelens.refresh,
+				desc = "refresh codelens",
+			})
+		end
+
+		if (client.server_capabilities.experimental or {}).externalDocs then
 			vim.keymap.set("n", "gx", vim.lsp.buf.external_docs, { desc = "external_docs", buffer = args.buf })
 		end
 
