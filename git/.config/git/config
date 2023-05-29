@@ -32,6 +32,9 @@ ff = only
 [fetch]
 prune = true
 
+[revert]
+reference = true
+
 [diff]
 colorMoved = default
 
@@ -63,9 +66,9 @@ br = branch
 r = reset
 rv = remote -v
 cp = cherry-pick
-pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
 dev = checkout develop
 main = checkout main
+wt = worktree
 
 # tweak defaults
 grep = grep -Ii
@@ -76,6 +79,8 @@ branch = branch -ra
 ai = add --interactive
 recommit = commit --amend -C HEAD
 redate = rebase --committer-date-is-author-date
+pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+wtbr = "!f() { git worktree add $(git rev-parse --show-toplevel)_${1##*/} $1; }; f"
 
 # log commands
 lg = log --graph --oneline --decorate --branches --remotes --tags --abbrev-commit
