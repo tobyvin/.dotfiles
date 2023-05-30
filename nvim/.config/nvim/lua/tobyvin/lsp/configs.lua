@@ -32,6 +32,10 @@ local M = {
 		init_options = {
 			provideFormatter = false,
 		},
+		filetypes = {
+			"html",
+			"htmldjango",
+		},
 	},
 	jsonls = {
 		settings = {
