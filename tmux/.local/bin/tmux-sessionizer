@@ -12,6 +12,8 @@ if [ "$#" -eq 0 ]; then
 				--bind 'focus:transform-header(echo {})' \
 				--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD"
 	)
+
+	test -n "$1" || exit 0
 fi
 
 if [ -z "$2" ]; then
