@@ -14,14 +14,18 @@ if [ "$#" -eq 0 ]; then
 	)
 fi
 
-name=$(basename "$1" | tr . _)
+if [ -z "$2" ]; then
+	if [ -z "$(tmux list-sessions -f "#{==:#{session_path},$1}" -F '#S' 2>/dev/null)" ]; then
+		tmux new-session -dc "$1"
+	fi
 
-if ! tmux has-session -t="$name" 2>/dev/null; then
-	tmux new-session -ds "$name" -c "$1"
+	set -- "$1" "$(tmux list-sessions -f "#{==:#{session_path},$1}" -F '#S' 2>/dev/null)"
+elif ! tmux has-session -t "$2" 2>/dev/null; then
+	tmux new-session -dc "$1" -s "$2"
 fi
 
-if [ -z "$TMUX" ] && [ -z "$name" ]; then
-	tmux attach-session -t "$name"
-elif tmux has-session -t="$name" 2>/dev/null; then
-	tmux switch-client -t "$name"
+if [ -z "$TMUX" ] && [ -z "$2" ]; then
+	tmux attach-session -t "$2"
+elif tmux has-session -t "$2" 2>/dev/null; then
+	tmux switch-client -t "$2"
 fi
