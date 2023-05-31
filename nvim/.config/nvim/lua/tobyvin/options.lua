@@ -22,7 +22,6 @@ vim.opt.jumpoptions:append("stack")
 vim.opt.linebreak = true
 vim.opt.mouse = "a"
 vim.opt.number = true
-vim.opt.pumblend = 10
 vim.opt.pumheight = 10
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
