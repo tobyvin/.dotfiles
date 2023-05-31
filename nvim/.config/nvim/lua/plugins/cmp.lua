@@ -65,6 +65,12 @@ function M.config()
 				border = "single",
 			}),
 		},
+		formatting = {
+			format = function(_, vim_item)
+				vim_item.menu = nil
+				return vim_item
+			end,
+		},
 		mapping = cmp.mapping.preset.insert({
 			["<Tab>"] = { i = cmp.mapping.select_next_item() },
 			["<S-Tab>"] = { i = cmp.mapping.select_prev_item() },

@@ -23,6 +23,7 @@ vim.opt.linebreak = true
 vim.opt.mouse = "a"
 vim.opt.number = true
 vim.opt.pumheight = 10
+vim.opt.pumwidth = 40
 vim.opt.relativenumber = true
 vim.opt.scrolloff = 10
 vim.opt.sessionoptions = { "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos" }
