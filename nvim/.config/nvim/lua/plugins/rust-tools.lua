@@ -75,8 +75,16 @@ function M.init()
 				desc = "debug",
 				buffer = args.buf,
 			})
+			vim.keymap.set("n", "<leader>dD", require("rust-tools").cached_commands.execute_last_debuggable, {
+				desc = "rerun last debug",
+				buffer = args.buf,
+			})
 			vim.keymap.set("n", "<leader>tt", require("rust-tools").runnables.runnables, {
 				desc = "test",
+				buffer = args.buf,
+			})
+			vim.keymap.set("n", "<leader>tT", require("rust-tools").cached_commands.execute_last_runnable, {
+				desc = "rerun last test",
 				buffer = args.buf,
 			})
 			vim.keymap.set("n", "<leader>le", require("rust-tools").expand_macro.expand_macro, {
