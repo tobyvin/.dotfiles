@@ -5,7 +5,6 @@ local M = {
 		contrast = "hard",
 		transparent_mode = true,
 		overrides = {
-			CursorLineNr = { bg = "" },
 			DiffDelete = { reverse = false },
 			DiffAdd = { reverse = false },
 			DiffChange = { reverse = false },
