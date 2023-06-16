@@ -44,7 +44,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 
 vim.api.nvim_create_autocmd({ "WinEnter", "TermOpen" }, {
 	group = augroup,
-	pattern = "term://*",
+	pattern = string.format("term://*:%s", vim.env.SHELL),
 	command = "startinsert",
 	desc = "start terminal mode",
 })
