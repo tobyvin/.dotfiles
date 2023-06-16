@@ -8,6 +8,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	group = augroup,
 	desc = "setup lsp",
 	callback = function(args)
+		---@type lsp.Client
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 
 		if client.server_capabilities.documentHighlightProvider then
@@ -26,36 +27,82 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		if client.server_capabilities.codeLensProvider then
-			vim.lsp.codelens.refresh()
-			vim.api.nvim_create_autocmd({ "TextChanged", "InsertLeave" }, {
-				group = augroup,
+		if client.server_capabilities.documentFormattingProvider then
+			vim.keymap.set("n", "gqq", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
+			vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
+		end
+
+		if client.server_capabilities.documentRangeFormattingProvider then
+			vim.keymap.set("v", "<leader>lf", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
+		end
+
+		if client.server_capabilities.hoverProvider then
+			vim.keymap.set({ "n", "v" }, "K", vim.lsp.buf.hover, { desc = "hover", buffer = args.buf })
+		end
+
+		if client.server_capabilities.signatureHelpProvider then
+			vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, {
+				desc = "signature help",
 				buffer = args.buf,
-				callback = vim.lsp.codelens.refresh,
-				desc = "refresh codelens",
 			})
 		end
 
-		if (client.server_capabilities.experimental or {}).externalDocs then
-			vim.keymap.set("n", "gx", vim.lsp.buf.external_docs, { desc = "external_docs", buffer = args.buf })
+		local on_list = function(options)
+			vim.fn.setqflist({}, " ", options)
+			vim.api.nvim_command("cfirst")
 		end
 
-		if client.server_capabilities.documentFormattingProvider then
-			vim.keymap.set("n", "gqq", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
+		if client.server_capabilities.declarationProvider then
+			vim.keymap.set("n", "gD", function()
+				vim.lsp.buf.declaration({ on_list = on_list })
+			end, { desc = "declaration", buffer = args.buf })
 		end
 
-		vim.keymap.set({ "n", "v" }, "<leader>lf", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
+		if client.server_capabilities.definitionProvider then
+			vim.keymap.set("n", "gd", function()
+				vim.lsp.buf.definition({ on_list = on_list })
+			end, { desc = "definition", buffer = args.buf })
+		end
 
-		vim.keymap.set({ "n", "v" }, "K", vim.lsp.buf.hover, { desc = "hover", buffer = args.buf })
-		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, { desc = "signature help", buffer = args.buf })
-		vim.keymap.set("n", "gd", vim.lsp.buf.definition, { desc = "definition", buffer = args.buf })
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { desc = "declaration", buffer = args.buf })
-		vim.keymap.set("n", "go", vim.lsp.buf.type_definition, { desc = "type definition", buffer = args.buf })
-		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, { desc = "implementation", buffer = args.buf })
-		vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "references", buffer = args.buf })
+		if client.server_capabilities.typeDefinitionProvider then
+			vim.keymap.set("n", "go", function()
+				vim.lsp.buf.type_definition({ on_list = on_list })
+			end, { desc = "type definition", buffer = args.buf })
+		end
 
-		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, { desc = "rename", buffer = args.buf })
-		vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, { desc = "code action", buffer = args.buf })
-		vim.keymap.set("n", "<leader>ll", vim.lsp.codelens.run, { desc = "codelens", buffer = args.buf })
+		if client.server_capabilities.implementationProvider then
+			vim.keymap.set("n", "gi", function()
+				vim.lsp.buf.implementation({ on_list = on_list })
+			end, { desc = "implementation", buffer = args.buf })
+		end
+
+		if client.server_capabilities.referencesProvider then
+			vim.keymap.set("n", "gr", function()
+				vim.lsp.buf.references(nil, { on_list = on_list })
+			end, { desc = "references", buffer = args.buf })
+		end
+
+		if client.server_capabilities.renameProvider then
+			vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, {
+				desc = "rename",
+				buffer = args.buf,
+			})
+		end
+
+		if client.server_capabilities.codeActionProvider then
+			vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, {
+				desc = "code action",
+				buffer = args.buf,
+			})
+		end
+
+		if client.server_capabilities.experimental then
+			if client.server_capabilities.experimental.externalDocs then
+				vim.keymap.set("n", "gx", vim.lsp.buf.external_docs, {
+					desc = "external_docs",
+					buffer = args.buf,
+				})
+			end
+		end
 	end,
 })

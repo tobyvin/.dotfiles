@@ -3,7 +3,6 @@ local M = {
 	"nvim-telescope/telescope.nvim",
 	dependencies = {
 		"nvim-lua/plenary.nvim",
-		"BurntSushi/ripgrep",
 		{
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = "make",
