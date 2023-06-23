@@ -26,6 +26,8 @@ setopt NONOMATCH
 setopt CORRECT
 setopt INTERACTIVE_COMMENTS
 
+TRAPUSR1() { rehash }
+
 bindkey -v
 bindkey -m 2>/dev/null
 
