@@ -27,7 +27,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		if client.server_capabilities.documentFormattingProvider then
+		if client.server_capabilities.documentFormattingProvider and vim.bo[args.buf].formatexpr then
 			vim.keymap.set("n", "gqq", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
 			vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
 		end
