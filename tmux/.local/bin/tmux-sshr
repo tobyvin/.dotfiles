@@ -3,7 +3,7 @@
 HOST=$(tmux display -p '#h' 2>/dev/null)
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-	tmux -L ssh run-shell "tmux-ssh"
+	tmux -L ssh run-shell "tmux-sshr"
 	exit 0
 fi
 
