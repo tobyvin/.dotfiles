@@ -88,7 +88,6 @@ ll = log --stat --oneline --decorate --branches --remotes --tags --abbrev-commit
 
 # undo http://megakemp.com/2016/08/25/git-undo/
 undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
-pop = git reset HEAD~
 
 # stash staged files
 stashindex = !git stash --keep-index && git stash && git stash apply stash@{1} && git stash show -p | git apply -R && git stash drop stash@{1}
