@@ -8,6 +8,7 @@ if [ "$#" -eq 0 ]; then
 		$FZF_CMD |
 			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --select-1 --exit-0 \
 				--bind "ctrl-q:execute(tmux kill-session -t{})+reload($FZF_CMD)" \
+				--bind 'focus:transform-header(tmux display -t{} -p "#{session_path}")' \
 				--preview-window=right,80% --preview='tmux capture-pane -ep -t{}:'
 	)
 fi

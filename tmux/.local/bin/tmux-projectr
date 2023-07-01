@@ -8,7 +8,7 @@ if [ "$#" -eq 0 ]; then
 	# shellcheck disable=2046
 	set -- $(
 		projectr -mgt ~/src ~/pkg ~/dkr ~/doc -P ~/.dotfiles --exclude-cwd |
-			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --select-1 --exit-0 -d/ --with-nth -2.. \
+			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --select-1 --exit-0 -d/ --with-nth 4.. \
 				--bind 'focus:transform-header(echo {})' \
 				--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD"
 	)
