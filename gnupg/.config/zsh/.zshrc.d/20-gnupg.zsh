@@ -1,9 +1,9 @@
 #!/bin/zsh
 # vim:ft=sh
 
-GPG_TTY=$(tty)
-export GPG_TTY
+if [ -t 0 ] && [ -z "$SSH_TTY" ]; then
+	export GPG_TTY="$(tty)"
+	export PINENTRY_USER_DATA=USE_TTY=1
+fi
 
 gpg-connect-agent updatestartuptty /bye >/dev/null 2>&1
-
-alias unlock='echo "" | gpg --clearsign 1>/dev/null && ssh localhost -- : 1>/dev/null'
