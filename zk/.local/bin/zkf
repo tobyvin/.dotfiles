@@ -3,7 +3,7 @@
 if [ "$#" -eq 0 ]; then
 	set -- "$(
 		rg '^# (.*)$' "$ZK_NOTEBOOK_DIR" --type=markdown --max-count=1 --vimgrep --replace '$1' \
-			--no-line-number --no-column |
+			--no-line-number --no-column --sort=modified |
 			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --print-query -d: --with-nth -1 \
 				--bind 'focus:transform-header(echo {1})' \
 				--preview-window='right,100,<100(up,75%,border-bottom)' \
