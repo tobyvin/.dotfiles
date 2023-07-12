@@ -20,7 +20,7 @@ eval set -- "$opts"
 help() {
 	cat <<-EOF
 		$SCRIPT
-		Toby Vincent <tobyv13@gmail.com>
+		Toby Vincent <tobyv@tobyvin.dev>
 
 		$SCRIPT
 		    Installer script. Basically just a wrapper around GNU stow with a few niceties. Running with

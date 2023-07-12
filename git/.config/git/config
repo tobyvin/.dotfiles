@@ -1,17 +1,11 @@
-[include]
-path = ~/.config/git/config.d/local.inc
-
 [user]
-email = tobyv13@gmail.com
+email = tobyv@tobyvin.dev
 name = Toby Vincent
 username = tobyvin
 signingkey = 0xA0876F29023F43AF
 
 [sendemail]
-smtpserver = smtp.gmail.com
-smtpuser = tobyv13@gmail.com
-smtpencryption = tls
-smtpserverport = 587
+from = Toby Vincent <tobyv@tobyvin.dev>
 
 [commit]
 gpgsign = true

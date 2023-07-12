@@ -15,7 +15,7 @@ eval set -- "$opts"
 help() {
 	cat <<-EOF
 		$SCRIPT
-		Toby Vincent <tobyv13@gmail.com>
+		Toby Vincent <tobyv@tobyvin.dev>
 
 		$SCRIPT
 		    Get a timestamp for a given directory using multiple activity sources. By default, uses stat.

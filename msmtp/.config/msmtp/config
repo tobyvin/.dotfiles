@@ -4,12 +4,12 @@ tls on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
 syslog on
 
-account gmail
+account tobyvin
+from tobyv@tobyvin.dev
 host smtp.gmail.com
-port 587
-tls_starttls    on
 user tobyv13
-from tobyv13@gmail.com
 passwordeval "pass gmail"
+port 587
+tls_starttls on
 
-account default: gmail
+account default: tobyvin
