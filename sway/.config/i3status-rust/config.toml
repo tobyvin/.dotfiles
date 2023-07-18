@@ -17,21 +17,20 @@ critical_bg = "#fb4934"
 critical_fg = "#1d2021"
 
 [icons]
-icons = "none"
+icons = "material-nf"
 
 [icons.overrides]
-bat_charging = "BAT+"
-music = "\U000f075a"       # nf-md-music
-music_next = "\U000f04ad"  # nf-md-skip_next
-music_pause = "\U000f03e4" # nf-md-pause
-music_play = "\U000f040a"  # nf-md-play
-music_prev = "\U000f04ae"  # nf-md-skip_previous
-weather_clouds = "\ue33d"  # nf-weather-cloud
-weather_default = "\ue33d" # Cloud symbol as default
-weather_rain = "\ue371"    # nf-weather-raindrop
-weather_snow = "\ue36f"    # nf-weather-snowflake_cold
-weather_sun = "\ue30d"     # nf-weather-day_sunny
-weather_thunder = "\ue31d" # nf-weather-thunderstorm
+cpu = "CPU"
+memory_mem = "MEM"
+cpu_boost_on = "BOOST"
+cpu_boost_off = ""
+disk_drive = "DISK"
+
+[[block]]
+block = "focused_window"
+[block.format]
+full = " $title.str(max_w:30) |"
+short = " $title.str(max_w:10) |"
 
 [[block]]
 block = "weather"
@@ -40,26 +39,18 @@ autolocate_interval = "once"
 service.name = "metno"
 
 [[block]]
-block = "disk_space"
-path = "/"
-info_type = "available"
-alert_unit = "GB"
-interval = 20
-warning = 20.0
-alert = 10.0
+block = "maildir"
+interval = 60
+inboxes = ["~/.local/share/mail/gmail/INBOX"]
+threshold_warning = 1
+threshold_critical = 10
+display_type = "new"
 
 [[block]]
-block = "memory"
-format = " $icon $mem_total_used_percents.eng(w:2)"
-
-[[block]]
-block = "cpu"
-interval = 1
-
-# [[block]]
-# block = "nvidia_gpu"
-# show_memory = false
-# show_clocks = true
+block = "music"
+player = "spotifyd"
+format = " $icon {$combo.str(max_w:20) $prev $play $next |}"
+merge_with_next = true
 
 [[block]]
 block = "sound"
@@ -69,26 +60,64 @@ button = "left"
 cmd = "pavucontrol"
 
 [[block]]
+block = "disk_space"
+format = " $available "
+format_alt = " $icon $available / $total "
+merge_with_next = true
+
+[[block]]
+block = "memory"
+format = " $mem_avail.eng(w:3,u:B,p:M) "
+format_alt = " $icon $mem_avail.eng(w:3,u:B,p:M) / $mem_total.eng(w:3,u:B,p:M) "
+merge_with_next = true
+
+[[block]]
+block = "cpu"
+format = " $utilization "
+format_alt = " $icon $utilization $frequency {$boost |}"
+
+[[block]]
+block = "toggle"
+format = " $icon "
+if_command = "networkctl status wg0"
+command_state = "cat /sys/class/net/wg0/carrier"
+command_on = "sudo networkctl up wg0"
+command_off = "sudo networkctl down wg0"
+interval = 20
+merge_with_next = true
+
+[[block]]
+block = "net"
+device = "^wg0$"
+format = " $icon "
+format_alt = " $device {$ip |}"
+missing_format = ""
+merge_with_next = true
+
+[[block]]
+block = "net"
+device = "^en.*$"
+format = " $icon "
+format_alt = " $device {$ip |}"
+missing_format = ""
+merge_with_next = true
+
+[[block]]
 block = "net"
 device = "^wl.*$"
-format = " $icon {$ssid |}"
-format_alt = " $icon {$signal_strength $frequency $ssid |}"
+format = " $icon "
+format_alt = " $device {$signal_strength $frequency $ssid |}{$ip |}"
 missing_format = ""
 
 [[block]]
 block = "battery"
 device = "BAT1"
-format = " $icon $percentage "
-full_format = " FULL "
-empty_format = " $icon $percentage "
 missing_format = ""
+merge_with_next = true
 
 [[block]]
 block = "battery"
 device = "BAT2"
-format = " $icon $percentage "
-full_format = " FULL "
-empty_format = " $icon $percentage "
 missing_format = ""
 
 [[block]]
@@ -98,6 +127,11 @@ format.full = " $timestamp.datetime(f:'%a %m/%d %T') "
 format.short = " $timestamp.datetime(f:%T) "
 
 [[block]]
-block = "music"
-player = "spotifyd"
-format = " $icon {$combo.str(max_w:20) $prev $play $next |}"
+block = "notify"
+format = " $icon {($notification_count.eng(w:1)) |}"
+[[block.click]]
+button = "left"
+action = "show"
+[[block.click]]
+button = "right"
+action = "toggle_paused"
