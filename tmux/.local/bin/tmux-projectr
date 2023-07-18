@@ -10,7 +10,7 @@ if [ "$#" -eq 0 ]; then
 		projectr -mgt ~/src ~/pkg ~/dkr ~/doc -P ~/.dotfiles --exclude-cwd |
 			fzf-tmux "$FZF_TMUX_OPTS" -- --tac --select-1 --exit-0 -d/ --with-nth 4.. \
 				--bind 'focus:transform-header(echo {})' \
-				--preview-window='right,75%,<80(up,75%,border-bottom)' --preview="$PREVIEW_CMD"
+				--preview-window='right,75%,<80(hidden)' --preview="$PREVIEW_CMD"
 	)
 
 	test -n "$1" || exit 0
