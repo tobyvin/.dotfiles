@@ -1,0 +1,33 @@
+[global]
+    width = 300
+    height = 300
+    offset = 10x10
+    notification_limit = 20
+    frame_color = "#fe8019"
+    idle_threshold = 120
+    font = Fira Code Nerd Font
+    markup = full
+    icon_path = /usr/share/icons
+    enable_recursive_icon_lookup = true
+    icon_theme = gruvbox-dark-icons-gtk, Adwaita
+    mouse_left_click = do_action, close_current
+    mouse_middle_click = context, close_current
+    mouse_right_click = close_current
+
+[urgency_low]
+    background = "#282828"
+    frame_color = "#8ec07c"
+    foreground = "#ebdbb2"
+    timeout = 5
+
+[urgency_normal]
+    background = "#282828"
+    frame_color = "#fabd2f"
+    foreground = "#ebdbb2"
+    timeout = 20
+
+[urgency_critical]
+    background = "#282828"
+    frame_color = "#fb4934"
+    foreground = "#ebdbb2"
+    timeout = 0
