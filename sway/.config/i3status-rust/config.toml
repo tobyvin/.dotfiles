@@ -39,6 +39,23 @@ autolocate_interval = "once"
 service.name = "metno"
 
 [[block]]
+block = "disk_space"
+format = " $available "
+format_alt = " $icon $available / $total "
+merge_with_next = true
+
+[[block]]
+block = "memory"
+format = " $mem_avail.eng(w:3,u:B,p:M) "
+format_alt = " $icon $mem_avail.eng(w:3,u:B,p:M) / $mem_total.eng(w:3,u:B,p:M) "
+merge_with_next = true
+
+[[block]]
+block = "cpu"
+format = " $utilization "
+format_alt = " $icon $utilization $frequency {$boost |}"
+
+[[block]]
 block = "maildir"
 interval = 60
 inboxes = ["~/.local/share/mail/gmail/INBOX"]
@@ -58,23 +75,6 @@ if_command = "pactl list >/dev/null || aplay -l >/dev/null "
 [[block.click]]
 button = "left"
 cmd = "pavucontrol"
-
-[[block]]
-block = "disk_space"
-format = " $available "
-format_alt = " $icon $available / $total "
-merge_with_next = true
-
-[[block]]
-block = "memory"
-format = " $mem_avail.eng(w:3,u:B,p:M) "
-format_alt = " $icon $mem_avail.eng(w:3,u:B,p:M) / $mem_total.eng(w:3,u:B,p:M) "
-merge_with_next = true
-
-[[block]]
-block = "cpu"
-format = " $utilization "
-format_alt = " $icon $utilization $frequency {$boost |}"
 
 [[block]]
 block = "toggle"
