@@ -1,13 +1,14 @@
 ### Variables
 
+# Colors
+include ~/.config/sway/config.d/00-colorscheme.conf
+include ~/.config/sway/config.d/99-base16.conf
+
 # Set logo key as main modifier
 set $mod Mod4
 
-# Terminal
-set $term $TERMINAL
-
 # Menu
-set $menu exec rofi -show-icons
+set $menu bemenu
 
 # Home row direction keys, like vim
 set $left h
@@ -18,9 +19,6 @@ set $right l
 # System commands
 set $lock_cmd swaylock --grace 10 --fade-in 1
 set $sleep_cmd systemctl suspend
-
-# Colors
-include colorscheme
 
 # Basic color configuration using the Base16 variables for windows and borders.
 # Property Name         Border  BG      Text    Indicator Child Border
@@ -75,16 +73,17 @@ input type:keyboard {
 ### Key bindings
 
 # Power menu
-bindsym $mod+Escape exec $menu -modi p:rofi-power-menu -show p
-bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Do you really want to exit sway?' -B 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Escape exec powermenu list | $menu | powermenu
+bindsym $mod+Shift+Escape exec swaynag -t warning \
+    -m 'Do you really want to exit sway?' \
+    -B 'Yes, exit sway' 'swaymsg exit'
 
 # Run menu
-bindsym $mod+space exec $menu -show drun
-bindsym $mod+shift+space exec $menu -show run
+bindsym $mod+space exec j4-dmenu-desktop --dmenu='$menu' --term="$TERMINAL"
+bindsym $mod+shift+space exec bemenu-run
 
 # Launch terminal
 bindsym $mod+return exec $TERMINAL
-bindsym $mod+shift+return exec $menu -show ssh
 
 # Launch browser
 bindsym $mod+w exec $BROWSER
@@ -215,13 +214,14 @@ exec dunst
 
 # Clipboard manager
 exec wl-paste --type text --watch clipman store --no-persist
-bindsym $mod+v exec clipman pick --tool=rofi
+bindsym $mod+v exec clipman pick --tool=bemenu
 
 # Password manager
-bindsym $mod+b exec rofi-rbw
+bindsym $mod+p exec passmenu
 
 # Yubikey TOTP manager
-bindsym $mod+y exec rofi-ykman
+bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard
+bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type
 
 include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*

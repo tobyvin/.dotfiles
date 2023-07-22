@@ -1,0 +1,15 @@
+[[items]]
+file = "~/.config/sway/config.d/99-base16.conf"
+template = "sway"
+subtemplate = "colors"
+hook = "swaymsg reload"
+rewrite = true
+light = false
+
+
+[[items]]
+file = "~/.config/dunst/dunstrc.d/99-base16.conf"
+template = "dunst"
+hook = "swaymsg reload"
+rewrite = true
+light = false
