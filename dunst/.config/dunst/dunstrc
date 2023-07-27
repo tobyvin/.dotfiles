@@ -1,4 +1,5 @@
 [global]
+    follow = mouse
     width = 300
     height = 300
     offset = 10x10
