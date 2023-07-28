@@ -1,27 +1,31 @@
 ### Variables
 
-# Colors
-include ~/.config/sway/config.d/00-colorscheme.conf
-include ~/.config/sway/config.d/99-base16.conf
-
-# Set logo key as main modifier
 set $mod Mod4
-
-# Menu
 set $menu bemenu
 
-# Home row direction keys, like vim
 set $left h
 set $down j
 set $up k
 set $right l
 
-# System commands
-set $lock_cmd swaylock --grace 10 --fade-in 1
-set $sleep_cmd systemctl suspend
+set $base00 #1d2021
+set $base01 #3c3836
+set $base02 #504945
+set $base03 #665c54
+set $base04 #bdae93
+set $base05 #d5c4a1
+set $base06 #ebdbb2
+set $base07 #fbf1c7
+set $base08 #fb4934
+set $base09 #fe8019
+set $base0A #fabd2f
+set $base0B #b8bb26
+set $base0C #8ec07c
+set $base0D #83a598
+set $base0E #d3869b
+set $base0F #d65d0e
 
-# Basic color configuration using the Base16 variables for windows and borders.
-# Property Name         Border  BG      Text    Indicator Child Border
+# Property              Border  BG      Text    Indicator Child Border
 client.focused          $base05 $base0D $base00 $base0D $base0D
 client.focused_inactive $base01 $base01 $base05 $base03 $base01
 client.unfocused        $base01 $base00 $base05 $base01 $base01
@@ -29,30 +33,9 @@ client.urgent           $base08 $base08 $base00 $base08 $base08
 client.placeholder      $base00 $base00 $base05 $base00 $base00
 client.background       $base07
 
-### Output configuration
-
-# Set wallpaper
 output * bg ~/.local/share/swaybg/gruvbox_sway.png fill
-
-### Idle configuration
-
-# lock: 10 min
-# display: 20 min
-# sleep: 30 min
-exec swayidle -w \
-    timeout 600 '$lock_cmd' \
-    timeout 1200 'swaymsg "output * dpms off"' \
-    resume 'swaymsg "output * dpms on"' \
-    timeout 1800 '$sleep_cmd' \
-    before-sleep '$lock_cmd' \
-    lock '$lock_cmd'
-
-# Inhibit idle if a window is in fullscreen
 for_window [shell=".*"] inhibit_idle fullscreen
 
-### Input configuration
-
-# Hide mouse cursor when not used
 # NOTE: Configure asynchronously with swaymsg as workaround for Firefox crash on reload
 # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1652820#c51
 exec_always swaymsg seat * hide_cursor 8000
@@ -70,32 +53,17 @@ input type:keyboard {
     xkb_options "caps:escape"
 }
 
-### Key bindings
-
-# Power menu
 bindsym $mod+Escape exec powermenu list | $menu | powermenu
-bindsym $mod+Shift+Escape exec swaynag -t warning \
-    -m 'Do you really want to exit sway?' \
-    -B 'Yes, exit sway' 'swaymsg exit'
-
-# Run menu
+bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym $mod+space exec j4-dmenu-desktop --dmenu='$menu' --term="$TERMINAL"
 bindsym $mod+shift+space exec bemenu-run
-
-# Launch terminal
 bindsym $mod+return exec $TERMINAL
-
-# Launch browser
 bindsym $mod+w exec $BROWSER
-
-# Take screenshots
 bindsym Print exec grim "screenshot-$(date +'%F-%H-%M-%S').png"
-bindsym Print+$mod exec grim -g "$(slurp)" "screenshot-$(date +'%F-%H-%M-%S').png"
+bindsym $mod+Print exec slurp | grim -g - "screenshot-$(date +'%F-%H-%M-%S').png"
 
-# Lock screen
 bindsym $mod+ctrl+q exec loginctl lock-session
 
-# Media control
 bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym --locked XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
@@ -106,13 +74,10 @@ bindsym --locked XF86AudioPlay exec playerctl play-pause
 bindsym --locked XF86AudioNext exec playerctl next
 bindsym --locked XF86AudioPrev exec playerctl previous
 
-# Kill focused window
 bindsym $mod+q kill
 
-# Reload the configuration file
 bindsym $mod+Shift+c reload
 
-# Move focus around
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
@@ -123,7 +88,6 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# Move the focused window with the same, but add Shift
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
@@ -134,7 +98,6 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# Switch to workspace
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
@@ -147,7 +110,6 @@ bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 bindsym $mod+ctrl+6 workspace back_and_forth
 
-# Move focused container to workspace
 bindsym $mod+Shift+1 move container to workspace number 1; workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2; workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3; workspace number 3
@@ -159,18 +121,14 @@ bindsym $mod+Shift+8 move container to workspace number 8; workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9; workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
-# Splitting direction
 bindsym $mod+Shift+backslash split toggle
 bindsym $mod+minus splith
 bindsym $mod+backslash splitv
 
-# Make current focus fullscreen
 bindsym $mod+f fullscreen
 
-# Resizing containers
 bindsym $mod+r mode 'resize'
 mode 'resize' {
-    # Resizing keys
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
@@ -181,13 +139,14 @@ mode 'resize' {
     bindsym Up resize shrink height 10px
     bindsym Right resize grow width 10px
 
-    # Return to default mode
     bindsym Escape mode 'default'
 }
 
-#
-# Status Bar
-#
+bindsym $mod+v exec clipman pick --tool=bemenu
+bindsym $mod+p exec passmenu
+bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard
+bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type
+
 bar {
     status_command i3status-rs
     font "Fira Code Nerd Font" Normal 12
@@ -205,25 +164,10 @@ bar {
     }
 }
 
-# Hide window title bars and borders
 default_border pixel
 hide_edge_borders smart
-
-# Notification daemon
-exec dunst
-
-# Clipboard manager
-exec wl-paste --type text --watch clipman store --no-persist
-bindsym $mod+v exec clipman pick --tool=bemenu
-
-# Password manager
-bindsym $mod+p exec passmenu
-
-# Yubikey TOTP manager
-bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard
-bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type
 
 include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
-exec systemctl --user start sway-session.target
+exec_always systemctl --user start sway-session.target

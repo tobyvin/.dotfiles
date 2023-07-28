@@ -96,17 +96,17 @@ merge_with_next = true
 
 [[block]]
 block = "net"
-device = "^en.*$"
+device = "^wl.*$"
 format = " $icon "
-format_alt = " $device {$ip |}"
+format_alt = " $device {$signal_strength $frequency $ssid |}{$ip |}"
 missing_format = ""
 merge_with_next = true
 
 [[block]]
 block = "net"
-device = "^wl.*$"
+device = "^en.*$"
 format = " $icon "
-format_alt = " $device {$signal_strength $frequency $ssid |}{$ip |}"
+format_alt = " $device {$ip |}"
 missing_format = ""
 
 [[block]]

@@ -1,8 +1,10 @@
 daemonize
+fade-in=1
 screenshots
 clock
 submit-on-touch
 indicator
+indicator-idle-visible
 indicator-radius=100
 indicator-thickness=7
 effect-blur=7x5

@@ -1,0 +1,13 @@
+[Unit]
+Description=Idle management daemon for Wayland
+Documentation=man:swayidle(1)
+PartOf=sway-session.target
+After=sway-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/swayidle -w
+Restart=on-failure
+
+[Install]
+WantedBy=sway-session.target
