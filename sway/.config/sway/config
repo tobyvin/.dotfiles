@@ -35,6 +35,9 @@ client.background       $base07
 
 output * bg ~/.local/share/swaybg/gruvbox_sway.png fill
 for_window [shell=".*"] inhibit_idle fullscreen
+for_window [app_id="pavucontrol" title="^Volume Control$"] border none, floating enable
+for_window [app_id="" title="^Streamlink Twitch GUI$"] border none, floating enable
+for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 
 # NOTE: Configure asynchronously with swaymsg as workaround for Firefox crash on reload
 # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1652820#c51
