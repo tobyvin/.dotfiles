@@ -42,13 +42,11 @@ service.name = "metno"
 block = "disk_space"
 format = " $available "
 format_alt = " $icon $available / $total "
-merge_with_next = true
 
 [[block]]
 block = "memory"
-format = " $mem_avail.eng(w:3,u:B,p:M) "
-format_alt = " $icon $mem_avail.eng(w:3,u:B,p:M) / $mem_total.eng(w:3,u:B,p:M) "
-merge_with_next = true
+format = " $mem_avail.eng(u:B,p:M) "
+format_alt = " $icon $mem_avail.eng(u:B,p:M) / $mem_total.eng(u:B,p:M) "
 
 [[block]]
 block = "cpu"
@@ -67,7 +65,6 @@ display_type = "new"
 block = "music"
 player = "spotifyd"
 format = " $icon {$combo.str(max_w:20) $prev $play $next |}"
-merge_with_next = true
 
 [[block]]
 block = "sound"
