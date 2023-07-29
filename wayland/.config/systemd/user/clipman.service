@@ -1,8 +1,8 @@
 [Unit]
 Description=A simple clipboard manager for Wayland
 Documentation=man:clipman(1)
-PartOf=sway-session.target
-After=sway-session.target
+PartOf=wayland-session.target
+After=wayland-session.target
 
 [Service]
 Type=simple
@@ -10,4 +10,4 @@ ExecStart=/usr/bin/wl-paste --type text --watch clipman --notify store --no-pers
 Restart=on-failure
 
 [Install]
-WantedBy=sway-session.target
+WantedBy=wayland-session.target
