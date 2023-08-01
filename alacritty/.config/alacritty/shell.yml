@@ -1,5 +1,0 @@
-shell:
-  program: /bin/zsh
-  args:
-    - -c
-    - tmux new -A
