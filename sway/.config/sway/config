@@ -77,8 +77,8 @@ bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard
 bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type
 bindsym $mod+return exec $TERMINAL
 bindsym $mod+w exec $BROWSER
-bindsym Print exec grim "screenshot-$(date +'%F-%H-%M-%S').png"
-bindsym $mod+Print exec slurp | grim -g - "screenshot-$(date +'%F-%H-%M-%S').png"
+bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
+bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 
 bindsym --locked XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym --locked XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%

@@ -57,9 +57,6 @@ format_alt = " $icon $utilization $frequency {$boost |}"
 block = "maildir"
 interval = 60
 inboxes = ["~/.local/share/mail/gmail/INBOX"]
-threshold_warning = 1
-threshold_critical = 10
-display_type = "new"
 
 [[block]]
 block = "music"
