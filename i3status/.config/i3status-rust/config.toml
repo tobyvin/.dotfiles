@@ -60,8 +60,7 @@ inboxes = ["~/.local/share/mail/gmail/INBOX"]
 
 [[block]]
 block = "music"
-player = "spotifyd"
-format = " $icon {$combo.str(max_w:20) $prev $play $next |}"
+format = " $icon {$combo.str(max_w:20,rot_interval:0.5) $prev $play $next |}"
 
 [[block]]
 block = "sound"
