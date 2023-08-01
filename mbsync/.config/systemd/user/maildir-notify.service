@@ -3,7 +3,7 @@ Description=Watches Maildir for new mail and sends notifications
 
 [Service]
 Type=simple
-ExecStart=%h/.local/bin/maildir-notify %h/.local/share/mail/gmail/INBOX %h/.local/share/mail/feeds/INBOX
+ExecStart=%h/.local/bin/maildir-notify
 RestartSec=10
 
 [Install]

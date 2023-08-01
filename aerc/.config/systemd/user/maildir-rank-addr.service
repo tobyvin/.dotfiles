@@ -1,9 +1,0 @@
-[Unit]
-Description=Generates a ranked addressbook from a maildir folder
-
-[Service]
-Type=oneshot
-ExecStart=/usr/bin/maildir-rank-addr --maildir=${MAIL} --addresses="tobyv@tobyvin.dev,tobyv13@gmail.com" --template='{{.Address}}\t{{.Name}}\t{{.NormalizedName}}'
-
-[Install]
-WantedBy=default.target

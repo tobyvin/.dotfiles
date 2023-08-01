@@ -1,7 +1,9 @@
 #!/bin/sh
 
 if [ $# = 0 ]; then
-	set -- "$MAIL"
+	for d in "$XDG_DATA_HOME"/mail/*; do
+		set -- "$@" "${d}/INBOX"
+	done
 fi
 
 for i; do
@@ -9,10 +11,12 @@ for i; do
 	shift
 done
 
+echo "Watching $*"
+
 inotifywait --monitor --event create --event moved_to "$@" |
 	while read -r dir _action file; do
 		inbox="$(dirname "$dir")"
-		catagory="$(dirname "$inbox" | xargs basename)"
+		category="$(dirname "$inbox" | xargs basename)"
 		from="$(grep -m1 -oP '(?<=^From: ).*' "${dir}${file}")"
 		subject="$(grep -m1 -oP '(?<=^Subject: ).*' "${dir}${file}")"
 
@@ -26,6 +30,6 @@ inotifywait --monitor --event create --event moved_to "$@" |
 			fi
 		fi
 
-		echo "Catagory: $catagory, From: $from, Subject: $subject"
-		notify-send -a "Mail" -c "$catagory" "From: $from" "$subject"
+		echo "Category: $category, From: $from, Subject: $subject"
+		notify-send -a "Mail" -c "$category" "From: $from" "$subject"
 	done

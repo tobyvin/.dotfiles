@@ -1,0 +1,5 @@
+addresses = [
+    "tobyv@tobyvin.dev",
+    "tobyv13@gmail.com"
+]
+template = "{{.Address}}\t{{.Name}}\t{{.NormalizedName}}"
