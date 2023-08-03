@@ -1,5 +1,9 @@
 [Unit]
 Description=Mailbox synchronization service
+Documentation=man:mbsync(1)
+Wants=network-online.target
+Requires=gpg-agent.socket
+After=network-online.target gpg-agent.socket network.target dbus.socket
 
 [Service]
 Type=oneshot
