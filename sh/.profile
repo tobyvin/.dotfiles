@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck disable=2046,1090
+# shellcheck disable=1090,3001,2046
 
 # Most of this script is a user scoped version of /etc/profile
 
@@ -18,12 +18,8 @@ append_path() {
 # NOTE: To avoid overriding PATH, we rename it and append it separately
 #
 # See: https://wiki.archlinux.org/title/Environment_variables#Per_Wayland_session
-for gen in /usr/lib/systemd/user-environment-generators/*; do
-	if [ -e "$gen" ]; then
-		export $($gen | sed 's/^PATH=/GEN_PATH=/' | xargs)
-		append_path "$GEN_PATH"
-		unset GEN_PATH
-	fi
+for generator in /usr/lib/systemd/user-environment-generators/*; do
+	export $($generator | xargs)
 done
 
 append_path "$HOME/.local/bin"
@@ -41,11 +37,3 @@ fi
 
 # Unload our profile API functions
 unset -f append_path
-
-# Manually parse and export XDG user directories. xdg-user-dirs-update is disabled in
-# $XDG_CONFIG_HOME/user-dirs.conf due to how it handles non-existent directories
-#
-# See: https://wiki.archlinux.org/title/XDG_user_directories
-if [ -e "$HOME/.config/user-dirs.dirs" ]; then
-	export $(xargs <"$HOME/.config/user-dirs.dirs")
-fi
