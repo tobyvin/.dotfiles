@@ -45,7 +45,7 @@ for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 # See: https://bugzilla.mozilla.org/show_bug.cgi?id=1652820#c51
 exec_always swaymsg seat * hide_cursor 8000
 
-output * bg ~/.local/share/swaybg/gruvbox_sway.png fill
+output * bg ~/.local/share/gruvbox/sway.png fill
 
 input type:pointer {
     accel_profile flat
