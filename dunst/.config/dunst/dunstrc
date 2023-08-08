@@ -6,7 +6,7 @@
     notification_limit = 20
     frame_color = "#fe8019"
     idle_threshold = 120
-    font = Fira Code Nerd Font
+    font = FiraCode Nerd Font 15
     markup = full
     icon_path = /usr/share/icons
     enable_recursive_icon_lookup = true

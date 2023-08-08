@@ -31,7 +31,7 @@ client.urgent           $base08 $base08 $base00 $base08 $base08
 client.placeholder      $base00 $base00 $base05 $base00 $base00
 client.background       $base07
 
-font "Fira Code Nerd Font" Normal 12
+font pango:Fira Code Nerd Font 15
 focus_on_window_activation focus
 default_border pixel
 hide_edge_borders smart
@@ -159,7 +159,7 @@ mode 'resize' {
 
 bar {
     status_command i3status-rs
-    font "Fira Code Nerd Font" Normal 15
+    font pango:Fira Code Nerd Font 15
     status_padding 0
     tray_padding 0
     colors {

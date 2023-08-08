@@ -8,6 +8,7 @@ vim.filetype.add({
 		["PKGBUILD"] = "PKGBUILD",
 	},
 	pattern = {
+		[".*/sway/config.d/.*%.conf"] = "swayconfig",
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
 		["/var/tmp/.*"] = function(_, bufnr, _)
 			local pid = vim.fn.getpid()

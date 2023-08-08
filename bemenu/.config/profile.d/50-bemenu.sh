@@ -1,4 +1,5 @@
 #!/usr/bin/sh
+# shellcheck disable=2034
 
 base00="#1d2021"
 base01="#3c3836"
@@ -22,7 +23,7 @@ export BEMENU_OPTS="--ignorecase \
 --scrollbar autohide \
 --line-height 18 \
 --binding vim \
---fn 'Fira Code Nerd Font 12' \
+--fn 'FiraCode Nerd Font 15' \
 --no-overlap \
 --ab '$base02' \
 --af '$base06' \
