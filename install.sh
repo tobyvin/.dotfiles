@@ -8,10 +8,7 @@ INSTALL_DIR="$(dirname "$SCRIPT_DIR")"
 long='install,clean,clean-only,no,simulate,verbose,help'
 short='icCnvh'
 
-opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"
-
-# shellcheck disable=2181
-if [ $? != 0 ]; then
+if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
 	exit 1
 fi
 
