@@ -6,7 +6,7 @@ local M = {
 		"NullLsInstall",
 		"NullLsUninstall",
 	},
-	dependencies = { "williamboman/mason.nvim", "jose-elias-alvarez/null-ls.nvim" },
+	dependencies = { "williamboman/mason.nvim" },
 	opts = {
 		handlers = {},
 	},

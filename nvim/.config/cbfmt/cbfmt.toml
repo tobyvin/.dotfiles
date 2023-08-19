@@ -1,0 +1,7 @@
+[languages]
+go = ["gofmt"]
+javascript = ["prettier --stdin"]
+lua = ["stylua -s -"]
+python = ["black --fast -"]
+rust = ["rustfmt"]
+sh = ["shfmt -"]
