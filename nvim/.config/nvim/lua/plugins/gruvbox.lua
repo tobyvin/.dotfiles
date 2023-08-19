@@ -16,12 +16,6 @@ local M = {
 			IndentContext5 = { link = "GruvboxAqua" },
 			IndentContext6 = { link = "GruvboxBlue" },
 			IndentContext7 = { link = "GruvboxPurple" },
-
-			-- See: https://github.com/ellisonleao/gruvbox.nvim/pull/255
-			["@lsp.type.class"] = { link = "@type" },
-			["@lsp.type.decorator"] = { link = "@macro" },
-			["@lsp.type.interface"] = { link = "@constructor" },
-			["@lsp.type.struct"] = { link = "@type" },
 		},
 	},
 }
