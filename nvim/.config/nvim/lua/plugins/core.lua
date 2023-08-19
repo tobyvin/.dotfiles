@@ -94,6 +94,10 @@ local M = {
 		"eandrju/cellular-automaton.nvim",
 		cmd = "CellularAutomaton",
 	},
+	{
+		"hjson/vim-hjson",
+		event = "BufReadPre",
+	},
 }
 
 return M
