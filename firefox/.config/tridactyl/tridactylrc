@@ -6,6 +6,9 @@
 
 sanitize tridactyllocal tridactylsync
 
+colourscheme gruvbox-dark-hard
+modeindicatormodes normal false
+
 alias save_rss jsb -p tri.native.run("r2e add '" + JS_ARG + "'") set rsscmd save_rss %u
 alias gitclone jsb -p tri.native.run("git clone --depth=1 '" + JS_ARG + "' /home/tobyv/src/" + JS_ARG.split("/").slice(-1))
 alias jse js 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
@@ -21,6 +24,7 @@ alias video_mark_init jse if(!tri.videoMark){tri.videoMark={historyStore:[],mark
 alias video_mode composite mode video ; video_mark_init
 alias exit_video mode normal
 
+set modeindicatormodes {"normal":"false"}
 set findcase smart
 set smoothscroll true
 set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
@@ -62,7 +66,7 @@ bind k scrollline -5
 bind J tabprev
 bind K tabnext
 bind x tabclose
-bind gs fillcmdline open search
+bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | exclaim_quiet mpv --loop
 bind zz composite jsb tri.native.run('cat /home/tobyv/.config/firefox/userscripts/rustdoc-condensed.js') | js -p eval(JS_ARG.content)
 bind gv video_mode

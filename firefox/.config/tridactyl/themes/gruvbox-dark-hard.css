@@ -1,0 +1,59 @@
+:root {
+  /* Gruvbox-dark-hard by Chris Kempson (http://chriskempson.com) */
+  --base00: #1d2021;
+  --base01: #3c3836;
+  --base02: #504945;
+  --base03: #665c54;
+  --base04: #bdae93;
+  --base05: #d5c4a1;
+  --base06: #ebdbb2;
+  --base07: #fbf1c7;
+  --base08: #fb4934;
+  --base09: #fe8019;
+  --base0A: #fabd2f;
+  --base0B: #b8bb26;
+  --base0C: #8ec07c;
+  --base0D: #83a598;
+  --base0E: #d3869b;
+  --base0F: #d65d0e;
+
+  --tridactyl-fg: var(--base05);
+  --tridactyl-bg: var(--base00);
+  --tridactyl-url-fg: var(--base08);
+  --tridactyl-url-bg: var(--base00);
+  --tridactyl-highlight-box-bg: var(--base0B);
+  --tridactyl-highlight-box-fg: var(--base00);
+
+  /* Hint character tags */
+  --tridactyl-hintspan-fg: var(--base00) !important;
+  --tridactyl-hintspan-bg: var(--base09) !important;
+
+  /* Element Highlights */
+  --tridactyl-hint-active-fg: none;
+  --tridactyl-hint-active-bg: none;
+  --tridactyl-hint-active-outline: none;
+  --tridactyl-hint-bg: none;
+  --tridactyl-hint-outline: none;
+}
+
+#tridactyl-input {
+  color: var(--tridactyl-fg);
+  background: var(--tridactyl-bg);
+}
+
+#completions {
+  color: var(--tridactyl-fg);
+  background: var(--tridactyl-bg);
+}
+
+.TridactylStatusIndicator {
+  background: var(--tridactyl-bg) !important;
+}
+
+#completions .focused {
+  background: var(--base02);
+}
+
+#completions .focused .url {
+  background: var(--base02);
+}
