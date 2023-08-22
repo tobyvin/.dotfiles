@@ -13,6 +13,9 @@ local M = {
 function M:config(opts)
 	opts.settings = vim.tbl_extend("force", opts.settings or {}, {
 		languages = {
+			css = {
+				require("efmls-configs.formatters.prettier"),
+			},
 			django = {
 				require("efmls-configs.linters.djlint"),
 				require("efmls-configs.formatters.djlint"),
@@ -38,6 +41,12 @@ function M:config(opts)
 			},
 			python = {
 				require("efmls-configs.formatters.black"),
+			},
+			sass = {
+				require("efmls-configs.formatters.prettier"),
+			},
+			scss = {
+				require("efmls-configs.formatters.prettier"),
 			},
 			sh = {
 				require("efmls-configs.linters.shellcheck"),
