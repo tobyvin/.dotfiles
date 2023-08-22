@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 local M = {
 	"jayp0521/mason-null-ls.nvim",
 	version = "*",

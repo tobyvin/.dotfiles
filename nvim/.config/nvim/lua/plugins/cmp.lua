@@ -1,3 +1,5 @@
+---@diagnostic disable: missing-fields
+---@type LazyPluginSpec
 local M = {
 	"hrsh7th/nvim-cmp",
 	event = { "InsertEnter", "CmdlineEnter" },
@@ -35,7 +37,7 @@ local M = {
 	},
 }
 
-function M.config()
+function M:config()
 	local cmp = require("cmp")
 
 	local default = require("cmp.config.default")()

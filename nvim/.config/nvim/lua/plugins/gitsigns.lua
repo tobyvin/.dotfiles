@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 local M = {
 	"lewis6991/gitsigns.nvim",
 	version = "*",
@@ -99,7 +100,7 @@ local M = {
 	},
 }
 
-function M.config(_, opts)
+function M:config(opts)
 	local popup = require("gitsigns.popup")
 	local popup_create = popup.create
 

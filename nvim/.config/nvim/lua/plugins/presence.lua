@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 local M = {
 	"andweeb/presence.nvim",
 	event = {

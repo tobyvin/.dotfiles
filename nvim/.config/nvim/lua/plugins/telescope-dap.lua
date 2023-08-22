@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 local M = {
 	"nvim-telescope/telescope-dap.nvim",
 	keys = {

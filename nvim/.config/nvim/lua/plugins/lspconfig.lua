@@ -1,15 +1,16 @@
+---@type LazyPluginSpec
 local M = {
 	"neovim/nvim-lspconfig",
 	event = "BufReadPre",
 	dependencies = {
 		"folke/neodev.nvim",
 		"hrsh7th/cmp-nvim-lsp",
+		"creativenull/efmls-configs-nvim",
 	},
 }
 
-function M.config()
+function M:config()
 	local lspconfig = require("lspconfig")
-	local configs = require("tobyvin.lsp.configs")
 
 	require("lspconfig.ui.windows").default_options.border = "single"
 
@@ -18,7 +19,7 @@ function M.config()
 	})
 
 	local available = lspconfig.util.available_servers()
-	for name, config in pairs(configs) do
+	for name, config in pairs(require("tobyvin.lsp.configs")) do
 		if not vim.tbl_contains(available, name) then
 			lspconfig[name].setup(config)
 		end

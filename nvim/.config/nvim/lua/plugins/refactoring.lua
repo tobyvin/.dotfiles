@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 local M = {
 	"ThePrimeagen/refactoring.nvim",
 	dependencies = {

@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 local M = {
 	"MunifTanjim/rust-tools.nvim",
 	ft = "rust",

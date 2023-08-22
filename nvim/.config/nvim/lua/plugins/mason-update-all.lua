@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 local M = {
 	"RubixDev/mason-update-all",
 	cmd = {

@@ -1,5 +1,4 @@
----@type LazySpec
-
+---@type LazyPluginSpec
 local M = {
 	"mfussenegger/nvim-dap",
 	cmd = {
@@ -33,7 +32,7 @@ local M = {
 	},
 }
 
-function M.config()
+function M:config()
 	require("dap").listeners.after.event_initialized["User"] = function()
 		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
 	end

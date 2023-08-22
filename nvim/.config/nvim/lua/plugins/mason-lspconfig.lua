@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 local M = {
 	"williamboman/mason-lspconfig.nvim",
 	version = "*",

@@ -1,4 +1,4 @@
----@type LazySpec
+---@type LazyPluginSpec
 local M = {
 	"rcarriga/cmp-dap",
 	ft = { "dap-repl" },

@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 local M = {
 	"mfussenegger/nvim-jdtls",
 	ft = "java",
@@ -6,7 +7,7 @@ local M = {
 	},
 }
 
-function M.config(_, opts)
+function M:config(opts)
 	require("jdtls").start_or_attach(opts)
 end
 

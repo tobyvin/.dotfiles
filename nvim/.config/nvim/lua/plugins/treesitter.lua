@@ -1,3 +1,4 @@
+---@type LazyPluginSpec
 local M = {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
@@ -7,6 +8,7 @@ local M = {
 		"JoosepAlviste/nvim-ts-context-commentstring",
 		"mfussenegger/nvim-ts-hint-textobject",
 	},
+	main = "nvim-treesitter.configs",
 	opts = {
 		ensure_installed = {
 			"bash",
@@ -113,9 +115,7 @@ local M = {
 	},
 }
 
-function M:config(opts)
-	require("nvim-treesitter.configs").setup(opts)
-
+function M:init()
 	vim.opt.foldmethod = "expr"
 	vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 	vim.opt.foldenable = false
