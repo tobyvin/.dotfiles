@@ -9,6 +9,7 @@ vim.filetype.add({
 	},
 	pattern = {
 		[".*/sway/config.d/.*%.conf"] = "swayconfig",
+		[".*/mutt/.*%.rc"] = "muttrc",
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
 		["/var/tmp/.*"] = function(_, bufnr, _)
 			local pid = vim.fn.getpid()

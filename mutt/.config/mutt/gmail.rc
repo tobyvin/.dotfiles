@@ -1,0 +1,13 @@
+set folder=~/.local/share/mail/gmail
+set mbox_type=Maildir
+
+set spoolfile=+INBOX
+set record=+Sent
+set postponed=+Drafts
+
+set sendmail="/usr/bin/msmtp"
+
+alternates ^tobyv@tobyvin.dev$
+
+unmailboxes *
+mailboxes +INBOX +Sent +Drafts +Trash +Archive

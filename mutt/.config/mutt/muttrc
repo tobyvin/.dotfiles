@@ -1,0 +1,24 @@
+set realname = 'Toby Vincent'
+
+set sendmail = "/usr/bin/msmtp"
+set edit_headers = yes
+set header_cache = ~/.cache/mutt
+
+set sort=threads
+set sort_aux=last-date-received
+
+set mail_check_stats
+set sidebar_visible
+set sidebar_format = "%B%<F? [%F]>%* %<N?%N/>%S"
+bind index,pager \CP sidebar-prev
+bind index,pager \CN sidebar-next
+bind index,pager \CO sidebar-open
+
+source "binds.rc"
+source "colors.rc"
+
+source "gmail.rc"
+folder-hook $folder 'source gmail.rc'
+
+source "porkbun.rc"
+folder-hook $folder 'source porkbun.rc'
