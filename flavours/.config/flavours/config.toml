@@ -10,6 +10,6 @@ light = false
 [[items]]
 file = "~/.config/dunst/dunstrc.d/99-base16.conf"
 template = "dunst"
-hook = "swaymsg reload"
+hook = "systemctl --user restart dunst.service"
 rewrite = true
 light = false
