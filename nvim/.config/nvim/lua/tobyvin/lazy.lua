@@ -15,7 +15,6 @@ require("lazy").setup("plugins", {
 	defaults = {
 		lazy = true,
 	},
-	concurrency = 5,
 	dev = {
 		path = "~/src",
 	},
