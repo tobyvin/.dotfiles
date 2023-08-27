@@ -65,5 +65,7 @@ for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
 	fi
 done
 
+bindkey '^ ' forward-word
+
 autoload -Uz compinit
 compinit
