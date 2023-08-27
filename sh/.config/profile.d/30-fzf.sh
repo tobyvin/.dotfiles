@@ -12,6 +12,4 @@ export FZF_DEFAULT_OPTS='--bind ctrl-q:abort
 --bind ctrl-b:preview-page-up
 --bind ctrl-f:preview-page-down
 --bind alt-up:half-page-up
---bind alt-down:half-page-down
---color fg:#ebdbb2,hl:#fabd2f,fg+:#ebdbb2,hl+:#fabd2f
---color info:#83a598,prompt:#bdae93,spinner:#fabd2f,pointer:#83a598,marker:#fe8019,header:#665c54'
+--bind alt-down:half-page-down'
