@@ -1,10 +1,4 @@
 #!/bin/sh
 
-SCRIPT="$0"
-
-say() {
-	printf "%s: %s\n" "$SCRIPT" "$@"
-}
-
-say "Installing plugins"
+printf "%s: Installing plugins\n" "$0"
 sheldon lock
