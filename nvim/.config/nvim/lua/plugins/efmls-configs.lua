@@ -49,7 +49,6 @@ function M:config(opts)
 				require("efmls-configs.formatters.prettier"),
 			},
 			sh = {
-				require("efmls-configs.linters.shellcheck"),
 				require("efmls-configs.formatters.shfmt"),
 			},
 		},
