@@ -75,6 +75,7 @@ bindurl ^https://www.youtube.com/watch\? v video_mode
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
 autocmd DocStart play.rust-lang.org mode ignore
+autocmd DocStart jellyfin.tobyvin.dev mode ignore
 autocmd DocLoad ^https://www.youtube.com/watch\? video_mode
 
 fixamo_quiet
