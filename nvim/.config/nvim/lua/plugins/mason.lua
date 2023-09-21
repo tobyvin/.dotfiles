@@ -3,12 +3,7 @@ local M = {
 	"williamboman/mason.nvim",
 	version = "*",
 	build = ":MasonUpdate",
-	cmd = {
-		"Mason",
-		"MasonLog",
-		"MasonInstall",
-		"MasonUninstall",
-	},
+  lazy = false,
 	dependencies = {},
 	opts = {
 		ui = {
