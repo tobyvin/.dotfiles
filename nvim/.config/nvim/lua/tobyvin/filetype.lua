@@ -8,9 +8,17 @@ vim.filetype.add({
 		["PKGBUILD"] = "PKGBUILD",
 	},
 	pattern = {
-		[".*/sway/config.d/.*%.conf"] = "swayconfig",
+		-- sway drop-ins
+		[".*/sway/config%.d/.*%.conf"] = "swayconfig",
+		[".*/%.sway/config%.d/.*%.conf"] = "swayconfig",
+		-- systemd-networkd
+		[".*/etc/systemd/network/.*%.d/%.#.*"] = "systemd",
+		[".*/etc/systemd/network/%.#.*"] = "systemd",
+		-- muttrc xdg base dir
 		[".*/mutt/.*%.rc"] = "muttrc",
+		-- conf fallback
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
+		-- sudoedit/sudo -e match orignal ft
 		["/var/tmp/.*"] = function(_, bufnr, _)
 			local pid = vim.fn.getpid()
 			local cl = vim.fn.readfile(("/proc/%s/comm"):format(pid))
