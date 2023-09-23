@@ -15,5 +15,5 @@ script can be used to stow specified (or, if unspecified, all) packages using
 `./install.sh -h` to see all options.
 
 [.dotfiles]: https://sr.ht/~tobyvin/.dotfiles/
-[stow]: https://www.gnu.org/software/stow/
 [install.sh]: ./install.sh
+[stow]: https://www.gnu.org/software/stow/

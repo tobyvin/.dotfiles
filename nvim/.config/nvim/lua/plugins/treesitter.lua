@@ -5,8 +5,11 @@ local M = {
 	event = "BufReadPost",
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
-		"JoosepAlviste/nvim-ts-context-commentstring",
 		"mfussenegger/nvim-ts-hint-textobject",
+		{
+			"JoosepAlviste/nvim-ts-context-commentstring",
+			config = true,
+		},
 	},
 	main = "nvim-treesitter.configs",
 	opts = {

@@ -14,7 +14,7 @@ function M:config(opts)
 	opts.settings = vim.tbl_extend("force", opts.settings or {}, {
 		languages = {
 			css = {
-				require("efmls-configs.formatters.prettier"),
+				require("efmls-configs.formatters.stylelint"),
 			},
 			django = {
 				require("efmls-configs.linters.djlint"),
@@ -24,9 +24,6 @@ function M:config(opts)
 				require("efmls-configs.linters.djlint"),
 				require("efmls-configs.formatters.djlint"),
 			},
-			javascript = {
-				require("efmls-configs.formatters.prettier"),
-			},
 			["jinja.html"] = {
 				require("efmls-configs.linters.djlint"),
 				require("efmls-configs.formatters.djlint"),
@@ -35,18 +32,32 @@ function M:config(opts)
 				require("efmls-configs.formatters.stylua"),
 			},
 			markdown = {
-				require("efmls-configs.linters.markdownlint"),
-				require("efmls-configs.formatters.prettier"),
-				require("efmls-configs.formatters.cbfmt"),
+				(function()
+					local markdownlint = require("efmls-configs.linters.markdownlint")
+					markdownlint.lintCommand = ("%s --config %s/markdownlint/markdownlint.yaml"):format(
+						markdownlint.lintCommand,
+						vim.env.XDG_CONFIG_HOME
+					)
+					return markdownlint
+				end)(),
+				(function()
+					local cbfmt = require("efmls-configs.formatters.cbfmt")
+					cbfmt.formatCommand = ("%s --config %s/cbfmt/cbfmt.toml"):format(
+						cbfmt.formatCommand,
+						vim.env.XDG_CONFIG_HOME
+					)
+					return cbfmt
+				end)(),
+				require("efmls-configs.formatters.mdformat"),
 			},
 			python = {
 				require("efmls-configs.formatters.black"),
 			},
 			sass = {
-				require("efmls-configs.formatters.prettier"),
+				require("efmls-configs.formatters.stylelint"),
 			},
 			scss = {
-				require("efmls-configs.formatters.prettier"),
+				require("efmls-configs.formatters.stylelint"),
 			},
 			sh = {
 				require("efmls-configs.formatters.shfmt"),
