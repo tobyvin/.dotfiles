@@ -1,30 +1,5 @@
----@type string[][]
-local dashboard = {}
-
----@type table<string,integer>
-local _index = {
-	header = 1,
-	lazy = 2,
-	fortune = 3,
-}
-
----@type string[]
-local sections = setmetatable({}, {
-	__index = function(_, k)
-		return dashboard[_index[k]]
-	end,
-
-	__newindex = function(_, k, v)
-		if _index[k] then
-			dashboard[_index[k]] = v
-		else
-			table.insert(dashboard, v)
-			_index[k] = #dashboard
-		end
-		vim.api.nvim_exec_autocmds("User", { pattern = "DashboardUpdate" })
-	end,
-})
-
+---@param lines string[]
+---@return integer
 local function max_len(lines)
 	local max = 0
 	for _, line in ipairs(lines) do
@@ -33,9 +8,10 @@ local function max_len(lines)
 	return max
 end
 
-local function pad_lines(lines, win)
+---@param lines string[]
+---@return string[]
+local function pad_horz(lines, width)
 	local max_line_len = max_len(lines)
-	local width = vim.api.nvim_win_get_width(win)
 	local padded = {}
 	for _, line in ipairs(lines) do
 		local line_len = max_line_len
@@ -45,125 +21,155 @@ local function pad_lines(lines, win)
 	return padded
 end
 
-local function render(buf, win)
-	local rendered = {}
-	for _, lines in pairs(dashboard) do
-		vim.list_extend(rendered, pad_lines(lines, win))
+---@param lines string[]
+---@return string[]
+local function pad_vert(lines, height)
+	local padded = lines
+	for _ = 1, (height - #lines) / 3 do
+		table.insert(padded, 1, "")
 	end
-	vim.bo[buf].modifiable = true
-	vim.api.nvim_buf_set_lines(buf, 0, -1, false, rendered)
-	vim.bo[buf].modifiable = false
+	return padded
 end
 
--- if require("tobyvin.utils").normal_startup() then
--- 	return
--- end
-
-local curr_buf = vim.api.nvim_get_current_buf()
-local buf = vim.api.nvim_create_buf(false, true)
-local win = vim.api.nvim_get_current_win()
-
-vim.api.nvim_set_current_buf(buf)
-vim.api.nvim_buf_delete(curr_buf, {})
-
-vim.opt_local.textwidth = 0
-vim.opt_local.bufhidden = "wipe"
-vim.opt_local.buflisted = false
-vim.opt_local.matchpairs = ""
-vim.opt_local.swapfile = false
-vim.opt_local.buftype = "nofile"
-vim.opt_local.filetype = "dashboard"
-vim.opt_local.synmaxcol = 0
-vim.opt_local.wrap = false
-vim.opt_local.colorcolumn = ""
-vim.opt_local.foldlevel = 999
-vim.opt_local.foldcolumn = "0"
-vim.opt_local.cursorcolumn = false
-vim.opt_local.cursorline = false
-vim.opt_local.number = false
-vim.opt_local.relativenumber = false
-vim.opt_local.list = false
-vim.opt_local.spell = false
-vim.opt_local.signcolumn = "no"
-
-local function with_spacer(lines, count)
-	local spaced = lines
-	while #spaced < count do
-		table.insert(spaced, 1, "")
-	end
-	return spaced
-end
-
+---@return string[], boolean?
 local function fortune()
+	if vim.fn.executable("fortune") ~= 1 then
+		return {}
+	end
+
 	local Job = require("plenary.job")
 	local job = Job:new({ command = "fortune", args = { "-s" } })
 
-	local ok, is_exe = pcall(vim.fn.executable, "cowsay")
-	if ok and 1 == is_exe then
+	if vim.fn.executable("cowsay") == 1 then
 		job = Job:new({ command = "cowsay", writer = job })
 	end
 
 	return job:sync()
 end
 
-local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
+---@return string[]
+local function lazy_stats()
+	if not pcall(require, "lazy") then
+		return {}
+	end
 
-vim.api.nvim_create_autocmd("User", {
-	group = augroup,
-	pattern = { "DashboardUpdate" },
-	callback = function()
-		pcall(render, buf, win)
-	end,
-	desc = "render dashboard on updates",
-})
+	local updates = nil
+	if require("lazy.status").has_updates() then
+		updates = string.format("updates: %s", require("lazy.status").updates())
+	end
 
-vim.api.nvim_create_autocmd("BufHidden", {
-	group = augroup,
-	pattern = { "*" },
-	callback = function(args)
-		if args.buf == buf then
-			vim.api.nvim_del_autocmd(augroup)
-			return true
-		end
-	end,
-	desc = "clear dashboard autocmds",
-})
+	local stats = require("lazy").stats()
 
-local ok, is_exe = pcall(vim.fn.executable, "fortune")
-if ok and 1 == is_exe then
-	sections.fortune = fortune()
-
-	vim.keymap.set("n", "<C-n>", function()
-		sections.fortune = fortune()
-	end, { desc = "next cowsay", buffer = buf })
+	return {
+		string.format("startup: %s ms", stats.startuptime),
+		string.format("plugins: %s (%s loaded)", stats.count, stats.loaded),
+		updates,
+	}
 end
 
-sections.header = with_spacer({
-	"                                                    ",
-	" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
-	" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
-	" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
-	" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
-	" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
-	" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
-	"                                                    ",
-}, 15)
+---@class Dashboard
+---@field sections string[][]
+---@field augroup integer?
+---@field win integer?
+---@field buf integer?
+---@field setup function
+local M = {
+	sections = {
+		fortune(),
+		{
+			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
+			" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
+			" ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║ ",
+			" ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║ ",
+			" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
+			" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
+		},
+		lazy_stats(),
+	},
+}
 
-vim.api.nvim_create_autocmd("User", {
-	group = augroup,
-	pattern = { "LazyVimStarted" },
-	callback = function()
-		local updates = nil
-		if require("lazy.status").has_updates() then
-			updates = string.format("updates: %s", require("lazy.status").updates())
-		end
+function M:render()
+	local width = vim.api.nvim_win_get_width(self.win)
+	local height = vim.api.nvim_win_get_height(self.win)
 
-		local stats = require("lazy").stats()
-		sections.lazy = {
-			string.format("startup: %s ms", stats.startuptime),
-			string.format("plugins: %s (%s loaded)", stats.count, stats.loaded),
-			updates,
-		}
-	end,
-	desc = "dashboard lazy stats",
-})
+	local rendered = {}
+	for _, section in pairs(self.sections) do
+		vim.list_extend(rendered, pad_horz(section, width))
+		table.insert(rendered, "")
+	end
+
+	rendered = pad_vert(rendered, height)
+
+	vim.bo[self.buf].modifiable = true
+	vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, rendered)
+	vim.bo[self.buf].modifiable = false
+end
+
+function M:create_buf()
+	self.buf = vim.api.nvim_create_buf(false, true)
+	self.win = vim.api.nvim_get_current_win()
+	vim.api.nvim_set_current_buf(self.buf)
+
+	local opts = { scope = "local", win = self.win }
+
+	vim.bo[self.buf].textwidth = 0
+	vim.bo[self.buf].bufhidden = "wipe"
+	vim.bo[self.buf].buflisted = false
+	vim.bo[self.buf].matchpairs = ""
+	vim.bo[self.buf].swapfile = false
+	vim.bo[self.buf].buftype = "nofile"
+	vim.bo[self.buf].filetype = "dashboard"
+	vim.bo[self.buf].synmaxcol = 0
+	vim.api.nvim_set_option_value("wrap", false, opts)
+	vim.api.nvim_set_option_value("colorcolumn", "", opts)
+	vim.api.nvim_set_option_value("foldlevel", 999, opts)
+	vim.api.nvim_set_option_value("foldcolumn", "0", opts)
+	vim.api.nvim_set_option_value("cursorcolumn", false, opts)
+	vim.api.nvim_set_option_value("cursorline", false, opts)
+	vim.api.nvim_set_option_value("number", false, opts)
+	vim.api.nvim_set_option_value("relativenumber", false, opts)
+	vim.api.nvim_set_option_value("list", false, opts)
+	vim.api.nvim_set_option_value("spell", false, opts)
+	vim.api.nvim_set_option_value("signcolumn", "no", opts)
+
+	M.augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
+	vim.api.nvim_create_autocmd({ "BufHidden", "BufDelete", "BufLeave" }, {
+		group = M.augroup,
+		pattern = { "*" },
+		callback = function(args)
+			if args.buf == M.buf then
+				vim.api.nvim_del_augroup_by_id(M.augroup)
+				M.buf = nil
+				M.win = nil
+				M.augroup = nil
+				return true
+			end
+		end,
+		desc = "clear dashboard autocmds",
+	})
+end
+
+function M.setup()
+	if M.buf == nil or not vim.api.nvim_buf_is_valid(M.buf) then
+		M:create_buf()
+	end
+
+	vim.keymap.set("n", "<C-n>", function()
+		M.sections[1] = fortune()
+		M:render()
+	end, { desc = "next cowsay", buffer = M.buf })
+
+	vim.api.nvim_create_autocmd("User", {
+		group = M.augroup,
+		pattern = { "LazyVimStarted" },
+		callback = function()
+			M.sections[3] = lazy_stats()
+			M:render()
+		end,
+		desc = "dashboard lazy stats",
+	})
+
+	M:render()
+end
+
+return M

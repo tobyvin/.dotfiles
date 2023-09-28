@@ -33,10 +33,12 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 })
 
 vim.api.nvim_create_autocmd("VimEnter", {
-	group = vim.api.nvim_create_augroup("dashboard", { clear = true }),
+	group = augroup,
 	callback = function()
 		if vim.fn.argc() == 0 then
-			require("tobyvin.utils.dashboard")
+			local curr_buf = vim.api.nvim_get_current_buf()
+			require("tobyvin.utils.dashboard").setup()
+			vim.api.nvim_buf_delete(curr_buf, {})
 		end
 	end,
 	desc = "show dashboard on startup",
