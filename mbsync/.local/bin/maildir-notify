@@ -1,31 +1,24 @@
 #!/bin/sh
 
-if [ $# = 0 ]; then
-	for d in "$XDG_DATA_HOME"/mail/*; do
-		set -- "$@" "${d}/INBOX"
-	done
-fi
-
-for i; do
-	set -- "$@" "${i}/new"
+for maildir; do
+	echo "Monitoring $maildir"
+	set -- "$@" "${maildir}/new"
 	shift
 done
 
-echo "Watching $*"
-
 inotifywait --monitor --event create --event moved_to "$@" |
 	while read -r dir _action file; do
-		inbox="$(dirname "$dir")"
-		category="$(dirname "$inbox" | xargs basename)"
+		maildir="$(dirname "$dir")"
+		category="$(dirname "$maildir" | xargs basename)"
 		from="$(grep -m1 -oP '(?<=^From: ).*' "${dir}${file}")"
 		subject="$(grep -m1 -oP '(?<=^Subject: ).*' "${dir}${file}")"
 
-		if [ ! -e "$inbox/new/$file" ]; then
-			if [ -e "$inbox/cur/$file" ]; then
-				from="$(grep -m1 -oP '(?<=^From: ).*' "$inbox/cur/$file")"
-				subject="$(grep -m1 -oP '(?<=^Subject: ).*' "$inbox/cur/$file")"
+		if [ ! -e "$maildir/new/$file" ]; then
+			if [ -e "$maildir/cur/$file" ]; then
+				from="$(grep -m1 -oP '(?<=^From: ).*' "$maildir/cur/$file")"
+				subject="$(grep -m1 -oP '(?<=^Subject: ).*' "$maildir/cur/$file")"
 			else
-				echo "Failed to read message. File: $file"
+				echo "Failed to read message. File: $file" 1>&2
 				continue
 			fi
 		fi
