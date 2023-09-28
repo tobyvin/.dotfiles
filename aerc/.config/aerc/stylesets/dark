@@ -1,7 +1,5 @@
 # vim: ft=dosini
 
-*.default=true
-
 title.fg=yellow
 title.bg=236
 title.bold=true
@@ -21,6 +19,8 @@ border.fg=blue
 statusline_default.fg=gray
 statusline_*.bg=236
 
+tab.reverse=false
+
 msglist*.X-Sourcehut-Patchset-Update,APPLIED.fg = blue
 msglist*.X-Sourcehut-Patchset-Update,APPLIED.fg = blue
 msglist*.X-Sourcehut-Patchset-Update,APPROVED.fg = green
@@ -38,11 +38,12 @@ msglist_unread.fg=green
 msglist_read.fg=blue
 msglist_marked.fg=yellow
 msglist_marked.reverse=true
+msglist_pill.reverse=false
 
 dirlist_default.fg=gray
 
 *.selected.bg=237
-*.selected.fg=white
+*.selected.fg=gray
 *.selected.bold=true
 
 selector_default.fg=gray
