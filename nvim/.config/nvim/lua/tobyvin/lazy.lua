@@ -31,4 +31,11 @@ require("lazy").setup("plugins", {
 	ui = {
 		border = "single",
 	},
+	performance = {
+		rtp = {
+			disabled_plugins = {
+				"netrwPlugin",
+			},
+		},
+	},
 })

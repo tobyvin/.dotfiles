@@ -95,6 +95,10 @@ vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = augroup,
 	callback = function(args)
+		if not vim.bo[args.buf].buflisted then
+			return
+		end
+
 		local file = vim.loop.fs_realpath(args.match) or args.match
 		local parent = vim.fn.fnamemodify(file, ":h")
 		local stat = vim.loop.fs_stat(parent)
