@@ -27,15 +27,6 @@ vim.api.nvim_create_autocmd("LspAttach", {
 			})
 		end
 
-		if client.server_capabilities.documentFormattingProvider then
-			vim.keymap.set("n", "gqq", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
-			vim.keymap.set("n", "<leader>lf", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
-		end
-
-		if client.server_capabilities.documentRangeFormattingProvider then
-			vim.keymap.set("v", "<leader>lf", vim.lsp.buf.format, { desc = "format", buffer = args.buf })
-		end
-
 		if client.server_capabilities.hoverProvider then
 			vim.keymap.set({ "n", "v" }, "K", vim.lsp.buf.hover, { desc = "hover", buffer = args.buf })
 		end
