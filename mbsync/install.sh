@@ -2,26 +2,17 @@
 
 if command -v mbsync >/dev/null; then
 	systemctl --user enable --now mbsync.service
+	systemctl --user enable --now maildir-notify@gmail.service
+	systemctl --user enable --now maildir-notify@porkbun.service
 else
-	cat <<-EOF
-		command not found: mbsync
-
-		install 'isync' package:
-		  paru -S isync
-	EOF
+	printf "%s: command not found: mbsync\n" "$0"
+	exit 1
 fi
 
 if command -v goimapnotify >/dev/null; then
 	systemctl --user enable --now goimapnotify@gmail.service
 	systemctl --user enable --now goimapnotify@porkbun.service
 else
-	cat <<-EOF
-		command not found: goimapnotify
-
-		install 'goimapnotify' package:
-		  paru -S goimapnotify
-	EOF
+	printf "%s: command not found: goimapnotify\n" "$0"
+	exit 1
 fi
-
-systemctl --user enable --now maildir-notify@gmail.service
-systemctl --user enable --now maildir-notify@porkbun.service
