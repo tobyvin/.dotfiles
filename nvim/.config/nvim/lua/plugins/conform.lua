@@ -10,7 +10,7 @@ local M = {
 			django = { "djlint" },
 			htmldjango = { "djlint" },
 			["jinja.html"] = { "djlint" },
-			markdown = { "markdownlint", "cbfmt" },
+			markdown = { "prettier", "markdownlint", "cbfmt" },
 			python = { "black" },
 			sass = { "stylua" },
 			scss = { "stylua" },
@@ -35,15 +35,21 @@ local M = {
 }
 
 function M:init()
+	local args = { lsp_fallback = "always" }
 	vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
 
 	vim.keymap.set({ "n", "v" }, "gqq", function()
-		return require("conform").format()
+		return require("conform").format(args)
 	end, { desc = "format" })
 
 	vim.keymap.set({ "n", "v" }, "<leader>lf", function()
-		return require("conform").format()
+		return require("conform").format(args)
 	end, { desc = "format" })
+end
+
+function M:config(opts)
+	require("conform.util").add_formatter_args(require("conform.formatters.prettier"), { "--prose-wrap", "always" })
+	require("conform").setup(opts)
 end
 
 return M
