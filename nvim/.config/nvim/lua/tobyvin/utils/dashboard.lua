@@ -23,59 +23,39 @@ end
 
 ---@param lines string[]
 ---@return string[]
-local function pad_vert(lines, height)
-	local padded = lines
-	for _ = 1, (height - #lines) / 3 do
-		table.insert(padded, 1, "")
+local function pad_top(lines, height)
+	if #lines < height then
+		for _ = 1, (height - #lines) do
+			table.insert(lines, 1, "")
+		end
 	end
-	return padded
-end
-
----@return string[], boolean?
-local function fortune()
-	if vim.fn.executable("fortune") ~= 1 then
-		return {}
-	end
-
-	local Job = require("plenary.job")
-	local job = Job:new({ command = "fortune", args = { "-s" } })
-
-	if vim.fn.executable("cowsay") == 1 then
-		job = Job:new({ command = "cowsay", writer = job })
-	end
-
-	return job:sync()
-end
-
----@return string[]
-local function lazy_stats()
-	if not pcall(require, "lazy") then
-		return {}
-	end
-
-	local updates = nil
-	if require("lazy.status").has_updates() then
-		updates = string.format("updates: %s", require("lazy.status").updates())
-	end
-
-	local stats = require("lazy").stats()
-
-	return {
-		string.format("startup: %s ms", stats.startuptime),
-		string.format("plugins: %s (%s loaded)", stats.count, stats.loaded),
-		updates,
-	}
+	return lines
 end
 
 ---@class Dashboard
----@field sections string[][]
+---@field sections (string[] | fun():string[])[]
+---@field rendered string[][]
 ---@field augroup integer?
 ---@field win integer?
 ---@field buf integer?
 ---@field setup function
 local M = {
+	rendered = {},
 	sections = {
-		fortune(),
+		function()
+			if vim.fn.executable("fortune") ~= 1 then
+				return {}
+			end
+
+			local Job = require("plenary.job")
+			local job = Job:new({ command = "fortune", args = { "-s" } })
+
+			if vim.fn.executable("cowsay") == 1 then
+				job = Job:new({ command = "cowsay", writer = job })
+			end
+
+			return pad_top(job:sync(), (vim.api.nvim_win_get_height(0) / 3) - 3)
+		end,
 		{
 			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
 			" ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║ ",
@@ -84,42 +64,67 @@ local M = {
 			" ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║ ",
 			" ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝ ",
 		},
-		lazy_stats(),
+		function()
+			if not pcall(require, "lazy") then
+				return {}
+			end
+
+			local stats = require("lazy").stats()
+			local lines = {
+				string.format("startup: %s ms", stats.startuptime),
+				string.format("plugins: %s (%s loaded)", stats.count, stats.loaded),
+			}
+
+			if require("lazy.status").has_updates() then
+				table.insert(lines, string.format("updates: %s", require("lazy.status").updates()))
+			end
+
+			return lines
+		end,
 	},
 }
 
-function M:render()
-	local width = vim.api.nvim_win_get_width(self.win)
-	local height = vim.api.nvim_win_get_height(self.win)
+function M.render(index)
+	if M.buf == nil or not vim.api.nvim_buf_is_valid(M.buf) then
+		M.create_buf()
+	end
 
+	local width = vim.api.nvim_win_get_width(M.win)
 	local rendered = {}
-	for _, section in pairs(self.sections) do
-		vim.list_extend(rendered, pad_horz(section, width))
+
+	for i, section in pairs(M.sections) do
+		if M.rendered[i] == nil or index == nil or index == i then
+			if type(section) == "table" then
+				M.rendered[i] = pad_horz(section, width)
+			elseif type(section) == "function" then
+				M.rendered[i] = pad_horz(section(), width)
+			end
+		end
+
+		vim.list_extend(rendered, M.rendered[i])
 		table.insert(rendered, "")
 	end
 
-	rendered = pad_vert(rendered, height)
-
-	vim.bo[self.buf].modifiable = true
-	vim.api.nvim_buf_set_lines(self.buf, 0, -1, false, rendered)
-	vim.bo[self.buf].modifiable = false
+	vim.bo[M.buf].modifiable = true
+	vim.api.nvim_buf_set_lines(M.buf, 0, -1, false, rendered)
+	vim.bo[M.buf].modifiable = false
 end
 
-function M:create_buf()
-	self.buf = vim.api.nvim_create_buf(false, true)
-	self.win = vim.api.nvim_get_current_win()
-	vim.api.nvim_set_current_buf(self.buf)
+function M.create_buf()
+	M.buf = vim.api.nvim_create_buf(false, true)
+	M.win = vim.api.nvim_get_current_win()
+	vim.api.nvim_set_current_buf(M.buf)
 
-	local opts = { scope = "local", win = self.win }
+	vim.bo[M.buf].textwidth = 0
+	vim.bo[M.buf].bufhidden = "wipe"
+	vim.bo[M.buf].buflisted = false
+	vim.bo[M.buf].matchpairs = ""
+	vim.bo[M.buf].swapfile = false
+	vim.bo[M.buf].buftype = "nofile"
+	vim.bo[M.buf].filetype = "dashboard"
+	vim.bo[M.buf].synmaxcol = 0
 
-	vim.bo[self.buf].textwidth = 0
-	vim.bo[self.buf].bufhidden = "wipe"
-	vim.bo[self.buf].buflisted = false
-	vim.bo[self.buf].matchpairs = ""
-	vim.bo[self.buf].swapfile = false
-	vim.bo[self.buf].buftype = "nofile"
-	vim.bo[self.buf].filetype = "dashboard"
-	vim.bo[self.buf].synmaxcol = 0
+	local opts = { scope = "local", win = M.win }
 	vim.api.nvim_set_option_value("wrap", false, opts)
 	vim.api.nvim_set_option_value("colorcolumn", "", opts)
 	vim.api.nvim_set_option_value("foldlevel", 999, opts)
@@ -151,20 +156,18 @@ end
 
 function M.setup()
 	if M.buf == nil or not vim.api.nvim_buf_is_valid(M.buf) then
-		M:create_buf()
+		M.create_buf()
 	end
 
 	vim.keymap.set("n", "<C-n>", function()
-		M.sections[1] = fortune()
-		M:render()
+		M.render(1)
 	end, { desc = "next cowsay", buffer = M.buf })
 
 	vim.api.nvim_create_autocmd("User", {
 		group = M.augroup,
-		pattern = { "LazyVimStarted" },
+		pattern = { "LazyVimStarted", "LazyLoad", "LazyCheck" },
 		callback = function()
-			M.sections[3] = lazy_stats()
-			M:render()
+			M.render(3)
 		end,
 		desc = "dashboard lazy stats",
 	})

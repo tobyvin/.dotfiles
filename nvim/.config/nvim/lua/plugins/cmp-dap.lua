@@ -9,6 +9,7 @@ local M = {
 }
 
 function M:config()
+	---@diagnostic disable-next-line: missing-fields
 	require("cmp").setup.filetype({ "dap-repl" }, {
 		sources = {
 			{ name = "dap" },

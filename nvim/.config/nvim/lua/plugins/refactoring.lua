@@ -9,7 +9,7 @@ local M = {
 
 function M.init()
 	vim.keymap.set("v", "<leader>rr", function()
-		require("refactoring").select_refactor()
+		require("refactoring").select_refactor({})
 	end, { desc = "refactor" })
 
 	vim.keymap.set("n", "<leader>ri", function()
