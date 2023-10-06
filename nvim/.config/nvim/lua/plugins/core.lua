@@ -1,14 +1,16 @@
+local function setup_with(func_name)
+	---@param plugin LazyPlugin
+	return function(plugin, opts)
+		pcall(require, plugin.main)[func_name](opts)
+	end
+end
+
 ---@type LazySpec[]
 local M = {
 	"nvim-lua/plenary.nvim",
 	{
 		"folke/lazy.nvim",
 		version = "*",
-		init = function()
-			vim.keymap.set("n", "<leader>p", function()
-				require("lazy").home()
-			end, { desc = "plugins" })
-		end,
 	},
 	{
 		"luukvbaal/statuscol.nvim",
@@ -62,28 +64,12 @@ local M = {
 		build = "go build -o ~/.local/bin",
 	},
 	{
-		"toppair/peek.nvim",
-		build = "deno task --quiet build:fast",
-		cond = function()
-			return vim.fn.executable("deno") == 1
-		end,
+		"mfussenegger/nvim-jdtls",
+		ft = "java",
 		opts = {
-			auto_load = false,
-			close_on_bdelete = true,
-			syntax = true,
-			update_on_change = true,
-			app = "webview",
-			filetype = { "markdown" },
+			cmd = { "jdtls" },
 		},
-		init = function()
-			vim.api.nvim_create_user_command("PeekOpen", function()
-				require("peek").open()
-			end, { desc = "open peek.nvim markdown preview" })
-
-			vim.api.nvim_create_user_command("PeekClose", function()
-				require("peek").close()
-			end, { desc = "close peek.nvim markdown preview" })
-		end,
+		config = setup_with("start_or_attach"),
 	},
 	{
 		"anuvyklack/pretty-fold.nvim",
