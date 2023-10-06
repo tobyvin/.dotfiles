@@ -4,18 +4,18 @@ local M = {
 	"stevearc/oil.nvim",
 	version = "*",
 	cmd = { "Oil", "BufNew" },
-	keys = {
-		"-",
-	},
 	opts = {
 		default_file_explorer = true,
 		skip_confirm_for_simple_edits = true,
+		view_options = {
+			show_hidden = true,
+		},
 	},
 }
 
 function M:init()
 	vim.keymap.set("n", "-", function()
-		return require("oil").open()
+		require("oil").open()
 	end, { desc = "Open parent directory" })
 
 	if vim.fn.argc() == 1 then
