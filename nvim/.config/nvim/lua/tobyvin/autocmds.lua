@@ -58,40 +58,6 @@ vim.api.nvim_create_autocmd("TermOpen", {
 	desc = "move to bottom of terminal",
 })
 
-vim.api.nvim_create_autocmd("FocusLost", {
-	group = augroup,
-	pattern = "*",
-	callback = function()
-		vim.g.system_clipboard = {
-			regtype = vim.fn.getregtype("+"),
-			contents = vim.split(vim.fn.getreg("+"), "\n"),
-		}
-	end,
-	desc = "clipboard sync",
-})
-
-vim.api.nvim_create_autocmd({ "VimEnter", "FocusGained" }, {
-	group = augroup,
-	pattern = "*",
-	callback = function(args)
-		local system_clipboard = {
-			regtype = vim.fn.getregtype("+"),
-			contents = vim.split(vim.fn.getreg("+"), "\n"),
-		}
-
-		if
-			args.event == "VimEnter"
-			or vim.g.system_clipboard ~= nil and not vim.deep_equal(vim.g.system_clipboard, system_clipboard)
-		then
-			require("neoclip")
-			require("neoclip.storage").insert(system_clipboard, "yanks")
-		end
-
-		vim.g.system_clipboard = nil
-	end,
-	desc = "clipboard sync",
-})
-
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = augroup,
 	callback = function(args)

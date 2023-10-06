@@ -3,7 +3,6 @@ vim.g.maplocalleader = vim.g.mapleader
 
 vim.opt.background = "dark"
 vim.opt.breakindent = true
-vim.opt.clipboard = "unnamedplus"
 vim.opt.colorcolumn = "+1"
 vim.opt.completeopt = { "menuone", "noselect", "noinsert" }
 vim.opt.conceallevel = 2

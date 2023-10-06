@@ -7,10 +7,6 @@ local M = {
 			"nvim-telescope/telescope-fzf-native.nvim",
 			build = "make",
 		},
-		{
-			"AckslD/nvim-neoclip.lua",
-			config = true,
-		},
 		"nvim-telescope/telescope-live-grep-args.nvim",
 		"nvim-telescope/telescope-dap.nvim",
 		"nvim-telescope/telescope-symbols.nvim",
@@ -95,7 +91,6 @@ function M:config(opts)
 	require("telescope").setup(opts)
 	require("telescope").load_extension("fzf")
 	require("telescope").load_extension("undo")
-	require("telescope").load_extension("neoclip")
 
 	local builtin = require("telescope.builtin")
 	local extensions = require("telescope").extensions
@@ -133,7 +128,6 @@ function M:config(opts)
 	vim.keymap.set("n", "<leader>gT", builtin.git_stash, { desc = "stash" })
 	vim.keymap.set("n", "<leader>fg", extensions.live_grep_args.live_grep_args, { desc = "live grep" })
 	vim.keymap.set("n", "<leader>fu", extensions.undo.undo, { desc = "undo" })
-	vim.keymap.set("n", "<leader>fp", extensions.neoclip.default, { desc = "clipboard" })
 
 	vim.keymap.set("v", "<leader>fg", function()
 		require("telescope-live-grep-args.shortcuts").grep_visual_selection()
