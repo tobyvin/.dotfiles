@@ -35,6 +35,10 @@ else
 				"$target" 'tmux -L ssh start-server \; display -p "#{socket_path}"'
 		)
 
+		if [ -z "$tmux_local_sock" ] || [ -z "$tmux_remote_sock" ]; then
+			exit 1
+		fi
+
 		tmux -L ssh new-session -ds "$target" \
 			ssh -t \
 			-o "ControlMaster=auto" \
