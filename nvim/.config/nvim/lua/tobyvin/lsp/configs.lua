@@ -10,6 +10,7 @@ local M = {
 			},
 		},
 	},
+	-- biome = {},
 	clangd = {},
 	cssls = {},
 	cssmodules_ls = {},
@@ -69,6 +70,7 @@ local M = {
 			},
 		},
 	},
+	ocamllsp = {},
 	omnisharp = {
 		-- cmd = { "dotnet", "/home/tobyv/.local/share/nvim/mason/packages/omnisharp/OmniSharp.dll" },
 		cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
