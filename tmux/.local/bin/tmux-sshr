@@ -27,8 +27,8 @@ if [ "$target" = "$HOST" ]; then
 	tmux detach -E 'tmux new -A'
 else
 	if ! tmux -L ssh has-session -t "$target"; then
-		local_socket=$(tmux -L ssh start-server \; display -p "#{socket_path}")
-		remote_socket=$(
+		tmux_local_sock=$(tmux -L ssh start-server \; display -p "#{socket_path}")
+		tmux_remote_sock=$(
 			ssh -T \
 				-o "ControlMaster=auto" \
 				-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
@@ -39,7 +39,8 @@ else
 			ssh -t \
 			-o "ControlMaster=auto" \
 			-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
-			-R "$local_socket":"$remote_socket" \
+			-R "2222:localhost:22" \
+			-R "$tmux_remote_sock:$tmux_local_sock" \
 			"$target" "zsh -l -c 'tmux new -A'"
 	fi
 

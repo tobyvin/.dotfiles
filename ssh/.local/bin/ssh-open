@@ -1,0 +1,8 @@
+#!/usr/bin/sh
+
+HOSTNAME=$(uname -n)
+
+printf '%s' "$1" | sed \
+	-e "s/localhost/$HOSTNAME/" \
+	-e "s/127\(\.[0-9]\{1,3\}\)\{3\}/$HOSTNAME/" |
+	xargs -I{} ssh -l "$USER" -p 2222 localhost "xdg-open '{}'"
