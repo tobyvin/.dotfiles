@@ -44,6 +44,7 @@ else
 			-o "ControlMaster=auto" \
 			-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
 			-R "2222:localhost:22" \
+			-R "${XDG_RUNTIME_DIR}/xdg-open.socket:${XDG_RUNTIME_DIR}/xdg-open.socket" \
 			-R "$tmux_remote_sock:$tmux_local_sock" \
 			"$target" "zsh -l -c 'tmux new -A'"
 	fi
