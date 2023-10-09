@@ -8,6 +8,11 @@ vim.keymap.set("v", "<a-j>", "<CMD>m '>+1<CR>gv=gv", { desc = "move selection do
 
 vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], { desc = "CTRL-W" })
 
+vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]], { desc = "yank lines into selection register" })
+vim.keymap.set({ "n", "v" }, "<leader>Y", [["+Y]], { desc = "yank lines into selection register" })
+vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "put lines from selection register" })
+vim.keymap.set({ "n", "v" }, "<leader>P", [["+P]], { desc = "put lines from selection register" })
+
 vim.keymap.set("n", "<leader>sr", require("tobyvin.utils.session").read, { desc = "read session" })
 vim.keymap.set("n", "<leader>sw", require("tobyvin.utils.session").write, { desc = "write session" })
 
