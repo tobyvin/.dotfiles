@@ -3,7 +3,8 @@
 local M = {
 	"stevearc/oil.nvim",
 	version = "*",
-	cmd = { "Oil", "BufNew" },
+	cmd = { "Oil" },
+	event = { "BufNew", "ColorScheme", "SessionLoadPost" },
 	opts = {
 		default_file_explorer = true,
 		skip_confirm_for_simple_edits = true,

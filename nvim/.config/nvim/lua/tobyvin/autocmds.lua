@@ -9,22 +9,15 @@ vim.api.nvim_create_autocmd("TextYankPost", {
 	desc = "Highlight yank",
 })
 
--- HACK: Temporary fix for statusline background issue when nvim-cmp menu closes
--- Ref: https://github.com/neovim/neovim/issues/22614
-vim.api.nvim_create_autocmd("CmdlineLeave", {
-	group = augroup,
-	pattern = "*",
-	callback = function()
-		vim.schedule(function()
-			vim.o.background = "dark"
-		end)
-	end,
-	desc = "Temporary highlight fix",
-})
-
 vim.api.nvim_create_autocmd("VimLeavePre", {
 	group = vim.api.nvim_create_augroup("session", { clear = true }),
 	callback = function()
+		-- HACK: Workaround for bug preventing restoration of current/alt buffers.
+		-- See: https://github.com/stevearc/oil.nvim/issues/29
+		if vim.bo.filetype == "oil" then
+			require("oil").close()
+		end
+
 		if vim.fn.argc() == 0 and #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
 			pcall(require("tobyvin.utils.session").write)
 		end
@@ -61,7 +54,8 @@ vim.api.nvim_create_autocmd("TermOpen", {
 vim.api.nvim_create_autocmd("BufWritePre", {
 	group = augroup,
 	callback = function(args)
-		if not vim.bo[args.buf].buflisted then
+		-- HACK: Workaround for writing oil.nvim buffers
+		if not vim.bo[args.buf].buflisted or vim.bo.filetype == "oil" then
 			return
 		end
 
