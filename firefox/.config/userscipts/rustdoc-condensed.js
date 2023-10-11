@@ -22,7 +22,7 @@
   // get the currently selected doc item from URL's hash fragment
   // e.g., in `struct.BStr.html#method.words`, this returns `method.words`.
   function getPageId() {
-    var id = document.location.href.split("#")[1];
+    const id = document.location.href.split("#")[1];
     if (id) {
       return id.split("?")[0].split("&")[0];
     }
@@ -50,7 +50,7 @@
       // If it's already expanded, then let it be. In newer versions of
       // rustdoc, collapsing everything doesn't collapse the methods, so we
       // don't need to do anything.
-      if (toggles[j].innerText == "[−]") {
+      if (toggles[j].innerText === "[−]") {
         continue;
       }
       toggles[j].click();
