@@ -1,10 +1,18 @@
 #!/bin/sh
 # shellcheck disable=SC2035,SC2016
 
+set -e
+
 CDPATH='' cd -- "$(dirname -- "$0")" || exit
 
 printf "%s: Removing bad links\n" "$0"
-fd . .. -Htl -E ./**/ -x sh -c '[ -e "{}" ] || (readlink -m "{}" | grep '"$PWD"' -q && rm -v "{}")'
+git diff-tree --no-commit-id --name-status e6051a3..HEAD -r |
+	grep -oP 'D\t[^/]+/\K(.*)' |
+	while read -r f; do
+		if [ -L "../$f" ] && [ ! -e "../$f" ]; then
+			rm -v "../$f"
+		fi
+	done
 
 printf "%s: Stowing packages\n" "$0"
 stow "$@" */
