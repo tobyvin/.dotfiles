@@ -7,7 +7,7 @@ After=network-online.target gpg-agent.socket network.target dbus.socket
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/mbsync -Vac ${XDG_CONFIG_HOME}/mbsync/mbsyncrc
+ExecStart=/usr/bin/mbsync -Vc ${XDG_CONFIG_HOME}/mbsync/mbsyncrc %i
 
 [Install]
 WantedBy=default.target

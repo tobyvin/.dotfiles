@@ -1,9 +1,10 @@
 [Unit]
 Description=Generates a ranked addressbook from a maildir folder
+After=mbsync@.service
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/maildir-rank-addr --maildir=${XDG_DATA_HOME}/mail/%i/INBOX --outputpath=${XDG_DATA_HOME}/mail/%i/addressbook.tsv
 
 [Install]
-WantedBy=default.target
+WantedBy=mbsync@.service

@@ -1,9 +1,0 @@
-[Unit]
-Description=Addressbook generation timer
-
-[Timer]
-OnUnitActiveSec=12h
-Unit=maildir-rank-addr@%i.service
-
-[Install]
-WantedBy=timers.target
