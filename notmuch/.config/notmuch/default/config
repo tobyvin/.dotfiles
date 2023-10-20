@@ -5,7 +5,6 @@ name=Toby Vincent
 primary_email=tobyv@tobyvin.dev
 other_email=tobyv13@gmail.com;tovince@siue.edu;
 [new]
-tags=unread;inbox;
 ignore=.mbsyncstate;.uidvalidity;addressbook.tsv;
 [search]
 exclude_tags=deleted;spam;
