@@ -31,6 +31,16 @@ reference = true
 
 [diff]
 colorMoved = default
+tool = difft
+
+[difftool]
+prompt = false
+
+[difftool "difft"]
+cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+difftool = true
 
 [merge]
 tool = nvimdiff
