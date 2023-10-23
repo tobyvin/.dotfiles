@@ -1,4 +1,4 @@
-" vim: filetype=vim
+" vim: filetype=tridactyl
 
 " tridactyl config
 " Ref: https://raw.githubusercontent.com/glacambre/.dotfiles/master/default/.config/tridactyl/tridactylrc
@@ -14,6 +14,8 @@ alias jse js 'use strict'; function $all(q, root=document) { return Array.from(r
 alias jsep js -p 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
 alias video_with jse let video; if (document.activeElement.name == 'VIDEO') video = document.activeElement; else video = $all('video').find(v => !v.paused); if (!video) video = $('video');
 
+set profiledir default
+set auconcreatecontainer true
 set modeindicatormodes {"normal":"false","video":"false"}
 set findcase smart
 set smoothscroll true
@@ -46,17 +48,100 @@ bind x tabclose
 bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | exclaim_quiet mpv --loop
 bind gv mode video
+bind gx hint -W mpvsafe
 
 bindurl ^https://docs.rs/[^/]+/\d+.\d+.\d+/[^/]+/ zz composite jsb tri.native.run('cat /home/tobyv/.config/firefox/userscripts/rustdoc-condensed.js') | js -p eval(JS_ARG.content)
-bindurl ^https://www.youtube.com/watch\? v mode video
 
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
 autocmd DocStart play.rust-lang.org mode ignore
-autocmd DocLoad ^https://www.youtube.com/watch\? mode video
 autocmd HistoryState https://jellyfin.tobyvin.dev/web/#!/video mode video
 
 fixamo_quiet
 
 guiset_quiet hoverlink right
 guiset_quiet tabs count
+
+autocontain -s tiktok\.com tiktok
+autocontain -s walmart\.com walmart
+
+autocontain -s twitter\.com twitter
+autocontain -s x\.com twitter
+
+" https://github.com/krober/contain-amazon/blob/master/src/background.js
+autocontain -s amazon\.(cn|in|co\.jp|com\.sg|com\.tr|fr|de|it|nl|es|co\.uk|ca|com\.mx|com\.au|com\.br|ae|se|sg|com\.be|eg|pl|sa|clothing|com|company|cruises|dog|energy|express|fund|game|gd|gent|hockey|international|jobs|kiwi|ltda|press|re|salon|shopping|soccer|tickets|tienda|tours|training|tv|wiki) amazon
+autocontain -s audible\.(com|co\.uk|fr|com\.au|de|it|ca|in|co\.jp) amazon
+autocontain -s wholefoodsmarket\.(com|co\.uk) amazon
+autocontain -s aboutamazon\.com amazon
+autocontain -s alexa\.com amazon
+autocontain -s amazoninspire\.com amazon
+autocontain -s amazonpay\.in amazon
+autocontain -s amazonteam\.org amazon
+autocontain -s amzn\.to amazon
+autocontain -s awscloud\.com amazon
+autocontain -s awsevents\.com amazon
+autocontain -s primevideo\.com amazon
+autocontain -s twitch\.(com|tv) amazon
+autocontain -s ext-twitch\.tv amazon
+autocontain -s 6pm\.com amazon
+autocontain -s abebooks\.com amazon
+autocontain -s acx\.com amazon
+autocontain -s bookdepository\.com amazon
+autocontain -s boxofficemojo\.com amazon
+autocontain -s comixology\.com amazon
+autocontain -s createspace\.com amazon
+autocontain -s dpreview\.com amazon
+autocontain -s eastdane\.com amazon
+autocontain -s fabric\.com amazon
+autocontain -s goodreads\.com amazon
+autocontain -s imdb\.com amazon
+autocontain -s junglee\.com amazon
+autocontain -s lab126\.com amazon
+autocontain -s mturk\.com amazon
+autocontain -s seattlespheres\.com amazon
+autocontain -s shopbop\.com amazon
+autocontain -s souq\.com amazon
+autocontain -s tenmarks\.com amazon
+autocontain -s withoutabox\.com amazon
+autocontain -s woot\.com amazon
+autocontain -s zappos\.com amazon
+
+" https://github.com/mozilla/contain-facebook/blob/main/src/background.js
+autocontain -s facebook\.(com|net) facebook
+autocontain -s fb\.(com|me) facebook
+autocontain -s fbcdn\.(com|net) facebook
+autocontain -s fbsbx\.com facebook
+autocontain -s tfbnw\.net facebook
+autocontain -s appspot\.com facebook
+autocontain -s online-metrix\.net facebook
+autocontain -s edgekey\.net facebook
+autocontain -s facebookrecruiting\.com facebook
+autocontain -s facebookblueprint\.com facebook
+autocontain -s fburl\.com facebook
+autocontain -s internalfb\.com facebook
+autocontain -s instagram\.com facebook
+autocontain -s cdninstagram\.com facebook
+autocontain -s akamaihd\.net facebook
+autocontain -s edgesuite\.net facebook
+autocontain -s messenger\.com facebook
+autocontain -s m\.me facebook
+autocontain -s messengerdevelopers\.com facebook
+autocontain -s atdmt\.com facebook
+autocontain -s workplace\.com facebook
+autocontain -s onavo\.com facebook
+autocontain -s oculus\.com facebook
+autocontain -s oculusvr\.com facebook
+autocontain -s oculusbrand\.com facebook
+autocontain -s oculusforbusiness\.com facebook
+autocontain -s mapwith\.ai facebook
+autocontain -s wit\.ai facebook
+autocontain -s mapillary\.com facebook
+autocontain -s oversightboard\.com facebook
+autocontain -s oversightboard\.com facebook
+autocontain -s bulletin\.com facebook
+autocontain -s facebookbrand\.com facebook
+autocontain -s metacareers\.com facebook
+autocontain -s meta\.com facebook
+autocontain -s metaque\.st facebook
+autocontain -s novi\.com facebook
+autocontain -s threads\.net facebook

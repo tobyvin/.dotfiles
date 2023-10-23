@@ -84,6 +84,10 @@ local M = {
 		"hjson/vim-hjson",
 		event = "BufReadPre",
 	},
+	{
+		"tridactyl/vim-tridactyl",
+		event = "BufReadPre",
+	},
 }
 
 return M
