@@ -73,7 +73,7 @@ autocontain -s abebooks\.com amazon
 autocontain -s aboutamazon\.com amazon
 autocontain -s acx\.com amazon
 autocontain -s alexa\.com amazon
-autocontain -s amazon\.(cn|in|co\.jp|com\.sg|com\.tr|fr|de|it|nl|es|co\.uk|ca|com\.mx|com\.au|com\.br|ae|se|sg|com\.be|eg|pl|sa|clothing|com|company|cruises|dog|energy|express|fund|game|gd|gent|hockey|international|jobs|kiwi|ltda|press|re|salon|shopping|soccer|tickets|tienda|tours|training|tv|wiki) amazon
+autocontain -s (?<!gaming\.)amazon\.(cn|in|co\.jp|com\.sg|com\.tr|fr|de|it|nl|es|co\.uk|ca|com\.mx|com\.au|com\.br|ae|se|sg|com\.be|eg|pl|sa|clothing|com|company|cruises|dog|energy|express|fund|game|gd|gent|hockey|international|jobs|kiwi|ltda|press|re|salon|shopping|soccer|tickets|tienda|tours|training|tv|wiki) amazon
 autocontain -s amazoninspire\.com amazon
 autocontain -s amazonpay\.in amazon
 autocontain -s amazonteam\.org amazon
