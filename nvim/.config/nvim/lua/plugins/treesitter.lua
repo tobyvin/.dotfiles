@@ -7,6 +7,10 @@ local M = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		"mfussenegger/nvim-ts-hint-textobject",
 		{
+			"LiadOz/nvim-dap-repl-highlights",
+			config = true,
+		},
+		{
 			"JoosepAlviste/nvim-ts-context-commentstring",
 			config = true,
 		},

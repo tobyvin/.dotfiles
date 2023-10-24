@@ -10,18 +10,13 @@ local M = {
 	},
 	keys = {
 		"<leader>db",
-		"<leader>dc",
+		"<leader>dl",
 		"<F5>",
 	},
 	dependencies = {
 		"mfussenegger/nvim-dap-python",
 		"leoluz/nvim-dap-go",
 		"nvim-telescope/telescope-dap.nvim",
-		{
-			"LiadOz/nvim-dap-repl-highlights",
-			dependencies = { "nvim-treesitter/nvim-treesitter" },
-			config = true,
-		},
 		{
 			"theHamsta/nvim-dap-virtual-text",
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -35,11 +30,13 @@ local M = {
 function M:config()
 	require("dap").listeners.after.event_initialized["User"] = function()
 		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
+		vim.notify("DAP attached", vim.log.levels.INFO)
 	end
 
 	require("dap").listeners.before.event_terminated["User"] = function()
 		vim.api.nvim_exec_autocmds("User", { pattern = "DapDetach" })
 		require("dap").repl.close()
+		vim.notify("DAP detached", vim.log.levels.INFO)
 	end
 
 	local adapters = require("tobyvin.dap.adapters")
@@ -58,9 +55,9 @@ function M:config()
 
 	vim.fn.sign_define("DapBreakpoint", { text = "󰝥 ", texthl = "debugBreakpoint" })
 	vim.fn.sign_define("DapBreakpointCondition", { text = "󰟃 ", texthl = "debugBreakpoint" })
-	vim.fn.sign_define("DapBreakpointRejected", { text = " ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapBreakpointRejected", { text = " ", texthl = "debugBreakpoint", numhl = "Error" })
 	vim.fn.sign_define("DapLogPoint", { text = " ", texthl = "debugBreakpoint" })
-	vim.fn.sign_define("DapStopped", { text = " ", texthl = "debugBreakpoint" })
+	vim.fn.sign_define("DapStopped", { text = " ", texthl = "debugBreakpoint", linehl = "CursorLine" })
 
 	vim.keymap.set("n", "<F5>", require("dap").continue, { desc = "continue" })
 	vim.keymap.set("n", "<F10>", require("dap").step_over, { desc = "step over" })
