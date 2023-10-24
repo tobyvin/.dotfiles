@@ -3,6 +3,15 @@ local M = {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
 	event = "BufReadPost",
+	cmd = {
+		"TSInstall",
+		"TSInstallInfo",
+		"TSInstallSync",
+		"TSModuleInfo",
+		"TSUninstall",
+		"TSUpdate",
+		"TSUpdateSync",
+	},
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		"mfussenegger/nvim-ts-hint-textobject",
@@ -48,7 +57,6 @@ local M = {
 			"scss",
 			"sql",
 			"svelte",
-			"teal",
 			"toml",
 			"tsx",
 			"typescript",
@@ -56,6 +64,9 @@ local M = {
 			"vue",
 			"yaml",
 		},
+		-- BUG: Required for TSUpdateSync to work in headless.
+		-- Ref: https://github.com/nvim-treesitter/nvim-treesitter/issues/2900
+		sync_install = #vim.api.nvim_list_uis() == 0,
 		indent = {
 			enable = true,
 		},
