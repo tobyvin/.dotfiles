@@ -6,7 +6,10 @@ set -e
 CDPATH='' cd -- "$(dirname -- "$0")" || exit
 
 printf "%s: Removing bad links\n" "$0"
-git diff-tree --no-commit-id --name-status e6051a3..HEAD -r |
+(
+	git diff-tree --no-commit-id --name-status e6051a3..HEAD -r
+	git diff --no-commit-id --name-status -r
+) |
 	grep -oP 'D\t[^/]+/\K(.*)' |
 	while read -r f; do
 		if [ -L "../$f" ] && [ ! -e "../$f" ]; then
