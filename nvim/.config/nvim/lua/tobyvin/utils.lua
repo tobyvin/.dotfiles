@@ -5,6 +5,29 @@ function M.inspect(v)
 	return v
 end
 
+---@param on_attach fun(client: lsp.Client, buffer: integer): boolean|nil
+---@param filter vim.lsp.get_clients.filter|nil
+function M.on_attach(on_attach, filter)
+	vim.api.nvim_create_autocmd("LspAttach", {
+		desc = "on client attach",
+		callback = function(args)
+			local bufnr = args.buf ---@type number
+			local client = vim.lsp.get_client_by_id(args.data.client_id)
+			filter = filter or {}
+
+			if
+				client
+				and (filter.id == nil or client.id == filter.id)
+				and (filter.name == nil or client.name == filter.name)
+				and (filter.bufnr == nil or bufnr == filter.bufnr)
+				and (filter.method == nil or client.supports_method(filter.method, { bufnr = bufnr }))
+			then
+				on_attach(client, bufnr)
+			end
+		end,
+	})
+end
+
 --- Merges two or more highlights.
 ---@param ns integer Namespace
 ---@param name string name of new hl
