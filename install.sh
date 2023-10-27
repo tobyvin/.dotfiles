@@ -9,6 +9,7 @@ printf "%s: Removing bad links\n" "$0"
 (
 	git diff-tree --no-commit-id --name-status e6051a3..HEAD -r
 	git diff --no-commit-id --name-status -r
+	git diff --no-commit-id --name-status -r --staged
 ) |
 	grep -oP 'D\t[^/]+/\K(.*)' |
 	while read -r f; do
