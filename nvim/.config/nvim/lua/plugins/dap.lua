@@ -21,7 +21,7 @@ local M = {
 			"theHamsta/nvim-dap-virtual-text",
 			dependencies = { "nvim-treesitter/nvim-treesitter" },
 			opts = {
-				commented = true,
+				virt_text_pos = vim.fn.has("nvim-0.10") == 1 and "inline" or "eol",
 			},
 		},
 	},
@@ -30,12 +30,23 @@ local M = {
 function M:config()
 	require("dap").listeners.after.event_initialized["User"] = function()
 		vim.api.nvim_exec_autocmds("User", { pattern = "DapAttach" })
+
+		for ns in pairs(vim.diagnostic.get_namespaces()) do
+			vim.diagnostic.hide(ns)
+		end
+
 		vim.notify("DAP attached", vim.log.levels.INFO)
 	end
 
 	require("dap").listeners.before.event_terminated["User"] = function()
 		vim.api.nvim_exec_autocmds("User", { pattern = "DapDetach" })
+
 		require("dap").repl.close()
+
+		for ns in pairs(vim.diagnostic.get_namespaces()) do
+			vim.diagnostic.show(ns)
+		end
+
 		vim.notify("DAP detached", vim.log.levels.INFO)
 	end
 
