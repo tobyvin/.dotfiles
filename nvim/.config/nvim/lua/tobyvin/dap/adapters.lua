@@ -1,3 +1,5 @@
+local dap_utils = require("tobyvin.utils.dap")
+
 local M = {
 	nlua = function(callback, config)
 		callback({ type = "server", host = config.host, port = config.port })
@@ -12,20 +14,25 @@ local M = {
 		command = "gdb",
 		args = { "-i", "dap" },
 	},
-	codelldb = function(on_config, _)
-		local codelldb_path = vim.fn.exepath("codelldb")
-		local liblldb_path = vim.fn.resolve(codelldb_path):gsub("/codelldb$", "/extension/lldb/lib/liblldb.so")
-
-		on_config({
-			type = "server",
-			port = "${port}",
-			host = "127.0.0.1",
-			executable = {
-				command = codelldb_path,
-				args = { "--liblldb", liblldb_path, "--port", "${port}" },
+	codelldb = {
+		type = "server",
+		port = "${port}",
+		host = "127.0.0.1",
+		executable = {
+			command = vim.fn.exepath("codelldb"),
+			args = {
+				"--liblldb",
+				(vim.fn.resolve(vim.fn.exepath("codelldb")):gsub("/codelldb$", "/extension/lldb/lib/liblldb.so")),
+				"--port",
+				"${port}",
 			},
-		})
-	end,
+		},
+		enrich_config = function(config, on_config)
+			if config["cargo"] ~= nil then
+				on_config(dap_utils.cargo_inspector(config))
+			end
+		end,
+	},
 }
 
 return M
