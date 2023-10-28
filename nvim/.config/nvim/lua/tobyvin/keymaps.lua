@@ -13,9 +13,6 @@ vim.keymap.set({ "n", "v" }, "<leader>Y", [["+Y]], { desc = "yank lines into sel
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "put lines from selection register" })
 vim.keymap.set({ "n", "v" }, "<leader>P", [["+P]], { desc = "put lines from selection register" })
 
-vim.keymap.set("n", "<leader>sr", require("tobyvin.utils.session").read, { desc = "read session" })
-vim.keymap.set("n", "<leader>sw", require("tobyvin.utils.session").write, { desc = "write session" })
-
 vim.keymap.set("n", "gqq", function()
 	local cursor = vim.api.nvim_win_get_cursor(0)
 	vim.cmd.normal("gggqG")

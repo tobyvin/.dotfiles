@@ -30,7 +30,11 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		if vim.fn.argc() == 0 then
 			local curr_buf = vim.api.nvim_get_current_buf()
-			require("tobyvin.utils.dashboard").setup()
+			local bufnr = require("tobyvin.utils.dashboard").setup()
+			vim.keymap.set("n", "<leader>sr", require("tobyvin.utils.session").read, {
+				buffer = bufnr,
+				desc = "read session",
+			})
 			vim.api.nvim_buf_delete(curr_buf, {})
 		end
 	end,
@@ -61,6 +65,11 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 
 		local file = vim.loop.fs_realpath(args.match) or args.match
 		local parent = vim.fn.fnamemodify(file, ":h")
+
+		if not parent then
+			return
+		end
+
 		local stat = vim.loop.fs_stat(parent)
 
 		if not stat then
@@ -85,11 +94,4 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 		vim.api.nvim_win_set_cursor(0, cursor)
 	end,
 	desc = "Trim whitespace on write",
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-	group = augroup,
-	pattern = "qf",
-	command = "wincmd J",
-	desc = "unfocus quickfix window",
 })

@@ -21,17 +21,6 @@ local function pad_horz(lines, width)
 	return padded
 end
 
----@param lines string[]
----@return string[]
-local function pad_top(lines, height)
-	if #lines < height then
-		for _ = 1, (height - #lines) do
-			table.insert(lines, 1, "")
-		end
-	end
-	return lines
-end
-
 ---@class Dashboard
 ---@field sections (string[] | fun():string[])[]
 ---@field rendered string[][]
@@ -54,7 +43,7 @@ local M = {
 				job = Job:new({ command = "cowsay", writer = job })
 			end
 
-			return pad_top(job:sync(), (vim.api.nvim_win_get_height(0) / 3) - 3)
+			return job:sync()
 		end,
 		{
 			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
@@ -84,47 +73,63 @@ local M = {
 	},
 }
 
-function M.render(index)
-	if M.buf == nil or not vim.api.nvim_buf_is_valid(M.buf) then
-		M.create_buf()
-	end
+function M.render(bufnr, index)
+	local width = vim.api.nvim_win_get_width(0)
+	local height = vim.api.nvim_win_get_height(0)
 
-	local width = vim.api.nvim_win_get_width(M.win)
 	local rendered = {}
+	local dashboard = vim.b[bufnr].dashboard or {}
 
+	local mid_height = 0
 	for i, section in pairs(M.sections) do
-		if M.rendered[i] == nil or index == nil or index == i then
+		if dashboard[i] == nil or index == nil or index == i then
 			if type(section) == "table" then
-				M.rendered[i] = pad_horz(section, width)
+				dashboard[i] = pad_horz(section, width)
 			elseif type(section) == "function" then
-				M.rendered[i] = pad_horz(section(), width)
+				dashboard[i] = pad_horz(section(), width)
 			end
 		end
 
-		vim.list_extend(rendered, M.rendered[i])
+		if i < (#M.sections / 2) then
+			mid_height = mid_height + #dashboard[i]
+		elseif i == math.ceil(#M.sections / 2) then
+			mid_height = mid_height + math.ceil(#dashboard[i] / 2)
+		end
+
+		vim.list_extend(rendered, dashboard[i])
 		table.insert(rendered, "")
 	end
 
-	vim.bo[M.buf].modifiable = true
-	vim.api.nvim_buf_set_lines(M.buf, 0, -1, false, rendered)
-	vim.bo[M.buf].modifiable = false
+	if mid_height < math.ceil(height / 3) then
+		for _ = 1, (math.ceil(height / 3) - mid_height) do
+			table.insert(rendered, 1, "")
+		end
+	end
+
+	vim.bo[bufnr].modifiable = true
+	vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, rendered)
+	vim.bo[bufnr].modifiable = false
+	vim.b[bufnr].dashboard = dashboard
 end
 
-function M.create_buf()
-	M.buf = vim.api.nvim_create_buf(false, true)
-	M.win = vim.api.nvim_get_current_win()
-	vim.api.nvim_set_current_buf(M.buf)
+function M.initialize()
+	local bufnr = vim.api.nvim_create_buf(false, true)
+	vim.api.nvim_set_current_buf(bufnr)
+	local winid = vim.api.nvim_get_current_win()
 
-	vim.bo[M.buf].textwidth = 0
-	vim.bo[M.buf].bufhidden = "wipe"
-	vim.bo[M.buf].buflisted = false
-	vim.bo[M.buf].matchpairs = ""
-	vim.bo[M.buf].swapfile = false
-	vim.bo[M.buf].buftype = "nofile"
-	vim.bo[M.buf].filetype = "dashboard"
-	vim.bo[M.buf].synmaxcol = 0
+	vim.bo[bufnr].textwidth = 0
+	vim.bo[bufnr].bufhidden = "wipe"
+	vim.bo[bufnr].buflisted = false
+	vim.bo[bufnr].matchpairs = ""
+	vim.bo[bufnr].swapfile = false
+	vim.bo[bufnr].buftype = "nofile"
+	vim.bo[bufnr].filetype = "dashboard"
+	vim.bo[bufnr].synmaxcol = 0
 
-	local opts = { scope = "local", win = M.win }
+	vim.b[bufnr].dashboard = {}
+	vim.b[bufnr].dashboard.augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
+
+	local opts = { scope = "local", win = winid }
 	vim.api.nvim_set_option_value("wrap", false, opts)
 	vim.api.nvim_set_option_value("colorcolumn", "", opts)
 	vim.api.nvim_set_option_value("foldlevel", 999, opts)
@@ -137,42 +142,38 @@ function M.create_buf()
 	vim.api.nvim_set_option_value("spell", false, opts)
 	vim.api.nvim_set_option_value("signcolumn", "no", opts)
 
-	M.augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
-	vim.api.nvim_create_autocmd({ "BufHidden", "BufDelete", "BufLeave" }, {
-		group = M.augroup,
-		pattern = { "*" },
-		callback = function(args)
-			if args.buf == M.buf then
-				vim.api.nvim_del_augroup_by_id(M.augroup)
-				M.buf = nil
-				M.win = nil
-				M.augroup = nil
-				return true
-			end
-		end,
-		desc = "clear dashboard autocmds",
-	})
+	return bufnr
 end
 
 function M.setup()
-	if M.buf == nil or not vim.api.nvim_buf_is_valid(M.buf) then
-		M.create_buf()
-	end
+	local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
+	local bufnr = M.initialize()
 
 	vim.keymap.set("n", "<C-n>", function()
-		M.render(1)
-	end, { desc = "next cowsay", buffer = M.buf })
+		M.render(bufnr, 1)
+	end, { desc = "next cowsay", buffer = bufnr })
 
 	vim.api.nvim_create_autocmd("User", {
-		group = M.augroup,
+		group = augroup,
 		pattern = { "LazyVimStarted", "LazyLoad", "LazyCheck" },
 		callback = function()
-			M.render(3)
+			M.render(bufnr, 3)
 		end,
 		desc = "dashboard lazy stats",
 	})
 
-	M:render()
+	vim.api.nvim_create_autocmd({ "BufHidden", "BufDelete", "BufLeave" }, {
+		group = augroup,
+		buffer = bufnr,
+		callback = function()
+			vim.api.nvim_del_augroup_by_id(augroup)
+			return true
+		end,
+		desc = "clear dashboard autocmds",
+	})
+
+	M.render(bufnr)
+	return bufnr
 end
 
 return M

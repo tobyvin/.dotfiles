@@ -5,6 +5,7 @@ function M.inspect(v)
 	return v
 end
 
+---Register callback to run when a lsp server matching a filter attaches to a buffer
 ---@param on_attach fun(client: lsp.Client, buffer: integer): boolean|nil
 ---@param filter vim.lsp.get_clients.filter|nil
 function M.on_attach(on_attach, filter)
@@ -28,10 +29,15 @@ function M.on_attach(on_attach, filter)
 	})
 end
 
---- Merges two or more highlights.
+---Merges two or more highlights groups into a new highlight group.
+---
+---**Note**: This will overwrite any existing group named <name>. If you would like to both merge
+---*and* overwrite a group, specify it both as <name>, as well as in the list of groups to merge.
+---
+---E.g. extend_hl(ns, "Normal", "Normal", "Special", { fg = "#333333" }, { other_ns, "Specific" })
 ---@param ns integer Namespace
----@param name string name of new hl
----@param ... string|table|{ [1]: integer, [2]: string|table } Two or more hl names, definitions, or tuples of {ns, name|definition}
+---@param name string name of new hightlight group. ---If you want to groups into an existing group, add <name> to the list of groups to merge.*
+---@param ... string|table|{ [1]: integer, [2]: string|table } Two or more highlight group names, anonymous highlight definitions, or tuples in the form of { namespace, name|definition }
 function M.extend_hl(ns, name, ...)
 	local hl = {}
 
