@@ -3,7 +3,8 @@
 HOST=$(tmux display -p '#h' 2>/dev/null)
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
-	tmux -L ssh run-shell "tmux-sshr"
+	tmux_sock=$(tmux display -p "#{socket_path}")
+	tmux -S "${tmux_sock}.control" run-shell "tmux-sshr"
 	exit 0
 fi
 
@@ -25,26 +26,23 @@ if [ "$target" = "$HOST" ]; then
 	tmux detach -E 'tmux new -A'
 else
 	if ! tmux -L ssh has-session -t "$target"; then
-		tmux_local_sock=$(tmux -L ssh start-server \; display -p "#{socket_path}")
-		tmux_remote_sock=$(
+		tmux_sock=$(tmux -L ssh display -p "#{socket_path}")
+		runtime=$(
 			ssh -T \
 				-o "ControlMaster=auto" \
 				-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
-				"$target" 'tmux -L ssh start-server \; display -p "#{socket_path}"'
+				"$target" \
+				'printf "%s\n" "$XDG_RUNTIME_DIR"'
 		)
-
-		if [ -z "$tmux_local_sock" ] || [ -z "$tmux_remote_sock" ]; then
-			exit 1
-		fi
 
 		tmux -L ssh new-session -ds "$target" \
 			ssh -t \
 			-o "ControlMaster=auto" \
 			-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
 			-R "2222:localhost:22" \
-			-R "${XDG_RUNTIME_DIR}/xdg-open.socket:${XDG_RUNTIME_DIR}/xdg-open.socket" \
-			-R "$tmux_remote_sock:$tmux_local_sock" \
-			"$target" "zsh -l -c 'tmux new -A'"
+			-R "${runtime}/xdg-open.socket:${XDG_RUNTIME_DIR}/xdg-open.socket" \
+			-R "${runtime}/tmux.${HOST}.control:${tmux_sock}" \
+			"$target" "zsh -l -c 'tmux -S \${XDG_RUNTIME_DIR}/tmux.${HOST} new -A'"
 	fi
 
 	if [ -z "$TMUX" ]; then
