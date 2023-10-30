@@ -31,6 +31,11 @@ TRAPUSR1() { rehash }
 bindkey -v
 bindkey -m 2>/dev/null
 
+autoload -U select-word-style
+zle -N select-word-style
+select-word-style normal
+zstyle :zle:transpose-words word-style shell
+
 # TODO: improve this with terminfo validation
 #
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
@@ -41,6 +46,7 @@ bindkey '^[[4~' end-of-line
 bindkey '^[[3~' delete-char
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
+bindkey '^[t' transpose-words
 
 bindkey -M vicmd '^[q' push-line
 bindkey -M vicmd '^[[Z' reverse-menu-complete
