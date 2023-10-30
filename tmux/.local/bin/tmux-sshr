@@ -26,7 +26,7 @@ if [ "$target" = "$HOST" ]; then
 	tmux detach -E 'tmux new -A'
 else
 	if ! tmux -L ssh has-session -t "$target"; then
-		tmux_sock=$(tmux -L ssh display -p "#{socket_path}")
+		tmux_sock=$(tmux -L ssh start-server \; display -p "#{socket_path}")
 		runtime=$(
 			ssh -T \
 				-o "ControlMaster=auto" \
