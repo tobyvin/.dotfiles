@@ -8,10 +8,8 @@ if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 fi
 
 if [ "$#" -eq 0 ]; then
-	ATTACHED=$(tmux display -p '#{?#{m:*ssh,#{socket_path}},#S,#{host}}' 2>/dev/null)
-
 	set -- "$(
-		sshr --all --exclude="$ATTACHED" |
+		sshr --all --exclude-attached |
 			fzf-tmux -p20%,20% -- --print-query --tac |
 			tail -1
 	)"
