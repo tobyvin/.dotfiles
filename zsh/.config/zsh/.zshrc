@@ -61,6 +61,7 @@ alias tree="tree --gitignore"
 alias grep='grep --color=auto'
 alias ipa="ip -s -c -h a"
 alias untar="tar -zxvf"
+alias info="info --vi-keys"
 
 # Adopt the behavior of the system wide configuration for application specific settings
 #
