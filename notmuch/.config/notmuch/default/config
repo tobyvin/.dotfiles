@@ -6,7 +6,5 @@ primary_email=tobyv@tobyvin.dev
 other_email=tobyv13@gmail.com;tovince@siue.edu;
 [new]
 ignore=.mbsyncstate;.uidvalidity;addressbook.tsv;
-[search]
-exclude_tags=deleted;spam;
 [maildir]
 synchronize_flags=true
