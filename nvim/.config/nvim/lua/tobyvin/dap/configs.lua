@@ -26,7 +26,11 @@ local M = {
 			type = "codelldb",
 			request = "launch",
 			program = function()
-				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+				return vim.fn.input({
+					prompt = "Path to executable: ",
+					text = vim.fn.getcwd() .. "/",
+					completion = "file",
+				})
 			end,
 			cwd = "${workspaceFolder}",
 			stopOnEntry = false,
@@ -39,7 +43,11 @@ local M = {
 			type = "codelldb",
 			request = "launch",
 			program = function()
-				return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+				return vim.fn.input({
+					prompt = "Path to executable: ",
+					text = vim.fn.getcwd() .. "/",
+					completion = "file",
+				})
 			end,
 			cwd = "${workspaceFolder}",
 			stopOnEntry = false,

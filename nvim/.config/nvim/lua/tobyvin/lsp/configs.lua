@@ -59,11 +59,6 @@ local M = {
 				completion = {
 					callSnippet = "Replace",
 				},
-				diagnostics = {
-					globals = {
-						"vim",
-					},
-				},
 				format = {
 					enable = false,
 				},
