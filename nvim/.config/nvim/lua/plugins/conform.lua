@@ -4,6 +4,8 @@ local M = {
 	version = "*",
 	event = "BufReadPre",
 	opts = {
+		format_on_save = false,
+		format_after_save = false,
 		formatters_by_ft = {
 			lua = { "stylua" },
 			css = { "prettier" },
@@ -17,9 +19,10 @@ local M = {
 			scss = { "prettier" },
 			sh = { "shfmt" },
 		},
-		format_on_save = false,
-		format_after_save = false,
 		formatters = {
+			prettier = {
+				prepend_args = { "--prose-wrap", "always" },
+			},
 			cbfmt = {
 				command = "cbfmt",
 				args = {
@@ -46,11 +49,6 @@ function M:init()
 	vim.keymap.set({ "n", "v" }, "<leader>lf", function()
 		return require("conform").format(args)
 	end, { desc = "format" })
-end
-
-function M:config(opts)
-	require("conform.util").add_formatter_args(require("conform.formatters.prettier"), { "--prose-wrap", "always" })
-	require("conform").setup(opts)
 end
 
 return M

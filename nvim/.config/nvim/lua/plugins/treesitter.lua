@@ -15,14 +15,8 @@ local M = {
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		"mfussenegger/nvim-ts-hint-textobject",
-		{
-			"LiadOz/nvim-dap-repl-highlights",
-			config = true,
-		},
-		{
-			"JoosepAlviste/nvim-ts-context-commentstring",
-			config = true,
-		},
+		{ "LiadOz/nvim-dap-repl-highlights", opts = {} },
+		{ "JoosepAlviste/nvim-ts-context-commentstring", opts = {} },
 	},
 	main = "nvim-treesitter.configs",
 	opts = {
@@ -124,11 +118,6 @@ local M = {
 		},
 		context_commentstring = {
 			enable = true,
-			enable_autocmd = false,
-			config = {
-				c = "// %s",
-				lua = "-- %s",
-			},
 		},
 	},
 }
