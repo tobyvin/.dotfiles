@@ -36,14 +36,27 @@ local M = {
 				return {}
 			end
 
-			local Job = require("plenary.job")
-			local job = Job:new({ command = "fortune", args = { "-s" } })
+			local opts = {
+				text = true,
+				timeout = 30,
+			}
 
+			local cowsay
 			if vim.fn.executable("cowsay") == 1 then
-				job = Job:new({ command = "cowsay", writer = job })
+				cowsay = vim.system({ "cowsay" }, { text = true, stdin = true })
+				opts.stdout = function(_, data)
+					cowsay:write(data)
+				end
 			end
 
-			return job:sync()
+			local stdout = vim.system({ "fortune", "-s" }, opts):wait().stdout
+
+			if cowsay then
+				cowsay:write(nil)
+				stdout = cowsay:wait().stdout
+			end
+
+			return vim.split(stdout or "", "\n")
 		end,
 		{
 			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",

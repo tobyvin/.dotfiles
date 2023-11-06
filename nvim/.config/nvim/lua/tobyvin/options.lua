@@ -30,6 +30,7 @@ vim.opt.showbreak = string.rep(" ", 3)
 vim.opt.signcolumn = "yes:1"
 vim.opt.smartcase = true
 vim.opt.smartindent = true
+vim.opt.smoothscroll = true
 vim.opt.spelloptions = { "camel" }
 vim.opt.splitbelow = true
 vim.opt.splitright = true

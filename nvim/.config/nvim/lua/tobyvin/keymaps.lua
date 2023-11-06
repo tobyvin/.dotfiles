@@ -13,6 +13,22 @@ vim.keymap.set({ "n", "v" }, "<leader>Y", [["+Y]], { desc = "yank lines into sel
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "put lines from selection register" })
 vim.keymap.set({ "n", "v" }, "<leader>P", [["+P]], { desc = "put lines from selection register" })
 
+vim.keymap.set({ "i", "s" }, "<Tab>", function()
+	if vim.snippet.jumpable(1) then
+		return "<cmd>lua vim.snippet.jump(1)<cr>"
+	else
+		return "<Tab>"
+	end
+end, { expr = true })
+
+vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
+	if vim.snippet.jumpable(-1) then
+		return "<cmd>lua vim.snippet.jump(-1)<cr>"
+	else
+		return "<Tab>"
+	end
+end, { expr = true })
+
 vim.keymap.set("n", "gqq", function()
 	local cursor = vim.api.nvim_win_get_cursor(0)
 	vim.cmd.normal("gggqG")

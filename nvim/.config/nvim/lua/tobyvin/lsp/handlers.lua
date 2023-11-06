@@ -1,17 +1,15 @@
+local ms = vim.lsp.protocol.Methods
+
 local M = {
-	["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
+	[ms.textDocument_hover] = vim.lsp.with(vim.lsp.handlers.hover, {
 		border = "single",
 	}),
-	["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
+	[ms.textDocument_signatureHelp] = vim.lsp.with(vim.lsp.handlers.signature_help, {
 		border = "single",
 	}),
 	["experimental/externalDocs"] = function(_, url)
 		if url then
-			if vim.fn.executable("xdg-open") == 1 then
-				require("plenary.job"):new({ command = "xdg-open", args = { url } }):start()
-			else
-				pcall(vim.fn["netrw#BrowseX"], url, 0)
-			end
+			vim.ui.open(url)
 		end
 	end,
 }

@@ -5,7 +5,7 @@ function M.cargo_inspector(config)
 
 	-- Create a buffer to receive compiler progress messages
 	local compiler_msg_buf = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_buf_set_option(compiler_msg_buf, "buftype", "nofile")
+	vim.bo[compiler_msg_buf].buftype = "nofile"
 
 	-- And a floating window in the corner to display those messages
 	local window_width = math.max(#final_config.name + 1, 50)
@@ -14,8 +14,8 @@ function M.cargo_inspector(config)
 		relative = "editor",
 		width = window_width,
 		height = window_height,
-		col = vim.api.nvim_get_option("columns") - window_width - 1,
-		row = vim.api.nvim_get_option("lines") - window_height - 1,
+		col = vim.wo.columns:get() - window_width - 1,
+		row = vim.wo.lines:get() - window_height - 1,
 		border = "rounded",
 		style = "minimal",
 	})
