@@ -4,16 +4,16 @@
 # Create the following .config/python/startup.py file
 # and export its path using PYTHONSTARTUP environment variable:
 #
-# export PYTHONSTARTUP="${XDG_CONFIG_HOME:-$HOME/.config}/python/startup.py"
+# export PYTHONSTARTUP="$XDG_CONFIG_HOME/python/startup.py"
 
 import atexit
 import os
 import readline
 
-xdg_cache = os.getenv("XDG_CACHE_HOME", os.path.expanduser("~/.cache"))
-xdg_python_history = os.path.join(xdg_cache, "python", "history")
+xdg_state = os.getenv("XDG_STATE_HOME", os.path.expanduser("~/.local/state"))
+histfile = os.getenv("PYTHONHISTFILE", os.path.join(
+    xdg_state, "python", "history"))
 
-histfile = os.getenv("PYTHONHISTFILE", xdg_python_history)
 alt_histfile = os.path.expanduser("~/.python_history")
 
 if not os.path.exists(histfile) and os.path.exists(alt_histfile):
