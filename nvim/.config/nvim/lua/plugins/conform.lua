@@ -18,6 +18,7 @@ local M = {
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },
+			["*"] = { "injected" },
 		},
 		formatters = {
 			prettier = {
@@ -39,16 +40,12 @@ local M = {
 }
 
 function M:init()
-	local args = { lsp_fallback = "always" }
+	local function format()
+		return require("conform").format({ lsp_fallback = "always" })
+	end
+
 	vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-
-	vim.keymap.set({ "n", "v" }, "gqq", function()
-		return require("conform").format(args)
-	end, { desc = "format" })
-
-	vim.keymap.set({ "n", "v" }, "<leader>lf", function()
-		return require("conform").format(args)
-	end, { desc = "format" })
+	vim.keymap.set({ "n", "v" }, "<leader>lf", format, { desc = "format" })
 end
 
 return M

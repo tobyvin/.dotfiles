@@ -2,19 +2,15 @@
 local M = {
 	"folke/noice.nvim",
 	version = "*",
-	event = { "VeryLazy" },
+	event = { "LspAttach" },
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 		"rcarriga/nvim-notify",
 	},
-	config = true,
-	---@type NoiceConfig
 	opts = {
 		cmdline = { enabled = false },
 		messages = { enabled = false },
-		popupmenu = {
-			backend = "cmp",
-		},
+		popupmenu = { backend = "cmp" },
 		lsp = {
 			override = {
 				["vim.lsp.util.convert_input_to_markdown_lines"] = true,
@@ -30,88 +26,48 @@ local M = {
 					{ "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
 				},
 				format_done = {
-					{
-						" ",
-						hl_group = "NoiceLspProgressDone",
-					},
+					{ " ", hl_group = "NoiceLspProgressDone" },
 					{ "{data.progress.title} ", hl_group = "NoiceLspProgressTitle" },
 					{ "{data.progress.client} ", hl_group = "NoiceLspProgressClient" },
 				},
 			},
 		},
-		commands = {
-			all = {
-				view = "split",
-				opts = { enter = true, format = "details" },
-				filter = {},
-			},
-		},
-		routes = {
-			{
-				view = "notify_send",
-				filter = {
-					event = "notify",
-					cond = function()
-						return vim.g.notify_send_enabled
-					end,
-				},
-				opts = { stop = false, app_name = "nvim" },
-			},
-			{
-				view = "mini",
-				filter = {
-					event = "notify",
-					any = {
-						{
-							error = false,
-							warning = false,
-							cond = function(message)
-								return vim.tbl_get(message, "opts", "title") == "Neogit"
-							end,
-						},
-					},
-				},
-			},
-		},
 		views = {
 			hover = {
-				border = {
-					style = "single",
-				},
+				border = { style = "single" },
 				position = { row = 2, col = 2 },
 			},
 			mini = {
-				position = {
-					row = -2,
-				},
-				win_options = {
-					winblend = 0,
-				},
+				position = { row = -2 },
+				win_options = { winblend = 0 },
 			},
 		},
 	},
 }
 
-function M.init()
-	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", {
-		link = "DiagnosticSignInfo",
+function M:init()
+	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", { link = "DiagnosticSignInfo" })
+	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", { link = "DiagnosticSignOk" })
+
+	---@diagnostic disable-next-line: duplicate-set-field
+	vim.notify = function(...)
+		require("lazy").load({ plugins = { "noice.nvim" } })
+		return vim.notify(...)
+	end
+
+	vim.api.nvim_create_autocmd("LspAttach", {
+		group = vim.api.nvim_create_augroup("noice-lsp", { clear = true }),
+		callback = function(args)
+			vim.keymap.set({ "n", "i", "s" }, "<c-d>", function()
+				return require("noice.lsp").scroll(4) and "<Ignore>" or "<c-d>"
+			end, { expr = true, buffer = args.buf, desc = "up half page" })
+
+			vim.keymap.set({ "n", "i", "s" }, "<c-u>", function()
+				return require("noice.lsp").scroll(-4) and "<Ignore>" or "<c-u>"
+			end, { expr = true, buffer = args.buf, desc = "down half page" })
+		end,
+		desc = "setup noice documentation scroll",
 	})
-
-	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", {
-		link = "DiffAdd",
-	})
-
-	vim.keymap.set({ "n", "i", "s" }, "<c-d>", function()
-		if not require("noice.lsp").scroll(4) then
-			return "<c-d>"
-		end
-	end, { desc = "up half page", expr = true })
-
-	vim.keymap.set({ "n", "i", "s" }, "<c-u>", function()
-		if not require("noice.lsp").scroll(-4) then
-			return "<c-u>"
-		end
-	end, { desc = "down half page", expr = true })
 end
 
 return M
