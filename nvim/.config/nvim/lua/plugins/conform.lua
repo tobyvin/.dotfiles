@@ -40,12 +40,7 @@ local M = {
 }
 
 function M:init()
-	local function format()
-		return require("conform").format({ lsp_fallback = "always" })
-	end
-
 	vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
-	vim.keymap.set({ "n", "v" }, "<leader>lf", format, { desc = "format" })
 end
 
 return M
