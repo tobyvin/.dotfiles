@@ -1,11 +1,18 @@
 #!/bin/sh
 
 if [ "$#" -eq 0 ]; then
-	PREVIEW_CMD='(
-	   onefetch --include-hidden --no-art --no-color-palette {}
-	   printf "\n"
-	   tree -CL 3 --gitignore --noreport --filelimit=50 {}
-	 ) 2>/dev/null'
+	PREVIEW_CMD="(
+    onefetch --include-hidden --no-art --no-color-palette {}  &&
+      printf '\n'
+    tree -CL 3 --gitignore --noreport --filelimit=50 {} &&
+      printf '\n'
+    case {}/ in
+      */dkr/*) bat -f --style=header {}/docker-compose.yml;;
+      */pkg/*) bat -f --style=header {}/PKGBUILD;;
+      *) bat -f --style=header {}/README.md;;
+    esac | sed '1s|File: ||'
+  ) 2>/dev/null"
+
 
 	# shellcheck disable=2046
 	set -- $(
