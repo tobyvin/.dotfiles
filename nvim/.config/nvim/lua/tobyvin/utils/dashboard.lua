@@ -87,6 +87,8 @@ local M = {
 }
 
 function M.render(bufnr, index)
+  bufnr = bufnr or 0
+
 	local width = vim.api.nvim_win_get_width(0)
 	local height = vim.api.nvim_win_get_height(0)
 
@@ -158,20 +160,24 @@ function M.initialize()
 	return bufnr
 end
 
+function M.next_fortune(bufnr)
+		M.render(bufnr, 1)
+end
+
+function M.refresh_stats(bufnr)
+		M.render(bufnr, 3)
+end
+
 function M.setup()
 	local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
 	local bufnr = M.initialize()
-
-	vim.keymap.set("n", "<C-n>", function()
-		M.render(bufnr, 1)
-	end, { desc = "next cowsay", buffer = bufnr })
 
 	vim.api.nvim_create_autocmd("User", {
 		group = augroup,
 		pattern = { "LazyVimStarted", "LazyLoad", "LazyCheck" },
 		callback = function()
-			M.render(bufnr, 3)
-		end,
+      M.refresh_stats(bufnr)
+    end,
 		desc = "dashboard lazy stats",
 	})
 

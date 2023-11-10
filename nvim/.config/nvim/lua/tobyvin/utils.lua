@@ -1,8 +1,22 @@
-local M = {}
+local M = {
+  dashboard = require("tobyvin.utils.dashboard"),
+  session = require("tobyvin.utils.session"),
+  dap = require("tobyvin.utils.dap"),
+}
 
 function M.inspect(v)
 	print(vim.inspect(v))
 	return v
+end
+
+function M.lazy_require(modname)
+	return setmetatable({}, {
+		__index = function(_, k)
+			return function(...)
+				return require(modname)[k](...)
+			end
+		end,
+	})
 end
 
 ---@param ms integer

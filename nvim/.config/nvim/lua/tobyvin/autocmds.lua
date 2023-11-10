@@ -19,7 +19,7 @@ vim.api.nvim_create_autocmd("VimLeavePre", {
 		end
 
 		if vim.fn.argc() == 0 and #vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) > 0 then
-			pcall(require("tobyvin.utils.session").write)
+			pcall(U.session.write)
 		end
 	end,
 	desc = "write session on vim exit",
@@ -30,11 +30,7 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
 		if vim.fn.argc() == 0 then
 			local curr_buf = vim.api.nvim_get_current_buf()
-			local bufnr = require("tobyvin.utils.dashboard").setup()
-			vim.keymap.set("n", "<leader>sr", require("tobyvin.utils.session").read, {
-				buffer = bufnr,
-				desc = "read session",
-			})
+			U.dashboard.setup()
 			vim.api.nvim_buf_delete(curr_buf, {})
 		end
 	end,

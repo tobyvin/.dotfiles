@@ -1,5 +1,3 @@
-local dap_utils = require("tobyvin.utils.dap")
-
 local M = {
 	nlua = function(callback, config)
 		callback({ type = "server", host = config.host, port = config.port })
@@ -29,7 +27,7 @@ local M = {
 		},
 		enrich_config = function(config, on_config)
 			if config["cargo"] ~= nil then
-				on_config(dap_utils.cargo_inspector(config))
+				on_config(U.dap.cargo_inspector(config))
 			end
 		end,
 	},

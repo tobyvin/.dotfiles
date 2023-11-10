@@ -22,6 +22,7 @@ function M:config(opts)
 	plugin_managers["lazy"] = "lazy"
 
 	-- HACK: Overwrite functions to remove WSL related stuff
+	---@diagnostic disable-next-line: duplicate-set-field
 	function Presence:get_discord_socket_path()
 		local sock_name = "discord-ipc-0"
 		local sock_path = nil
@@ -60,6 +61,7 @@ function M:config(opts)
 	end
 
 	-- HACK: Fix grep command for neovim socket
+	---@diagnostic disable-next-line: duplicate-set-field
 	function Presence:get_nvim_socket_paths(on_done)
 		self.log:debug("Getting nvim socket paths...")
 		local sockets = {}

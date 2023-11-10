@@ -17,13 +17,12 @@ function M:init()
 		return
 	end
 
-	vim.api.nvim_create_user_command("PeekOpen", function()
-		require("peek").open()
-	end, { desc = "open peek.nvim markdown preview" })
-
-	vim.api.nvim_create_user_command("PeekClose", function()
-		require("peek").close()
-	end, { desc = "close peek.nvim markdown preview" })
+	vim.api.nvim_create_user_command("PeekOpen", U.lazy_require("peek").open, {
+		desc = "open peek.nvim markdown preview",
+	})
+	vim.api.nvim_create_user_command("PeekClose", U.lazy_require("peek").close, {
+		desc = "close peek.nvim markdown preview",
+	})
 end
 
 return M

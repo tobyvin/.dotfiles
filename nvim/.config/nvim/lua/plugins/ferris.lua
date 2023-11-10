@@ -1,5 +1,3 @@
-local utils = require("tobyvin.utils")
-
 ---@type LazyPluginSpec
 local M = {
 	"vxpm/ferris.nvim",
@@ -7,7 +5,7 @@ local M = {
 }
 
 function M:init()
-	utils.on_attach(function()
+	U.on_attach(function()
 		require("ferris")
 	end, { name = "rust_analyzer" })
 end

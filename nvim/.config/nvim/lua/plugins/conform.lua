@@ -18,6 +18,7 @@ local M = {
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },
+			PKGBUILD = { "shfmt" },
 			["*"] = { "injected" },
 		},
 		formatters = {

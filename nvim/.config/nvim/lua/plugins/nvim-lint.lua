@@ -1,5 +1,3 @@
-local utils = require("tobyvin.utils")
-
 local function find_config(filename)
 	local config = unpack(vim.fs.find(filename, {
 		path = vim.api.nvim_buf_get_name(0),
@@ -20,13 +18,16 @@ local function try_lint()
 
 	vim.list_extend(names, lint.linters_by_ft["*"] or {})
 
-	names = vim.tbl_filter(function(name)
-		local linter = lint.linters[name]
-		if not linter then
-			vim.notify("Linter not found: " .. name, vim.log.levels.WARN, { title = "nvim-lint" })
-		end
-		return linter and not (type(linter) == "table" and linter.condition and not linter.condition())
-	end, names)
+	names = vim.iter(names)
+		:filter(function(name)
+			local linter = lint.linters[name]
+			if not linter then
+				vim.notify("Linter not found: " .. name, vim.log.levels.WARN, { title = "nvim-lint" })
+			end
+			---@diagnostic disable-next-line: undefined-field
+			return (type(linter) == "table" and linter.condition and linter.condition()) or linter
+		end)
+		:totable()
 
 	if #names > 0 then
 		lint.try_lint(names)
@@ -74,25 +75,20 @@ local M = {
 function M:init()
 	vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
 		group = vim.api.nvim_create_augroup("nvim-lint", { clear = true }),
-		callback = utils.debounce(100, try_lint),
+		callback = U.debounce(100, try_lint),
 	})
 end
 
 function M:config(opts)
 	local lint = require("lint")
-
-	for name, linter in pairs(opts.linters) do
-		if type(linter) == "table" and type(lint.linters[name]) == "table" then
-			lint.linters[name] = vim.tbl_deep_extend("force", lint.linters[name], linter)
-			for _, arg in pairs(lint.linters[name].prepend_args) do
-				lint.linters[name].args = lint.linters[name].args or {}
-				table.insert(lint.linters[name].args, arg)
-			end
-		else
-			lint.linters[name] = linter
-		end
-	end
 	lint.linters_by_ft = opts.linters_by_ft
+	vim.iter(opts.linters):each(function(name, linter)
+		linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[name] or {}, { args = {} })
+		vim.iter(linter.prepend_args):rev():each(function(arg)
+			table.insert(linter.args, 1, arg)
+		end)
+		lint.linters[name] = linter
+	end)
 end
 
 return M
