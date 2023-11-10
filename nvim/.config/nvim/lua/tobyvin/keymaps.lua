@@ -13,24 +13,20 @@ vim.keymap.set({ "n", "v" }, "<leader>Y", [["+Y]], { desc = "yank lines into sel
 vim.keymap.set({ "n", "v" }, "<leader>p", [["+p]], { desc = "put lines from selection register" })
 vim.keymap.set({ "n", "v" }, "<leader>P", [["+P]], { desc = "put lines from selection register" })
 
-vim.keymap.set({ "i", "s" }, "<Tab>", function()
-	if vim.snippet.jumpable(1) then
-		return "<cmd>lua vim.snippet.jump(1)<cr>"
-	else
-		return "<Tab>"
+vim.keymap.set("o", "o", function()
+	local cursor = vim.fn.winsaveview()
+	vim.cmd.normal({ "ggVG", bang = true, mods = { keepjumps = true } })
+	if cursor and not string.find(vim.v.operator, "[cd]") then
+		vim.defer_fn(function()
+			vim.fn.winrestview(cursor)
+		end, 0)
 	end
+end, { desc = "buffer text object" })
+
+vim.keymap.set({ "i", "s" }, "<Tab>", function()
+	return vim.snippet.jumpable(1) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<Tab>"
 end, { expr = true })
 
 vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
-	if vim.snippet.jumpable(-1) then
-		return "<cmd>lua vim.snippet.jump(-1)<cr>"
-	else
-		return "<Tab>"
-	end
+	return vim.snippet.jumpable(-1) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<Tab>"
 end, { expr = true })
-
-vim.keymap.set("n", "gqq", function()
-	local cursor = vim.api.nvim_win_get_cursor(0)
-	vim.cmd.normal("gggqG")
-	vim.api.nvim_win_set_cursor(0, cursor)
-end, { desc = "format buffer" })
