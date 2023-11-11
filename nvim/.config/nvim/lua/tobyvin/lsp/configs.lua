@@ -92,14 +92,6 @@ local M = {
 	powershell_es = {},
 	pylsp = {},
 	rust_analyzer = {
-		handlers = {
-			["experimental/externalDocs"] = function(err, result)
-				if result then
-					vim.fn["netrw#BrowseX"](result, 0)
-				end
-				return result, err
-			end,
-		},
 		standalone = true,
 		settings = {
 			["rust-analyzer"] = {

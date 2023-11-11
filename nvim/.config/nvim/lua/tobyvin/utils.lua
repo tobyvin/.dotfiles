@@ -1,7 +1,7 @@
 local M = {
-  dashboard = require("tobyvin.utils.dashboard"),
-  session = require("tobyvin.utils.session"),
-  dap = require("tobyvin.utils.dap"),
+	dashboard = require("tobyvin.utils.dashboard"),
+	session = require("tobyvin.utils.session"),
+	dap = require("tobyvin.utils.dap"),
 }
 
 function M.inspect(v)
