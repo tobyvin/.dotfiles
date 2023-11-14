@@ -16,6 +16,7 @@ local M = {
 			tex = { "latexindent" },
 			plaintex = { "latexindent" },
 			markdown = { "prettier", "markdownlint", "cbfmt" },
+			nginx = { "nginxbeautifier" },
 			python = { "black" },
 			sass = { "prettier" },
 			scss = { "prettier" },
@@ -43,6 +44,20 @@ local M = {
 					("%s/cbfmt/cbfmt.toml"):format(vim.env.XDG_CONFIG_HOME),
 				},
 				stdin = true,
+			},
+			nginxbeautifier = {
+				command = "nginxbeautifier",
+				args = function(ctx)
+					return {
+						vim.bo[ctx.buf].expandtab and "-s" or "-t",
+						vim.bo[ctx.buf].tabstop,
+						"-i",
+						"$FILENAME",
+						"-o",
+						"$FILENAME",
+					}
+				end,
+				stdin = false,
 			},
 		},
 	},
