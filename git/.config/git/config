@@ -61,40 +61,8 @@ process = git-lfs filter-process
 required = true
 
 [alias]
-# basic
-st = status -u
-cl = clone
-ci = commit
+st = status
 co = checkout
-br = branch
-r = reset
 rv = remote -v
-cp = cherry-pick
-dev = checkout develop
-main = checkout main
-wt = worktree
-
-# tweak defaults
-grep = grep -Ii
-diff = diff --word-diff
-branch = branch -ra
-
-# shortcuts
-ai = add --interactive
-recommit = commit --amend -C HEAD
-redate = rebase --committer-date-is-author-date
-pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
-wtbr = "!f() { git worktree add $(git rev-parse --show-toplevel)_${1##*/} $1; }; f"
-
-# log commands
-lg = log --graph --oneline --decorate --branches --remotes --tags --abbrev-commit
-ll = log --stat --oneline --decorate --branches --remotes --tags --abbrev-commit
-
-# undo http://megakemp.com/2016/08/25/git-undo/
-undo = "!f() { git reset --soft $(git rev-parse --abbrev-ref HEAD)@{${1-1}}; }; f"
-
-# stash staged files
-stashindex = !git stash --keep-index && git stash && git stash apply stash@{1} && git stash show -p | git apply -R && git stash drop stash@{1}
-
-# generate git artifacts
-ignore = "!f() { IFS=\",\"; curl -L -s \"https://www.toptal.com/developers/gitignore/api/$*\" ;}; f"
+lg = log --oneline --decorate --branches --remotes --tags --abbrev-commit --graph
+ll = log --oneline --decorate --branches --remotes --tags --abbrev-commit --stat
