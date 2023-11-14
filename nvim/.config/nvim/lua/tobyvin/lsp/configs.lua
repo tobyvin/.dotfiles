@@ -159,25 +159,8 @@ local M = {
 		},
 		on_attach = function(_, bufnr)
 			vim.b[bufnr].tex_flavor = "latex"
-			vim.wo.spell = true
-
-			local preview_autocmd
-			local augroup = vim.api.nvim_create_augroup("texlab", {})
-
-			vim.api.nvim_create_user_command("TexlabPreview", function()
-				preview_autocmd = vim.api.nvim_create_autocmd("CursorMoved", {
-					group = augroup,
-					command = "TexlabForward",
-				})
-
-				vim.cmd.TexlabForward()
-			end, { desc = "Texlab preview start" })
-
-			vim.api.nvim_create_user_command("TexlabPreviewStop", function()
-				if preview_autocmd then
-					vim.api.nvim_del_autocmd(preview_autocmd)
-				end
-			end, { desc = "Texlab preview stop" })
+			vim.wo[0][bufnr].spell = true
+			vim.keymap.set("n", "gx", vim.cmd.TexlabForward, { desc = "open in pdf" })
 		end,
 	},
 	tsserver = {},

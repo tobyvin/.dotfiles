@@ -25,12 +25,11 @@ require("lazy").setup("plugins", {
 			"tokyonight",
 		},
 	},
-	checker = {
-		enabled = true,
-		notify = false,
-	},
 	ui = {
 		border = "single",
+	},
+	change_detection = {
+		notify = false,
 	},
 	performance = {
 		rtp = {

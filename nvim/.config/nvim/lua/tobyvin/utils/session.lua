@@ -1,32 +1,19 @@
 local M = {}
 
-local sep = (function()
-	if jit then
-		local os = string.lower(jit.os)
-		if os ~= "windows" then
-			return "/"
-		else
-			return "\\"
-		end
-	else
-		return package.config:sub(1, 1)
-	end
-end)()
-
 ---@return string session_path
 function M.path()
 	if vim.v.this_session and vim.v.this_session ~= "" then
 		return vim.v.this_session
 	end
 
-	local session_dir = table.concat({ vim.fn.stdpath("data"), "session" }, sep)
-	local name = vim.loop.cwd():gsub(":", "++"):gsub(sep, "%%"):gsub("$", ".vim")
+	local session_dir = table.concat({ vim.fn.stdpath("data"), "session" }, U.sep)
+	local name = vim.loop.cwd():gsub(":", "++"):gsub(U.sep, "%%"):gsub("$", ".vim")
 
 	if not name or name == "" then
 		error(("Invalid session name: '%s'"):format(name))
 	end
 
-	return table.concat({ session_dir, name }, sep)
+	return table.concat({ session_dir, name }, U.sep)
 end
 
 function M.write()

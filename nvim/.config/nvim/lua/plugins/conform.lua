@@ -13,6 +13,8 @@ local M = {
 			html = { "prettier" },
 			htmldjango = { "djlint" },
 			["jinja.html"] = { "djlint" },
+			tex = { "latexindent" },
+			plaintex = { "latexindent" },
 			markdown = { "prettier", "markdownlint", "cbfmt" },
 			python = { "black" },
 			sass = { "prettier" },
@@ -22,6 +24,12 @@ local M = {
 			["*"] = { "injected" },
 		},
 		formatters = {
+			latexindent = {
+				prepend_args = {
+					"-l",
+					("%s/latexindent/indentconfig.yaml"):format(vim.env.XDG_CONFIG_HOME),
+				},
+			},
 			prettier = {
 				prepend_args = { "--prose-wrap", "always" },
 			},

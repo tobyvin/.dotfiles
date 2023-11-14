@@ -1,13 +1,3 @@
-local function find_config(filename)
-	local config = unpack(vim.fs.find(filename, {
-		path = vim.api.nvim_buf_get_name(0),
-		upward = true,
-	})) or ("%s/%s/%s"):format(vim.env.XDG_CONFIG_HOME, vim.fs.basename(filename), filename)
-	if vim.fn.filereadable(config) == 1 then
-		return config
-	end
-end
-
 local function try_lint()
 	local lint = require("lint")
 	local names = lint._resolve_linter_by_ft(vim.bo.filetype)
@@ -49,23 +39,26 @@ local M = {
 			markdownlint = {
 				prepend_args = {
 					"--config",
-					function()
-						return find_config("markdownlint.yaml")
-					end,
+					("%s/markdownlint/markdownlint.yaml"):format(vim.env.XDG_CONFIG_HOME),
 				},
-				condition = function()
-					return find_config("markdownlint.yaml")
-				end,
 			},
 			selene = {
 				prepend_args = {
 					"--config",
 					function()
-						return find_config("selene.toml")
+						return vim.fs.find("selene.toml", {
+							upward = true,
+							stop = vim.uv.os_homedir(),
+							path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+						})[1]
 					end,
 				},
 				condition = function()
-					return find_config("selene.toml")
+					return vim.fs.find("selene.toml", {
+						upward = true,
+						stop = vim.uv.os_homedir(),
+						path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
+					})[1]
 				end,
 			},
 		},
