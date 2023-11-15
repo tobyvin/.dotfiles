@@ -2,19 +2,13 @@ local M = {
 	dashboard = require("tobyvin.utils.dashboard"),
 	session = require("tobyvin.utils.session"),
 	dap = require("tobyvin.utils.dap"),
-	sep = (function()
-		if jit then
-			local os = string.lower(jit.os)
-			if os ~= "windows" then
-				return "/"
-			else
-				return "\\"
-			end
-		else
-			return package.config:sub(1, 1)
-		end
-	end)(),
+	sep = vim.uv.os_uname().version:match("Windows") and "\\" or "/",
 }
+
+---@param ... string
+M.join = function(...)
+	return table.concat({ ... }, M.sep)
+end
 
 function M.inspect(v)
 	print(vim.inspect(v))
@@ -144,7 +138,10 @@ function M.find(bufnr, filename, ...)
 
 	return vim.iter(results)
 		:map(function(f)
-			return f:starts("/") and f or ("%s/%s"):format(vim.fn.stdpath("config"), f)
+			if not f:starts("/") then
+				f = M.join(vim.fn.stdpath("config") --[[@as string]], f)
+			end
+			return f
 		end)
 		:find(function(f)
 			return vim.fn.filereadable(f) == 1
