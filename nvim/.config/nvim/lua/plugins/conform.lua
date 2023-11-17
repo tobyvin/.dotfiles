@@ -2,10 +2,11 @@
 local M = {
 	"stevearc/conform.nvim",
 	version = "*",
-	event = "BufReadPre",
+	cmd = { "ConformInfo" },
 	opts = {
 		format_on_save = false,
 		format_after_save = false,
+		log_level = vim.log.levels.DEBUG,
 		formatters_by_ft = {
 			lua = { "stylua" },
 			css = { "prettier" },
@@ -15,14 +16,17 @@ local M = {
 			["jinja.html"] = { "djlint" },
 			tex = { "latexindent" },
 			plaintex = { "latexindent" },
-			markdown = { "prettier", "markdownlint", "cbfmt" },
+			-- FIX: Move "injected" back to "*" if/when https://github.com/stevearc/conform.nvim/issues/200 is fixed.
+			markdown = { "prettier", "markdownlint", "injected" },
 			nginx = { "nginxbeautifier" },
 			python = { "black" },
+			-- FIX: Remove if/when https://github.com/stevearc/conform.nvim/issues/127 gets fixed.
+			rust = { "rustfmt" },
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },
 			PKGBUILD = { "shfmt" },
-			["*"] = { "injected" },
+			-- ["*"] = { "injected" },
 		},
 		formatters = {
 			latexindent = {
@@ -33,17 +37,6 @@ local M = {
 			},
 			prettier = {
 				prepend_args = { "--prose-wrap", "always" },
-			},
-			cbfmt = {
-				command = "cbfmt",
-				args = {
-					"--stdin-filepath",
-					"$FILENAME",
-					"--best-effort",
-					"--config",
-					("%s/cbfmt/cbfmt.toml"):format(vim.env.XDG_CONFIG_HOME),
-				},
-				stdin = true,
 			},
 			nginxbeautifier = {
 				command = "nginxbeautifier",
