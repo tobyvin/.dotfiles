@@ -1,7 +1,9 @@
 ---@type LazyPluginSpec
 local M = {
 	"vxpm/ferris.nvim",
-	config = true,
+	opts = {
+		url_handler = vim.ui.open,
+	},
 }
 
 function M:init()

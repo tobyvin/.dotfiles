@@ -1,71 +1,65 @@
-local on_list = function(options)
-	vim.fn.setqflist({}, " ", options)
-	vim.api.nvim_command("cfirst")
-end
+local ms = vim.lsp.protocol.Methods
 
 local M = {
-	["textDocument/documentHighlight"] = function(bufnr)
+	[ms.textDocument_documentHighlight] = function(bufnr)
 		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 			buffer = bufnr,
 			callback = vim.lsp.buf.document_highlight,
-			desc = "lsp document highlight",
+			desc = "document highlight",
 		})
 		vim.api.nvim_create_autocmd({ "CursorMoved", "CursorMovedI" }, {
 			buffer = bufnr,
 			callback = vim.lsp.buf.clear_references,
-			desc = "lsp clear references",
+			desc = "clear references",
 		})
 	end,
-	["textDocument/signatureHelp"] = function(bufnr)
+	[ms.textDocument_signatureHelp] = function(bufnr)
 		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, {
 			buffer = bufnr,
 			desc = "signature help",
 		})
 	end,
-	["textDocument/declaration"] = function(bufnr)
-		vim.keymap.set("n", "gD", function()
-			vim.lsp.buf.declaration({ on_list = on_list })
-		end, { buffer = bufnr, desc = "declaration" })
+	[ms.textDocument_declaration] = function(bufnr)
+		vim.keymap.set("n", "gd", vim.lsp.buf.declaration, {
+			buffer = bufnr,
+			desc = "declaration",
+		})
 	end,
-	["textDocument/definition"] = function(bufnr)
-		vim.keymap.set("n", "gd", function()
-			vim.lsp.buf.definition({ on_list = on_list })
-		end, { buffer = bufnr, desc = "definition" })
+	[ms.textDocument_definition] = function(bufnr)
+		vim.keymap.set("n", "gd", vim.lsp.buf.definition, {
+			buffer = bufnr,
+			desc = "definition",
+		})
 	end,
-	["textDocument/typeDefinition"] = function(bufnr)
-		vim.keymap.set("n", "go", function()
-			vim.lsp.buf.type_definition({ on_list = on_list })
-		end, { buffer = bufnr, desc = "type definition" })
+	[ms.textDocument_typeDefinition] = function(bufnr)
+		vim.keymap.set("n", "go", vim.lsp.buf.type_definition, {
+			buffer = bufnr,
+			desc = "type definition",
+		})
 	end,
-	["textDocument/implementation"] = function(bufnr)
-		vim.keymap.set("n", "gi", function()
-			vim.lsp.buf.implementation({ on_list = on_list })
-		end, { buffer = bufnr, desc = "implementation" })
+	[ms.textDocument_implementation] = function(bufnr)
+		vim.keymap.set("n", "gi", vim.lsp.buf.implementation, {
+			buffer = bufnr,
+			desc = "implementation",
+		})
 	end,
-	["textDocument/inlayHint"] = function(bufnr)
-		vim.lsp.inlay_hint.enable(bufnr, true)
+	[ms.textDocument_inlayHint] = vim.lsp.inlay_hint.enable,
+	[ms.textDocument_references] = function(bufnr)
+		vim.keymap.set("n", "gr", vim.lsp.buf.references, {
+			buffer = bufnr,
+			desc = "references",
+		})
 	end,
-	["textDocument/references"] = function(bufnr)
-		vim.keymap.set("n", "gr", function()
-			vim.lsp.buf.references(nil, { on_list = on_list })
-		end, { buffer = bufnr, desc = "references" })
-	end,
-	["textDocument/rename"] = function(bufnr)
+	[ms.textDocument_rename] = function(bufnr)
 		vim.keymap.set("n", "<leader>lr", vim.lsp.buf.rename, {
 			buffer = bufnr,
 			desc = "rename",
 		})
 	end,
-	["textDocument/codeAction"] = function(bufnr)
+	[ms.textDocument_codeAction] = function(bufnr)
 		vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, {
 			buffer = bufnr,
 			desc = "code action",
-		})
-	end,
-	["experimental/externalDocs"] = function(bufnr)
-		vim.keymap.set("n", "gx", vim.lsp.buf.external_docs, {
-			buffer = bufnr,
-			desc = "external_docs",
 		})
 	end,
 }
