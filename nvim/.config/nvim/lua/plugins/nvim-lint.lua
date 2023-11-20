@@ -29,9 +29,7 @@ local M = {
 	"mfussenegger/nvim-lint",
 	opts = {
 		linters_by_ft = {
-			django = { "djlint" },
 			htmldjango = { "djlint" },
-			["jinja.html"] = { "djlint" },
 			lua = { "selene" },
 			markdown = { "markdownlint" },
 		},

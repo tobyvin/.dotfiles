@@ -10,10 +10,8 @@ local M = {
 		formatters_by_ft = {
 			lua = { "stylua" },
 			css = { "prettier" },
-			django = { "djlint" },
 			html = { "prettier" },
 			htmldjango = { "djlint" },
-			["jinja.html"] = { "djlint" },
 			tex = { "latexindent" },
 			plaintex = { "latexindent" },
 			-- FIX: Move "injected" back to "*" if/when https://github.com/stevearc/conform.nvim/issues/200 is fixed.
@@ -26,7 +24,6 @@ local M = {
 			scss = { "prettier" },
 			sh = { "shfmt" },
 			PKGBUILD = { "shfmt" },
-			-- ["*"] = { "injected" },
 		},
 		formatters = {
 			latexindent = {
@@ -37,6 +34,14 @@ local M = {
 			},
 			prettier = {
 				prepend_args = { "--prose-wrap", "always" },
+			},
+			djlint = {
+				prepend_args = function(ctx)
+					return {
+						"--indent=" .. vim.bo[ctx.buf].tabstop,
+						"--profile=" .. (vim.bo[ctx.buf].filetype:gsub("htmldjango", "django")),
+					}
+				end,
 			},
 			nginxbeautifier = {
 				command = "nginxbeautifier",
