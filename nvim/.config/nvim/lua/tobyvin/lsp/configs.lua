@@ -1,3 +1,5 @@
+local ms = vim.lsp.protocol.Methods
+
 local M = {
 	bashls = {
 		settings = {
@@ -30,8 +32,9 @@ local M = {
 		},
 	},
 	html = {
-		init_options = {
-			provideFormatter = false,
+		handlers = {
+			-- TODO: Find out why html ls is missing diagnostic handler without this.
+			[ms.textDocument_diagnostic] = vim.lsp.diagnostic.on_diagnostic,
 		},
 		filetypes = {
 			"html",
