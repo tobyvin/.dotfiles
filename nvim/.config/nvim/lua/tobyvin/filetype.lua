@@ -5,7 +5,8 @@ vim.filetype.add({
 		zsh = "sh",
 	},
 	filename = {
-		["PKGBUILD"] = "PKGBUILD",
+		PKGBUILD = "PKGBUILD",
+		tridactylrc = "trytactylrc",
 	},
 	pattern = {
 		-- sway drop-ins

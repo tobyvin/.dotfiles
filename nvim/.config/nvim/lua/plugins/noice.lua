@@ -2,7 +2,7 @@
 local M = {
 	"folke/noice.nvim",
 	version = "*",
-	event = { "VeryLazy", "LspAttach" },
+	event = { "LspAttach" },
 	dependencies = {
 		"MunifTanjim/nui.nvim",
 		"rcarriga/nvim-notify",
@@ -46,6 +46,11 @@ local M = {
 }
 
 function M:init()
+	---@diagnostic disable-next-line: duplicate-set-field
+	vim.notify = function(...)
+		return require("noice").notify(...)
+	end
+
 	vim.api.nvim_set_hl(0, "NoiceLspProgressSpinner", { link = "DiagnosticSignInfo" })
 	vim.api.nvim_set_hl(0, "NoiceLspProgressDone", { link = "DiagnosticSignOk" })
 

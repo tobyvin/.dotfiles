@@ -36,27 +36,12 @@ local M = {
 				return {}
 			end
 
-			local opts = {
-				text = true,
-				timeout = 30,
-			}
-
-			local cowsay
+			local cmd = vim.system({ "fortune", "-s" }, { text = true })
 			if vim.fn.executable("cowsay") == 1 then
-				cowsay = vim.system({ "cowsay" }, { text = true, stdin = true })
-				opts.stdout = function(_, data)
-					cowsay:write(data)
-				end
+				cmd = vim.system({ "cowsay" }, { text = true, stdin = cmd:wait().stdout })
 			end
 
-			local stdout = vim.system({ "fortune", "-s" }, opts):wait().stdout
-
-			if cowsay then
-				cowsay:write(nil)
-				stdout = cowsay:wait().stdout
-			end
-
-			return vim.split(stdout or "", "\n")
+			return vim.split(cmd:wait().stdout or "", "\n")
 		end,
 		{
 			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",
@@ -87,7 +72,7 @@ local M = {
 }
 
 function M.render(bufnr, index)
-  bufnr = bufnr or 0
+	bufnr = bufnr or 0
 
 	local width = vim.api.nvim_win_get_width(0)
 	local height = vim.api.nvim_win_get_height(0)
@@ -140,32 +125,30 @@ function M.initialize()
 	vim.bo[bufnr].buftype = "nofile"
 	vim.bo[bufnr].filetype = "dashboard"
 	vim.bo[bufnr].synmaxcol = 0
+	vim.wo[winid][0].wrap = false
+	vim.wo[winid][0].colorcolumn = ""
+	vim.wo[winid][0].foldlevel = 999
+	vim.wo[winid][0].foldcolumn = "0"
+	vim.wo[winid][0].cursorcolumn = false
+	vim.wo[winid][0].cursorline = false
+	vim.wo[winid][0].number = false
+	vim.wo[winid][0].relativenumber = false
+	vim.wo[winid][0].list = false
+	vim.wo[winid][0].spell = false
+	vim.wo[winid][0].signcolumn = "no"
 
 	vim.b[bufnr].dashboard = {}
 	vim.b[bufnr].dashboard.augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
-
-	local opts = { scope = "local", win = winid }
-	vim.api.nvim_set_option_value("wrap", false, opts)
-	vim.api.nvim_set_option_value("colorcolumn", "", opts)
-	vim.api.nvim_set_option_value("foldlevel", 999, opts)
-	vim.api.nvim_set_option_value("foldcolumn", "0", opts)
-	vim.api.nvim_set_option_value("cursorcolumn", false, opts)
-	vim.api.nvim_set_option_value("cursorline", false, opts)
-	vim.api.nvim_set_option_value("number", false, opts)
-	vim.api.nvim_set_option_value("relativenumber", false, opts)
-	vim.api.nvim_set_option_value("list", false, opts)
-	vim.api.nvim_set_option_value("spell", false, opts)
-	vim.api.nvim_set_option_value("signcolumn", "no", opts)
 
 	return bufnr
 end
 
 function M.next_fortune(bufnr)
-		M.render(bufnr, 1)
+	M.render(bufnr, 1)
 end
 
 function M.refresh_stats(bufnr)
-		M.render(bufnr, 3)
+	M.render(bufnr, 3)
 end
 
 function M.setup()
@@ -176,8 +159,8 @@ function M.setup()
 		group = augroup,
 		pattern = { "LazyVimStarted", "LazyLoad", "LazyCheck" },
 		callback = function()
-      M.refresh_stats(bufnr)
-    end,
+			M.refresh_stats(bufnr)
+		end,
 		desc = "dashboard lazy stats",
 	})
 

@@ -8,4 +8,4 @@ require("tobyvin.lsp")
 require("tobyvin.diagnostic")
 require("tobyvin.lazy")
 
-vim.cmd.colorscheme("gruvbox")
+pcall(vim.cmd.colorscheme, "gruvbox")
