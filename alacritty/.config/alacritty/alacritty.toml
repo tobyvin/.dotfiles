@@ -14,7 +14,7 @@ opacity = 0.95
 
 [font]
 size = 15
-normal = { family = "Fira Code Nerd Font" }
+normal = { family = "Hack Nerd Font" }
 
 [mouse]
 hide_when_typing = true
