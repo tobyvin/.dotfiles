@@ -19,8 +19,14 @@ local M = {
 			desc = "signature help",
 		})
 	end,
+	[ms.textDocument_documentSymbol] = function(bufnr)
+		vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, {
+			buffer = bufnr,
+			desc = "definition",
+		})
+	end,
 	[ms.textDocument_declaration] = function(bufnr)
-		vim.keymap.set("n", "gd", vim.lsp.buf.declaration, {
+		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, {
 			buffer = bufnr,
 			desc = "declaration",
 		})
@@ -57,7 +63,7 @@ local M = {
 		})
 	end,
 	[ms.textDocument_codeAction] = function(bufnr)
-		vim.keymap.set("n", "<leader>la", vim.lsp.buf.code_action, {
+		vim.keymap.set({ "n", "v" }, "<leader>la", vim.lsp.buf.code_action, {
 			buffer = bufnr,
 			desc = "code action",
 		})

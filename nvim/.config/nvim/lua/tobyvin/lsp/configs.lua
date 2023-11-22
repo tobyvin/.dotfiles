@@ -14,7 +14,12 @@ local M = {
 	},
 	-- biome = {},
 	clangd = {},
-	cssls = {},
+	cssls = {
+		handlers = {
+			-- TODO: Find out why html ls is missing diagnostic handler without this.
+			[ms.textDocument_diagnostic] = vim.lsp.diagnostic.on_diagnostic,
+		},
+	},
 	cssmodules_ls = {},
 	dockerls = {},
 	gopls = {
