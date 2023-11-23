@@ -1,23 +1,22 @@
 local M = {}
 
 ---@return string session_path
-function M.path()
+function M.session_path()
 	if vim.v.this_session and vim.v.this_session ~= "" then
 		return vim.v.this_session
 	end
 
-	local session_dir = table.concat({ vim.fn.stdpath("data"), "session" }, U.sep)
-	local name = vim.loop.cwd():gsub(":", "++"):gsub(U.sep, "%%"):gsub("$", ".vim")
+	local name = vim.loop.cwd():gsub(":", "++"):gsub(U.fs.sep, "%%"):gsub("$", ".vim")
 
-	if not name or name == "" then
+	if name == nil or name == "" then
 		error(("Invalid session name: '%s'"):format(name))
 	end
 
-	return table.concat({ session_dir, name }, U.sep)
+	return U.fs.xdg.data("nvim", "session", name)
 end
 
 function M.write()
-	local is_ok, res = pcall(M.path)
+	local is_ok, res = pcall(M.session_path)
 	if not is_ok then
 		return vim.notify(res, vim.log.levels.ERROR)
 	end
@@ -30,20 +29,27 @@ function M.write()
 end
 
 function M.read()
-	local is_ok, res = pcall(M.path)
+	local is_ok, session_file = pcall(M.session_path)
 	if not is_ok then
-		return vim.notify(res, vim.log.levels.ERROR)
+		return vim.notify(session_file, vim.log.levels.ERROR)
 	end
 
-	if vim.fn.filereadable(res) ~= 1 then
-		return vim.notify("No session found", vim.log.levels.WARN)
+	if vim.fn.filereadable(session_file) ~= 1 then
+		return vim.notify(("No session found\nsession path: %s"):format(session_file), vim.log.levels.WARN)
 	end
 
 	if
-		#vim.fn.getbufinfo({ buflisted = 1, bufloaded = 1 }) == 0
-		or vim.fn.confirm("Reading session will overwrite buffers. Continue?", "&Yes\n&No") == 1
+		not U.buf.iter():any(U.buf.is_valid)
+		or vim.fn.confirm("Reading session will overwrite existing buffers. Continue?", "&Yes\n&No") == 1
 	then
-		vim.cmd.source(vim.fn.fnameescape(res))
+		U.buf.iter():filter(U.buf.is_invalid):map(U.buf.delete)
+		vim.cmd.source(vim.fn.fnameescape(session_file))
+	end
+end
+
+function M.on_exit()
+	if vim.fn.argc() == 0 and U.buf.iter():any(U.buf.is_valid) then
+		pcall(M.write)
 	end
 end
 

@@ -1,14 +1,10 @@
 local M = {
+	fs = require("tobyvin.utils.fs"),
+	buf = require("tobyvin.utils.buf"),
 	dashboard = require("tobyvin.utils.dashboard"),
 	session = require("tobyvin.utils.session"),
 	dap = require("tobyvin.utils.dap"),
-	sep = vim.uv.os_uname().version:match("Windows") and "\\" or "/",
 }
-
----@param ... string
-M.join = function(...)
-	return table.concat({ ... }, M.sep)
-end
 
 function M.inspect(v)
 	print(vim.inspect(v))
@@ -94,58 +90,6 @@ function M.extend_hl(ns, name, ...)
 	end
 
 	vim.api.nvim_set_hl(ns, name, hl)
-end
-
----@class stdpath
----@field cache fun(...: string): string
----@field config fun(...: string): string
----@field config_dirs fun(...: string): string
----@field data fun(...: string): string
----@field data_dirs fun(...: string): string
----@field log fun(...: string): string
----@field run fun(...: string): string
----@field state fun(...: string): string
-M.stdpath = setmetatable({}, {
-	__call = function(t, dir, ...)
-		return t[dir](...)
-	end,
-	__index = function(t, dir)
-		local value = vim.fn.stdpath(dir)
-		if not value or type(value) == "table" then
-			t[dir] = value
-		else
-			t[dir] = function(...)
-				return table.concat({ vim.fs.dirname(value), ... }, M.sep)
-			end
-		end
-
-		return t[dir]
-	end,
-})
-
----Searches upward from <bufnr>'s name for <filename>. If not found, returns the first existing
----fallback or nil if none exist
----@param bufnr integer
----@param filename string
----@param ... string? fallback paths
-function M.find(bufnr, filename, ...)
-	local results = vim.fs.find(filename, {
-		upward = true,
-		stop = vim.uv.os_homedir(),
-		path = vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)),
-	})
-	vim.list_extend(results, { ... })
-
-	return vim.iter(results)
-		:map(function(f)
-			if not f:starts("/") then
-				f = M.join(vim.fn.stdpath("config") --[[@as string]], f)
-			end
-			return f
-		end)
-		:find(function(f)
-			return vim.fn.filereadable(f) == 1
-		end)
 end
 
 return M

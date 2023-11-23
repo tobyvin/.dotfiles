@@ -27,7 +27,6 @@ end
 ---@field augroup integer?
 ---@field win integer?
 ---@field buf integer?
----@field setup function
 local M = {
 	rendered = {},
 	sections = {
@@ -71,11 +70,20 @@ local M = {
 	},
 }
 
+function M.next_fortune(bufnr)
+	M.render(bufnr, 1)
+end
+
+function M.refresh_stats(bufnr)
+	M.render(bufnr, 3)
+end
+
 function M.render(bufnr, index)
 	bufnr = bufnr or 0
 
-	local width = vim.api.nvim_win_get_width(0)
-	local height = vim.api.nvim_win_get_height(0)
+	local opts = vim.b[bufnr].dashboard_opts
+	local width = vim.api.nvim_win_get_width(opts.winid)
+	local height = vim.api.nvim_win_get_height(opts.winid)
 
 	local rendered = {}
 	local dashboard = vim.b[bufnr].dashboard or {}
@@ -112,10 +120,17 @@ function M.render(bufnr, index)
 	vim.b[bufnr].dashboard = dashboard
 end
 
-function M.initialize()
+function M.initialize(opts)
 	local bufnr = vim.api.nvim_create_buf(false, true)
-	vim.api.nvim_set_current_buf(bufnr)
-	local winid = vim.api.nvim_get_current_win()
+
+	if not opts.winid then
+		if opts.float then
+			opts.winid = vim.api.nvim_open_win(bufnr, opts.float_enter, opts.float_opts)
+		else
+			opts.winid = vim.api.nvim_get_current_win()
+			vim.api.nvim_win_set_buf(opts.winid, bufnr)
+		end
+	end
 
 	vim.bo[bufnr].textwidth = 0
 	vim.bo[bufnr].bufhidden = "wipe"
@@ -125,36 +140,53 @@ function M.initialize()
 	vim.bo[bufnr].buftype = "nofile"
 	vim.bo[bufnr].filetype = "dashboard"
 	vim.bo[bufnr].synmaxcol = 0
-	vim.wo[winid][0].wrap = false
-	vim.wo[winid][0].colorcolumn = ""
-	vim.wo[winid][0].foldlevel = 999
-	vim.wo[winid][0].foldcolumn = "0"
-	vim.wo[winid][0].cursorcolumn = false
-	vim.wo[winid][0].cursorline = false
-	vim.wo[winid][0].number = false
-	vim.wo[winid][0].relativenumber = false
-	vim.wo[winid][0].list = false
-	vim.wo[winid][0].spell = false
-	vim.wo[winid][0].signcolumn = "no"
 
-	vim.b[bufnr].dashboard = {}
-	vim.b[bufnr].dashboard.augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
+	vim.iter(opts.win_opts):each(function(k, v)
+		vim.wo[opts.winid][0][k] = v
+	end)
+
+	vim.b[bufnr].dashboard_opts = opts
 
 	return bufnr
 end
 
-function M.next_fortune(bufnr)
-	M.render(bufnr, 1)
+function M.on_enter()
+	if vim.fn.argc() == 0 then
+		M.setup()
+	end
+	return true
 end
 
-function M.refresh_stats(bufnr)
-	M.render(bufnr, 3)
-end
+function M.setup(opts)
+	opts = vim.tbl_extend("keep", opts or {}, {
+		float = false,
+		float_enter = false,
+		float_opts = {
+			relative = "editor",
+			width = 80,
+			height = 50,
+			col = (vim.o.columns - (opts and opts.width or 80)) / 2,
+			row = (vim.o.lines - (opts and opts.height or 50)) / 2,
+			style = "minimal",
+		},
+		win_opts = {
+			wrap = false,
+			colorcolumn = "",
+			foldlevel = 999,
+			foldcolumn = "0",
+			cursorcolumn = false,
+			cursorline = false,
+			number = false,
+			relativenumber = false,
+			list = false,
+			spell = false,
+			signcolumn = "no",
+		},
+	})
 
-function M.setup()
+	local bufnr = M.initialize(opts)
+
 	local augroup = vim.api.nvim_create_augroup("dashboard", { clear = true })
-	local bufnr = M.initialize()
-
 	vim.api.nvim_create_autocmd("User", {
 		group = augroup,
 		pattern = { "LazyVimStarted", "LazyLoad", "LazyCheck" },

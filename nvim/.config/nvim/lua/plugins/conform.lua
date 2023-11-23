@@ -6,7 +6,6 @@ local M = {
 	opts = {
 		format_on_save = false,
 		format_after_save = false,
-		log_level = vim.log.levels.DEBUG,
 		formatters_by_ft = {
 			lua = { "stylua" },
 			css = { "prettier" },
@@ -14,8 +13,7 @@ local M = {
 			htmldjango = { "djlint" },
 			tex = { "latexindent" },
 			plaintex = { "latexindent" },
-			-- FIX: Move "injected" back to "*" if/when https://github.com/stevearc/conform.nvim/issues/200 is fixed.
-			markdown = { "prettier", "markdownlint", "injected" },
+			markdown = { "prettier", "markdownlint" },
 			nginx = { "nginxbeautifier" },
 			python = { "black" },
 			-- FIX: Remove if/when https://github.com/stevearc/conform.nvim/issues/127 gets fixed.
@@ -24,6 +22,7 @@ local M = {
 			scss = { "prettier" },
 			sh = { "shfmt" },
 			PKGBUILD = { "shfmt" },
+			["*"] = { "injected", "trim_whitespace", "trim_newlines" },
 		},
 		formatters = {
 			latexindent = {
