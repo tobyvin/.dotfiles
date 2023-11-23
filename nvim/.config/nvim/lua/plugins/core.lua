@@ -84,7 +84,6 @@ local M = {
 	},
 	{
 		"sourcegraph/sg.nvim",
-		event = { "LspAttach", "BufReadPre" },
 		cmd = {
 			"CodyDo",
 			"CodyAsk",
