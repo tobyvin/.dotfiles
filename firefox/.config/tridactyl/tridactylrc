@@ -14,6 +14,7 @@ alias jsep js -p 'use strict'; function $all(q, root=document) { return Array.fr
 alias video_with jse let video; if (document.activeElement.name == 'VIDEO') video = document.activeElement; else video = $all('video').find(v => !v.paused); if (!video) video = $('video');
 
 set profiledir default
+set homepages [ "https://miniflux.tobyvin.dev/", "https://tobyvin.dev/"]
 set auconcreatecontainer true
 set modeindicatormodes {"normal":"false","video":"false"}
 set findcase smart
@@ -48,8 +49,6 @@ bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | exclaim_quiet mpv --loop
 bind gv mode video
 bind gx hint -W mpvsafe
-
-bindurl ^https://docs.rs/[^/]+/\d+.\d+.\d+/[^/]+/ zz composite jsb tri.native.run('cat /home/tobyv/.config/firefox/userscripts/rustdoc-condensed.js') | js -p eval(JS_ARG.content)
 
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
