@@ -75,20 +75,7 @@ local M = {
 	},
 	ocamllsp = {},
 	omnisharp = {
-		-- cmd = { "dotnet", "/home/tobyv/.local/share/nvim/mason/packages/omnisharp/OmniSharp.dll" },
 		cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
-		on_attach = function(client)
-			-- HACK: https://github.com/OmniSharp/omnisharp-roslyn/issues/2483
-			local tokenModifiers = client.server_capabilities.semanticTokensProvider.legend.tokenModifiers
-			for i, v in ipairs(tokenModifiers) do
-				tokenModifiers[i] = v:gsub(" ", "_"):gsub("-_", "")
-			end
-
-			local tokenTypes = client.server_capabilities.semanticTokensProvider.legend.tokenTypes
-			for i, v in ipairs(tokenTypes) do
-				tokenTypes[i] = v:gsub(" ", "_"):gsub("-_", "")
-			end
-		end,
 	},
 	perlnavigator = {
 		settings = {
