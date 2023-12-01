@@ -6,7 +6,12 @@ live_config_reload = true
 
 [shell]
 program = "tmux"
-args = ["new", "-A"]
+args = [
+    "-T",
+    "256,clipboard,focus,hyperlinks,mouse,osc7,RGB,strikethrough,sync,usstyle",
+    "new",
+    "-A"
+]
 
 [window]
 dynamic_padding = true
