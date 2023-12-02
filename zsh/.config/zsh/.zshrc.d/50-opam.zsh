@@ -1,5 +1,5 @@
 #!/bin/zsh
 
-if [ -r $XDG_DATA_HOME/opam/opam-init/init.zsh ]; then
-	source $XDG_DATA_HOME/opam/opam-init/init.zsh
+if [ -r $OPAMROOT/opam-init/complete.zsh ]; then
+	source $OPAMROOT/opam-init/complete.zsh >/dev/null 2>/dev/null
 fi

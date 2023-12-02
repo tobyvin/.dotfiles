@@ -166,6 +166,7 @@ local M = {
 			},
 		},
 	},
+	zls = {},
 }
 
 return M
