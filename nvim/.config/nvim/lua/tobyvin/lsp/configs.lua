@@ -12,7 +12,16 @@ local M = {
 			},
 		},
 	},
-	-- biome = {},
+	biome = {
+		capabilities = {
+			textDocument = {
+				rangeFormatting = { dynamicRegistration = true },
+				onTypeFormatting = { dynamicRegistration = true },
+				formatting = { dynamicRegistration = true },
+				typeDefinition = { dynamicRegistration = true },
+			},
+		},
+	},
 	clangd = {},
 	cssls = {
 		handlers = {
@@ -44,18 +53,6 @@ local M = {
 		filetypes = {
 			"html",
 			"htmldjango",
-		},
-	},
-	jsonls = {
-		settings = {
-			json = {
-				format = {
-					enable = true,
-				},
-				validate = {
-					enable = true,
-				},
-			},
 		},
 	},
 	lua_ls = {
@@ -158,7 +155,6 @@ local M = {
 			vim.keymap.set("n", "gx", vim.cmd.TexlabForward, { desc = "open in pdf" })
 		end,
 	},
-	tsserver = {},
 	typos_lsp = {
 		filetypes = {
 			"eml",

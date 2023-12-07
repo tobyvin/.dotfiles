@@ -4,9 +4,35 @@ local M = {
 }
 
 function M.init()
-	require("tobyvin.lsp.configs").jsonls.on_new_config = function(new_config)
-		new_config.settings.json.schemas = new_config.settings.json.schemas or {}
-		vim.list_extend(new_config.settings.json.schemas, require("schemastore").json.schemas())
+	local lsp_settings = {
+		jsonls = {
+			settings = {
+				json = {
+					validate = {
+						enable = true,
+					},
+					schemas = require("schemastore").json.schemas(),
+				},
+			},
+		},
+		yamlls = {
+			settings = {
+				yaml = {
+					schemaStore = {
+						enable = false,
+						url = "",
+					},
+					schemas = require("schemastore").yaml.schemas(),
+				},
+			},
+		},
+	}
+
+	for name, override in vim.iter(lsp_settings) do
+		local config = require("tobyvin.lsp.configs")[name]
+		if config then
+			require("tobyvin.lsp.configs")[name] = vim.tbl_extend("force", config, override)
+		end
 	end
 end
 
