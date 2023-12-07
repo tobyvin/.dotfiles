@@ -17,8 +17,8 @@ local M = {
 			local with_range = function(callback)
 				return function()
 					if vim.fn.mode():lower() == "v" then
-						local cursor = vim.fn.getpos(".")
-						local visual = vim.fn.getpos("v")
+						local cursor = vim.fn.getpos(".") --[[@as integer[] ]]
+						local visual = vim.fn.getpos("v") --[[@as integer[] ]]
 						callback({ cursor[2], visual[2] })
 					else
 						callback()
@@ -104,6 +104,7 @@ function M:config(opts)
 	local popup = require("gitsigns.popup")
 	local popup_create = popup.create
 
+	---@diagnostic disable-next-line: duplicate-set-field
 	function popup.create(...)
 		local winid, bufnr = popup_create(...)
 

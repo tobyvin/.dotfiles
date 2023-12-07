@@ -19,7 +19,7 @@ vim.filetype.add({
 		[".*/mutt/.*%.rc"] = "muttrc",
 		-- conf fallback
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
-		-- sudoedit/sudo -e match orignal ft
+		-- sudoedit/sudo -e match original ft
 		["/var/tmp/.*"] = function(_, bufnr, _)
 			local pid = vim.fn.getpid()
 			local cl = vim.fn.readfile(("/proc/%s/comm"):format(pid))

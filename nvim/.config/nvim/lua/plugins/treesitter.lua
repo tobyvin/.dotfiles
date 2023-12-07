@@ -16,7 +16,6 @@ local M = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		"mfussenegger/nvim-ts-hint-textobject",
 		{ "LiadOz/nvim-dap-repl-highlights", opts = {} },
-		{ "JoosepAlviste/nvim-ts-context-commentstring", opts = {} },
 	},
 	main = "nvim-treesitter.configs",
 	opts = {
@@ -115,9 +114,6 @@ local M = {
 					["av"] = "@statement.outer",
 				},
 			},
-		},
-		context_commentstring = {
-			enable = true,
 		},
 	},
 }

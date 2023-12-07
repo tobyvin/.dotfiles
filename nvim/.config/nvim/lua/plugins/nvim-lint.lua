@@ -32,6 +32,7 @@ local M = {
 			htmldjango = { "djlint" },
 			lua = { "selene" },
 			markdown = { "markdownlint" },
+			zsh = { "zsh" },
 		},
 		linters = {
 			markdownlint = {

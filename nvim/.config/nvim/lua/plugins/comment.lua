@@ -4,7 +4,14 @@ local M = {
 	version = "*",
 	event = "BufReadPre",
 	dependencies = {
-		"JoosepAlviste/nvim-ts-context-commentstring",
+		{
+			"JoosepAlviste/nvim-ts-context-commentstring",
+			event = "BufReadPre",
+			opts = {},
+			init = function()
+				vim.g.skip_ts_context_commentstring_module = true
+			end,
+		},
 	},
 	opts = {
 		pre_hook = function(...)

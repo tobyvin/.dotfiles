@@ -159,6 +159,15 @@ local M = {
 		end,
 	},
 	tsserver = {},
+	typos_lsp = {
+		filetypes = {
+			"eml",
+			"gitcommit",
+			"mail",
+			"markdown",
+			"tex",
+		},
+	},
 	yamlls = {
 		settings = {
 			yaml = {
