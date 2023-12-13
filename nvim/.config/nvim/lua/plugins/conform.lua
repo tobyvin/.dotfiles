@@ -35,7 +35,7 @@ local M = {
 				prepend_args = { "--prose-wrap", "always" },
 			},
 			djlint = {
-				prepend_args = function(ctx)
+				prepend_args = function(_, ctx)
 					return {
 						"--indent=" .. vim.bo[ctx.buf].tabstop,
 						"--profile=" .. (vim.bo[ctx.buf].filetype:gsub("htmldjango", "django")),
@@ -44,7 +44,7 @@ local M = {
 			},
 			nginxbeautifier = {
 				command = "nginxbeautifier",
-				args = function(ctx)
+				args = function(_, ctx)
 					return {
 						vim.bo[ctx.buf].expandtab and "-s" or "-t",
 						vim.bo[ctx.buf].tabstop,
