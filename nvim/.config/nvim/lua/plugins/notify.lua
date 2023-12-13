@@ -14,4 +14,11 @@ local M = {
 	},
 }
 
+function M:init()
+	---@diagnostic disable-next-line: duplicate-set-field
+	vim.notify = function(...)
+		return require("notify").notify(...)
+	end
+end
+
 return M

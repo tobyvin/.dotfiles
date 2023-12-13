@@ -14,6 +14,18 @@ local M = {
 		opts = {},
 	},
 	{
+		"j-hui/fidget.nvim",
+		version = "*",
+		event = { "LspAttach" },
+		opts = {
+			notification = {
+				window = {
+					winblend = 0,
+				},
+			},
+		},
+	},
+	{
 		"akinsho/git-conflict.nvim",
 		event = "BufReadPre",
 		opts = {
