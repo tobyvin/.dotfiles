@@ -35,12 +35,9 @@ local M = {
 				return {}
 			end
 
-			local cmd = vim.system({ "fortune", "-s" }, { text = true })
-			if vim.fn.executable("cowsay") == 1 then
-				cmd = vim.system({ "cowsay" }, { text = true, stdin = cmd:wait().stdout })
-			end
+			local obj = U.system({ "fortune", "-s" }):try_pipe({ "cowsay" })
 
-			return vim.split(cmd:wait().stdout or "", "\n")
+			return vim.split(obj:wait().stdout or "", "\n")
 		end,
 		{
 			" ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗ ",

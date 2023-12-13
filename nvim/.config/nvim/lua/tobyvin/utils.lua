@@ -34,6 +34,34 @@ function M.debounce(ms, fn)
 	end
 end
 
+function M.system(...)
+	local s = vim.system(...)
+	--- @param obj vim.SystemObj
+	--- @param cmd string[]
+	--- @param opts SystemOpts|nil)
+	--- @param on_exit function|nil
+	---@diagnostic disable-next-line: inject-field
+	s.pipe = function(obj, cmd, opts, on_exit)
+		opts = vim.tbl_extend("keep", opts or {}, { stdin = obj:wait().stdout })
+		return M.system(cmd, opts, on_exit)
+	end
+
+	--- @param obj vim.SystemObj
+	--- @param cmd string[]
+	--- @param opts SystemOpts|nil)
+	--- @param on_exit function|nil
+	---@diagnostic disable-next-line: inject-field
+	s.try_pipe = function(obj, cmd, opts, on_exit)
+		if vim.fn.executable(cmd[1]) ~= 1 then
+			cmd = { "cat" }
+		end
+		---@diagnostic disable-next-line: undefined-field
+		return obj:pipe(cmd, opts, on_exit)
+	end
+
+	return s
+end
+
 ---Register callback to run when a lsp server matching a filter attaches to a buffer
 ---@param on_attach fun(client: lsp.Client, buffer: integer): boolean|nil
 ---@param filter vim.lsp.get_clients.filter|nil
