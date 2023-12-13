@@ -10,6 +10,7 @@ local M = {
 			DiffAdd = { link = "GruvboxGreen" },
 			DiffChange = { link = "GruvboxAqua" },
 			DiffText = { link = "GruvboxYellow" },
+			Delimiter = { link = "Special" },
 		},
 	},
 }
