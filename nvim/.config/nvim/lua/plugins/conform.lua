@@ -61,7 +61,30 @@ local M = {
 }
 
 function M:init()
-	vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
+	U.formatexpr = function(...)
+		if not pcall(require, "fidget.progress") then
+			return require("conform").formatexpr(...)
+		end
+
+		local bufnr = vim.api.nvim_get_current_buf()
+		local handle = require("fidget.progress").handle.create({
+			title = "Formatting",
+			message = string.format("buffer: %s", bufnr),
+			lsp_client = { name = "conform" },
+		})
+
+		local err = require("conform").formatexpr()
+		if err == 1 then
+			handle.message = "Failed"
+		else
+			handle.message = "Completed"
+		end
+
+		handle:finish()
+		return err
+	end
+
+	vim.o.formatexpr = "v:lua.U.formatexpr()"
 end
 
 return M
