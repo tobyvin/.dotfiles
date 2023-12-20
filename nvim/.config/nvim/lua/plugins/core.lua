@@ -66,7 +66,10 @@ local M = {
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 		},
-		opts = {},
+		opts = {
+			separator = "─",
+			multiline_threshold = 1,
+		},
 	},
 	{
 		"f3fora/nvim-texlabconfig",
