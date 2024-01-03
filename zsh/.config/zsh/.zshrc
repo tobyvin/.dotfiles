@@ -26,6 +26,9 @@ zle -N select-word-style
 select-word-style normal
 zstyle :zle:transpose-words word-style shell
 
+zstyle :completion:* cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
+zstyle :completion:* use-cache true
+
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^[q' push-line
 bindkey '^[[Z' reverse-menu-complete
