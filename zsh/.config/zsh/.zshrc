@@ -1,33 +1,22 @@
 #!/bin/zsh
 
-export HYPHEN_INSENSITIVE="true"
-export DISABLE_UPDATE_PROMPT="true"
-export DISABLE_AUTO_TITLE="true"
-export HISTFILE="$XDG_STATE_HOME/zsh/history"
-export HISTSIZE=10000
-export SAVEHIST=10000
-export DIRSTACKSIZE=20
+HISTFILE="${XDG_STATE_HOME}/zsh/history"
+HISTSIZE=10000
+SAVEHIST=10000
 
-setopt NO_BEEP
-setopt MENU_COMPLETE
-setopt AUTO_CD
-setopt AUTO_PUSHD
-setopt PUSHD_SILENT
-setopt PUSHD_TO_HOME
-setopt PUSHD_IGNORE_DUPS
-setopt EXTENDED_HISTORY
-setopt SHARE_HISTORY
-setopt HIST_EXPIRE_DUPS_FIRST
-setopt HIST_IGNORE_DUPS
-setopt HIST_IGNORE_SPACE
-setopt HIST_VERIFY
-setopt NONOMATCH
-setopt CORRECT
-setopt INTERACTIVE_COMMENTS
-
-TRAPUSR1() {
-  rehash
-}
+setopt no_beep
+setopt menu_complete
+setopt auto_pushd
+setopt pushd_silent
+setopt pushd_ignore_dups
+setopt extended_history
+setopt share_history
+setopt hist_expire_dups_first
+setopt hist_ignore_dups
+setopt hist_ignore_space
+setopt hist_verify
+setopt nonomatch
+setopt interactive_comments
 
 bindkey -v
 bindkey -m 2>/dev/null
@@ -37,8 +26,6 @@ zle -N select-word-style
 select-word-style normal
 zstyle :zle:transpose-words word-style shell
 
-# TODO: improve this with terminfo validation
-#
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^[q' push-line
 bindkey '^[[Z' reverse-menu-complete
@@ -48,6 +35,7 @@ bindkey '^[[3~' delete-char
 bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[t' transpose-words
+bindkey '^ ' forward-word
 
 bindkey -M vicmd '^[q' push-line
 bindkey -M vicmd '^[[Z' reverse-menu-complete
@@ -72,8 +60,3 @@ for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
 		source "$script"
 	fi
 done
-
-bindkey '^ ' forward-word
-
-autoload -Uz compinit
-compinit
