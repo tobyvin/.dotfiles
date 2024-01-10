@@ -15,7 +15,7 @@ local M = {
 			plaintex = { "latexindent" },
 			markdown = { "prettier", "markdownlint" },
 			nginx = { "nginxbeautifier" },
-			python = { "black" },
+			python = { "black", "usort" },
 			-- FIX: Remove if/when https://github.com/stevearc/conform.nvim/issues/127 gets fixed.
 			rust = { "rustfmt" },
 			sass = { "prettier" },
