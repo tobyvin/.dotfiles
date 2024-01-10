@@ -13,7 +13,7 @@ local M = {
 			htmldjango = { "djlint" },
 			tex = { "latexindent" },
 			plaintex = { "latexindent" },
-			markdown = { "prettier", "markdownlint" },
+			markdown = { "mdformat", "markdownlint" },
 			nginx = { "nginxbeautifier" },
 			python = { "black", "usort" },
 			-- FIX: Remove if/when https://github.com/stevearc/conform.nvim/issues/127 gets fixed.
