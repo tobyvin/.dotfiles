@@ -1,10 +1,12 @@
 player=mpv
 player-args=--profile=stream
 player-passthrough=hls
+player-no-close
 hls-live-edge=5
 stream-segment-threads=4
-webbrowser true
-webbrowser-headless true
 retry-open=1
 retry-streams=1
 default-stream=best
+webbrowser=true
+webbrowser-headless=true
+webbrowser-executable=chromium
