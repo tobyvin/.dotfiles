@@ -13,6 +13,7 @@ vim.filetype.add({
 		[".*/sway/config%.d/.*%.conf"] = "swayconfig",
 		[".*/%.sway/config%.d/.*%.conf"] = "swayconfig",
 		-- systemd-networkd
+		[".*/etc/systemd/network/.*%.d/.*%.conf"] = "systemd",
 		[".*/etc/systemd/network/.*%.d/%.#.*"] = "systemd",
 		[".*/etc/systemd/network/%.#.*"] = "systemd",
 		-- muttrc xdg base dir
