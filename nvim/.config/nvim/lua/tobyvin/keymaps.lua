@@ -1,5 +1,10 @@
-vim.keymap.set("n", "gn", vim.cmd.bnext, { desc = "go to next buffer in the buffer list" })
-vim.keymap.set("n", "gp", vim.cmd.bprevious, { desc = "go to previous buffer in the buffer list" })
+vim.keymap.set("n", "]]", "<CMD>cnext<CR>", { desc = "go to next error" })
+vim.keymap.set("n", "[[", "<CMD>cprev<CR>", { desc = "go to previous error" })
+vim.keymap.set("n", "]b", "<CMD>bnext<CR>", { desc = "go to next buffer in the buffer list" })
+vim.keymap.set("n", "[b", "<CMD>bprev<CR>", { desc = "go to previous buffer in the buffer list" })
+vim.keymap.set("n", "gl", vim.diagnostic.setloclist, { desc = "add buffer diagnostics to loclist" })
+vim.keymap.set("n", "gL", vim.diagnostic.setqflist, { desc = "add all diagnostics to qflist" })
+vim.keymap.set("n", "L", vim.diagnostic.open_float, { desc = "show diagnostics in floating window" })
 
 vim.keymap.set("n", "<a-j>", "<CMD>m +1<CR>", { desc = "move line down" })
 vim.keymap.set("n", "<a-k>", "<CMD>m -2<CR>", { desc = "move line up" })

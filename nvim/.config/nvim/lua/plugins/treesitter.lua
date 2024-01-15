@@ -54,6 +54,7 @@ local M = {
 			"tsx",
 			"typescript",
 			"vim",
+      "vimdoc",
 			"vue",
 			"yaml",
 		},
@@ -73,20 +74,16 @@ local M = {
 				goto_next_start = {
 					["]p"] = "@parameter.inner",
 					["]f"] = "@function.outer",
-					["]]"] = "@class.outer",
 				},
 				goto_next_end = {
 					["]F"] = "@function.outer",
-					["]["] = "@class.outer",
 				},
 				goto_previous_start = {
 					["[p"] = "@parameter.inner",
 					["[f"] = "@function.outer",
-					["[["] = "@class.outer",
 				},
 				goto_previous_end = {
 					["[F"] = "@function.outer",
-					["[]"] = "@class.outer",
 				},
 			},
 

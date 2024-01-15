@@ -26,6 +26,7 @@ vim.opt.scrolloff = 10
 vim.opt.sessionoptions = { "buffers", "curdir", "folds", "help", "tabpages", "winsize", "winpos" }
 vim.opt.shiftround = true
 vim.opt.shiftwidth = 0
+vim.opt.shortmess:append("a")
 vim.opt.showbreak = string.rep(" ", 3)
 vim.opt.signcolumn = "yes:1"
 vim.opt.smartcase = true
