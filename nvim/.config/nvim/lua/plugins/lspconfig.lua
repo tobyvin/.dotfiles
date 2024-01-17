@@ -11,7 +11,8 @@ local M = {
 
 function M:config()
 	require("neoconf")
-	require("lspconfig.util").default_config.capabilities = require("cmp_nvim_lsp").default_capabilities()
+	require("lspconfig.util").default_config.capabilities =
+		require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 	require("lspconfig.ui.windows").default_options.border = "single"
 
 	local available = require("lspconfig.util").available_servers()

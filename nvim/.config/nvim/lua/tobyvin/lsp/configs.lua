@@ -164,6 +164,18 @@ local M = {
 			"tex",
 		},
 	},
+	typst_lsp = {
+		capabilities = {
+			workspace = {
+				didChangeConfiguration = {
+					dynamicRegistration = true,
+				},
+			},
+		},
+		settings = {
+			exportPdf = "onType",
+		},
+	},
 	yamlls = {
 		settings = {
 			yaml = {

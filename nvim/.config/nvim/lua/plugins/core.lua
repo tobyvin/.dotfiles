@@ -17,7 +17,7 @@ local M = {
 		"j-hui/fidget.nvim",
 		version = "*",
 		event = { "LspAttach" },
-    cmd = "Fidget",
+		cmd = "Fidget",
 		opts = {
 			notification = {
 				window = {
@@ -93,6 +93,14 @@ local M = {
 	{
 		"hjson/vim-hjson",
 		ft = "hjson",
+	},
+	{
+		"chomosuke/typst-preview.nvim",
+		ft = "typst",
+		version = "*",
+		build = function()
+			require("typst-preview").update()
+		end,
 	},
 	{
 		"tridactyl/vim-tridactyl",
