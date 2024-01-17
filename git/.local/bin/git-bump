@@ -1,0 +1,27 @@
+#!/bin/sh
+
+tag="$(git describe --abbrev=0 2>/dev/null)"
+IFS=. read -r major minor patch <<EOF
+${tag#v}
+EOF
+
+case "$1" in
+major)
+	major=$((major + 1))
+	minor=0
+	patch=0
+	;;
+minor)
+	minor=$((minor + 1))
+	patch=0
+	;;
+patch)
+	patch=$((patch + 1))
+	;;
+*)
+	echo "Invalid semver argument given (major|minor|patch): $1" 1>&2
+	exit 1
+	;;
+esac
+
+git shortlog "$tag"..HEAD | git tag -s "v${major}.${minor}.${patch}" --file -
