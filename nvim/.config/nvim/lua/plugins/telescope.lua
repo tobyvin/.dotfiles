@@ -60,7 +60,7 @@ local M = {
 				sort_lastused = true,
 				mappings = {
 					i = {
-						["<C-d>"] = "delete_buffer",
+						["<C-x>"] = "delete_buffer",
 					},
 				},
 			},
