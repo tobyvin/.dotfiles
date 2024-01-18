@@ -12,6 +12,7 @@ local M = {
 		"hrsh7th/cmp-nvim-lua",
 		"hrsh7th/cmp-cmdline",
 		"Dosx001/cmp-commit",
+		"rcarriga/cmp-dap",
 		"davidsierradz/cmp-conventionalcommits",
 		{
 			"petertriho/cmp-git",
@@ -132,6 +133,12 @@ function M:config()
 	cmp.setup.filetype("toml", {
 		sources = {
 			{ name = "crates" },
+		},
+	})
+
+	cmp.setup.filetype("dap-repl", {
+		sources = {
+			{ name = "dap" },
 		},
 	})
 end

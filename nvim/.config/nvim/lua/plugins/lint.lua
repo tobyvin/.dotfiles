@@ -14,7 +14,7 @@ local function try_lint()
 			if not linter then
 				vim.notify("Linter not found: " .. name, vim.log.levels.WARN, { title = "nvim-lint" })
 			end
-			---@diagnostic disable-next-line: undefined-field
+			---@diagnostic disable-next-line: undefined-field, return-type-mismatch
 			return (type(linter) == "table" and linter.condition and linter.condition()) or linter
 		end)
 		:totable()
