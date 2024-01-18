@@ -18,6 +18,8 @@ local M = {
 			python = { "black", "usort" },
 			-- FIX: Remove if/when https://github.com/stevearc/conform.nvim/issues/127 gets fixed.
 			rust = { "rustfmt" },
+			-- FIX: Remove if/when https://github.com/stevearc/conform.nvim/issues/127 gets fixed.
+			typst = { "typstfmt" },
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },
