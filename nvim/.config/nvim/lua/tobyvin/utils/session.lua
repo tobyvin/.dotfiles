@@ -23,9 +23,11 @@ function M.write()
 
 	vim.fn.mkdir(vim.fn.fnamemodify(res, ":p:h"), "p")
 
+	vim.api.nvim_exec_autocmds("User", { pattern = "SessionSavePre" })
 	if pcall(vim.cmd.mksession, { vim.fn.fnameescape(res), bang = true }) then
 		vim.v.this_session = res
 	end
+	vim.api.nvim_exec_autocmds("User", { pattern = "SessionSavePost" })
 end
 
 function M.read()
