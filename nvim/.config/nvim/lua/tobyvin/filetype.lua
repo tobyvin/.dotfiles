@@ -3,6 +3,7 @@ vim.filetype.add({
 		eml = "mail",
 		ron = "ron",
 		zsh = "sh",
+		service = "systemd",
 	},
 	filename = {
 		PKGBUILD = "PKGBUILD",
