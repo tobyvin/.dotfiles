@@ -48,12 +48,11 @@ bindkey -M vicmd '^[[3~' delete-char
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
-alias ls="ls --color=auto"
-alias tree="tree --gitignore"
+alias ls='ls --color=auto'
+alias ip='ip -color=auto'
 alias grep='grep --color=auto'
-alias ipa="ip -s -c -h a"
-alias untar="tar -zxvf"
-alias info="info --vi-keys"
+alias info='info --vi-keys'
+alias untar='tar -zxvf'
 
 # Adopt the behavior of the system wide configuration for application specific settings
 #
