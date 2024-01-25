@@ -1,6 +1,9 @@
 ---@type LazyPluginSpec
 local M = {
-	"ellisonleao/gruvbox.nvim",
+	-- "ellisonleao/gruvbox.nvim",
+	-- TODO: revert once https://github.com/ellisonleao/gruvbox.nvim/pull/315 is merged
+	"JulesNP/gruvbox.nvim",
+	branch = "tsfix",
 	priority = 1000,
 	opts = {
 		contrast = "hard",
@@ -11,6 +14,7 @@ local M = {
 			DiffChange = { link = "GruvboxAqua" },
 			DiffText = { link = "GruvboxYellow" },
 			Delimiter = { link = "Special" },
+			-- better typst highlighting
 			["@lsp.type.string"] = { link = "@string" },
 			["@lsp.type.keyword"] = { link = "@keyword" },
 			["@lsp.type.operator"] = { link = "@operator" },
