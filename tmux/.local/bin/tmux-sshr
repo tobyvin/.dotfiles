@@ -27,22 +27,20 @@ if [ "$target" = "$HOST" ]; then
 else
 	if ! tmux -L ssh has-session -t "$target"; then
 		tmux_sock=$(tmux -L ssh start-server \; display -p "#{socket_path}")
-		runtime=$(
-			ssh -T \
+		read -r runtime <<-EOF
+			$(ssh -T \
 				-o "ControlMaster=auto" \
 				-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
 				"$target" \
-				'printf "%s\n" "$XDG_RUNTIME_DIR"'
-		)
+				'printf "%s\n" "$XDG_RUNTIME_DIR"')
+		EOF
 
-		tmux -L ssh new-session -ds "$target" \
-			ssh -t \
-			-o "ControlMaster=auto" \
-			-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
+		tmux -L ssh new-session -ds "$target" -- ssh -t \
 			-R "2222:localhost:22" \
-			-R "${runtime}/xdg-open.socket:${XDG_RUNTIME_DIR}/xdg-open.socket" \
 			-R "${runtime}/tmux.${HOST}.control:${tmux_sock}" \
-			"$target" "zsh -l -c 'tmux -S \${XDG_RUNTIME_DIR}/tmux.${HOST} new -A'"
+			-R "${runtime}/xdg-open.socket:${XDG_RUNTIME_DIR}/xdg-open.socket" \
+			-R "${runtime}/discord-ipc-0:${XDG_RUNTIME_DIR}/discord-ipc-0" \
+			"$target" "zsh -l -c 'tmux -S ${runtime}/tmux.${HOST} new -A'"
 	fi
 
 	if [ -z "$TMUX" ]; then
