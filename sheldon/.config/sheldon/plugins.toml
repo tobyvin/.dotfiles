@@ -1,9 +1,5 @@
 [templates]
-defer = """{{ hooks | get: \"pre\" | nl }}
-{% for file in files %}
-zsh-defer source "{{ file }}"
-{% endfor %}
-{{ hooks | get: \"post\" | nl }}"""
+defer = '{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source "{{ file }}"\n{% endfor %}{{ hooks?.post | nl }}'
 base16_config = 'export BASE16_CONFIG_PATH="{{ dir }}"'
 base16_fzf = 'export BASE16_FZF_PATH="{{ dir }}"'
 
