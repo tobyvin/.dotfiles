@@ -17,7 +17,7 @@ if [ "$#" -eq 0 ]; then
 	# shellcheck disable=2046
 	set -- $(
 		projectr -mgt ~/src ~/pkg ~/dkr ~/doc -P ~/.dotfiles --exclude-cwd |
-			fzf-tmux -p100,30 -- --tac --select-1 --exit-0 -d/ --with-nth 4.. \
+			fzf-tmux -p100,30 -- --tac --exit-0 -d/ --with-nth 4.. \
 				--bind "focus:transform-header(echo {} | sed 's|$HOME|~|')" \
 				--preview-window='right,60,<60(hidden)' --preview="$PREVIEW_CMD"
 	)
