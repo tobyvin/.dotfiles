@@ -1,17 +1,18 @@
 #!/bin/sh
 
-HOST=$(tmux display -p '#h' 2>/dev/null)
-
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 	tmux_sock=$(tmux display -p "#{socket_path}")
-	tmux -S "${tmux_sock}.control" run-shell "tmux-sshr"
+	tmux -S "${tmux_sock}.control" run-shell "$(basename "$0")"
 	exit 0
 fi
 
+HOST=$(tmux display -p '#h' 2>/dev/null)
+ATTACHED=$(tmux display -p "#{?#{m:*ssh,#{socket_path}},#{s/_/./:session_name},#{host}}")
+
 if [ "$#" -eq 0 ]; then
 	set -- "$(
-		sshr --all --exclude-attached |
-			fzf-tmux -p20%,20% -- --print-query --tac |
+		sshr --resolve --exclude $ATTACHED |
+			fzf-tmux -p20%,20% -- --print-query |
 			tail -1
 	)"
 fi
@@ -20,33 +21,32 @@ if [ -z "$1" ]; then
 	exit 0
 fi
 
-target="$1"
+while read -r k v; do
+	case "$k" in
+	"hostname")
+		hostname=$v
+		session=$(printf '%s' "$v" | tr '.' '_')
+		break
+		;;
+	esac
+done <<-EOF
+	 $(ssh -G "$@")
+EOF
 
-if [ "$target" = "$HOST" ]; then
+if [ "${hostname##"$HOST"}" != "$hostname" ]; then
 	tmux detach -E 'tmux new -A'
 else
-	if ! tmux -L ssh has-session -t "$target"; then
-		tmux_sock=$(tmux -L ssh start-server \; display -p "#{socket_path}")
-		read -r runtime <<-EOF
-			$(ssh -T \
-				-o "ControlMaster=auto" \
-				-o "ControlPath=${XDG_RUNTIME_DIR}/ssh.%C" \
-				"$target" \
-				'printf "%s\n" "$XDG_RUNTIME_DIR"')
-		EOF
-
-		tmux -L ssh new-session -ds "$target" -- ssh -t \
-			-R "2222:localhost:22" \
-			-R "${runtime}/tmux.${HOST}.control:${tmux_sock}" \
-			-R "${runtime}/xdg-open.socket:${XDG_RUNTIME_DIR}/xdg-open.socket" \
-			-R "${runtime}/discord-ipc-0:${XDG_RUNTIME_DIR}/discord-ipc-0" \
-			"$target" "zsh -l -c 'tmux -S ${runtime}/tmux.${HOST} new -A'"
+	if ! tmux -L ssh has-session -t "$session"; then
+		tmux -L ssh new-session -ds "$session" -- \
+			ssh -t "$@" \
+			-R "/tmp/tmux-${HOST}.control:/tmp/tmux-%i/ssh" \
+			-- "zsh -l -c 'tmux -S /tmp/tmux-${HOST} new -A'"
 	fi
 
 	if [ -z "$TMUX" ]; then
-		tmux -L ssh attach -t "$target"
+		tmux -L ssh attach -t "$session"
 	else
-		tmux detach -E "tmux -L ssh attach -t $target"
+		tmux detach -E "tmux -L ssh attach -t $session"
 	fi
 
 	exit 0
