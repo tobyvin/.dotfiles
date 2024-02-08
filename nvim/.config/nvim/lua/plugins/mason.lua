@@ -3,8 +3,14 @@ local M = {
 	"williamboman/mason.nvim",
 	version = "*",
 	build = ":MasonUpdate",
-  lazy = false,
-	dependencies = {},
+	lazy = false,
+	dependencies = {
+		{
+			"zapling/mason-lock.nvim",
+			lazy = false,
+			opts = {},
+		},
+	},
 	opts = {
 		ui = {
 			border = "single",

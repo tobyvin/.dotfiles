@@ -15,7 +15,6 @@ local M = {
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		"mfussenegger/nvim-ts-hint-textobject",
-		{ "LiadOz/nvim-dap-repl-highlights", opts = {} },
 	},
 	main = "nvim-treesitter.configs",
 	opts = {
