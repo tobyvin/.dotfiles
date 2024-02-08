@@ -24,9 +24,9 @@ if [ ! -s .untracked ]; then
 fi
 
 printf "%s: Stowing packages\n" "$0"
-stow "$@" */
+stow "$@" ${1:-*}/
 
 printf "%s: Installing packages\n" "$0"
-for f in */install.sh; do
+for f in ${1:-*}/install.sh; do
 	$f
 done

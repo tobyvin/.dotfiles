@@ -1,6 +1,6 @@
 #!/bin/sh
 
-pkgname=notmuch
+pkgname=sway
 
 if ! command -v "$pkgname" >/dev/null; then
 	printf "%s: $pkgname not found, skipping...\n" "$0"
@@ -9,4 +9,4 @@ fi
 
 printf "%s: Installing service\n" "$0"
 
-systemctl --user enable --now --no-block $pkgname.service
+systemctl --user enable --now --no-block swayidle.service

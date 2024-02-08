@@ -1,5 +1,6 @@
 [Unit]
 Description=Notify on new mail in MailDir %i
+PartOf=mbsync@%i.service
 
 [Service]
 Type=simple
@@ -7,4 +8,4 @@ ExecStart=%h/.local/bin/maildir-notify ${XDG_DATA_HOME}/mail/%i/INBOX
 RestartSec=10
 
 [Install]
-WantedBy=default.target
+WantedBy=mbsync@%i.service

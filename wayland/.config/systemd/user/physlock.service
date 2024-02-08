@@ -1,0 +1,14 @@
+[Unit]
+Description=Lightweight linux console locking tool
+OnSuccess=unlock.target
+PartOf=lock.target
+After=lock.target
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/physlock -dsm
+Restart=on-failure
+RestartSec=0
+
+[Install]
+WantedBy=lock.target

@@ -1,7 +1,9 @@
 #!/bin/sh
 
-if ! command -v "nvim" >/dev/null; then
-	printf "%s: nvim not found, skipping...\n" "$0"
+pkgname=nvim
+
+if ! command -v "$pkgname" >/dev/null; then
+	printf "%s: $pkgname not found, skipping...\n" "$0"
 	exit 0
 fi
 
@@ -12,6 +14,4 @@ nvim --headless -c 'Lazy! clean' -c qa
 
 printf "%s: Installing treesitter parsers\n" "$0"
 
-nvim --headless -c 'TSUpdateSync' -c qa
-
-printf "\n"
+nvim --headless -c 'TSUpdateSync' -c qa | sed 's/$/\n/'

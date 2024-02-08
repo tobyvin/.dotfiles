@@ -1,7 +1,9 @@
 #!/bin/sh
 
-if ! command -v "sheldon" >/dev/null; then
-	printf "%s: sheldon not found, skipping...\n" "$0"
+pkgname=sheldon
+
+if ! command -v "$pkgname" >/dev/null; then
+	printf "%s: $pkgname not found, skipping...\n" "$0"
 	exit 0
 fi
 

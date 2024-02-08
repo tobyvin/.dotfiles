@@ -2,7 +2,6 @@
 Description=Idle management daemon for Wayland
 PartOf=wayland-session.target
 After=wayland-session.target
-ConditionFileIsExecutable=/usr/bin/wl-mpris-idle-inhibit
 
 [Service]
 Type=simple

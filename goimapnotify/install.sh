@@ -1,11 +1,14 @@
 #!/bin/sh
 
-if ! command -v "goimapnotify" >/dev/null; then
-	printf "%s: goimapnotify not found, skipping...\n" "$0"
+pkgname=goimapnotify
+
+if ! command -v "$pkgname" >/dev/null; then
+	printf "%s: $pkgname not found, skipping...\n" "$0"
 	exit 0
 fi
 
 printf "%s: Installing services\n" "$0"
 
-systemctl --user enable --now --no-block goimapnotify@gmail.service
-systemctl --user enable --now --no-block goimapnotify@porkbun.service
+for instance in gmail porkbun; do
+	systemctl --user enable --now --no-block $pkgname@"$instance".service
+done
