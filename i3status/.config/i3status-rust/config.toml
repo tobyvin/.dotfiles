@@ -19,13 +19,6 @@ critical_fg = "#1d2021"
 [icons]
 icons = "material-nf"
 
-[icons.overrides]
-cpu = "CPU"
-memory_mem = "MEM"
-cpu_boost_on = "BOOST"
-cpu_boost_off = ""
-disk_drive = "DISK"
-
 [[block]]
 block = "focused_window"
 [block.format]
@@ -37,26 +30,26 @@ block = "weather"
 autolocate = true
 autolocate_interval = "once"
 service.name = "metno"
+format = " $icon $temp "
+format_alt = " $icon $weather $temp "
 
 [[block]]
 block = "disk_space"
-format = " $available "
-format_alt = " $icon $available / $total "
 
 [[block]]
 block = "memory"
-format = " $mem_avail.eng(u:B,p:M) "
-format_alt = " $icon $mem_avail.eng(u:B,p:M) / $mem_total.eng(u:B,p:M) "
+format = " $icon $mem_used_percents.eng(w:2) "
 
 [[block]]
 block = "cpu"
-format = " $utilization "
-format_alt = " $icon $utilization $frequency {$boost |}"
+
+[[block]]
+block = "amd_gpu"
 
 [[block]]
 block = "maildir"
+inboxes = ["~/.local/share/mail/*/INBOX"]
 interval = 60
-inboxes = ["~/.local/share/mail/gmail/INBOX"]
 
 [[block]]
 block = "music"
