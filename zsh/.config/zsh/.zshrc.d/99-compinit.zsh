@@ -8,5 +8,5 @@ compinit -u -C -d "${XDG_CACHE_HOME}/zsh/zcompdump"
 
 TRAPUSR1() {
 	rehash
-	compdump
+	compinit -u -d "${XDG_CACHE_HOME}/zsh/zcompdump"
 }

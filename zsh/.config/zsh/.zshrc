@@ -48,11 +48,12 @@ bindkey -M vicmd '^[[3~' delete-char
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
-alias ls='ls --color=auto'
+alias ls='ls --human-readable --color=auto'
 alias ip='ip -color=auto'
 alias grep='grep --color=auto'
 alias info='info --vi-keys'
 alias untar='tar -zxvf'
+alias userctl='systemctl --user'
 
 # Adopt the behavior of the system wide configuration for application specific settings
 #
