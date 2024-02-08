@@ -19,11 +19,13 @@ base0E="#d3869b"
 base0F="#d65d0e"
 
 export BEMENU_OPTS="--ignorecase \
+--prompt=> \
 --list 10 \
 --scrollbar autohide \
 --line-height 18 \
 --binding vim \
---fn 'FiraCode Nerd Font 15' \
+--vim-esc-exits \
+--fn 'Hack Nerd Font 15' \
 --no-overlap \
 --ab '$base02' \
 --af '$base06' \
