@@ -71,7 +71,6 @@ bindsym $mod+space exec j4-dmenu-desktop --no-generic --dmenu='$menu' --term="$T
 # bemenu | xargs -I_ rg "^Name=_" /usr/share/applications --max-count=1 --files-with-matches |
 # xargs basename 2>/dev/null
 bindsym $mod+shift+space exec bemenu-run
-bindsym $mod+v exec clipman pick --tool=bemenu
 bindsym $mod+p exec passmenu
 bindsym $mod+Shift+p exec passmenu --type
 bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard

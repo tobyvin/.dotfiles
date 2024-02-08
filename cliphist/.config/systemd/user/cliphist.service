@@ -1,0 +1,11 @@
+[Unit]
+Description=Clipboard history daemon
+PartOf=wayland-session.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/wl-paste --watch /usr/bin/cliphist store
+Restart=on-failure
+
+[Install]
+WantedBy=wayland-session.target
