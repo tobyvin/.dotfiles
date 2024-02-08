@@ -1,27 +1,6 @@
 import = [
+    "/home/tobyv/.config/alacritty/defaults.toml",
     "/home/tobyv/.config/alacritty/colors.toml",
     "/home/tobyv/.config/alacritty/local.toml",
 ]
 live_config_reload = true
-
-[shell]
-program = "tmux"
-args = ["new", "-A"]
-
-[window]
-dynamic_padding = true
-opacity = 0.95
-
-[font]
-size = 15
-normal = { family = "Hack Nerd Font" }
-
-[mouse]
-hide_when_typing = true
-
-[keyboard]
-bindings = [
-    { action = "CreateNewWindow", key = "T", mods = "Control|Shift" },
-    { action = "ReceiveChar", key = "F", mode = "~Search", mods = "Control|Shift" },
-    { action = "ToggleFullscreen", key = "Return", mods = "Alt" },
-]
