@@ -16,7 +16,7 @@ fi
 
 printf "%s: Installing symlinks\n" "$0"
 
-ln -svf "$(command -v bemenu)" ~/.local/bin/dmenu
-ln -svf "$(command -v bemenu)" ~/.local/bin/dmenu-wl
-ln -svf "$(command -v bemenu-run)" ~/.local/bin/dmenu_run
-ln -svf "$(command -v bemenu-run)" ~/.local/bin/dmenu-wl_run
+ln -sf "$(command -v bemenu)" ~/.local/bin/dmenu
+ln -sf "$(command -v bemenu)" ~/.local/bin/dmenu-wl
+ln -sf "$(command -v bemenu-run)" ~/.local/bin/dmenu_run
+ln -sf "$(command -v bemenu-run)" ~/.local/bin/dmenu-wl_run
