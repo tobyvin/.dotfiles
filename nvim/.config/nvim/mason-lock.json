@@ -1,0 +1,12 @@
+{
+  "bash-language-server": "5.1.2",
+  "biome": "1.5.3",
+  "lua-language-server": "3.7.4",
+  "prettier": "3.2.5",
+  "selene": "0.26.1",
+  "shellcheck": "v0.9.0",
+  "shfmt": "v3.7.0",
+  "stylua": "v0.20.0",
+  "taplo": "0.8.1",
+  "typos-lsp": "v0.1.12"
+}
