@@ -54,8 +54,8 @@ interval = 60
 
 [[block]]
 block = "music"
-format = " $icon {$prev $play $next |}"
-format_alt = " $icon {$combo.str(max_w:20,rot_interval:0.5) $prev $play $next |}"
+format = " $icon {$combo.str(w:0)$prev $play $next |}"
+format_alt = " $icon {$combo.str(max_w:10,rot_interval:0.5) $prev $play $next |}"
 
 [[block]]
 block = "sound"
