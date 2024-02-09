@@ -45,6 +45,7 @@ block = "cpu"
 
 [[block]]
 block = "amd_gpu"
+if_command = "lspci -v | grep 'AMD/ATI' >/dev/null"
 
 [[block]]
 block = "maildir"
@@ -53,7 +54,8 @@ interval = 60
 
 [[block]]
 block = "music"
-format = " $icon {$combo.str(max_w:20,rot_interval:0.5) $prev $play $next |}"
+format = " $icon {$prev $play $next |}"
+format_alt = " $icon {$combo.str(max_w:20,rot_interval:0.5) $prev $play $next |}"
 
 [[block]]
 block = "sound"
@@ -61,16 +63,6 @@ if_command = "pactl list >/dev/null || aplay -l >/dev/null "
 [[block.click]]
 button = "left"
 cmd = "pavucontrol"
-
-[[block]]
-block = "toggle"
-format = " $icon "
-if_command = "networkctl status wg0"
-command_state = "cat /sys/class/net/wg0/carrier"
-command_on = "sudo networkctl up wg0"
-command_off = "sudo networkctl down wg0"
-interval = 20
-merge_with_next = true
 
 [[block]]
 block = "net"
