@@ -1,13 +1,13 @@
 [Unit]
 Description=Mailbox synchronization service
 Documentation=man:mbsync(1)
-Wants=network-online.target
-Requires=gpg-agent.socket
-After=network-online.target gpg-agent.socket network.target dbus.socket
+Wants=network-online.target maildir-notify@%i.service
+After=network-online.target network.target
+Before=maildir-notify@%i.service
 
 [Service]
 Type=oneshot
-ExecStart=/usr/bin/mbsync -Vc ${XDG_CONFIG_HOME}/mbsync/mbsyncrc %i
+ExecStart=-/usr/bin/mbsync -Vc ${XDG_CONFIG_HOME}/mbsync/mbsyncrc %i
 
 [Install]
 WantedBy=default.target
