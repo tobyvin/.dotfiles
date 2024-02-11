@@ -1,1 +1,1 @@
-vim.wo[0][0].scrolloff = 0
+vim.opt_local.scrolloff = 0

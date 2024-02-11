@@ -1,3 +1,2 @@
----@diagnostic disable-next-line: param-type-mismatch
-vim.opt_local.formatoptions:remove("o")
-vim.opt_local.tabstop = 2
+vim.cmd.runtime("ftplugin/html.lua", { bang = true })
+vim.cmd.runtime("ftplugin/django.lua", { bang = true })
