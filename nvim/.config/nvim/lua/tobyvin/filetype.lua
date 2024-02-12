@@ -10,6 +10,11 @@ vim.filetype.add({
 		tridactylrc = "trytactylrc",
 	},
 	pattern = {
+		-- fontconfig
+		[".*/fontconfig/fonts%.conf"] = "xml",
+		[".*/fontconfig/conf%.d/.*%.conf"] = "xml",
+		[".*/usr/share/fontconfig/fonts%.conf"] = "xml",
+		[".*/usr/share/fontconfig/conf%..*/.*%.conf"] = "xml",
 		-- sway drop-ins
 		[".*/sway/config%.d/.*%.conf"] = "swayconfig",
 		[".*/%.sway/config%.d/.*%.conf"] = "swayconfig",

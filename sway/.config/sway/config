@@ -31,7 +31,7 @@ client.urgent           $base08 $base08 $base00 $base08 $base08
 client.placeholder      $base00 $base00 $base05 $base00 $base00
 client.background       $base07
 
-font pango:Hack Nerd Font 15
+font pango:sans-serif 15
 focus_on_window_activation focus
 default_border pixel
 hide_edge_borders smart
@@ -163,7 +163,7 @@ mode 'resize' {
 
 bar {
     status_command i3status-rs
-    font pango:Hack Nerd Font 15
+    font pango:monospace 15
     tray_padding 5
     colors {
         background $base00

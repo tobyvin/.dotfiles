@@ -1,6 +1,7 @@
 {
   "bash-language-server": "5.1.2",
   "biome": "1.5.3",
+  "lemminx": "0.26.1",
   "lua-language-server": "3.7.4",
   "prettier": "3.2.5",
   "selene": "0.26.1",

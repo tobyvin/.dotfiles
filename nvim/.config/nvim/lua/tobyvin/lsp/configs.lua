@@ -55,6 +55,13 @@ local M = {
 			"htmldjango",
 		},
 	},
+	lemminx = {
+		settings = {
+			xml = {
+				catalogs = { "/etc/xml/catalog" },
+			},
+		},
+	},
 	lua_ls = {
 		settings = {
 			Lua = {

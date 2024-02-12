@@ -25,7 +25,7 @@ export BEMENU_OPTS="--ignorecase \
 --line-height 18 \
 --binding vim \
 --vim-esc-exits \
---fn 'Hack Nerd Font 15' \
+--fn 'sans-serif 15' \
 --no-overlap \
 --ab '$base02' \
 --af '$base06' \
