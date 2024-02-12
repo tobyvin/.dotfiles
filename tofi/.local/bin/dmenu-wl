@@ -1,0 +1,63 @@
+#!/bin/sh
+
+help() {
+	tofi --help
+	cat <<-EOF
+
+		Extra options:
+		    -b            alias for '--anchor=bottom'
+		    -i            ignored, exists for compatibility
+		    -l <lines>    alias for '--horizontal=false --height=<estimation>'. Note: height is a rough
+		                      approximation, the actual number of lines shown may slightly differ.
+		    -m <monitor>  alias for '--output=<monitor>'
+		    -p <prompt>   alias for '--prompt-text=<prompt>'
+		    -h, --help    Show this help
+	EOF
+}
+
+if ! opts="$(getopt -o bil:m:p:h -l help -n "$SCRIPT" -- "$@")"; then
+	help
+	exit 1
+fi
+
+eval set -- "$opts"
+
+args=""
+while true; do
+	case "$1" in
+	-h | --help)
+		help
+		exit 0
+		;;
+	-b)
+		args="$args --anchor=bottom"
+		shift
+		;;
+	-l)
+		args="$args --result-spacing=0 --horizontal=false --height=$((30 + 23 * $2))"
+		shift 2
+		;;
+	-m)
+		args="$args --output=$2"
+		shift 2
+		;;
+	-p)
+		args="$args --prompt-text=$2"
+		shift 2
+		;;
+	-i) shift ;;
+	--)
+		shift
+		break
+		;;
+	*)
+		args="$args $1"
+		shift
+		;;
+	esac
+done
+
+set -- "$args" "$@"
+
+# shellcheck disable=2068
+command tofi $@
