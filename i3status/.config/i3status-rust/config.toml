@@ -1,8 +1,5 @@
-# base16-i3status-rust (https://github.com/mystfox/base16-i3status-rust)
-# Gruvbox dark, hard by Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
-
 [theme]
-theme = "semi-native"
+theme = "native"
 
 [theme.overrides]
 idle_bg = "#1d2021"
@@ -54,7 +51,7 @@ interval = 60
 
 [[block]]
 block = "music"
-format = " $icon {$combo.str(w:0)$prev $play $next |}"
+format = "{$combo.str(w:0) $icon $prev $play $next |}"
 format_alt = " $icon {$combo.str(max_w:10,rot_interval:0.5) $prev $play $next |}"
 
 [[block]]
