@@ -183,4 +183,4 @@ bar {
 include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
-exec_always "systemctl --user import-environment {,WAYLAND_}DISPLAY SWAYSOCK; systemctl --user start sway-session.target"
+exec_always systemctl --user start sway-session.target

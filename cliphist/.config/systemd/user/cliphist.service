@@ -1,6 +1,7 @@
 [Unit]
 Description=Clipboard history daemon
 PartOf=wayland-session.target
+After=wayland-session.target
 
 [Service]
 Type=simple

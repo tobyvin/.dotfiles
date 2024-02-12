@@ -1,0 +1,8 @@
+[Unit]
+Description=Session services which should run early before the wayland session is brought up
+Documentation=man:systemd.special(7)
+Requires=basic.target
+Before=wayland-session.target
+RefuseManualStart=yes
+StopWhenUnneeded=yes
+BindsTo=graphical-session-pre.target
