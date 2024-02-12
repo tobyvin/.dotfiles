@@ -1,5 +1,6 @@
 set $mod Mod4
-set $menu dmenu-wl
+set $menu tofi
+set $menu_list tofi --config ~/.config/tofi/vertical.config
 
 set $left h
 set $down j
@@ -66,19 +67,19 @@ bindsym $mod+q kill
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym $mod+ctrl+q exec loginctl lock-session
-bindsym $mod+Escape exec powermenu list | $menu -l 6 | powermenu
+bindsym $mod+Escape exec powermenu list | $menu | powermenu
 bindsym $mod+return exec $TERMINAL
 bindsym $mod+w exec $BROWSER
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 bindsym $mod+space exec tofi-drun | xargs swaymsg exec --
 bindsym $mod+shift+space exec tofi-run | xargs swaymsg exec --
-bindsym $mod+v exec cliphist list | $menu -l 10 | cliphist decode | wl-copy
-bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
+bindsym $mod+v exec cliphist list | $menu_list | cliphist decode | wl-copy
+bindsym $mod+Shift+v exec cliphist list | $menu_list | cliphist delete
 bindsym $mod+p exec passmenu
 bindsym $mod+Shift+p exec passmenu --type
-bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard
-bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type
+bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard --menu-cmd $menu
+bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type --menu-cmd $menu
 
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
