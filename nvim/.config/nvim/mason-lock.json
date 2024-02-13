@@ -3,6 +3,8 @@
   "biome": "1.5.3",
   "lemminx": "0.26.1",
   "lua-language-server": "3.7.4",
+  "markdownlint": "0.39.0",
+  "mdformat": "0.7.17",
   "prettier": "3.2.5",
   "selene": "0.26.1",
   "shellcheck": "v0.9.0",
