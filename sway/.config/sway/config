@@ -46,6 +46,7 @@ for_window [class="^steam$" title="^Steam$"] floating disable
 for_window [app_id="mpv"] fullscreen enable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="" title="^Streamlink Twitch GUI$"] floating enable
+for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
 
 assign [app_id="mpv"] s
 assign [class="^discord$" instance="^discord$"] d
