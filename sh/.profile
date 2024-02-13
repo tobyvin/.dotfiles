@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck disable=1090,3001,2046
+# shellcheck disable=1090,2046
 
 # Most of this script is a user scoped version of /etc/profile
 
@@ -14,8 +14,10 @@ append_path() {
 	esac
 }
 
+# Store original (system) paths to fix prioritization later
+orig_path=$PATH
+
 # Use systemd-environment-d-generator(8) to generate environment, and export those variables
-# NOTE: To avoid overriding PATH, we rename it and append it separately
 #
 # See: https://wiki.archlinux.org/title/Environment_variables#Per_Wayland_session
 for generator in /usr/lib/systemd/user-environment-generators/*; do
@@ -37,3 +39,7 @@ fi
 
 # Unload our profile API functions
 unset -f append_path
+
+# Fix PATH to prioritize user added paths
+PATH="${PATH#"$orig_path":}"${orig_path:+:$orig_path}
+export PATH
