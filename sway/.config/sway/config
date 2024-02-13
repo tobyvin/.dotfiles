@@ -43,7 +43,6 @@ for_window [shell=".*"] inhibit_idle fullscreen
 for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
 for_window [class="^steam$"] floating enable
 for_window [class="^steam$" title="^Steam$"] floating disable
-for_window [app_id="mpv"] fullscreen enable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="" title="^Streamlink Twitch GUI$"] floating enable
 for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
