@@ -9,5 +9,6 @@
   "shfmt": "v3.7.0",
   "stylua": "v0.20.0",
   "taplo": "0.8.1",
-  "typos-lsp": "v0.1.12"
+  "typos-lsp": "v0.1.12",
+  "typst-lsp": "v0.12.1"
 }
