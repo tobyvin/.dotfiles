@@ -1,6 +1,16 @@
 [menu]
-executable = 'rofi'
-args = ['-dmenu', '-markup', '--allow-images']
+executable = 'wmenu'
+args = [
+    '-i',
+    '-f',
+    'monospace 12',
+    '-nebdbb2',
+    '-N282828',
+    '-S282828',
+    '-sfe8019',
+    '-mebdbb2',
+    '-M8ec07c',
+]
 
 [format]
 output_format = '{indent}<b>Output {name}</b>    <span alpha="20000">({id})</span>'

@@ -1,15 +1,18 @@
-#!/usr/bin/sh
+#!/bin/sh
 
-if [ "$#" -eq 0 ]; then
-	set -- $(awk '{print tolower($2)}')
+if [ ! -t 0 ]; then
+	set -- "$(awk '{print tolower($2)}')"
+elif [ $# -eq 0 ]; then
+	printf '%s\n' '󰌾 Lock' '󰍃 Logout' '⏾ Suspend' '󰋊 Hibernate' '󰜉 Reboot' '󰐥 Poweroff'
+	exit 0
 fi
 
 case "$1" in
 lock)
-	loginctl lock-session ${XDG_SESSION_ID-}
+	loginctl lock-session "${XDG_SESSION_ID-}"
 	;;
 logout)
-	loginctl terminate-session ${XDG_SESSION_ID-}
+	loginctl terminate-session "${XDG_SESSION_ID-}"
 	;;
 suspend)
 	systemctl suspend
@@ -23,10 +26,8 @@ reboot)
 poweroff)
 	systemctl poweroff
 	;;
-*list)
-	printf '%s\n' '󰌾 Lock' '󰍃 Logout' '󰋊 Hibernate' '󰒲 Suspend' '󰜉 Reboot' '󰐥 Poweroff'
-	;;
 *)
-	echo "Invalid argument: $@"
+	echo "Invalid argument: $*"
+	exit 1
 	;;
 esac
