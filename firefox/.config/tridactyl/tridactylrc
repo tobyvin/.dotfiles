@@ -42,8 +42,8 @@ bind N findnext --reverse
 bind <C-l> nohlsearch
 bind j scrollline 5
 bind k scrollline -5
-bind J tabprev
-bind K tabnext
+bind J tabnext
+bind K tabprev
 bind x tabclose
 bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | exclaim_quiet mpv --loop
