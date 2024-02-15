@@ -16,6 +16,9 @@ critical_fg = "#1d2021"
 [icons]
 icons = "material-nf"
 
+[icons.overrides]
+rss = "󰑫 "
+
 [[block]]
 block = "focused_window"
 [block.format]
@@ -43,6 +46,10 @@ block = "cpu"
 [[block]]
 block = "amd_gpu"
 if_command = "lspci -v | grep 'AMD/ATI' >/dev/null"
+
+[[block]]
+block = "custom_dbus"
+path = "/rss"
 
 [[block]]
 block = "maildir"

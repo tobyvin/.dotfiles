@@ -1,0 +1,13 @@
+#!/bin/sh
+# shellcheck disable=SC2046
+
+set -e
+
+if [ $# -eq 0 ]; then
+	set -- $(curl -sH "X-Auth-Token: ${MINIFLUX_TOKEN:-$(pass miniflux.tobyvin.dev/i3status)}" https://miniflux.tobyvin.dev/v1/feeds/counters |
+		jq -r '[.unreads[]] | add // 0 | [., (if . > 50 then "critical" elif . > 0 then "warning" else "idle" end), "rss"] | .[]')
+fi
+
+busctl --user call rs.i3status /rss rs.i3status.custom SetText ss "${1:-0}" "${1:-0}"
+busctl --user call rs.i3status /rss rs.i3status.custom SetState s "${2:-idle}"
+busctl --user call rs.i3status /rss rs.i3status.custom SetIcon s "${3:-rss}"

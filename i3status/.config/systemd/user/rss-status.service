@@ -1,0 +1,6 @@
+[Unit]
+Description=rss status bar block
+
+[Service]
+Type=oneshot
+ExecStart=%h/.local/bin/rss-status

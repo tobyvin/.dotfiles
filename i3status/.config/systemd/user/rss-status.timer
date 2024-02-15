@@ -1,0 +1,9 @@
+[Unit]
+Description=rss status bar block
+
+[Timer]
+OnActiveSec=1h
+Persistent=true
+
+[Install]
+WantedBy=timers.target
