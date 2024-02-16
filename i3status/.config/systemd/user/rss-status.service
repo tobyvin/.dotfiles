@@ -3,4 +3,8 @@ Description=rss status bar block
 
 [Service]
 Type=oneshot
+BusName=rs.i3status
 ExecStart=%h/.local/bin/rss-status
+
+[Install]
+WantedBy=default.target
