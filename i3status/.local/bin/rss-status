@@ -3,6 +3,8 @@
 
 set -e
 
+sleep 1
+
 if [ $# -eq 0 ]; then
 	set -- $(curl -sH "X-Auth-Token: ${MINIFLUX_TOKEN:-$(pass miniflux.tobyvin.dev/i3status)}" https://miniflux.tobyvin.dev/v1/feeds/counters |
 		jq -r '[.unreads[]] | add // 0 | [., (if . > 50 then "critical" elif . > 0 then "warning" else "idle" end), "rss"] | .[]')

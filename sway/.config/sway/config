@@ -184,6 +184,7 @@ bar {
     }
 }
 
+exec_always ~/.local/bin/rss-status
 
 include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
