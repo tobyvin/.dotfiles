@@ -4,6 +4,7 @@
 --cookies-from-browser=firefox
 --mark-watched
 --sponsorblock-mark=all
+--sponsorblock-remove=sponsor
 
 --sub-langs="en,live_chat"
 --write-subs

@@ -46,7 +46,7 @@ bind J tabnext
 bind K tabprev
 bind x tabclose
 bind gs fillcmdline open duckduckgo
-bind zv composite js document.location.href | exclaim_quiet mpv --loop
+bind zv composite js document.location.href | mpvsafe
 bind gv mode video
 bind gx hint -W mpvsafe
 
