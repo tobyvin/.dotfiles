@@ -15,5 +15,6 @@
   "taplo": "0.8.1",
   "typos-lsp": "v0.1.12",
   "typst-lsp": "v0.12.1",
-  "usort": "1.0.8.post1"
+  "usort": "1.0.8.post1",
+  "yaml-language-server": "1.14.0"
 }
