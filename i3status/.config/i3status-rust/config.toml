@@ -50,6 +50,10 @@ if_command = "lspci -v | grep 'AMD/ATI' >/dev/null"
 [[block]]
 block = "custom_dbus"
 path = "/rss"
+[[block.click]]
+button = "left"
+cmd = "xdg-open https://miniflux.tobyvin.dev"
+update = true
 
 [[block]]
 block = "maildir"

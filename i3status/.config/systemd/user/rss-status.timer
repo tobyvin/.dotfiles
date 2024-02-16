@@ -2,7 +2,8 @@
 Description=rss status bar block
 
 [Timer]
-OnActiveSec=1h
+OnCalendar=hourly
+AccuracySec=15m
 Persistent=true
 
 [Install]
