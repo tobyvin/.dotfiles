@@ -1,0 +1,15 @@
+[Unit]
+Description=Set backlight to %i idle
+Conflicts=physlock.service
+PartOf=idle.target
+Before=idle.target
+
+[Service]
+Type=oneshot
+ExecStartPre=/usr/bin/brightnessctl --class=backlight --save
+ExecStart=/usr/bin/brightnessctl --class=backlight set %i
+ExecStopPost=/usr/bin/brightnessctl --class=backlight --restore
+RemainAfterExit=yes
+
+[Install]
+WantedBy=idle.target
