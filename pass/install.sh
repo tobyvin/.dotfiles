@@ -16,11 +16,11 @@ if [ ! -d "$store" ]; then
 else
 	printf "%s: Syncing password-store\n" "$0"
 
-	git remote update origin
+	git -C "$store" remote update origin
 
-	LOCAL=$(git rev-parse @)
-	REMOTE=$(git rev-parse '@{u}')
-	BASE=$(git merge-base @ '@{u}')
+	LOCAL=$(git -C "$store" rev-parse @)
+	REMOTE=$(git -C "$store" rev-parse '@{u}')
+	BASE=$(git -C "$store" merge-base @ '@{u}')
 
 	if [ "$BASE" != "$REMOTE" ]; then
 		git -C "$store" pull
