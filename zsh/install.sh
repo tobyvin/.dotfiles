@@ -3,11 +3,13 @@
 pkgname=zsh
 
 if ! command -v "$pkgname" >/dev/null; then
-	printf "%s: $pkgname not found, skipping...\n" "$0"
+	printf '%s: %s not found, skipping...\n' "$0" "$pkgname"
 	exit 0
 fi
 
-mkdir -p "${XDG_CACHE_HOME}/zsh"
+mkdir -pv "${XDG_CACHE_HOME}/zsh"
+
+printf '%s: Writing zcompdump\n' "$0"
 
 zsh -s <<EOF
 	  autoload -U compinit

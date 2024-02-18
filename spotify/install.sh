@@ -3,7 +3,7 @@
 pkgname=spotifyd
 
 if ! command -v "$pkgname" >/dev/null; then
-	printf "%s: $pkgname not found, skipping...\n" "$0"
+	printf '%s: %s not found, skipping...\n' "$0" "$pkgname"
 	exit 0
 fi
 
