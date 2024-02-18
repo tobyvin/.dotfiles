@@ -70,7 +70,7 @@ block = "sound"
 if_command = "pactl list >/dev/null || aplay -l >/dev/null "
 [[block.click]]
 button = "left"
-cmd = "pavucontrol"
+cmd = "pgrep pavucontrol && killall pavucontrol || pavucontrol"
 
 [[block]]
 block = "net"

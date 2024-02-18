@@ -1,6 +1,4 @@
 set $mod Mod4
-set $menu_opts -i -f 'monospace 12' -nebdbb2 -N282828 -S282828 -sfe8019 -mebdbb2 -M8ec07c
-set $menu wmenu $menu_opts
 
 set $left h
 set $down j
@@ -24,6 +22,9 @@ set $base0D #83a598
 set $base0E #d3869b
 set $base0F #d65d0e
 
+set $menu wmenu -i -f 'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
+set $passmenu find $PASSWORD_STORE_DIR/ -name '*.gpg' -printf '%P\n' | sed "s/\.gpg$//" | sort | $menu | xargs -r pass show
+
 # Property              Border  BG      Text    Indicator Child Border
 client.focused          $base05 $base0D $base00 $base0D $base0D
 client.focused_inactive $base01 $base01 $base05 $base03 $base01
@@ -33,7 +34,7 @@ client.placeholder      $base00 $base00 $base05 $base00 $base00
 client.background       $base07
 
 font pango:sans-serif 15
-focus_on_window_activation focus
+focus_on_window_activation smart
 default_border pixel
 hide_edge_borders smart
 
@@ -64,10 +65,13 @@ input type:keyboard {
     xkb_options "caps:escape"
 }
 
+floating_modifier $mod
+
 bindsym $mod+q kill
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym $mod+ctrl+q exec loginctl lock-session
+bindsym Pause exec swaymsg "output * power toggle"
 bindsym $mod+Escape exec powermenu | $menu -l 6 | powermenu
 bindsym $mod+return exec $TERMINAL
 bindsym $mod+w exec $BROWSER
@@ -77,15 +81,15 @@ bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL
 bindsym $mod+shift+space exec wmenu_path | $menu | xargs swaymsg exec --
 bindsym $mod+v exec cliphist list | $menu -l 10 | cliphist decode | wl-copy
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
-bindsym $mod+p exec passmenu $menu_opts
-bindsym $mod+Shift+p exec passmenu --type $menu_opts
+bindsym $mod+p exec $passmenu -c
+bindsym $mod+Shift+p exec $passmenu | wtype -
 bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard --menu-cmd "$menu -l 10"
 bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type --menu-cmd "$menu -l 10"
 
-bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
-bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
-bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
-bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 bindsym XF86AudioPlay exec playerctl play-pause
 bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
