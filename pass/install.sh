@@ -16,7 +16,7 @@ if [ ! -d "$store" ]; then
 else
 	printf "%s: Syncing password-store\n" "$0"
 
-	git remote update
+	git remote update origin
 
 	LOCAL=$(git rev-parse @)
 	REMOTE=$(git rev-parse '@{u}')
