@@ -34,7 +34,7 @@ client.placeholder      $base00 $base00 $base05 $base00 $base00
 client.background       $base07
 
 font pango:sans-serif 15
-focus_on_window_activation smart
+focus_on_window_activation focus
 default_border pixel
 hide_edge_borders smart
 
