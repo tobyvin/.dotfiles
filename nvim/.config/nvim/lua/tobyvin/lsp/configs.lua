@@ -2,6 +2,7 @@ local ms = vim.lsp.protocol.Methods
 
 local M = {
 	bashls = {
+		filetypes = { "sh", "PKGBUILD" },
 		settings = {
 			bashIde = {
 				explainshellEndpoint = "https://explainshell.com",
@@ -11,6 +12,12 @@ local M = {
 				},
 			},
 		},
+		---@type fun(new_config: lspconfig.options.bashls, new_root_dir: any)
+		on_new_config = function(new_config, new_root_dir)
+			if require("lspconfig").util.path.join(new_root_dir, "PKGBUILD") then
+				new_config.settings.bashIde.shellcheckPath = "pkgbuildcheck"
+			end
+		end,
 	},
 	biome = {
 		capabilities = {

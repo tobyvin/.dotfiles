@@ -6,6 +6,7 @@ vim.filetype.add({
 		service = "systemd",
 	},
 	filename = {
+		PKGBUILD = "PKGBUILD",
 		tridactylrc = "trytactylrc",
 	},
 	pattern = {
