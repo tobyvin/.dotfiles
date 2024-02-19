@@ -2,7 +2,7 @@
 
 if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
 	tmux_sock=$(tmux display -p "#{socket_path}")
-	tmux -S "${tmux_sock}.control" run-shell "$(basename "$0")"
+	tmux -S "${tmux_sock}.control" run-shell "$(basename "$0") $*"
 	exit 0
 fi
 
@@ -11,10 +11,12 @@ ATTACHED=$(tmux display -p "#{?#{m:*ssh,#{socket_path}},#{s/_/./:session_name},#
 
 if [ "$#" -eq 0 ]; then
 	set -- "$(
-		sshr --resolve --exclude $ATTACHED |
+		sshr --resolve --exclude "$ATTACHED" |
 			fzf-tmux -p20%,20% -- --print-query |
 			tail -1
 	)"
+elif [ "$1" = "-1" ] 2>/dev/null; then
+	set -- "$(sshr --exclude "$ATTACHED" | head -n1)"
 fi
 
 if [ -z "$1" ]; then
