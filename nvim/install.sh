@@ -7,6 +7,10 @@ if ! command -v "$pkgname" >/dev/null; then
 	exit 0
 fi
 
+if test .installed -nt $pkgname; then
+	exit 0
+fi
+
 printf "%s: Installing plugins\n" "$0"
 
 nvim --headless -c 'Lazy! restore' -c qa

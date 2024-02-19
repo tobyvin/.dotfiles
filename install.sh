@@ -1,13 +1,18 @@
 #!/bin/sh
-# shellcheck disable=SC2035
+# shellcheck disable=SC2035,SC2086
 
 set -e
 
 CDPATH='' cd -- "$(dirname -- "$0")" || exit
 
+if [ -r .installed ]; then
+	read -r DOTFILES_INSTALLED <.installed
+	export DOTFILES_INSTALLED
+fi
+
 printf "%s: Removing bad links\n" "$0"
 {
-	git log --name-only --no-renames --diff-filter=D --format=format:
+	git log --name-only --no-renames --diff-filter=D --format=format: $DOTFILES_INSTALLED HEAD
 	git diff --name-only --no-renames --diff-filter=D HEAD
 	if [ -f .untracked ]; then
 		cat .untracked
@@ -30,3 +35,5 @@ printf "%s: Installing packages\n" "$0"
 for f in ${1:-*}/install.sh; do
 	$f
 done
+
+git rev-parse ^@ >.installed
