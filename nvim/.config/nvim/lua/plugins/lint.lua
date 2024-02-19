@@ -60,6 +60,18 @@ local M = {
 					})[1]
 				end,
 			},
+			shellcheck = {
+				condition = function()
+					return not vim.api.nvim_buf_get_name(0):match(".*/PKGBUILD$")
+				end,
+			},
+			pkgbuildcheck = {
+				extend = "shellcheck",
+				cmd = "pkgbuildcheck",
+				condition = function()
+					return vim.api.nvim_buf_get_name(0):match(".*/PKGBUILD$")
+				end,
+			},
 		},
 	},
 }
@@ -75,7 +87,10 @@ function M:config(opts)
 	local lint = require("lint")
 	lint.linters_by_ft = opts.linters_by_ft
 	vim.iter(opts.linters):each(function(name, linter)
-		linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[name] or {}, { args = {} })
+		linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[linter.extend or name] or {}, {
+			args = {},
+			prepend_args = {},
+		})
 		vim.iter(linter.prepend_args):rev():each(function(arg)
 			table.insert(linter.args, 1, arg)
 		end)
