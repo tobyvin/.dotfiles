@@ -51,6 +51,7 @@ bindkey -M vicmd '^[[1;5D' backward-word
 alias ls='ls --human-readable --color=auto'
 alias ip='ip -color=auto'
 alias grep='grep --color=auto'
+alias diff='diff --color=auto'
 alias info='info --vi-keys'
 alias untar='tar -zxvf'
 alias userctl='systemctl --user'
