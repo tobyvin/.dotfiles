@@ -16,7 +16,7 @@ vim.opt.ignorecase = true
 vim.opt.inccommand = "split"
 vim.opt.jumpoptions:append("stack")
 vim.opt.linebreak = true
-vim.opt.modelines = 1
+vim.opt.modeline = true
 vim.opt.mouse = "a"
 vim.opt.number = true
 vim.opt.pumheight = 10

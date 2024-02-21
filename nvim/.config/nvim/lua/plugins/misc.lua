@@ -26,6 +26,10 @@ local M = {
 		ft = "hjson",
 	},
 	{
+		"nfnty/vim-nftables",
+		ft = "nftables",
+	},
+	{
 		"tridactyl/vim-tridactyl",
 		ft = "tridactyl",
 	},

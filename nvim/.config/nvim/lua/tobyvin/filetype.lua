@@ -4,9 +4,11 @@ vim.filetype.add({
 		ron = "ron",
 		zsh = "sh",
 		service = "systemd",
+		nft = "nftables",
 	},
 	filename = {
 		tridactylrc = "trytactylrc",
+		["nftables.conf"] = "nftables",
 	},
 	pattern = {
 		-- fontconfig
