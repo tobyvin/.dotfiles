@@ -38,7 +38,7 @@ EOF
 if [ "${hostname##"$HOST"}" != "$hostname" ]; then
 	tmux detach -E 'tmux new -A'
 else
-	if ! tmux -L ssh has-session -t "$session"; then
+	if ! tmux -L ssh has-session -t "$session" 2>/dev/null; then
 		tmux -L ssh new-session -ds "$session" -- \
 			ssh -t "$@" \
 			-R "/tmp/tmux-${HOST}.control:/tmp/tmux-%i/ssh" \
