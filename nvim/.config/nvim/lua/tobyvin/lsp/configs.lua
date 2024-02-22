@@ -14,7 +14,9 @@ local M = {
 		},
 		---@type fun(new_config: lspconfig.options.bashls, new_root_dir: any)
 		on_new_config = function(new_config, new_root_dir)
-			if require("lspconfig").util.path.join(new_root_dir, "PKGBUILD") then
+			if vim.iter(vim.fs.dir(new_root_dir)):any(function(n)
+				return n == "PKGBUILD"
+			end) then
 				new_config.settings.bashIde.shellcheckPath = "pkgbuildcheck"
 			end
 		end,
