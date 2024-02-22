@@ -1,4 +1,4 @@
 #!/bin/sh
 
-export MANPAGER="less -R --use-color -Dd+r -Du+b"
+export MANPAGER="less -R --use-color -Dd+g -Du+b"
 export MANROFFOPT="-P -c"
