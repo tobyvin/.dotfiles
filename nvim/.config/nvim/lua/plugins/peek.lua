@@ -1,7 +1,9 @@
 ---@type LazyPluginSpec
 local M = {
 	"toppair/peek.nvim",
-	build = vim.fn.executable("deno") == 1 and "deno task --quiet build:fast" or nil,
+	cond = vim.fn.executable("deno") == 1,
+	ft = { "markdown" },
+	build = "deno task --quiet build:fast",
 	opts = {
 		auto_load = false,
 		close_on_bdelete = true,
@@ -12,16 +14,14 @@ local M = {
 	},
 }
 
-function M:init()
-	if not M.build or vim.env.SSH_CLIENT or vim.env.SSH_TTY then
-		return
-	end
+function M:config(opts)
+	require("peek").setup(opts)
 
-	vim.api.nvim_create_user_command("PeekOpen", U.lazy_require("peek").open, {
-		desc = "open peek.nvim markdown preview",
+	vim.api.nvim_create_user_command("PeekOpen", require("peek").open, {
+		desc = "open markdown preview",
 	})
-	vim.api.nvim_create_user_command("PeekClose", U.lazy_require("peek").close, {
-		desc = "close peek.nvim markdown preview",
+	vim.api.nvim_create_user_command("PeekClose", require("peek").close, {
+		desc = "close markdown preview",
 	})
 end
 

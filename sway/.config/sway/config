@@ -47,10 +47,13 @@ for_window [class="^steam$" title="^Steam$"] floating disable
 for_window [app_id="firefox" title="Library"] floating enable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="" title="^Streamlink Twitch GUI$"] floating enable
+for_window [app_id="deno" title="^Peek preview$"] resize set width 980px
 for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
 
 assign [app_id="mpv"] s
 assign [class="^discord$" instance="^discord$"] d
+
+no_focus [app_id="deno" title="^Peek preview$"]
 
 input type:pointer {
     accel_profile flat
