@@ -8,8 +8,8 @@ set $right l
 set $menu wmenu -i -f 'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
 set $passmenu find $PASSWORD_STORE_DIR/ -name '*.gpg' -printf '%P\n' | sed "s/\.gpg$//" | sort | $menu | xargs -r pass show
 
-set $wss $ws11
-set $wsd $ws12
+set $ws11 $ws11
+set $ws12 $ws12
 set $ws01 1:a1
 set $ws02 2:a2
 set $ws03 3:a3
@@ -81,8 +81,8 @@ for_window [app_id="deno" title="^Peek preview$"] resize set width 980px
 for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
 for_window [class="^discord$" title="^Discord$"] move to scratchpad
 
-assign [app_id="mpv"] $wss
-assign [class="^discord$" instance="^discord$"] $wsd
+assign [app_id="mpv"] $ws11
+assign [class="^discord$" instance="^discord$"] $ws12
 
 no_focus [app_id="deno" title="^Peek preview$"]
 
@@ -172,8 +172,8 @@ bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+6 workspace back_and_forth
 bindsym $mod+Tab workspace back_and_forth
 
-bindsym $mod+s   workspace $wss
-bindsym $mod+d   workspace $wsd
+bindsym $mod+s   workspace $ws11
+bindsym $mod+d   workspace $ws12
 bindsym $mod+1   workspace $ws01
 bindsym $mod+2   workspace $ws02
 bindsym $mod+3   workspace $ws03
@@ -195,8 +195,8 @@ bindsym $mod+F8  workspace $ws18
 bindsym $mod+F9  workspace $ws19
 bindsym $mod+F10 workspace $ws20
 
-bindsym $mod+Shift+s   move container to workspace $wss,  workspace $wss
-bindsym $mod+Shift+d   move container to workspace $wsd,  workspace $wsd
+bindsym $mod+Shift+s   move container to workspace $ws11, workspace $ws11
+bindsym $mod+Shift+d   move container to workspace $ws12, workspace $ws12
 bindsym $mod+Shift+1   move container to workspace $ws01, workspace $ws01
 bindsym $mod+Shift+2   move container to workspace $ws02, workspace $ws02
 bindsym $mod+Shift+3   move container to workspace $ws03, workspace $ws03
