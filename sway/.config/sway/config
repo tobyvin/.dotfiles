@@ -262,10 +262,12 @@ bar {
     }
 }
 
-exec_always ~/.local/bin/rss-status
-
 exec swaymsg "workspace $ws00; layout tabbed;"
 
 include /etc/sway/config.d/*
 
-exec_always systemctl --user start sway-session.target
+exec_always {
+    ~/.local/bin/rss-status
+    import-gsettings
+    systemctl --user start sway-session.target
+}

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+config="${XDG_CONFIG_HOME:-$HOME/.config}/gtk-3.0/settings.ini"
+
+if [ ! -f "$config" ]; then
+	exit 1
+fi
+
+for name in 'gtk-theme' 'icon-theme' 'cursor-theme' 'font-name' 'color-scheme'; do
+	key=${name%-name}
+	key=${key#gtk-}
+	value="$(grep "gtk-$key-name" "$config" | sed 's/.*\s*=\s*//')"
+	if [ -n "$value" ]; then
+		gsettings set org.gnome.desktop.interface "$name" "$value"
+	fi
+done

@@ -6,7 +6,7 @@ After=graphical-session.target
 [Service]
 Type=oneshot
 BusName=rs.i3status
-ExecStart=%h/.local/bin/rss-status
+ExecStart=-%h/.local/bin/rss-status
 
 [Install]
 WantedBy=graphical-session.target
