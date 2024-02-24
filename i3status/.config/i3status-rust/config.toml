@@ -62,8 +62,14 @@ interval = 60
 
 [[block]]
 block = "music"
-format = "{ $icon $title.str(max_w:10,rot_interval:0.5) $prev $play $next |}"
-format_alt = " $icon {$combo.str(max_w:30,rot_interval:0.5) $prev $play $next |}"
+format = "{ $icon $title.str(max_w:10,rot_interval:0.5) |}{$prev $play $next |}{$volume_icon $volume |}"
+format_alt = "{ $icon $combo.str(max_w:30,rot_interval:0.5) |}{$prev $play $next |}{$volume_icon $volume |}"
+[[block.click]]
+button = "up"
+action = "volume_up"
+[[block.click]]
+button = "down"
+action = "volume_down"
 
 [[block]]
 block = "sound"
@@ -111,6 +117,12 @@ block = "time"
 interval = 1
 format.full = " $timestamp.datetime(f:'%a %m/%d %T') "
 format.short = " $timestamp.datetime(f:%T) "
+
+[[block]]
+block = "kdeconnect"
+format = " $icon  {$bat_icon |}{$network_icon |}{$notif_icon$notif_count |}"
+missing_format = ""
+disconnected_format = ""
 
 [[block]]
 block = "notify"
