@@ -9,14 +9,21 @@ fi
 HOST=$(tmux display -p '#h' 2>/dev/null)
 ATTACHED=$(tmux display -p "#{?#{m:*ssh,#{socket_path}},#{s/_/./:session_name},#{host}}")
 
+sessions() {
+	{
+		tmux -L ssh ls -F '#{?session_last_attached,#{session_last_attached},#{session_created}}:#{s/_/./:session_name}'
+		tmux ls -F '#{?session_last_attached,#{session_last_attached},#{session_created}}:#{host}'
+	} 2>/dev/null | sort -u | cut -d':' -f2
+}
+
 if [ "$#" -eq 0 ]; then
 	set -- "$(
-		sshr --resolve --exclude "$ATTACHED" |
+		sessions | sshr --resolve --exclude "$ATTACHED" --include - |
 			fzf-tmux -p20%,20% -- --print-query |
 			tail -1
 	)"
 elif [ "$1" = "-1" ] 2>/dev/null; then
-	set -- "$(sshr --exclude "$ATTACHED" | head -n1)"
+	set -- "$(sessions | sed "/$ATTACHED/d" | head -n1)"
 fi
 
 if [ -z "$1" ]; then
