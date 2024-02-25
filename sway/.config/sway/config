@@ -72,13 +72,13 @@ output * bg ~/.local/share/gruvbox/sway.png fill
 
 for_window [shell=".*"] inhibit_idle fullscreen
 for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
-for_window [class="^steam$"] floating enable
-for_window [class="^steam$" title="^Steam$"] floating disable
+for_window [class="^[Ss]team$"] floating enable
+for_window [class="^[Ss]team$" title="^Steam$"] floating disable
+for_window [class="^[Ss]team$" title="^Sign in to Steam$"] move to scratchpad
 for_window [app_id="firefox" title="Library"] floating enable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="" title="^Streamlink Twitch GUI$"] floating enable
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px
-for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
 for_window [class="^discord$" title="^Discord$"] move to scratchpad
 
 assign [app_id="mpv"] $ws11
