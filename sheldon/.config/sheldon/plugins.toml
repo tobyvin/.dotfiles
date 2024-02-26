@@ -1,7 +1,5 @@
 [templates]
 defer = "{{ hooks?.pre | nl }}{% for file in files %}zsh-defer source \"{{ file }}\"\n{% endfor %}{{ hooks?.post | nl }}"
-base16_config = 'export BASE16_CONFIG_PATH="{{ dir }}"'
-base16_fzf = 'export BASE16_FZF_PATH="{{ dir }}"'
 
 [plugins]
 
@@ -20,11 +18,6 @@ github = "zsh-users/zsh-completions"
 
 [plugins.base16-shell]
 github = "tinted-theming/base16-shell"
-apply = ["defer", "base16_config"]
-
-[plugins.base16-fzf]
-github = "tinted-theming/base16-fzf"
-apply = ["base16_fzf"]
 
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
