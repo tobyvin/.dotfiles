@@ -1,0 +1,9 @@
+image: archlinux
+secrets:
+  - f65d5d0d-b171-42f7-a125-d788245b25a0
+tasks:
+  - mirror: |
+      git clone --mirror https://git.sr.ht/~tobyvin/.dotfiles mirror
+      cd mirror
+      git config --add core.sshCommand 'ssh -o "StrictHostKeyChecking=accept-new"'
+      git push --mirror git@github.com:tobyvin/.dotfiles.git
