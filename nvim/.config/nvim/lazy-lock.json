@@ -24,7 +24,6 @@
   "gruvbox.nvim": { "branch": "tsfix", "commit": "d0635ba2b511761615301a28fd7dfdc55f986bf5" },
   "indent-blankline.nvim": { "branch": "master", "commit": "821a7acd88587d966f7e464b0b3031dfe7f5680c" },
   "lazy.nvim": { "branch": "main", "commit": "aedcd79811d491b60d0a6577a9c1701063c2a609" },
-  "mason-lock.nvim": { "branch": "main", "commit": "4fb91ae8cbd85b7c6fa56f823231edfded07f17a" },
   "mason.nvim": { "branch": "main", "commit": "c43eeb5614a09dc17c03a7fb49de2e05de203924" },
   "neoconf.nvim": { "branch": "main", "commit": "4ef6c6c5882e7e16209173fb8c47414202843384" },
   "neodev.nvim": { "branch": "main", "commit": "de3685b8c1cd439dd96b7958793f6f381f98652d" },

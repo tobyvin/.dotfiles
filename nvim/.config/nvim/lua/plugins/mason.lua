@@ -4,13 +4,6 @@ local M = {
 	version = "*",
 	build = ":MasonUpdate",
 	lazy = false,
-	dependencies = {
-		{
-			"zapling/mason-lock.nvim",
-			lazy = false,
-			opts = {},
-		},
-	},
 	opts = {
 		registries = {
 			-- TODO: remove once mdformat-gfm is added to official registry
