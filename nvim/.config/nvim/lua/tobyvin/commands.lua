@@ -8,3 +8,13 @@ vim.api.nvim_create_user_command("Scratch", function(cmdln)
 	vim.bo[bufnr].filetype = cmdln.args[1]
 	vim.api.nvim_set_current_buf(bufnr)
 end, { nargs = "?", desc = "scratch buffer", complete = "filetype" })
+
+vim.api.nvim_create_user_command("Runtime", function(opts)
+	local items = vim.api.nvim_get_runtime_file(("*%s*"):format(opts.args), not opts.bang)
+	U.select(items, {
+		prompt = "select runtime file",
+		format_item = function(item)
+			return item:gsub(vim.env.HOME, "~")
+		end,
+	}, vim.cmd.edit)
+end, { nargs = "?", bang = true, desc = "scratch buffer", complete = "filetype" })

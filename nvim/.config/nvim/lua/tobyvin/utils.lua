@@ -11,6 +11,18 @@ function M.inspect(v)
 	return v
 end
 
+function M.select(items, opts, on_choice)
+	if #items == 1 then
+		on_choice(items[1])
+	elseif #items > 1 then
+		vim.ui.select(items, opts, function(item, idx)
+			return item ~= nil and on_choice(item, idx) or nil
+		end)
+	else
+		vim.print("No results found")
+	end
+end
+
 function M.lazy_require(modname)
 	return setmetatable({}, {
 		__index = function(_, k)
