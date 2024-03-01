@@ -123,6 +123,9 @@ block = "kdeconnect"
 format = " $icon  {$bat_icon |}{$network_icon |}{$notif_icon$notif_count |}"
 missing_format = ""
 disconnected_format = ""
+[[block.click]]
+button = "left"
+cmd = "pgrep kdeconnect-sms && killall kdeconnect-sms || kdeconnect-sms"
 
 [[block]]
 block = "notify"
