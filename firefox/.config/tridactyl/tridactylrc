@@ -8,10 +8,13 @@ sanitize tridactyllocal tridactylsync
 
 colourscheme gruvbox-dark-hard
 
-alias gitclone jsb -p tri.native.run("git clone --depth=1 '" + JS_ARG + "' /home/tobyv/src/" + JS_ARG.split("/").slice(-1))
-alias jse js 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
-alias jsep js -p 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
-alias video_with jse let video; if (document.activeElement.name == 'VIDEO') video = document.activeElement; else video = $all('video').find(v => !v.paused); if (!video) video = $('video');
+command jse js 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
+command jsep js -p 'use strict'; function $all(q, root=document) { return Array.from(root.querySelectorAll(q)) }; function $(q, root=document) { return root.querySelector(q) }; let $ex = (s) => tri.controller.acceptExCmd(s) ; let $set = (...args) => tri.config.set(...args);
+command video_with jse let video; if (document.activeElement.name == 'VIDEO') video = document.activeElement; else video = $all('video').find(v => !v.paused); if (!video) video = $('video');
+command fixamo_quiet jsb tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""'))
+command fixamo js tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""').then(tri.excmds.fillcmdline_tmp(3000, "Permissions added to user.js. Please restart Firefox to make them take affect.")))
+command bdelete tabclose
+command bd tabclose
 
 set profiledir default
 set homepages [ "https://miniflux.tobyvin.dev/", "https://tobyvin.dev/"]
@@ -49,6 +52,16 @@ bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | mpvsafe
 bind gv mode video
 bind gx hint -W mpvsafe
+
+" Requires custom firefox build or pacman hook:
+" patches: https://github.com/glacambre/firefox-patches
+" hook: https://aur.archlinux.org/packages/firefox-no-reserved-keys-patch
+bind --mode=ex <C-n> ex.next_completion
+bind --mode=ex <C-p> ex.prev_completion
+bind --mode=ex <C-y> ex.insert_completion
+bind --mode=ex <C-e> ex.deselect_completion
+bind --mode=ex <Tab> ex.complete
+bind --mode=ex <C-g> composite text.beginning_of_line ; text.forward_word ; text.kill_word
 
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
