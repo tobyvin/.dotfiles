@@ -165,8 +165,8 @@ bindsym $mod+8   workspace $ws08
 bindsym $mod+9   workspace $ws09
 bindsym $mod+0   workspace $ws10
 
-bindsym $mod+Shift+s   move container to workspace $ws11, workspace $ws11
-bindsym $mod+Shift+d   move container to workspace $ws12, workspace $ws12
+bindsym $mod+Shift+s   move container to workspace $ws06, workspace $ws06
+bindsym $mod+Shift+d   move container to workspace $ws07, workspace $ws07
 bindsym $mod+Shift+1   move container to workspace $ws01, workspace $ws01
 bindsym $mod+Shift+2   move container to workspace $ws02, workspace $ws02
 bindsym $mod+Shift+3   move container to workspace $ws03, workspace $ws03
