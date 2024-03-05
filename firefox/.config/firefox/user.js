@@ -90,12 +90,12 @@ user_pref("network.gio.supported-protocols", "");
 
 /*** [SECTION 0800]: LOCATION BAR / SEARCH BAR / SUGGESTIONS / HISTORY / FORMS ***/
 user_pref("_user.js.parrot", "0800 syntax error: the parrot's ceased to be!");
-user_pref("browser.urlbar.showSearchTerms.enabled", false);
+user_pref("browser.urlbar.showSearchTerms.enabled", true);
 user_pref("browser.urlbar.speculativeConnect.enabled", false);
 user_pref("browser.urlbar.suggest.quicksuggest.nonsponsored", false);
 user_pref("browser.urlbar.suggest.quicksuggest.sponsored", false);
-user_pref("browser.search.suggest.enabled", false);
-user_pref("browser.urlbar.suggest.searches", false);
+user_pref("browser.search.suggest.enabled", true);
+user_pref("browser.urlbar.suggest.searches", true);
 user_pref("browser.urlbar.trending.featureGate", false);
 user_pref("browser.urlbar.addons.featureGate", false);
 user_pref("browser.urlbar.mdn.featureGate", false);
