@@ -1,0 +1,14 @@
+statuspanel[type="overLink"],
+#statuspanel[type="overLink"] {
+  right: 0;
+  display: inline;
+}
+
+tabs {
+  counter-reset: tab-counter;
+}
+
+.tab-label::before {
+  counter-increment: tab-counter;
+  content: counter(tab-counter) " - ";
+}
