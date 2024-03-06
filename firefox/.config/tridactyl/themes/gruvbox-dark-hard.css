@@ -1,5 +1,4 @@
 :root {
-  /* Gruvbox-dark-hard by Chris Kempson (http://chriskempson.com) */
   --base00: #1d2021;
   --base01: #3c3836;
   --base02: #504945;
@@ -16,6 +15,9 @@
   --base0D: #83a598;
   --base0E: #d3869b;
   --base0F: #d65d0e;
+
+  --tridactyl-cmdl-font-size: var(--tridactyl-font-size);
+  --tridactyl-cmplt-font-size: var(--tridactyl-font-size);
 
   --tridactyl-fg: var(--base05);
   --tridactyl-bg: var(--base00);
