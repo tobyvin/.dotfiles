@@ -33,6 +33,7 @@ local M = {
 			lua = { "selene" },
 			markdown = { "markdownlint" },
 			zsh = { "zsh" },
+			systemd = { "systemdlint" },
 		},
 		linters = {
 			markdownlint = {
@@ -47,7 +48,7 @@ local M = {
 					function()
 						return vim.fs.find("selene.toml", {
 							upward = true,
-							stop = vim.uv.os_homedir(),
+							stop = vim.env.HOME,
 							path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
 						})[1]
 					end,
@@ -55,7 +56,7 @@ local M = {
 				condition = function()
 					return vim.fs.find("selene.toml", {
 						upward = true,
-						stop = vim.uv.os_homedir(),
+						stop = vim.env.HOME,
 						path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
 					})[1]
 				end,
