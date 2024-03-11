@@ -1,4 +1,3 @@
----@diagnostic disable: missing-fields
 ---@type LazyPluginSpec
 local M = {
 	"hrsh7th/nvim-cmp",
@@ -7,24 +6,7 @@ local M = {
 		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
 		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-nvim-lsp-document-symbol",
-		"hrsh7th/cmp-nvim-lsp-signature-help",
-		"hrsh7th/cmp-nvim-lua",
 		"hrsh7th/cmp-cmdline",
-		"Dosx001/cmp-commit",
-		"rcarriga/cmp-dap",
-		"davidsierradz/cmp-conventionalcommits",
-		{
-			"petertriho/cmp-git",
-			ft = "gitcommit",
-			dependencies = { "nvim-lua/plenary.nvim" },
-			config = true,
-		},
-		{
-			"David-Kunz/cmp-npm",
-			dependencies = { "nvim-lua/plenary.nvim" },
-			config = true,
-		},
 		{
 			"saadparwaiz1/cmp_luasnip",
 			dependencies = {
@@ -68,6 +50,7 @@ function M:config()
 				border = "single",
 			}),
 		},
+		---@diagnostic disable-next-line: missing-fields
 		formatting = {
 			format = function(_, vim_item)
 				vim_item.menu = nil
@@ -84,61 +67,22 @@ function M:config()
 		}),
 		sources = {
 			{ name = "nvim_lsp" },
-			{ name = "nvim_lsp_signature_help" },
 			{ name = "luasnip" },
 			{ name = "path" },
 		},
 	})
 
-	local cmd_mapping = cmp.mapping.preset.cmdline({
-		["<C-Space>"] = { c = cmp.mapping.complete({}) },
-		["<C-e>"] = { c = cmp.mapping.abort() },
-	})
-
 	cmp.setup.cmdline(":", {
-		mapping = cmd_mapping,
+		mapping = cmp.mapping.preset.cmdline(),
 		sources = {
-			{ name = "cmdline", max_item_count = 10 },
+			{ name = "cmdline" },
 		},
 	})
 
 	cmp.setup.cmdline({ "/", "?", "@" }, {
-		mapping = cmd_mapping,
-		sources = {
-			{ name = "nvim_lsp_document_symbol", max_item_count = 10, group_index = 1 },
-			{ name = "buffer", keyword_length = 3, max_item_count = 10, group_index = 2 },
-		},
-	})
-
-	cmp.setup.filetype({ "tex", "bib", "markdown" }, {
+		mapping = cmp.mapping.preset.cmdline(),
 		sources = {
 			{ name = "buffer", keyword_length = 3 },
-		},
-	})
-
-	cmp.setup.filetype("gitcommit", {
-		sources = {
-			{ name = "git" },
-			{ name = "commit" },
-			{ name = "conventionalcommits" },
-		},
-	})
-
-	cmp.setup.filetype("json", {
-		sources = {
-			{ name = "npm" },
-		},
-	})
-
-	cmp.setup.filetype("toml", {
-		sources = {
-			{ name = "crates" },
-		},
-	})
-
-	cmp.setup.filetype("dap-repl", {
-		sources = {
-			{ name = "dap" },
 		},
 	})
 end

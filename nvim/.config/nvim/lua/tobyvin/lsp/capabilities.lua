@@ -14,7 +14,7 @@ local M = {
 		})
 	end,
 	[ms.textDocument_signatureHelp] = function(bufnr)
-		vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, {
+		vim.keymap.set({ "n", "i" }, "<C-s>", vim.lsp.buf.signature_help, {
 			buffer = bufnr,
 			desc = "signature help",
 		})
