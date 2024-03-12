@@ -18,7 +18,7 @@ sessions() {
 
 if [ "$#" -eq 0 ]; then
 	set -- "$(
-		sessions | sshr --resolve --port 22 --exclude "$ATTACHED" --include - |
+		sessions | sshr --resolve --port 22 --scan 0.0.0.0/24 --exclude "$ATTACHED" --include - |
 			fzf-tmux -p20%,20% -- --print-query |
 			tail -1
 	)"
