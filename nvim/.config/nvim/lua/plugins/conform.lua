@@ -7,20 +7,21 @@ local M = {
 		format_on_save = false,
 		format_after_save = false,
 		formatters_by_ft = {
-			lua = { "stylua" },
 			css = { "prettier" },
 			html = { "prettier" },
 			htmldjango = { "djlint" },
-			tex = { "latexindent" },
-			plaintex = { "latexindent" },
+			json = { "deno_fmt" },
+			lua = { "stylua" },
 			markdown = { "mdformat", "markdownlint" },
 			nginx = { "nginxbeautifier" },
+			plaintex = { "latexindent" },
 			python = { "black", "usort" },
-			-- HACK: unable to get typst-lsp to do formatting
-			typst = { "typstfmt" },
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },
+			tex = { "latexindent" },
+			-- HACK: unable to get typst-lsp to do formatting
+			typst = { "typstfmt" },
 			["*"] = { "injected", "trim_whitespace", "trim_newlines" },
 		},
 		formatters = {
