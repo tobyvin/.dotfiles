@@ -1,5 +1,5 @@
-vim.keymap.set("n", "]]", "<CMD>cnext<CR>", { desc = "go to next error" })
-vim.keymap.set("n", "[[", "<CMD>cprev<CR>", { desc = "go to previous error" })
+vim.keymap.set("n", "]e", "<CMD>cnext<CR>", { desc = "go to next error" })
+vim.keymap.set("n", "[e", "<CMD>cprev<CR>", { desc = "go to previous error" })
 vim.keymap.set("n", "]b", "<CMD>bnext<CR>", { desc = "go to next buffer in the buffer list" })
 vim.keymap.set("n", "[b", "<CMD>bprev<CR>", { desc = "go to previous buffer in the buffer list" })
 vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "add buffer diagnostics to loclist" })
