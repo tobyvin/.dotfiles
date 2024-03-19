@@ -1,6 +1,12 @@
 local ms = vim.lsp.protocol.Methods
 
+---@type table<string, fun(bufnr:number, client:vim.lsp.Client)>
 local M = {
+	[ms.dollar_progress] = function(_, client)
+		-- See: https://github.com/neovim/neovim/pull/26098
+		client.progress = vim.ringbuf(1024) --[[@as vim.lsp.Client.Progress]]
+		client.progress.pending = {}
+	end,
 	[ms.textDocument_documentHighlight] = function(bufnr)
 		vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
 			buffer = bufnr,
@@ -49,7 +55,9 @@ local M = {
 			desc = "implementation",
 		})
 	end,
-	[ms.textDocument_inlayHint] = vim.lsp.inlay_hint.enable,
+	[ms.textDocument_inlayHint] = function(bufnr)
+		vim.lsp.inlay_hint.enable(bufnr, true)
+	end,
 	[ms.textDocument_references] = function(bufnr)
 		vim.keymap.set("n", "gr", vim.lsp.buf.references, {
 			buffer = bufnr,

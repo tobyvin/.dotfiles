@@ -25,7 +25,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
 		for method, setup_handler in pairs(require("tobyvin.lsp.capabilities")) do
 			if client.supports_method(method, { bufnr = args.buf }) then
-				setup_handler(args.buf)
+				setup_handler(args.buf, client)
 			end
 		end
 	end,
