@@ -29,6 +29,9 @@ prune = true
 [revert]
 reference = true
 
+[rerere]
+enabled = true
+
 [diff]
 colorMoved = default
 colorMovedWS = allow-indentation-change
