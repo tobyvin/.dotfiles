@@ -11,6 +11,7 @@ local M = {
 			html = { "prettier" },
 			htmldjango = { "djlint" },
 			json = { "deno_fmt" },
+			jsonc = { "deno_fmt" },
 			lua = { "stylua" },
 			markdown = { "mdformat", "markdownlint" },
 			nginx = { "nginxbeautifier" },
