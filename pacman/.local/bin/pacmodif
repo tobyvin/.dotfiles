@@ -1,0 +1,12 @@
+#!/bin/sh
+
+for file; do
+	pkgname=$(pacman -Qqo "$file" | pacman -Q - | tr ' ' '-')
+	pkg=$(find /var/cache/pacman -name "${pkgname}-*.pkg.tar.zst")
+	if [ -z "$pkg" ]; then
+		printf "Failed to find '%s' in pacman cache\n" "$file"
+	else
+		printf '%s:%s <-> %s\n' "$pkg" "${file#/}" "$file"
+		bsdtar -xOf "$pkg" "${file#/}" | diff - "$file"
+	fi
+done
