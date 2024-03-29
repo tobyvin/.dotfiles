@@ -58,10 +58,15 @@ bind gx hint -W mpvsafe
 " hook: https://aur.archlinux.org/packages/firefox-no-reserved-keys-patch
 bind --mode=ex <C-n> ex.next_completion
 bind --mode=ex <C-p> ex.prev_completion
+bind --mode=ex <Down> ex.next_completion
+bind --mode=ex <Up> ex.prev_completion
+bind --mode=ex <Tab> ex.next_completion
+bind --mode=ex <C-Tab> ex.prev_completion
+bind --mode=ex <C-d> composite ex.next_completion; ex.next_completion; ex.next_completion; ex.next_completion; ex.next_completion
+bind --mode=ex <C-u> composite ex.prev_completion; ex.prev_completion; ex.prev_completion; ex.prev_completion; ex.prev_completion
+bind --mode=ex <C-Space> ex.insert_completion
 bind --mode=ex <C-y> ex.insert_completion
 bind --mode=ex <C-e> ex.deselect_completion
-bind --mode=ex <Tab> ex.complete
-bind --mode=ex <C-g> composite text.beginning_of_line ; text.forward_word ; text.kill_word
 
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
