@@ -16,5 +16,7 @@ vim.api.nvim_create_user_command("Runtime", function(opts)
 		format_item = function(item)
 			return item:gsub(vim.env.HOME, "~")
 		end,
-	}, vim.cmd.edit)
+	}, function(item)
+		vim.cmd.edit(item)
+	end)
 end, { nargs = "?", bang = true, desc = "scratch buffer", complete = "filetype" })
