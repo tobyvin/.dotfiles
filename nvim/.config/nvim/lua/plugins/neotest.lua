@@ -27,7 +27,7 @@ function M:init()
 	end, { desc = "run nearest test" })
 	vim.keymap.set("n", "<leader>td", function()
 		require("neotest").run.run({ suite = false, strategy = "dap" })
-	end, { desc = "run nearest test" })
+	end, { desc = "debug nearest test" })
 end
 
 return M
