@@ -52,6 +52,7 @@ bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | mpvsafe
 bind gv mode video
 bind gx hint -W mpvsafe
+bind yy clipboard yankmd
 
 " Requires custom firefox build or pacman hook:
 " patches: https://github.com/glacambre/firefox-patches
