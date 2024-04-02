@@ -59,10 +59,10 @@ for_window [app_id="firefox" title="Library"] floating enable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="" title="^Streamlink Twitch GUI$"] floating enable
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px
-for_window [class="^discord$" title="^Discord$"] move to scratchpad
+for_window [app_id="discord" title="^Discord Updater$"] move to scratchpad
 
 assign [app_id="mpv"] $ws06
-assign [class="^discord$" instance="^discord$"] $ws07
+assign [app_id="discord"] $ws07
 
 no_focus [app_id="deno" title="^Peek preview$"]
 
