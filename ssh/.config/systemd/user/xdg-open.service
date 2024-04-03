@@ -1,9 +1,0 @@
-[Unit]
-Description=xdg-open socket listener
-
-[Service]
-ExecStartPre=/usr/bin/rm -f %t/xdg-open.socket
-ExecStart=/usr/bin/socat UNIX-LISTEN:%t/xdg-open.socket,fork,umask=007 EXEC:"xargs xdg-open",nofork
-
-[Install]
-WantedBy=default.target
