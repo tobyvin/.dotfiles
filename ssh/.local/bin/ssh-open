@@ -1,15 +1,17 @@
 #!/usr/bin/sh
 
-if [ -n "$SSH_CLIENT" ]; then
-	HOSTNAME=$(uname -n)
-
-	printf '%s' "$@" |
-		sed -e "s/localhost/$HOSTNAME/" -e "s/127\(\.[0-9]\{1,3\}\)\{3\}/$HOSTNAME/" |
-		if [ -S "$XDG_RUNTIME_DIR"/xdg-open.socket ] && command -v nc >/dev/null; then
-			nc -UN "$XDG_RUNTIME_DIR"/xdg-open.socket
-		else
-			xargs -I{} ssh -l "$USER" -p 2222 localhost "xdg-open '{}'"
-		fi
-else
+if [ -z "$SSH_CLIENT" ]; then
 	$(command -vp xdg-open) "$@"
+	exit 0
 fi
+
+HOSTNAME=$(uname -n)
+
+printf %s "$@" |
+	sed -e "s/localhost/$HOSTNAME/" -e "s/127\(\.[0-9]\{1,3\}\)\{3\}/$HOSTNAME/" |
+	if [ -S "$XDG_RUNTIME_DIR"/xdg-open.socket ]; then
+		if stderr=$(nc -UN "$XDG_RUNTIME_DIR"/xdg-open.socket | grep .); then
+			printf %s\\n "$stderr" 1>&2
+			exit 1
+		fi
+	fi
