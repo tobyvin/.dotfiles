@@ -7,7 +7,6 @@ set $right l
 
 set $menu wmenu -i -f 'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
 set $passmenu find $PASSWORD_STORE_DIR/ -name '*.gpg' -printf '%P\n' | sed "s/\.gpg$//" | sort | $menu | xargs -r pass show
-set $swayssh xargs -I_ swaymsg exec -- $TERMINAL -e ssh '_' -t -- "zsh -l -c 'tmux -L ssh new -A'"
 
 set $ws01 1
 set $ws02 2
@@ -89,7 +88,7 @@ bindsym $mod+Escape exec powermenu | $menu -l 6 | powermenu
 bindsym Pause exec swaymsg "output * power toggle"
 
 bindsym $mod+return exec $TERMINAL
-bindsym $mod+Shift+return exec sshr --resolve --port 22 --scan 0.0.0.0/24 | $menu | $swayssh
+bindsym $mod+Shift+return exec sshr --resolve --port 22 --scan 0.0.0.0/24 | $menu | xargs sway_ssh
 bindsym $mod+w exec $BROWSER
 
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
