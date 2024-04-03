@@ -65,6 +65,9 @@ block = "music"
 format = "{ $icon $title.str(max_w:10,rot_interval:0.5) |}{$prev $play $next |}{$volume_icon $volume |}"
 format_alt = "{ $icon $combo.str(max_w:30,rot_interval:0.5) |}{$prev $play $next |}{$volume_icon $volume |}"
 [[block.click]]
+button = "right"
+cmd = "playerctl volume | (grep -q '0.000000' && playerctl volume 0.5 || playerctl volume 0.0)"
+[[block.click]]
 button = "up"
 action = "volume_up"
 [[block.click]]
