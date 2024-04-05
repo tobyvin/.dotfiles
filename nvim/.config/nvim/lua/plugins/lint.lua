@@ -76,12 +76,10 @@ function M:config(opts)
 	local lint = require("lint")
 	lint.linters_by_ft = opts.linters_by_ft
 	vim.iter(opts.linters):each(function(name, linter)
-		linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[name] or {}, {
-			args = {},
-			prepend_args = {},
-		})
-		vim.iter(linter.prepend_args):rev():each(function(arg)
-			table.insert(linter.args, 1, arg)
+		linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[name] or {})
+		linter.args = vim.iter({ linter.prepend_args }):flatten():rev():fold(linter.args or {}, function(args, arg)
+			table.insert(args, 1, arg)
+			return args
 		end)
 		lint.linters[name] = linter
 	end)
