@@ -1,56 +1,29 @@
 ---@type LazyPluginSpec
 local M = {
 	"andweeb/presence.nvim",
-	event = {
-		"FocusGained",
-		"TextChanged",
-		"VimLeavePre",
-		"WinEnter",
-		"WinLeave",
-		"BufEnter",
-		"BufAdd",
-	},
-	opts = {
-		focus_lost_delay = 300,
-	},
+	event = "UIEnter",
 }
 
 function M:config(opts)
-	local Presence = require("presence")
-
-	local plugin_managers = require("presence/plugin_managers")
-	plugin_managers["lazy"] = "lazy"
-
-	function Presence:handle_focus_lost()
-		self:start_idle_timer(self.options.focus_lost_delay, function()
-			self:cancel()
-		end)
-	end
-
-	function Presence:start_idle_timer(timeout, callback)
-		local idle_timeout = timeout * 1000
-		self.idle_timer = vim.fn.timer_start(idle_timeout, callback)
-	end
-
-	function Presence:cancel_idle_timer()
-		if self.idle_timer then
-			vim.fn.timer_stop(self.idle_timer)
-		end
-		self.idle_timer = nil
-	end
-
-	Presence.setup(opts)
+	require("presence").setup(opts)
 
 	vim.api.nvim_create_autocmd("FocusLost", {
+		group = vim.api.nvim_create_augroup("tobyvin.presence_idle", { clear = true }),
 		callback = function()
-			Presence:handle_focus_lost()
-		end,
-	})
+			local idle_timer = vim.defer_fn(function()
+				require("presence").log:debug("Idle timeout reached...")
+				require("presence"):cancel()
+				require("presence").last_activity.file = nil
+			end, 300000)
 
-	vim.api.nvim_create_autocmd("FocusGained", {
-		callback = function()
-			Presence:cancel_idle_timer()
+			vim.api.nvim_create_autocmd("FocusGained", {
+				callback = function()
+					idle_timer:stop()
+					return true
+				end,
+			})
 		end,
+		desc = "start presence idle timer",
 	})
 end
 
