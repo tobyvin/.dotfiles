@@ -8,9 +8,9 @@ local M = {
 }
 
 function M:init()
-	U.on_attach(function()
+	U.lsp.on_attach("rust_analyzer", function()
 		vim.keymap.set("n", "gx", require("ferris.methods.open_documentation"), { desc = "open external docs" })
-	end, { name = "rust_analyzer" })
+	end, { desc = "setup ferris keymaps" })
 end
 
 return M
