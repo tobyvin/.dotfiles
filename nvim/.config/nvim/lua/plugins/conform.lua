@@ -16,7 +16,6 @@ local M = {
 			markdown = { "mdformat", "markdownlint" },
 			nginx = { "nginxbeautifier" },
 			plaintex = { "latexindent" },
-			python = { "black", "usort" },
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },

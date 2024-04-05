@@ -99,7 +99,6 @@ local M = {
 		},
 	},
 	powershell_es = {},
-	pylsp = {},
 	rust_analyzer = {
 		standalone = true,
 		settings = {
@@ -134,6 +133,7 @@ local M = {
 			},
 		},
 	},
+	ruff_lsp = {},
 	taplo = {},
 	texlab = {
 		settings = {
