@@ -1,5 +1,5 @@
-vim.keymap.set("n", "]e", "<CMD>cnext<CR>", { desc = "go to next error" })
-vim.keymap.set("n", "[e", "<CMD>cprev<CR>", { desc = "go to previous error" })
+vim.keymap.set("n", "]]", "<CMD>cnext<CR>", { desc = "go to next error" })
+vim.keymap.set("n", "[[", "<CMD>cprev<CR>", { desc = "go to previous error" })
 vim.keymap.set("n", "]b", "<CMD>bnext<CR>", { desc = "go to next buffer in the buffer list" })
 vim.keymap.set("n", "[b", "<CMD>bprev<CR>", { desc = "go to previous buffer in the buffer list" })
 vim.keymap.set("n", "]g", vim.diagnostic.goto_next, { desc = "add buffer diagnostics to loclist" })
@@ -31,10 +31,14 @@ vim.keymap.set("o", "o", function()
 	end
 end, { desc = "buffer text object" })
 
+vim.keymap.set("i", "<cr>", function()
+	return vim.fn.pumvisible() == 1 and "<C-y>" or "<cr>"
+end, { expr = true, noremap = true })
+
 vim.keymap.set({ "i", "s" }, "<Tab>", function()
 	return vim.snippet.jumpable(1) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<Tab>"
 end, { expr = true })
 
 vim.keymap.set({ "i", "s" }, "<S-Tab>", function()
-	return vim.snippet.jumpable(-1) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<Tab>"
+	return vim.snippet.jumpable(-1) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<S-Tab>"
 end, { expr = true })

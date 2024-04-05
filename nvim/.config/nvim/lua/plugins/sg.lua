@@ -22,7 +22,12 @@ local M = {
 		"nvim-lua/plenary.nvim",
 		"nvim-telescope/telescope.nvim",
 	},
-	opts = {},
+	opts = {
+		accept_tos = true,
+		download_binaries = false,
+		skip_node_check = true,
+		on_attach = function() end,
+	},
 }
 
 return M

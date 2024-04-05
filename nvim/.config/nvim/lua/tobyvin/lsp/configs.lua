@@ -180,6 +180,7 @@ local M = {
 			"tex",
 		},
 	},
+	-- check out [tinymist](https://github.com/Myriad-Dreamin/tinymist) as a possible alternative
 	typst_lsp = {
 		capabilities = {
 			workspace = {

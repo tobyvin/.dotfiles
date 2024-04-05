@@ -3,10 +3,10 @@ local M = {
 	"stevearc/oil.nvim",
 	version = "*",
 	cmd = { "Oil" },
-	event = { "BufNew", "ColorScheme" },
 	opts = {
 		default_file_explorer = true,
 		skip_confirm_for_simple_edits = true,
+		experimental_watch_for_changes = false,
 		view_options = {
 			show_hidden = true,
 		},
