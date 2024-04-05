@@ -64,6 +64,7 @@ local M = {
 			"htmldjango",
 		},
 	},
+	jinja_lsp = {},
 	lemminx = {
 		settings = {
 			xml = {

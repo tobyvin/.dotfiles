@@ -1,10 +1,13 @@
 vim.filetype.add({
 	extension = {
 		eml = "mail",
-		ron = "ron",
-		zsh = "sh",
-		service = "systemd",
+		jinja = "jinja",
+		jinja2 = "jinja",
+		j2 = "jinja",
 		nft = "nftables",
+		ron = "ron",
+		service = "systemd",
+		zsh = "sh",
 	},
 	filename = {
 		tridactylrc = "trytactylrc",
