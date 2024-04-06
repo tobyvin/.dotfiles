@@ -4,7 +4,7 @@ local ms = vim.lsp.protocol.Methods
 local M = {
 	[ms.dollar_progress] = function(_, client)
 		-- See: https://github.com/neovim/neovim/pull/26098
-		client.progress = vim.ringbuf(1024) --[[@as vim.lsp.Client.Progress]]
+		client.progress = vim.ringbuf(2048) --[[@as vim.lsp.Client.Progress]]
 		client.progress.pending = {}
 	end,
 	[ms.textDocument_documentHighlight] = function(bufnr)
