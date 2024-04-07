@@ -29,6 +29,8 @@ zstyle :zle:transpose-words word-style shell
 zstyle :completion:* cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
 zstyle :completion:* use-cache true
 
+hash -d rfc=/usr/share/doc/rfc/txt
+
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^[q' push-line
 bindkey '^[[Z' reverse-menu-complete
