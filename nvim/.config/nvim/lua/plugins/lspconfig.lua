@@ -22,8 +22,6 @@ function M:config()
 		if not vim.tbl_contains(avail, name) then
 			require("lspconfig")[name].setup(config)
 		end
-
-		require("tobyvin.lsp.configs")[name] = require("lspconfig")[name].manager.config
 	end)
 end
 
