@@ -3,8 +3,7 @@ local M = {
 	"neovim/nvim-lspconfig",
 	event = "BufReadPre",
 	dependencies = {
-		-- { "hrsh7th/cmp-nvim-lsp", opts = {} },
-		"nvimdev/epo.nvim",
+		{ "hrsh7th/cmp-nvim-lsp", opts = {} },
 		{ "folke/neodev.nvim", opts = {} },
 		{ "folke/neoconf.nvim", cmd = "Neoconf", dependencies = { "nvim-lspconfig" }, opts = {} },
 	},
@@ -12,11 +11,8 @@ local M = {
 
 function M:config()
 	require("neoconf")
-	-- require("lspconfig").util.default_config.capabilities =
-	-- 	require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
 	require("lspconfig").util.default_config.capabilities =
-		vim.tbl_deep_extend("force", vim.lsp.protocol.make_client_capabilities(), require("epo").register_cap())
+		require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 	require("lspconfig.ui.windows").default_options.border = "single"
 
