@@ -30,6 +30,8 @@ zstyle :completion:* cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
 zstyle :completion:* use-cache true
 
 hash -d rfc=/usr/share/doc/rfc/txt
+hash -d auto=$XDG_CONFIG_HOME/autostart
+hash -d app=$XDG_DATA_HOME/applications
 
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^[q' push-line
