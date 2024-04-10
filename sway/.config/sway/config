@@ -88,7 +88,7 @@ bindsym $mod+Escape exec powermenu | $menu -l 6 | powermenu
 bindsym Pause exec swaymsg "output * power toggle"
 
 bindsym $mod+return exec $TERMINAL
-bindsym $mod+Shift+return exec sshr --resolve --port 22 --scan 0.0.0.0/24 | $menu | xargs sway_ssh
+bindsym $mod+Shift+return exec sshr --resolve --port 22 --scan 0.0.0.0/24 | $menu | xargs -0r sway_ssh
 bindsym $mod+w exec $BROWSER
 
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
