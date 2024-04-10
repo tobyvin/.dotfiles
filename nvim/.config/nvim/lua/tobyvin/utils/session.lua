@@ -6,7 +6,7 @@ function M.session_path()
 		return vim.v.this_session
 	end
 
-	local name = vim.loop.cwd():gsub(":", "++"):gsub(U.fs.sep, "%%"):gsub("$", ".vim")
+	local name = vim.uv.cwd():gsub(":", "++"):gsub(U.fs.sep, "%%"):gsub("$", ".vim")
 
 	if name == nil or name == "" then
 		error(("Invalid session name: '%s'"):format(name))

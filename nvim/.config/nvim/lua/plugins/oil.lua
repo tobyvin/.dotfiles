@@ -35,7 +35,7 @@ function M:init()
 
 	if vim.fn.argc() == 1 then
 		arg = vim.fn.argv(0) --[[@as string]]
-		local stat = vim.loop.fs_stat(arg)
+		local stat = vim.uv.fs_stat(arg)
 		local adapter = string.match(arg, "^([%l-]*)://")
 		if (stat and stat.type == "directory") or adapter == "oil-ssh" then
 			require("lazy").load({ plugins = { "oil.nvim" } })

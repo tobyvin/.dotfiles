@@ -8,7 +8,7 @@ local M = {
 				explainshellEndpoint = "https://explainshell.com",
 				includeAllWorkspaceSymbols = true,
 				shellcheckArguments = {
-					string.format("--source-path=%s", vim.loop.cwd()),
+					string.format("--source-path=%s", vim.uv.cwd()),
 				},
 			},
 		},

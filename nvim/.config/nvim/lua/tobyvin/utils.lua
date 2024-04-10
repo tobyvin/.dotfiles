@@ -17,7 +17,9 @@ function M.select(items, opts, on_choice)
 		on_choice(items[1])
 	elseif #items > 1 then
 		vim.ui.select(items, opts, function(item, idx)
-			return item ~= nil and on_choice(item, idx) or nil
+			if item ~= nil then
+				on_choice(item, idx)
+			end
 		end)
 	else
 		vim.print("No results found")
@@ -37,7 +39,7 @@ end
 ---@param ms integer
 ---@param fn function
 function M.debounce(ms, fn)
-	local timer = vim.loop.new_timer()
+	local timer = vim.uv.new_timer()
 	return function(...)
 		local argv = { ... }
 		timer:start(ms, 0, function()
@@ -51,7 +53,7 @@ function M.system(...)
 	local s = vim.system(...)
 	--- @param obj vim.SystemObj
 	--- @param cmd string[]
-	--- @param opts SystemOpts|nil)
+	--- @param opts vim.SystemOpts|nil)
 	--- @param on_exit function|nil
 	---@diagnostic disable-next-line: inject-field
 	s.pipe = function(obj, cmd, opts, on_exit)
@@ -61,7 +63,7 @@ function M.system(...)
 
 	--- @param obj vim.SystemObj
 	--- @param cmd string[]
-	--- @param opts SystemOpts|nil)
+	--- @param opts vim.SystemOpts|nil)
 	--- @param on_exit function|nil
 	---@diagnostic disable-next-line: inject-field
 	s.try_pipe = function(obj, cmd, opts, on_exit)
