@@ -99,6 +99,7 @@ local M = {
 		},
 	},
 	powershell_es = {},
+	pylsp = {},
 	rust_analyzer = {
 		standalone = true,
 		settings = {
