@@ -34,10 +34,6 @@ set videomaps.z mode normal
 set videomaps.🕷🕷INHERITS🕷🕷 nmaps
 
 unbind <C-f>
-unbind s
-unbind d
-unbind f
-bind <C-Space> hint
 bind / fillcmdline find
 bind ? fillcmdline find --reverse
 bind n findnext
@@ -51,7 +47,6 @@ bind x tabclose
 bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | mpvsafe
 bind gv mode video
-bind gx hint -W mpvsafe
 bind yy clipboard yankmd
 
 " Requires custom firefox build or pacman hook:
