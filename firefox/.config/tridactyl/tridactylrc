@@ -34,6 +34,7 @@ set videomaps.z mode normal
 set videomaps.🕷🕷INHERITS🕷🕷 nmaps
 
 unbind <C-f>
+unbind d
 bind / fillcmdline find
 bind ? fillcmdline find --reverse
 bind n findnext
@@ -43,7 +44,7 @@ bind j scrollline 5
 bind k scrollline -5
 bind J tabnext
 bind K tabprev
-bind x tabclose
+bind dd tabclose
 bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | mpvsafe
 bind gv mode video
