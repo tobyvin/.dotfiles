@@ -10,5 +10,6 @@ fi
 printf "%s: Installing services\n" "$0"
 
 for instance in gmail porkbun; do
-	systemctl --user enable --now --no-block $pkgname@"$instance".service
+	systemctl --user enable --now --no-block mbsync@"$instance".service
+	systemctl --user enable --now --no-block maildir-notify@"$instance".service
 done

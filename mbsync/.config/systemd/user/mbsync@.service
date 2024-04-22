@@ -1,9 +1,8 @@
 [Unit]
 Description=Mailbox synchronization service
 Documentation=man:mbsync(1)
-Wants=network-online.target maildir-notify@%i.service
+Wants=network-online.target
 After=network-online.target network.target
-Before=maildir-notify@%i.service
 
 [Service]
 Type=oneshot
