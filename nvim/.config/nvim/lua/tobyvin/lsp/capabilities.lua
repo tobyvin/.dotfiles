@@ -56,7 +56,7 @@ local M = {
 		})
 	end,
 	[ms.textDocument_inlayHint] = function(bufnr)
-		vim.lsp.inlay_hint.enable(bufnr, true)
+		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end,
 	[ms.textDocument_references] = function(bufnr)
 		vim.keymap.set("n", "gr", vim.lsp.buf.references, {
