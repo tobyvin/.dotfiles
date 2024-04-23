@@ -28,6 +28,8 @@ vim.filetype.add({
 		[".*/etc/systemd/network/%.#.*"] = "systemd",
 		-- muttrc xdg base dir
 		[".*/mutt/.*%.rc"] = "muttrc",
+		-- goimapnotify
+		[".*/goimapnotify/.*%.conf"] = "json",
 		-- conf fallback
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
 		-- sudoedit/sudo -e match original ft
