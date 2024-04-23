@@ -21,16 +21,6 @@ local M = {
 			end
 		end,
 	},
-	biome = {
-		capabilities = {
-			textDocument = {
-				rangeFormatting = { dynamicRegistration = true },
-				onTypeFormatting = { dynamicRegistration = true },
-				formatting = { dynamicRegistration = true },
-				typeDefinition = { dynamicRegistration = true },
-			},
-		},
-	},
 	clangd = {},
 	cssls = {
 		handlers = {
@@ -38,7 +28,7 @@ local M = {
 			[ms.textDocument_diagnostic] = vim.lsp.diagnostic.on_diagnostic,
 		},
 	},
-	cssmodules_ls = {},
+	denols = {},
 	dockerls = {},
 	gopls = {
 		cmd = {
