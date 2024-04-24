@@ -183,7 +183,8 @@ bindsym $mod+plus scratchpad show
 bindsym $mod+f fullscreen
 bindsym $mod+Shift+f floating toggle
 
-bindsym $mod+backslash splitv
+bindsym $mod+backslash split vertical
+bindsym $mod+Shift+backslash split none
 bindsym $mod+e layout toggle split tabbed
 
 bindsym $mod+r mode 'resize'
