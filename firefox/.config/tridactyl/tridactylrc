@@ -1,9 +1,3 @@
-" vim: filetype=tridactyl
-
-" tridactyl config
-" Ref: https://raw.githubusercontent.com/glacambre/.dotfiles/master/default/.config/tridactyl/tridactylrc
-" Ref: https://raw.githubusercontent.com/BurntSushi/dotfiles/master/.config/tridactyl/tridactylrc
-
 sanitize tridactyllocal tridactylsync
 
 colourscheme gruvbox-dark-hard
@@ -25,13 +19,6 @@ set smoothscroll true
 set editorcmd alacritty -e tmux new -As tridactylrc nvim -S $XDG_DATA_HOME/nvim/session/tridactylrc.vim
 set video_seek 5
 set video_volume 0.05
-set videomaps.h video_with video.currentTime -= Number(get('video_seek'))
-set videomaps.j video_with video.volume -= Number(get('video_volume'))
-set videomaps.k video_with video.volume += Number(get('video_volume'))
-set videomaps.l video_with video.currentTime += Number(get('video_seek'))
-set videomaps.l video_with video.currentTime += Number(get('video_seek'))
-set videomaps.z mode normal
-set videomaps.🕷🕷INHERITS🕷🕷 nmaps
 
 unbind <C-f>
 unbind d
@@ -47,8 +34,14 @@ bind K tabprev
 bind dd tabclose
 bind gs fillcmdline open duckduckgo
 bind zv composite js document.location.href | mpvsafe
-bind gv mode video
 bind yy clipboard yankmd
+
+bind gv video_with if (video) tri.excmds.mode("video"); else throw new Error("Failed to find video");
+bind --mode=video <Esc> mode normal
+bind --mode=video h video_with video.currentTime -= 5
+bind --mode=video j video_with video.volume -= 0.05
+bind --mode=video k video_with video.volume += 0.05
+bind --mode=video l video_with video.currentTime += 5
 
 " Requires custom firefox build or pacman hook:
 " patches: https://github.com/glacambre/firefox-patches
