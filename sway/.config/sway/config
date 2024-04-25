@@ -51,6 +51,10 @@ output * bg ~/.local/share/gruvbox/sway.png fill
 
 for_window [shell=".*"] inhibit_idle fullscreen
 for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
+for_window [app_id="^$" title="^$"] {
+	floating enable
+	move position cursor
+}
 for_window [class="^[Ss]team$"] floating enable
 for_window [class="^[Ss]team$" title="^Steam$"] floating disable
 for_window [class="^[Ss]team$" title="^Sign in to Steam$"] move to scratchpad
