@@ -20,8 +20,7 @@ local M = {
 			scss = { "prettier" },
 			sh = { "shfmt" },
 			tex = { "latexindent" },
-			-- HACK: unable to get typst-lsp to do formatting
-			typst = { "typstfmt" },
+			typst = { "typstyle" },
 			["*"] = { "injected", "trim_whitespace", "trim_newlines" },
 		},
 		formatters = {
@@ -55,6 +54,14 @@ local M = {
 					}
 				end,
 				stdin = false,
+			},
+			typstyle = {
+				meta = {
+					url = "https://github.com/Enter-tainer/typstyle",
+					description = "Beautiful and reliable typst code formatter",
+				},
+				command = "typstyle",
+				stdin = true,
 			},
 		},
 	},
