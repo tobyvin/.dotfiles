@@ -10,7 +10,11 @@ vim.opt.cursorline = true
 vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff" }
 vim.opt.equalalways = false
 vim.opt.expandtab = false
-vim.opt.foldmethod = "marker"
+vim.opt.fillchars:append("fold: ")
+vim.opt.foldenable = false
+vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldmethod = "expr"
+vim.opt.foldtext = ""
 vim.opt.formatoptions = "cqrnj"
 vim.opt.ignorecase = true
 vim.opt.inccommand = "split"

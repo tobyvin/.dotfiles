@@ -1,19 +1,21 @@
 vim.diagnostic.config({
+	underline = true,
 	virtual_text = {
 		source = "if_many",
 	},
-	signs = true,
-	underline = true,
+	signs = {
+		text = {
+			[vim.diagnostic.severity.ERROR] = " ",
+			[vim.diagnostic.severity.WARN] = " ",
+			[vim.diagnostic.severity.INFO] = " ",
+			[vim.diagnostic.severity.HINT] = " ",
+		},
+	},
+	float = {
+		scope = "cursor",
+		source = true,
+		border = "single",
+	},
 	update_in_insert = true,
 	severity_sort = true,
-	float = {
-		source = "always",
-		border = "single",
-		scope = "cursor",
-	},
 })
-
-vim.fn.sign_define("DiagnosticSignError", { text = " ", texthl = "DiagnosticSignError" })
-vim.fn.sign_define("DiagnosticSignWarn", { text = " ", texthl = "DiagnosticSignWarn" })
-vim.fn.sign_define("DiagnosticSignInfo", { text = " ", texthl = "DiagnosticSignInfo" })
-vim.fn.sign_define("DiagnosticSignHint", { text = " ", texthl = "DiagnosticSignHint" })
