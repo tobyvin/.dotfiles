@@ -28,9 +28,17 @@ vim.keymap.set("i", "<cr>", function()
 end, { expr = true, noremap = true })
 
 vim.keymap.set({ "i", "s" }, "<tab>", function()
-	return vim.snippet.jumpable(1) and "<cmd>lua vim.snippet.jump(1)<cr>" or "<tab>"
+	if vim.snippet.active({ direction = 1 }) then
+		return "<cmd>lua vim.snippet.jump(1)<cr>"
+	else
+		return "<tab>"
+	end
 end, { expr = true })
 
 vim.keymap.set({ "i", "s" }, "<s-tab>", function()
-	return vim.snippet.jumpable(-1) and "<cmd>lua vim.snippet.jump(-1)<cr>" or "<s-tab>"
+	if vim.snippet.active({ direction = -1 }) then
+		return "<cmd>lua vim.snippet.jump(-1)<cr>"
+	else
+		return "<s-tab>"
+	end
 end, { expr = true })
