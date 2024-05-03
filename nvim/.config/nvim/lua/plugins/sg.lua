@@ -1,5 +1,6 @@
 local M = {
 	"sourcegraph/sg.nvim",
+	version = "*",
 	cmd = {
 		"CodyDo",
 		"CodyAsk",

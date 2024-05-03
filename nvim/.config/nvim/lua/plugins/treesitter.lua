@@ -2,7 +2,7 @@
 local M = {
 	"nvim-treesitter/nvim-treesitter",
 	build = ":TSUpdate",
-	event = "BufReadPost",
+	event = "BufReadPre",
 	cmd = {
 		"TSInstall",
 		"TSInstallInfo",
@@ -14,7 +14,6 @@ local M = {
 	},
 	dependencies = {
 		"nvim-treesitter/nvim-treesitter-textobjects",
-		"mfussenegger/nvim-ts-hint-textobject",
 	},
 	main = "nvim-treesitter.configs",
 	opts = {
@@ -77,7 +76,6 @@ local M = {
 					["[F"] = "@function.outer",
 				},
 			},
-
 			select = {
 				enable = true,
 				lookahead = true,

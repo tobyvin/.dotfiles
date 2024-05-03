@@ -1,6 +1,7 @@
 ---@type LazyPluginSpec
 local M = {
 	"rcarriga/nvim-notify",
+	version = "*",
 	opts = {
 		timeout = 3000,
 		background_colour = "Pmenu",
