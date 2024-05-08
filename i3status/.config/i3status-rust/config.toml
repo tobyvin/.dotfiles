@@ -22,8 +22,8 @@ rss = "󰑫 "
 [[block]]
 block = "focused_window"
 [block.format]
-full = " $title.str(rot_interval:0.5) |"
-short = " $title.str(max_w:30,rot_interval:0.5) |"
+full = " $title.str(max_w:30,rot_interval:0.5) |"
+short = ""
 
 [[block]]
 block = "weather"

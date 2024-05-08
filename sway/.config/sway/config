@@ -212,7 +212,6 @@ bar {
     status_command i3status-rs
     font pango:monospace 12
     position top
-    strip_workspace_name yes
     tray_padding 5
     colors {
         background $base00
