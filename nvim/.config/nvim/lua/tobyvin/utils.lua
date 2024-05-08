@@ -91,12 +91,10 @@ function M.extend_hl(ns, name, ...)
 
 	for _, arg in pairs({ ... }) do
 		local hl_name_or_val, hl_ns, hl_val
-		if
-			vim.tbl_islist(arg --[[@as table]])
-		then
+		if type(arg) ~= "string" and vim.islist(arg) then
 			hl_ns, hl_name_or_val = arg[1], arg[2]
 		else
-			hl_ns, hl_name_or_val = ns, arg --[[@as string|table]]
+			hl_ns, hl_name_or_val = ns, arg
 		end
 
 		if type(hl_name_or_val) == "string" then

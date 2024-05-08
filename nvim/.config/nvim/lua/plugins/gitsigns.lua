@@ -14,38 +14,46 @@ local M = {
 		},
 		preview_config = { border = "single" },
 		on_attach = function(bufnr)
-			local with_range = function(callback)
-				return function()
-					if vim.fn.mode():lower() == "v" then
-						local cursor = vim.fn.getpos(".") --[[@as integer[] ]]
-						local visual = vim.fn.getpos("v") --[[@as integer[] ]]
-						callback({ cursor[2], visual[2] })
-					else
-						callback()
-					end
-				end
-			end
-
-			vim.keymap.set("n", "<leader>gb", require("gitsigns").blame_line, { desc = "show blame", buffer = bufnr })
-
 			vim.keymap.set("n", "]c", function()
-				return require("gitsigns").nav_hunk("next", { preview = true })
+				if vim.wo.diff then
+					return "]c"
+				else
+					return [[<Cmd>lua require("gitsigns').nav_hunk("next", { preview = true })<CR>]]
+				end
 			end, { expr = true, desc = "next hunk", buffer = bufnr })
 
 			vim.keymap.set("n", "[c", function()
-				return require("gitsigns").nav_hunk("prev", { preview = true })
-			end, { expr = true, desc = "previous hunk", buffer = bufnr })
+				if vim.wo.diff then
+					return "[c"
+				else
+					return [[<Cmd>lua require("gitsigns").nav_hunk("prev", { preview = true })<CR>]]
+				end
+			end, {
+				expr = true,
+				desc = "previous hunk",
+				buffer = bufnr,
+			})
 
-			vim.keymap.set("n", "<leader>gB", function()
-				require("gitsigns").blame_line({ full = true })
-			end, { desc = "show blame", buffer = bufnr })
-
-			vim.keymap.set({ "n", "v" }, "<leader>gr", with_range(require("gitsigns").reset_hunk), {
+			vim.keymap.set("n", "<leader>gr", require("gitsigns").reset_hunk, {
 				desc = "reset hunk",
 				buffer = bufnr,
 			})
 
-			vim.keymap.set({ "n", "v" }, "<leader>gs", with_range(require("gitsigns").stage_hunk), {
+			vim.keymap.set("v", "<leader>gr", function()
+				require("gitsigns").reset_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
+			end, {
+				desc = "reset hunk",
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("n", "<leader>gs", require("gitsigns").stage_hunk, {
+				desc = "stage hunk",
+				buffer = bufnr,
+			})
+
+			vim.keymap.set("v", "<leader>gs", function()
+				require("gitsigns").stage_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
+			end, {
 				desc = "stage hunk",
 				buffer = bufnr,
 			})
