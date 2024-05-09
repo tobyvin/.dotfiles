@@ -46,6 +46,7 @@ bind --mode=video l video_with video.currentTime += 5
 " Requires custom firefox build or pacman hook:
 " patches: https://github.com/glacambre/firefox-patches
 " hook: https://aur.archlinux.org/packages/firefox-no-reserved-keys-patch
+unbind --mode=ex <S-Backspace>
 bind --mode=ex <C-n> ex.next_completion
 bind --mode=ex <C-p> ex.prev_completion
 bind --mode=ex <Down> ex.next_completion
