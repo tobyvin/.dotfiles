@@ -15,7 +15,7 @@ append_path() {
 }
 
 # Store original (system) paths to fix prioritization later
-orig_path=$PATH
+_path=$PATH
 
 # Use systemd-environment-d-generator(8) to generate environment, and export those variables
 #
@@ -41,5 +41,7 @@ fi
 unset -f append_path
 
 # Fix PATH to prioritize user added paths
-PATH="${PATH#"$orig_path":}"${orig_path:+:$orig_path}
-export PATH
+if [ -e "$_path" ]; then
+	PATH="${PATH#"$_path"}:$_path"
+	export PATH
+fi
