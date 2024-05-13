@@ -9,9 +9,8 @@
     idle_threshold = 120
     font = sans-serif 12
     markup = full
-    icon_path = /usr/share/icons
+    icon_theme = gruvbox-dark-icons-gtk, Adwaita, hicolor
     enable_recursive_icon_lookup = true
-    icon_theme = gruvbox-dark-icons-gtk, Adwaita
     dmenu = "/usr/bin/wmenu -i -f 'monospace 12' -nebdbb2 -N282828 -S282828 -sfe8019 -mebdbb2 -M8ec07c"
     mouse_left_click = do_action, close_current
     mouse_middle_click = context, close_current
