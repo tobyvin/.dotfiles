@@ -1,28 +1,19 @@
 #!/bin/sh
 
 for maildir; do
-	echo "Monitoring $maildir"
+	printf 'monitoring: %s\n' "$maildir"
 	set -- "$@" "${maildir}/new"
 	shift
 done
 
 inotifywait --monitor --event create --event moved_to "$@" |
 	while read -r dir _action file; do
-		maildir="$(dirname "$dir")"
-		category="$(dirname "$maildir" | xargs basename)"
-		from="$(grep -m1 -oP '(?<=^From: ).*' "${dir}${file}")"
-		subject="$(grep -m1 -oP '(?<=^Subject: ).*' "${dir}${file}")"
-
-		if [ ! -e "$maildir/new/$file" ]; then
-			if [ -e "$maildir/cur/$file" ]; then
-				from="$(grep -m1 -oP '(?<=^From: ).*' "$maildir/cur/$file")"
-				subject="$(grep -m1 -oP '(?<=^Subject: ).*' "$maildir/cur/$file")"
-			else
-				echo "Failed to read message. File: $file" 1>&2
-				continue
-			fi
-		fi
-
-		echo "Category: $category, From: $from, Subject: $subject"
-		notify-send -a "Mail" -c "$category" "From: $from" "$subject"
+		grep '^\(Subject\|From\|To\): .*$' <"${dir}${file}" |
+			sed -e 's/</\&lt\;/g' -e 's/>/\&gt\;/g' |
+			notify-send \
+				-a 'maildir-notify' \
+				-c 'email.arrived' \
+				-i 'mail-unread-symbolic' \
+				'You have new mail' \
+				"$(cat -)"
 	done
