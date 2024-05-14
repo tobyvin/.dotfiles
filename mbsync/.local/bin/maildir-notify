@@ -10,10 +10,6 @@ inotifywait --monitor --event create --event moved_to "$@" |
 	while read -r dir _action file; do
 		grep '^\(Subject\|From\|To\): .*$' <"${dir}${file}" |
 			sed -e 's/</\&lt\;/g' -e 's/>/\&gt\;/g' |
-			notify-send \
-				-a 'maildir-notify' \
-				-c 'email.arrived' \
-				-i 'mail-unread-symbolic' \
-				'You have new mail' \
-				"$(cat -)"
+			notify-send -a maildir-notify -c email.arrived -i mail-unread \
+				'You have new mail' "$(cat -)"
 	done
