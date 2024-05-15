@@ -5,6 +5,10 @@ local M = {
 		cmd = "CellularAutomaton",
 	},
 	{
+		"rktjmp/playtime.nvim",
+		cmd = "Playtime",
+	},
+	{
 		"hjson/vim-hjson",
 		ft = "hjson",
 	},
