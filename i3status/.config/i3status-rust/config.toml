@@ -56,9 +56,12 @@ cmd = "xdg-open https://miniflux.tobyvin.dev"
 update = true
 
 [[block]]
-block = "maildir"
-inboxes = ["~/.local/share/mail/*/INBOX"]
-interval = 60
+block = "custom"
+command = "notmuch-status"
+json = true
+[[block.click]]
+button = "left"
+cmd = "alacritty -e aerc"
 
 [[block]]
 block = "music"
