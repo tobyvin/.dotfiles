@@ -1,0 +1,34 @@
+#!/bin/python
+
+import notmuch
+import subprocess
+import os
+
+
+def notify(title, message):
+    subprocess.Popen(
+        [
+            "notify-send",
+            "--app-name=notmuch-notify",
+            "--category=email.arrived",
+            "--icon=mail-unread",
+            title,
+            message,
+        ]
+    )
+
+
+for message in (
+    notmuch.Database(
+        path="{}/mail".format(
+            os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
+        ),
+        mode=notmuch.Database.MODE.READ_WRITE,
+    )
+    .create_query("tag:notify")
+    .search_messages()
+):
+    print(message)
+    message.remove_tag("notify")
+    notify(message.get_header("From"), message.get_header("Subject"))
+    del message

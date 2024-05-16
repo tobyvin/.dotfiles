@@ -98,7 +98,7 @@ bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 
 bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL
-bindsym $mod+shift+space exec wmenu-run
+bindsym $mod+shift+space exec wmenu_path | $menu | xargs swaymsg exec --
 
 bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete

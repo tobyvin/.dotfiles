@@ -1,0 +1,7 @@
+#!/bin/sh
+
+for maildir in ${XDG_DATA_HOME}/mail/${MAILDIR:-*}; do
+	if [ -e "$maildir"/INBOX ]; then
+		maildir-rank-addr --maildir="$maildir"/INBOX --outputpath="$maildir"/addressbook.tsv
+	fi
+done

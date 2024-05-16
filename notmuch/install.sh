@@ -9,4 +9,4 @@ fi
 
 printf "%s: Installing service\n" "$0"
 
-systemctl --user enable --now --no-block $pkgname.service
+systemctl --user enable --now --no-block notmuch.service goimapnotify.service

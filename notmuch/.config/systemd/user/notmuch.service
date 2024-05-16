@@ -1,11 +1,10 @@
 [Unit]
 Description=Mailbox indexer service
 Documentation=man:notmuch(1)
-After=mbsync@.service
 
 [Service]
 Type=oneshot
 ExecStart=/usr/bin/notmuch new
 
 [Install]
-WantedBy=mbsync@.service
+WantedBy=default.target

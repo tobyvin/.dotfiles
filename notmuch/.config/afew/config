@@ -1,0 +1,11 @@
+[SpamFilter]
+[KillThreadsFilter]
+[ListMailsFilter]
+[ArchiveSentMailsFilter]
+sent_tag = sent
+[Filter.0]
+message = notify
+query = tag:new
+tags_blacklist = killed;spam
+tags = +notify
+[InboxFilter]
