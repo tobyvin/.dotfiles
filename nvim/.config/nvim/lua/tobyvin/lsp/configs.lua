@@ -54,6 +54,7 @@ local M = {
 			"htmldjango",
 		},
 	},
+	-- jedi_language_server = {},
 	jinja_lsp = {},
 	lemminx = {
 		settings = {
@@ -89,7 +90,20 @@ local M = {
 		},
 	},
 	powershell_es = {},
-	pylsp = {},
+	pyright = {
+		settings = {
+			pyright = {
+				disableOrganizeImports = true,
+			},
+			python = {
+				analysis = {
+					autoSearchPaths = true,
+					diagnosticMode = "workspace",
+					useLibraryCodeForTypes = true,
+				},
+			},
+		},
+	},
 	rust_analyzer = {
 		standalone = true,
 		settings = {
@@ -124,7 +138,13 @@ local M = {
 			},
 		},
 	},
-	ruff_lsp = {},
+	ruff_lsp = {
+		on_attach = function(client)
+			if client.name == "ruff_lsp" then
+				client.server_capabilities.hoverProvider = false
+			end
+		end,
+	},
 	taplo = {},
 	texlab = {
 		settings = {

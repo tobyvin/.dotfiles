@@ -30,6 +30,8 @@ vim.filetype.add({
 		[".*/mutt/.*%.rc"] = "muttrc",
 		-- goimapnotify
 		[".*/goimapnotify/.*%.conf"] = "json",
+		-- i3blocks
+		[".*/i3blocks/config"] = "confini",
 		-- conf fallback
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
 		-- sudoedit/sudo -e match original ft

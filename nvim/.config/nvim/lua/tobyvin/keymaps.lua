@@ -13,6 +13,16 @@ vim.keymap.set("v", "<a-j>", ":move '>+1<cr>gv=gv", { desc = "move +" })
 
 vim.keymap.set("t", "<c-w>", [[<c-\><c-n><c-w>]], { desc = "CTRL-W" })
 
+-- TODO: remove once default binds are established
+-- Ref: https://github.com/neovim/neovim/issues/28634
+-- Ref: https://github.com/neovim/neovim/pull/28649
+vim.keymap.set("n", "crn", vim.lsp.buf.rename, { desc = "vim.lsp.buf.rename()" })
+vim.keymap.set("n", "crr", vim.lsp.buf.code_action, { desc = "vim.lsp.buf.code_action()" })
+vim.keymap.set("x", "<C-R>r", vim.lsp.buf.code_action, { desc = "vim.lsp.buf.code_action()" })
+vim.keymap.set("x", "<C-R><C-R>", vim.lsp.buf.code_action, { desc = "vim.lsp.buf.code_action()" })
+vim.keymap.set("n", "gr", vim.lsp.buf.references, { desc = "vim.lsp.buf.references()" })
+vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, { desc = "vim.lsp.buf.signature_help()" })
+
 vim.keymap.set("o", "o", function()
 	local cursor = vim.fn.winsaveview()
 	vim.cmd.normal({ "ggVG", bang = true, mods = { keepjumps = true } })
