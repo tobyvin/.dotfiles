@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+
+import os
+from typing import Union
+
+import i3ipc
+from i3ipc import Event
+from i3ipc.events import WindowEvent, WorkspaceEvent
+
+
+class Connection(i3ipc.Connection):
+    def handle(
+        self,
+        *events: Union[Event, str],
+    ):
+        def wrapped(handler):
+            for event in events:
+                self.on(event, handler)
+            return handler
+
+        return wrapped
+
+
+max_length = int(os.environ.get("max_length", 30))
+
+
+sway = Connection()
+
+
+@sway.handle(
+    Event.WINDOW_FOCUS,
+    Event.WINDOW_TITLE,
+    Event.WINDOW_NEW,
+    Event.WINDOW_CLOSE,
+    Event.WORKSPACE_FOCUS,
+)
+def on_window_event(sway: i3ipc.Connection, event: WindowEvent | WorkspaceEvent):
+    focused = sway.get_tree()
+    while focused is not None and focused.ipc_data["type"] != "con":
+        focused = focused.find_focused()
+
+    if focused:
+        print(focused.ipc_data["name"][:max_length])
+    else:
+        print("")
+
+
+if __name__ == "__main__":
+    sway.main()
