@@ -14,7 +14,7 @@ local M = {
 			jsonc = { "deno_fmt" },
 			lua = { "stylua" },
 			markdown = { "mdformat", "markdownlint" },
-			nginx = { "nginxbeautifier" },
+			nginx = { "nginxfmt" },
 			plaintex = { "latexindent" },
 			sass = { "prettier" },
 			scss = { "prettier" },
@@ -40,6 +40,17 @@ local M = {
 						"--profile=" .. (vim.bo[ctx.buf].filetype:gsub("htmldjango", "django")),
 					}
 				end,
+			},
+			nginxfmt = {
+				command = "nginxfmt.py",
+				args = function(_, ctx)
+					return {
+						"-i",
+						vim.bo[ctx.buf].tabstop,
+						"-",
+					}
+				end,
+				stdin = true,
 			},
 			nginxbeautifier = {
 				command = "nginxbeautifier",
