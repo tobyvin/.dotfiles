@@ -2,12 +2,12 @@ separator_block_width=15
 markup=pango
 
 [i3blocks-title]
-# command=~/.local/bin/i3blocks-title
+command=~/.local/bin/i3blocks-title
 max_length=30
 interval=persist
 
 [weather]
-command=curl wttr.in/?m\&format="%c+%t\n" | sed 's/\s\++\(.*\)C/ \1/'
+command=curl -s wttr.in/?m\&format="%c+%t\n" | sed 's/\s\++\(.*\)C/ \1/'
 interval=600
 
 [time]
