@@ -3,7 +3,9 @@ local augroup = vim.api.nvim_create_augroup("tobyvin", { clear = true })
 vim.api.nvim_create_autocmd("TextYankPost", {
 	group = augroup,
 	pattern = "*",
-	callback = vim.highlight.on_yank,
+	callback = function()
+		vim.highlight.on_yank()
+	end,
 	desc = "vim.highlight.on_yank()",
 })
 

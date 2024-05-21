@@ -90,16 +90,19 @@ local M = {
 		},
 	},
 	powershell_es = {},
-	pyright = {
+	pylsp = {
 		settings = {
-			pyright = {
-				disableOrganizeImports = true,
-			},
-			python = {
-				analysis = {
-					autoSearchPaths = true,
-					diagnosticMode = "workspace",
-					useLibraryCodeForTypes = true,
+			pylsp = {
+				plugins = {
+					black = { enabled = false },
+					autopep8 = { enabled = false },
+					yapf = { enabled = false },
+					pycodestyle = {
+						maxLineLength = 88,
+					},
+					pyflakes = { enabled = false },
+					rope_completion = { enabled = true },
+					rope_autoimport = { enabled = true },
 				},
 			},
 		},

@@ -8,6 +8,12 @@ local M = {
 ---@param on_attach fun(client: vim.lsp.Client, bufnr: integer): boolean|nil
 ---@param opts vim.api.keyset.create_autocmd?
 function M.on_attach(filter, on_attach, opts)
+	if type(filter) == "string" then
+		filter = {
+			name = filter,
+		}
+	end
+
 	opts = opts or {}
 	opts.callback = function(args)
 		local bufnr = args.buf ---@type number
@@ -16,11 +22,10 @@ function M.on_attach(filter, on_attach, opts)
 		if
 			client
 			and vim.iter({ filter }):all(function(f)
-				return (type(f) == "string" and f == client.name)
-					or (f.id == nil or client.id == f.id)
-						and (f.name == nil or client.name == f.name)
-						and (f.bufnr == nil or bufnr == f.bufnr)
-						and (f.method == nil or client.supports_method(f.method, { bufnr = bufnr }))
+				return (f.id == nil or client.id == f.id)
+					and (f.name == nil or client.name == f.name)
+					and (f.bufnr == nil or bufnr == f.bufnr)
+					and (f.method == nil or client.supports_method(f.method, { bufnr = bufnr }))
 			end)
 		then
 			on_attach(client, bufnr)
