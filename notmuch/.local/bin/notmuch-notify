@@ -18,11 +18,19 @@ def notify(title, message):
     )
 
 
+# Workaround for bug in the notmuch module's default config resolution
+if os.environ.get("NOTMUCH_CONFIG") is None:
+    os.environ["NOTMUCH_CONFIG"] = os.path.join(
+        os.environ.get(
+            "XDG_CONFIG_HOME", os.path.join(os.path.expanduser("~"), ".config")
+        ),
+        "notmuch",
+        os.environ.get("NOTMUCH_PROFILE", "default"),
+        "config",
+    )
+
 for message in (
     notmuch.Database(
-        path="{}/mail".format(
-            os.getenv("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))
-        ),
         mode=notmuch.Database.MODE.READ_WRITE,
     )
     .create_query("tag:notify")

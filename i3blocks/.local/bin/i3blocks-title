@@ -40,9 +40,9 @@ def on_window_event(sway: i3ipc.Connection, event: WindowEvent | WorkspaceEvent)
         focused = focused.find_focused()
 
     if focused:
-        print(focused.ipc_data["name"][:max_length])
+        print(focused.ipc_data["name"][:max_length], flush=True)
     else:
-        print("")
+        print("", flush=True)
 
 
 if __name__ == "__main__":

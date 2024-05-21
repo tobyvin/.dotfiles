@@ -1,5 +1,9 @@
-separator_block_width=15
 markup=pango
+
+black="#1d2021"
+white="#d5c4a1"
+yellow="#fabd2f"
+red="#fb4934"
 
 [i3blocks-title]
 command=~/.local/bin/i3blocks-title
@@ -9,6 +13,15 @@ interval=persist
 [weather]
 command=curl -s wttr.in/?m\&format="%c+%t\n" | sed 's/\s\++\(.*\)C/ \1/'
 interval=600
+
+[miniflux]
+command=~/.local/bin/i3blocks-miniflux
+interval=30
+format=json
+
+[notmuch]
+command=~/.local/bin/i3blocks-notmuch
+interval=5
 
 [time]
 command=date +"%a %d/%m %T"
