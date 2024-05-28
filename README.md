@@ -9,11 +9,20 @@ git clone https://git.tobyvin.dev/.dotfiles ~/.dotfiles && cd ~/.dotfiles && ./i
 ## Getting started
 
 The configuration files are managed using GNU [stow]. The included [install.sh]
-script can be used to stow specified (or, if unspecified, all) packages using
-`./install.sh [package ..]`, clean broken symlinks from `$HOME` using
-`./install.sh -C`, or both with `./install.sh -c [package ..]`. Run
-`./install.sh -h` to see all options.
+script will install specified (or, if unspecified, all) packages using
+`./install.sh [package ..]`. The script will also do it's best to clean broken
+symlinks from `$HOME` that belong to the repository, and is fairly strict about
+what links it will remove, erroring on the side caution as to not remove any
+symlinks that do (or did) not belong to the repository.
 
-[.dotfiles]: https://sr.ht/~tobyvin/.dotfiles/
+## Mirrors
+
+I host this repository (and many others) on my local [cgit] instance, but it is
+also mirrored to both [SourceHut] and [GitHub].
+
+[cgit]: <https://git.tobyvin.dev>
+[SourceHut]: <https://git.sr.ht/~tobyvin/.dotfiles>
+[GitHub]: <https://github.com/tobyvin/.dotfiles>
+[.dotfiles]: <https://git.tobyvin.dev/.dotfiles>
 [install.sh]: ./install.sh
-[stow]: https://www.gnu.org/software/stow/
+[stow]: <https://www.gnu.org/software/stow/>
