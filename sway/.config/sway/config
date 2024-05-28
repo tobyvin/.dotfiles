@@ -5,7 +5,7 @@ set $down j
 set $up k
 set $right l
 
-set $menu wmenu
+set $menu ~/.local/bin/wmenu
 
 set $out1 -
 set $out2 -
