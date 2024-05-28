@@ -1,0 +1,10 @@
+#!/bin/sh
+
+if [ ! -t 0 ]; then
+	set -- "$@" "$(cat)"
+elif [ $# -eq 0 ]; then
+	sshr --resolve --port 22 --scan 0.0.0.0/24
+fi
+
+# shellcheck disable=SC2068
+swaymsg exec -- "$TERMINAL" -e ssh $@ -t -- zsh -l -c '\"tmux new -A\"'

@@ -1,0 +1,9 @@
+#!/bin/sh
+
+curl -s https://miniflux.tobyvin.dev/v1/feeds/counters \
+	-H "X-Auth-Token: ${MINIFLUX_TOKEN:-$(pass miniflux.tobyvin.dev/i3status)}" |
+	jq -r '[.unreads[]] | add // 0 | {
+		icon: "rss",
+		state: (if . > 50 then "Critical" elif . > 0 then "Warning" else "Idle" end),
+		text: (. | tostring)
+	}'

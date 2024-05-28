@@ -3,7 +3,7 @@
 ## Install
 
 ```sh
-git clone https://git.sr.ht/~tobyvin/.dotfiles ~/.dotfiles && cd ~/.dotfiles && ./install.sh
+git clone https://git.tobyvin.dev/.dotfiles ~/.dotfiles && cd ~/.dotfiles && ./install.sh
 ```
 
 ## Getting started

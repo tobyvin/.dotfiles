@@ -1,9 +1,9 @@
 #!/bin/sh
-# shellcheck disable=SC2035,SC2086
 
 set -e
 
 CDPATH='' cd -- "$(dirname -- "$0")" || exit
+TARGET=${TARGET:-$HOME}
 
 if [ -r .installed ]; then
 	read -r DOTFILES_INSTALLED <.installed
@@ -12,14 +12,12 @@ fi
 
 printf "%s: Removing bad links\n" "$0"
 {
-	git log --name-only --no-renames --diff-filter=D --format=format: $DOTFILES_INSTALLED HEAD
+	git log --name-only --no-renames --diff-filter=D --format=format: "$DOTFILES_INSTALLED" HEAD
 	git diff --name-only --no-renames --diff-filter=D HEAD
-	if [ -f .untracked ]; then
-		cat .untracked
-	fi
-} | sort -u | sed -n 's/^[^/]\+\//..\//p' | while read -r f; do
-	if [ -L "$f" ] && [ ! -e "$f" ]; then
-		rm -v "$f"
+	cat .untracked 2>/dev/null
+} | sort -u | while read -r f; do
+	if [ -L "$TARGET/${f#*/}" ] && [ ! -e "$TARGET/${f#*/}" ]; then
+		rm -v "$TARGET/${f#*/}"
 	fi
 done
 
@@ -29,6 +27,7 @@ if [ ! -s .untracked ]; then
 fi
 
 printf "%s: Stowing packages\n" "$0"
+# shellcheck disable=SC2086
 stow "$@" ${1:-*}/
 
 printf "%s: Installing packages\n" "$0"

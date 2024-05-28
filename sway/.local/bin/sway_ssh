@@ -1,4 +1,0 @@
-#!/bin/sh
-# shellcheck disable=SC2068
-
-swaymsg exec -- "$TERMINAL" -e ssh $@ -t -- zsh -l -c '\"tmux new -A\"'

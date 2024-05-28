@@ -1,0 +1,16 @@
+#!/bin/sh
+# shellcheck disable=SC2068
+
+base00="${BASE16_COLOR_06_HEX:-#1d2021}"
+base06="${BASE16_COLOR_00_HEX:-#ebdbb2}"
+base09="${BASE16_COLOR_09_HEX:-#fe8019}"
+base0C="${BASE16_COLOR_0C_HEX:-#8ec07c}"
+
+command -p wmenu -i -f 'monospace 12' \
+	-n"$base06" \
+	-N"$base00" \
+	-S"$base00" \
+	-s"$base09" \
+	-m"$base06" \
+	-M"$base0C" \
+	$@

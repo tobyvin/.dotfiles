@@ -1,6 +1,0 @@
-#!/bin/sh
-
-set -e
-
-selection="$(cliphist list | "$@")"
-echo "$selection" | cliphist decode | wl-copy
