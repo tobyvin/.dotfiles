@@ -1,4 +1,4 @@
 #!/bin/sh
 
 afew -C "$XDG_CONFIG_HOME"/notmuch/default/config --tag --new
-~/.local/bin/notmuch-notify
+~/.local/lib/notmuch/notmuch-notify
