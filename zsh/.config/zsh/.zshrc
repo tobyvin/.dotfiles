@@ -33,8 +33,18 @@ hash -d rfc=/usr/share/doc/rfc/txt
 hash -d auto=$XDG_CONFIG_HOME/autostart
 hash -d app=$XDG_DATA_HOME/applications
 
+function push-input-hold {
+	buf="$BUFFER"
+	cur="$CURSOR"
+	zle push-input
+	BUFFER="$buf"
+	CURSOR="$cur"
+}
+zle -N push-input-hold
+
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
-bindkey '^[q' push-line
+bindkey '^[q' push-input
+bindkey '^[Q' push-input-hold
 bindkey '^[[Z' reverse-menu-complete
 bindkey '^[[1~' beginning-of-line
 bindkey '^[[4~' end-of-line
@@ -45,6 +55,7 @@ bindkey '^[t' transpose-words
 bindkey '^ ' forward-word
 
 bindkey -M vicmd '^[q' push-line
+bindkey -M vicmd '^[Q' push-input-hold
 bindkey -M vicmd '^[[Z' reverse-menu-complete
 bindkey -M vicmd '^[[1~' beginning-of-line
 bindkey -M vicmd '^[[4~' end-of-line

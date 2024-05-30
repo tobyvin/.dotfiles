@@ -1,16 +1,15 @@
 #!/bin/zsh
-# vim: ft=sh
-
-_fzf_compgen_path() {
-	fd --hidden --follow --exclude ".git" . "$1"
-}
-
-_fzf_compgen_dir() {
-	fd --type d --hidden --follow --exclude ".git" . "$1"
-}
 
 if [ -r "/usr/share/fzf/completion.zsh" ]; then
 	source /usr/share/fzf/completion.zsh
+fi
+
+if [ -r "/usr/share/fzf/key-bindings.zsh" ]; then
+	source /usr/share/fzf/key-bindings.zsh
+	for keymap in emacs vicmd viins; do
+		bindkey -rM $keymap '\ec'
+		bindkey -rM $keymap '^T'
+	done
 fi
 
 if [ -n "$BASE16_THEME" ] && [ -n "$BASE16_SHELL_ENABLE_VARS" ]; then
