@@ -101,8 +101,11 @@ local M = {
 						maxLineLength = 88,
 					},
 					pyflakes = { enabled = false },
-					rope_completion = { enabled = true },
-					rope_autoimport = { enabled = true },
+					rope_autoimport = {
+						enabled = true,
+						code_actions = { enabled = true },
+						completions = { enabled = false },
+					},
 				},
 			},
 		},
