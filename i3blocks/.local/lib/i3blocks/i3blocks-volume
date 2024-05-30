@@ -1,0 +1,158 @@
+#!/usr/bin/env python3
+
+import asyncio
+import json
+import os
+import subprocess
+import sys
+
+
+class PulseAudio:
+    icons = {
+        "mute": "\U0000eee8",  # nf-fa-volume_mute
+        "low": "\U0000f026",  # nf-fa-volume_off
+        "medium": "\U0000f027",  # nf-fa-volume_low
+        "high": "\U0000f028",  # nf-fa-volume_high
+    }
+
+    def __init__(self):
+        self.print_status()
+
+    @property
+    def volume(self) -> dict:
+        channels = self.sink.get("volume")
+
+        return int(
+            channels.get(next(chan for chan in channels))
+            .get("value_percent")
+            .rstrip("%")
+        )
+
+    @property
+    def icon(self) -> str:
+        if self.sink.get("mute"):
+            return self.icons["mute"]
+
+        match self.volume:
+            case v if v < 33:
+                return self.icons["low"]
+            case v if v < 66:
+                return self.icons["medium"]
+            case _:
+                return self.icons["high"]
+
+    def list_sinks() -> dict[int, dict]:
+        return json.loads(
+            subprocess.run(
+                ["pactl", "--format=json", "list", "sinks"],
+                capture_output=True,
+                encoding="UTF-8",
+            ).stdout
+        )
+
+    def get_default_sink() -> str:
+        return subprocess.run(
+            ["pactl", "get-default-sink"],
+            capture_output=True,
+            encoding="UTF-8",
+        ).stdout
+
+    def print_status(self, update=True, format="json"):
+        if update:
+            self.sinks = PulseAudio.list_sinks()
+            self.default_sink = PulseAudio.get_default_sink()
+            self.sink = next(sink for sink in self.sinks)
+
+        output = {"full_text": f" {self.icon} {self.volume}% "}
+
+        if self.sink.get("mute"):
+            output["color"] = os.environ.get("black")
+            output["background"] = os.environ.get("yellow")
+
+        output.update(self.color)
+
+        match format:
+            case "json":
+                print(json.dumps(output), flush=True)
+            case "raw":
+                for prop in ["full_text", "short_text", "color", "background"]:
+                    print(output.get(prop, ""), flush=True)
+            case f:
+                raise ValueError(f"Invalid output format: {f}")
+
+    async def listener(self):
+        process = await asyncio.create_subprocess_exec(
+            "pactl",
+            "--format=json",
+            "subscribe",
+            stdout=asyncio.subprocess.PIPE,
+        )
+
+        while True:
+            line = await process.stdout.readline()
+
+            if not line:
+                await asyncio.sleep(1)
+                continue
+
+            match json.loads(line.decode("UTF-8")):
+                case {
+                    "index": index,
+                    "event": "change",
+                    "on": "sink",
+                } if index == self.sink.get("index"):
+                    self.print_status()
+                case {
+                    "index": index,
+                    "event": "change",
+                    "on": "source-output",
+                }:
+                    self.print_status()
+
+
+async def button_handler():
+    loop = asyncio.get_event_loop()
+    reader = asyncio.StreamReader()
+    protocol = asyncio.StreamReaderProtocol(reader)
+    await loop.connect_read_pipe(lambda: protocol, sys.stdin)
+    proc: subprocess.Popen = None
+
+    while True:
+        line = await reader.readline()
+
+        if not line:
+            await asyncio.sleep(1)
+            continue
+
+        match json.loads(line):
+            case {"button": 1} if proc:
+                proc.terminate()
+                proc = None
+            case {"button": 1, "gui": cmd}:
+                proc = subprocess.Popen(cmd, shell=True)
+            case {"button": 2}:
+                pass
+            case {"button": 3}:
+                subprocess.run(["wpctl", "set-mute", "@DEFAULT_AUDIO_SINK@", "toggle"])
+            case {"button": 4}:
+                subprocess.run(
+                    ["wpctl", "set-volume", "-l", "1.5", "@DEFAULT_AUDIO_SINK@", "5%+"]
+                )
+            case {"button": 5}:
+                subprocess.run(
+                    ["wpctl", "set-volume", "-l", "1.5", "@DEFAULT_AUDIO_SINK@", "5%-"]
+                )
+
+
+async def main():
+    pulse_audio = PulseAudio()
+    try:
+        async with asyncio.TaskGroup() as task_group:
+            task_group.create_task(pulse_audio.listener())
+            task_group.create_task(button_handler())
+    except asyncio.CancelledError:
+        return
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
