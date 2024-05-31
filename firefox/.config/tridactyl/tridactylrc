@@ -62,6 +62,7 @@ bind --mode=ex <C-e> ex.deselect_completion
 autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
 autocmd DocStart play.rust-lang.org mode ignore
+autocmd DocStart foundry.tobyvin.dev mode ignore
 autocmd HistoryState https://jellyfin.tobyvin.dev/web/#!/video mode video
 
 fixamo_quiet
