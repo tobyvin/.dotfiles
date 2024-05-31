@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import os
+import linecache
+
+ICON = "\U000f035b"  # 󰍛
+
+
+def main():
+    linecache.getline("/proc/meminfo", 0)
+    linecache.getline("/proc/meminfo", 2)
+
+    with open("/proc/meminfo", "r") as f:
+        meminfo = dict(
+            (i.split()[0].rstrip(":"), int(i.split()[1])) for i in f.readlines()
+        )
+
+    used = 100 - round(100 * meminfo["MemAvailable"] / meminfo["MemTotal"])
+
+    print(f" {ICON} {used}% \n")
+    if used > 95:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("red", ""))
+    elif used > 80:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("yellow", ""))
+
+
+if __name__ == "__main__":
+    main()

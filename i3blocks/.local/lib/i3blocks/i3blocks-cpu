@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+
+import os
+
+ICON = "\U000f0ee0"  # 󰻠
+
+
+def main():
+    with open("/proc/loadavg", "r") as stat:
+        load, _ = stat.readline().split(None, 1)
+    load = round(float(load))
+
+    print(f" {ICON} {load}% \n")
+    if load > 90:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("red", ""))
+    elif load > 60:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("yellow", ""))
+    elif load > 30:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("green", ""))
+
+
+if __name__ == "__main__":
+    main()

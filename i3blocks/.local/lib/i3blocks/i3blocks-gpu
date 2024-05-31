@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import os
+import glob
+
+ICON = "\U000f0379"  # 󰍹
+
+
+def main():
+    files = glob.glob("/sys/class/drm/card*/device/gpu_busy_percent")
+    if not files:
+        return
+
+    with open(files[0]) as f:
+        usage = int(f.readline())
+
+    print(f" {ICON} {usage}% \n")
+    if usage > 90:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("red", ""))
+    elif usage > 60:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("yellow", ""))
+    elif usage > 30:
+        print(os.environ.get("black", ""))
+        print(os.environ.get("green", ""))
+
+
+if __name__ == "__main__":
+    main()

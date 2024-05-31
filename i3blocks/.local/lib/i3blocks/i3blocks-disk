@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import os
+
+ICON = "\U000f02ca"  # 󰋊
+GB = 1073741824
+
+
+def main():
+    statvfs = os.statvfs("/")
+    avail = bytes = statvfs.f_bavail * statvfs.f_frsize
+
+    for unit in ["B", "KB", "MB", "GB", "TB", "PB"]:
+        if avail < 1024.0 or unit == "PB":
+            break
+        avail /= 1024.0
+
+    print(f" {ICON} {round(avail)}{unit} \n")
+    if bytes < (20 * GB):
+        print(os.environ.get("black", ""))
+        print(os.environ.get("red", ""))
+    elif bytes < (10 * GB):
+        print(os.environ.get("black", ""))
+        print(os.environ.get("yellow", ""))
+
+
+if __name__ == "__main__":
+    main()

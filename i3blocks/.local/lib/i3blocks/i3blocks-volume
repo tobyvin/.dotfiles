@@ -69,8 +69,6 @@ class PulseAudio:
             output["color"] = os.environ.get("black")
             output["background"] = os.environ.get("yellow")
 
-        output.update(self.color)
-
         match format:
             case "json":
                 print(json.dumps(output), flush=True)

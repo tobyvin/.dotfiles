@@ -1,5 +1,5 @@
 markup=pango
-
+interval=5
 black="#1d2021"
 white="#d5c4a1"
 yellow="#fabd2f"
@@ -14,6 +14,19 @@ interval=persist
 command=curl -s wttr.in/?m\&format="%c+%t\n" | sed 's/\s\++\(.*\)C/ \1/'
 interval=600
 
+[disk]
+command=$SCRIPT_DIR/i3blocks-disk
+interval=20
+
+[memory]
+command=$SCRIPT_DIR/i3blocks-memory
+
+[cpu]
+command=$SCRIPT_DIR/i3blocks-cpu
+
+[gpu]
+command=$SCRIPT_DIR/i3blocks-gpu
+
 [miniflux]
 command=$SCRIPT_DIR/i3blocks-miniflux
 interval=30
@@ -21,7 +34,6 @@ format=json
 
 [notmuch]
 command=$SCRIPT_DIR/i3blocks-notmuch
-interval=5
 
 [volume]
 command=$SCRIPT_DIR/i3blocks-volume
