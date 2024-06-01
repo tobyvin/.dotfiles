@@ -2,6 +2,7 @@ markup=pango
 interval=5
 black="#1d2021"
 white="#d5c4a1"
+green="#8ec07c"
 yellow="#fabd2f"
 red="#fb4934"
 
@@ -30,7 +31,6 @@ command=$SCRIPT_DIR/i3blocks-gpu
 [miniflux]
 command=$SCRIPT_DIR/i3blocks-miniflux
 interval=30
-format=json
 
 [notmuch]
 command=$SCRIPT_DIR/i3blocks-notmuch
@@ -42,9 +42,10 @@ format=json
 gui=pavucontrol
 
 [time]
-command=date +"%a %d/%m %T"
+command=date +" %a %d/%m %T "
 interval=1
 
 [dunst]
 command=$SCRIPT_DIR/i3blocks-dunst
-interval=1
+interval=persist
+format=json

@@ -4,7 +4,7 @@ import os
 
 import requests
 
-ICON = "\U0000f09e"
+ICON = "\U000f046b"  # 󰑫
 
 
 def main():

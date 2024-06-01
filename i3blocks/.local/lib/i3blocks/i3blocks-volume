@@ -9,10 +9,10 @@ import sys
 
 class PulseAudio:
     icons = {
-        "mute": "\U0000eee8",  # nf-fa-volume_mute
-        "low": "\U0000f026",  # nf-fa-volume_off
-        "medium": "\U0000f027",  # nf-fa-volume_low
-        "high": "\U0000f028",  # nf-fa-volume_high
+        "mute": "\U000f075f",  # 󰝟
+        "low": "\U000f057f",  # 󰕿
+        "medium": "\U000f0580",  # 󰖀
+        "high": "\U000f057e",  # 󰕾
     }
 
     def __init__(self):
@@ -71,7 +71,7 @@ class PulseAudio:
 
         match format:
             case "json":
-                print(json.dumps(output), flush=True)
+                print(json.dumps(output, ensure_ascii=False), flush=True)
             case "raw":
                 for prop in ["full_text", "short_text", "color", "background"]:
                     print(output.get(prop, ""), flush=True)

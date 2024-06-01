@@ -1,38 +1,118 @@
 #!/usr/bin/env python3
 
+import asyncio
 import os
-import subprocess
+import sys
+import json
+
+from dbus_next.aio import MessageBus
 
 
-def muted():
-    """Returns True if Dunst is muted"""
-    cmd = ["dunstctl", "is-paused"]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    output = proc.communicate()[0]
-    return "true" == output.strip().decode("UTF-8")
+class Dunst:
+    @classmethod
+    async def connect(cls):
+        self = cls()
+        self.bus = await MessageBus().connect()
+
+        introspection = await self.bus.introspect(
+            "org.freedesktop.Notifications", "/org/freedesktop/Notifications"
+        )
+
+        self.obj = self.bus.get_proxy_object(
+            "org.freedesktop.Notifications",
+            "/org/freedesktop/Notifications",
+            introspection,
+        )
+
+        self.dunst = self.obj.get_interface("org.dunstproject.cmd0")
+        self.paused = await self.dunst.get_paused()
+        self.displayed = await self.dunst.get_displayed_length()
+        self.waiting = await self.dunst.get_waiting_length()
+
+        return self
+
+    def print_status(self):
+        if self.paused:
+            icon = "\U000f009b"  # 󰂛
+        else:
+            icon = "\U000f009a"  # 󰂚
+
+        if self.waiting > 0:
+            count = f" {self.waiting}"
+        else:
+            count = ""
+
+        output = {"full_text": f" {icon}{count} "}
+
+        if self.displayed + self.waiting > 0:
+            output["color"] = os.environ.get("black")
+            output["background"] = os.environ.get("green")
+        elif self.paused:
+            output["color"] = os.environ.get("black")
+            output["background"] = os.environ.get("yellow")
+
+        print(json.dumps(output, ensure_ascii=False), flush=True)
+
+    def on_properties_changed(self, _name, property, invalidated):
+        update = False
+        for property, variant in property.items():
+            match property:
+                case "paused":
+                    self.paused = variant.value
+                case "displayedLength":
+                    self.displayed = variant.value
+                case "waitingLength":
+                    self.waiting = variant.value
+                case _:
+                    continue
+            update = True
+
+        if update:
+            self.print_status()
+
+    async def listener(self):
+        properties = self.obj.get_interface("org.freedesktop.DBus.Properties")
+        properties.on_properties_changed(self.on_properties_changed)
+
+        await self.bus.wait_for_disconnect()
+
+    async def button_handler(self):
+        loop = asyncio.get_event_loop()
+        reader = asyncio.StreamReader()
+        protocol = asyncio.StreamReaderProtocol(reader)
+        await loop.connect_read_pipe(lambda: protocol, sys.stdin)
+
+        while True:
+            line = await reader.readline()
+
+            if not line:
+                await asyncio.sleep(1)
+                continue
+
+            match json.loads(line):
+                case {"button": 1}:
+                    await self.dunst.call_notification_show()
+                case {"button": 2}:
+                    pass
+                case {"button": 3}:
+                    await self.dunst.set_paused(not self.paused)
+                case {"button": 4}:
+                    pass
+                case {"button": 5}:
+                    pass
 
 
-def notif(t):
-    """Returns notification count"""
-    cmd = ["dunstctl", "count", t]
-    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE)
-    output = proc.communicate()[0]
-    return int(output.strip().decode("UTF-8"))
+async def main():
+    dunst = await Dunst.connect()
+    dunst.print_status()
+
+    try:
+        async with asyncio.TaskGroup() as task_group:
+            task_group.create_task(dunst.listener())
+            task_group.create_task(dunst.button_handler())
+    except asyncio.CancelledError:
+        return
 
 
-button = os.environ.get("BLOCK_BUTTON", None)
-
-if button == "1":
-    subprocess.run(["dunstctl", "history-pop"], check=True)
-elif button == "3":
-    subprocess.run(["dunstctl", "set-paused", "toggle"], check=True)
-
-
-if notif("waiting") > 0:
-    print("\uf1f6")
-elif notif("displayed") > 0:
-    print("\uf0f3")
-elif muted():
-    print("\uf1f7")
-else:
-    print("\uf0a2")
+if __name__ == "__main__":
+    asyncio.run(main())
