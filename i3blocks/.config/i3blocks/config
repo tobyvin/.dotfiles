@@ -42,7 +42,7 @@ format=json
 gui=pavucontrol
 
 [time]
-command=date +" %a %d/%m %T "
+command=date +" %a %m/%d %T "
 interval=1
 
 [dunst]
