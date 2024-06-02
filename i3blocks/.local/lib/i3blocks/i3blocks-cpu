@@ -12,14 +12,14 @@ def main():
 
     print(f" {ICON} {load}% \n")
     if load > 90:
-        print(os.environ.get("black", ""))
-        print(os.environ.get("red", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
     elif load > 60:
-        print(os.environ.get("black", ""))
-        print(os.environ.get("yellow", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
     elif load > 30:
-        print(os.environ.get("black", ""))
-        print(os.environ.get("green", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_0C_HEX")}")
 
 
 if __name__ == "__main__":

@@ -17,11 +17,11 @@ def main():
 
     print(f" {ICON} {round(avail)}{unit} \n")
     if bytes < (20 * GB):
-        print(os.environ.get("black", ""))
-        print(os.environ.get("red", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
     elif bytes < (10 * GB):
-        print(os.environ.get("black", ""))
-        print(os.environ.get("yellow", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
 
 
 if __name__ == "__main__":

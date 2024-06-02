@@ -66,8 +66,8 @@ class PulseAudio:
         output = {"full_text": f" {self.icon} {self.volume}% "}
 
         if self.sink.get("mute"):
-            output["color"] = os.environ.get("black")
-            output["background"] = os.environ.get("yellow")
+            output["color"] = f"#{os.environ.get("BASE16_COLOR_00_HEX")}"
+            output["background"] = f"#{os.environ.get("BASE16_COLOR_0A_HEX")}"
 
         match format:
             case "json":

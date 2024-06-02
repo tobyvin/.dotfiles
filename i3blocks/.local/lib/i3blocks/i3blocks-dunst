@@ -45,11 +45,11 @@ class Dunst:
         output = {"full_text": f" {icon}{count} "}
 
         if self.displayed + self.waiting > 0:
-            output["color"] = os.environ.get("black")
-            output["background"] = os.environ.get("green")
+            output["color"] = f"#{os.environ.get("BASE16_COLOR_00_HEX")}"
+            output["background"] = f"#{os.environ.get("BASE16_COLOR_0C_HEX")}"
         elif self.paused:
-            output["color"] = os.environ.get("black")
-            output["background"] = os.environ.get("yellow")
+            output["color"] = f"#{os.environ.get("BASE16_COLOR_00_HEX")}"
+            output["background"] = f"#{os.environ.get("BASE16_COLOR_0A_HEX")}"
 
         print(json.dumps(output, ensure_ascii=False), flush=True)
 

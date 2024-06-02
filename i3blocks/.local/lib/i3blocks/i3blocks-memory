@@ -19,11 +19,11 @@ def main():
 
     print(f" {ICON} {used}% \n")
     if used > 95:
-        print(os.environ.get("black", ""))
-        print(os.environ.get("red", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
     elif used > 80:
-        print(os.environ.get("black", ""))
-        print(os.environ.get("yellow", ""))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
 
 
 if __name__ == "__main__":

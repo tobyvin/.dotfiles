@@ -21,12 +21,12 @@ def main():
     count = notmuch.Database().create_query("tag:unread").count_messages()
 
     print(f" {ICON} {count} \n")
-    if count > 50:
-        print(os.environ.get("black"))
-        print(os.environ.get("red"))
+    if count > 10:
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
     elif count > 0:
-        print(os.environ.get("black"))
-        print(os.environ.get("yellow"))
+        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
 
 
 if __name__ == "__main__":

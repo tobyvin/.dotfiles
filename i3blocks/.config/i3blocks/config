@@ -1,10 +1,5 @@
 markup=pango
 interval=5
-black="#1d2021"
-white="#d5c4a1"
-green="#8ec07c"
-yellow="#fabd2f"
-red="#fb4934"
 
 [i3blocks-title]
 command=$SCRIPT_DIR/i3blocks-title
