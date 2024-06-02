@@ -5,7 +5,6 @@ from typing import Union
 
 import i3ipc
 from i3ipc import Event
-from i3ipc.events import WindowEvent, WorkspaceEvent
 
 
 class Connection(i3ipc.Connection):
@@ -34,7 +33,7 @@ sway = Connection()
     Event.WINDOW_CLOSE,
     Event.WORKSPACE_FOCUS,
 )
-def on_window_event(sway: i3ipc.Connection, event: WindowEvent | WorkspaceEvent):
+def print_status(sway: i3ipc.Connection, _=None):
     focused = sway.get_tree()
     while focused is not None and focused.ipc_data["type"] != "con":
         focused = focused.find_focused()
@@ -45,5 +44,10 @@ def on_window_event(sway: i3ipc.Connection, event: WindowEvent | WorkspaceEvent)
         print("", flush=True)
 
 
-if __name__ == "__main__":
+def main():
+    print_status(sway)
     sway.main()
+
+
+if __name__ == "__main__":
+    main()

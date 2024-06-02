@@ -23,6 +23,9 @@ command=$SCRIPT_DIR/i3blocks-cpu
 [gpu]
 command=$SCRIPT_DIR/i3blocks-gpu
 
+[net]
+command=$SCRIPT_DIR/i3blocks-net
+
 [miniflux]
 command=$SCRIPT_DIR/i3blocks-miniflux
 interval=30
