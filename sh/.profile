@@ -14,9 +14,6 @@ append_path() {
 	esac
 }
 
-# Store original (system) paths to fix prioritization later
-_path=$PATH
-
 # Use systemd-environment-d-generator(8) to generate environment, and export those variables
 #
 # See: https://wiki.archlinux.org/title/Environment_variables#Per_Wayland_session
@@ -39,9 +36,3 @@ fi
 
 # Unload our profile API functions
 unset -f append_path
-
-# Fix PATH to prioritize user added paths
-if [ -e "$_path" ]; then
-	PATH="${PATH#"$_path"}:$_path"
-	export PATH
-fi
