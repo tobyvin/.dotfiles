@@ -10,6 +10,13 @@ interval=persist
 command=curl -s wttr.in/?m\&format="%c+%t\n" | sed 's/\s\++\(.*\)C/ \1/'
 interval=600
 
+[miniflux]
+command=$SCRIPT_DIR/i3blocks-miniflux
+interval=30
+
+[notmuch]
+command=$SCRIPT_DIR/i3blocks-notmuch
+
 [disk]
 command=$SCRIPT_DIR/i3blocks-disk
 interval=20
@@ -26,12 +33,10 @@ command=$SCRIPT_DIR/i3blocks-gpu
 [net]
 command=$SCRIPT_DIR/i3blocks-net
 
-[miniflux]
-command=$SCRIPT_DIR/i3blocks-miniflux
-interval=30
-
-[notmuch]
-command=$SCRIPT_DIR/i3blocks-notmuch
+[volume]
+command=$SCRIPT_DIR/i3blocks-mpris
+interval=persist
+format=json
 
 [volume]
 command=$SCRIPT_DIR/i3blocks-volume
