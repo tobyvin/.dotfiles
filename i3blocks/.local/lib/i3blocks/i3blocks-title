@@ -9,23 +9,27 @@ import i3ipc
 from i3ipc.aio import Connection
 
 
-class Status:
-    def __init__(self, title: str = "", width: int = 30):
+class Printer:
+    def __init__(self, title: str | None = None, width: int = 30):
         self.width = width
-        self.title = title
-        if len(title) > self.width:
-            self.iter = deque(list(title + " "))
-        else:
-            self.iter = list(title)
+        match title:
+            case str("") | None:
+                self.iter = [""]
+            case str(s):
+                self.iter = deque(list(s + " "))
 
     def __iter__(self):
         while self.iter:
-            title = "".join(islice(self.iter, 0, self.width))
-            yield title
-            if isinstance(self.iter, deque):
+            yield "".join(islice(self.iter, 0, self.width))
+            if len(self.iter) > self.width:
                 self.iter.rotate(-1)
             else:
                 break
+
+    async def print(self):
+        for status in iter(self):
+            print(status, flush=True)
+            await asyncio.sleep(0.5)
 
 
 class Blocklet:
@@ -47,24 +51,25 @@ class Blocklet:
         self.i3 = await Connection().connect()
 
         for event in Blocklet.EVENTS:
-            self.i3.on(event, lambda _, event: self.update_focus(event.container))
+            self.i3.on(event, lambda _, event: self.update_focus(event.container.name))
+
+        self.i3.on(
+            i3ipc.Event.WORKSPACE_FOCUS,
+            lambda _, event: self.update_focus(),
+        )
+
         return self
 
     async def main(self):
         if focused := (await self.i3.get_tree()).find_focused():
-            self.update_focus(focused)
+            self.update_focus(focused.name)
         await self.i3.main()
 
-    async def printer(self, title: str):
-        for status in iter(Status(title)):
-            print(status, flush=True)
-            await asyncio.sleep(0.5)
-
-    def update_focus(self, container: i3ipc.Con):
+    def update_focus(self, title: str = None):
         if self.printer_task is not None:
             self.printer_task.cancel()
 
-        self.printer_task = self.task_group.create_task(self.printer(container.name))
+        self.printer_task = self.task_group.create_task(Printer(title).print())
 
 
 async def main():
