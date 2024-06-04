@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import os
+import subprocess
 
 import requests
 
@@ -8,6 +9,10 @@ ICON = "\U000f046b"  # 󰑫
 
 
 def main():
+    match int(os.environ.get("BLOCK_BUTTON", "0")):
+        case 1:
+            subprocess.run(["xdg-open", "https://miniflux.tobyvin.dev"])
+
     url = "https://miniflux.tobyvin.dev/v1/feeds/counters"
     headers = {"X-Auth-Token": os.environ.get("MINIFLUX_TOKEN")}
     resp = requests.get(url, headers=headers)
