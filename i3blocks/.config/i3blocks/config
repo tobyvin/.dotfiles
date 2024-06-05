@@ -32,7 +32,7 @@ command=$SCRIPT_DIR/i3blocks-gpu
 [net]
 command=$SCRIPT_DIR/i3blocks-net
 
-[volume]
+[mpris]
 command=$SCRIPT_DIR/i3blocks-mpris
 interval=persist
 format=json
