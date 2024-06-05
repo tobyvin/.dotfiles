@@ -5,7 +5,6 @@ import json
 import os
 import sys
 from asyncio import CancelledError, TaskGroup, run
-from pprint import pprint
 from collections import defaultdict, deque
 from itertools import islice
 
@@ -268,25 +267,22 @@ class MPRIS:
                 await asyncio.sleep(1)
                 continue
 
-            match json.loads(line):
-                case {"button": 1} if bus_name := self.active_player:
-                    await self.ifaces[bus_name].call_play_pause()
-                case {"button": 2}:
-                    pass
-                case {"button": 3}:
-                    self.cycle_player()
-                case {"button": 4} if bus_name := self.active_player:
-                    iface = self.ifaces[bus_name]
-                    if callable(getattr(iface.__class__, "get_volume", None)):
-                        volume = await iface.get_volume()
-                        if callable(getattr(iface.__class__, "set_volume", None)):
-                            await iface.set_volume(volume + 0.05)
-                case {"button": 5} if bus_name := self.active_player:
-                    iface = self.ifaces[bus_name]
-                    if callable(getattr(iface.__class__, "get_volume", None)):
-                        volume = await iface.get_volume()
-                        if callable(getattr(iface.__class__, "set_volume", None)):
-                            await self.ifaces[bus_name].set_volume(volume - 0.05)
+            try:
+                match json.loads(line):
+                    case {"button": 1} if bus_name := self.active_player:
+                        await self.ifaces[bus_name].call_play_pause()
+                    case {"button": 2}:
+                        pass
+                    case {"button": 3}:
+                        self.cycle_player()
+                    case {"button": 4} if bus_name := self.active_player:
+                        volume = await self.ifaces[bus_name].get_volume()
+                        await self.ifaces[bus_name].set_volume(volume + 0.05)
+                    case {"button": 5} if bus_name := self.active_player:
+                        volume = await self.ifaces[bus_name].get_volume()
+                        await self.ifaces[bus_name].set_volume(volume - 0.05)
+            except DBusError:
+                pass
 
 
 async def main():
