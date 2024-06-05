@@ -5,11 +5,13 @@ import json
 import os
 import sys
 from asyncio import CancelledError, TaskGroup, run
+from pprint import pprint
 from collections import defaultdict, deque
 from itertools import islice
 
 from dbus_next import Variant
 from dbus_next.aio import MessageBus
+from dbus_next.errors import DBusError
 
 BUS_NAME_PREFIX = "org.mpris.MediaPlayer2."
 BUS_NAME_IGNORE = ["org.mpris.MediaPlayer2.playerctld"]
@@ -274,11 +276,17 @@ class MPRIS:
                 case {"button": 3}:
                     self.cycle_player()
                 case {"button": 4} if bus_name := self.active_player:
-                    volume = await self.ifaces[bus_name].get_volume()
-                    await self.ifaces[bus_name].set_volume(volume + 0.05)
+                    iface = self.ifaces[bus_name]
+                    if callable(getattr(iface.__class__, "get_volume", None)):
+                        volume = await iface.get_volume()
+                        if callable(getattr(iface.__class__, "set_volume", None)):
+                            await iface.set_volume(volume + 0.05)
                 case {"button": 5} if bus_name := self.active_player:
-                    volume = await self.ifaces[bus_name].get_volume()
-                    await self.ifaces[bus_name].set_volume(volume - 0.05)
+                    iface = self.ifaces[bus_name]
+                    if callable(getattr(iface.__class__, "get_volume", None)):
+                        volume = await iface.get_volume()
+                        if callable(getattr(iface.__class__, "set_volume", None)):
+                            await self.ifaces[bus_name].set_volume(volume - 0.05)
 
 
 async def main():
