@@ -7,105 +7,77 @@ import subprocess
 import sys
 
 
-class PulseAudio:
-    icons = {
-        "mute": "\U000f075f",  # 󰝟
-        "low": "\U000f057f",  # 󰕿
-        "medium": "\U000f0580",  # 󰖀
-        "high": "\U000f057e",  # 󰕾
-    }
+ICONS = {
+    "mute": "\U000f075f",  # 󰝟
+    "low": "\U000f057f",  # 󰕿
+    "medium": "\U000f0580",  # 󰖀
+    "high": "\U000f057e",  # 󰕾
+}
 
-    def __init__(self):
-        self.print_status()
 
-    @property
-    def volume(self) -> dict:
-        channels = self.sink.get("volume")
-
-        return int(
-            channels.get(next(chan for chan in channels))
-            .get("value_percent")
-            .rstrip("%")
-        )
-
-    @property
-    def icon(self) -> str:
-        if self.sink.get("mute"):
-            return self.icons["mute"]
-
-        match self.volume:
-            case v if v < 33:
-                return self.icons["low"]
-            case v if v < 66:
-                return self.icons["medium"]
-            case _:
-                return self.icons["high"]
-
-    def list_sinks() -> dict[int, dict]:
-        return json.loads(
-            subprocess.run(
-                ["pactl", "--format=json", "list", "sinks"],
-                capture_output=True,
-                encoding="UTF-8",
-            ).stdout
-        )
-
-    def get_default_sink() -> str:
-        return subprocess.run(
-            ["pactl", "get-default-sink"],
+def is_muted():
+    return (
+        subprocess.run(
+            ["pactl", "get-sink-mute", "@DEFAULT_SINK@"],
             capture_output=True,
             encoding="UTF-8",
-        ).stdout
-
-    def print_status(self, update=True, format="json"):
-        if update:
-            self.sinks = PulseAudio.list_sinks()
-            self.default_sink = PulseAudio.get_default_sink()
-            self.sink = next(sink for sink in self.sinks)
-
-        output = {"full_text": f" {self.icon} {self.volume}% "}
-
-        if self.sink.get("mute"):
-            output["color"] = f"#{os.environ.get("BASE16_COLOR_00_HEX")}"
-            output["background"] = f"#{os.environ.get("BASE16_COLOR_0A_HEX")}"
-
-        match format:
-            case "json":
-                print(json.dumps(output, ensure_ascii=False), flush=True)
-            case "raw":
-                for prop in ["full_text", "short_text", "color", "background"]:
-                    print(output.get(prop, ""), flush=True)
-            case f:
-                raise ValueError(f"Invalid output format: {f}")
-
-    async def listener(self):
-        process = await asyncio.create_subprocess_exec(
-            "pactl",
-            "--format=json",
-            "subscribe",
-            stdout=asyncio.subprocess.PIPE,
         )
+        .stdout.removeprefix("Mute: ")
+        .strip()
+        == "yes"
+    )
 
-        while True:
-            line = await process.stdout.readline()
 
-            if not line:
-                await asyncio.sleep(1)
-                continue
+def get_volume():
+    stdout = subprocess.run(
+        ["pactl", "get-sink-volume", "@DEFAULT_SINK@"],
+        capture_output=True,
+        encoding="UTF-8",
+    ).stdout.strip()
 
-            match json.loads(line.decode("UTF-8")):
-                case {
-                    "index": index,
-                    "event": "change",
-                    "on": "sink",
-                } if index == self.sink.get("index"):
-                    self.print_status()
-                case {
-                    "index": index,
-                    "event": "change",
-                    "on": "source-output",
-                }:
-                    self.print_status()
+    for s in stdout.removeprefix("Volume: ").split():
+        if s.endswith("%"):
+            return int(s.rstrip("%"))
+
+
+def print_status():
+    match get_volume():
+        case None:
+            print(flush=True)
+        case v if is_muted():
+            output = {
+                "full_text": f" {ICONS["mute"]} {v}% ",
+                "color": f"#{os.environ.get("BASE16_COLOR_00_HEX")}",
+                "background": f"#{os.environ.get("BASE16_COLOR_0A_HEX")}",
+            }
+        case v if v > 66:
+            output = {"full_text": f" {ICONS["high"]} {v}% "}
+        case v if v > 33:
+            output = {"full_text": f" {ICONS["medium"]} {v}% "}
+        case _:
+            output = {"full_text": f" {ICONS["low"]} {v}% "}
+
+    print(json.dumps(output, ensure_ascii=False), flush=True)
+
+
+async def listener():
+    process = await asyncio.create_subprocess_exec(
+        "pactl",
+        "--format=json",
+        "subscribe",
+        stdout=asyncio.subprocess.PIPE,
+    )
+
+    while True:
+        line = await process.stdout.readline()
+
+        if not line:
+            await asyncio.sleep(1)
+            continue
+
+        match json.loads(line.decode("UTF-8")):
+            case {"on": "sink"} | {"on": "source-output"}:
+                print_status()
 
 
 async def button_handler():
@@ -143,10 +115,10 @@ async def button_handler():
 
 
 async def main():
-    pulse_audio = PulseAudio()
+    print_status()
     try:
         async with asyncio.TaskGroup() as task_group:
-            task_group.create_task(pulse_audio.listener())
+            task_group.create_task(listener())
             task_group.create_task(button_handler())
     except asyncio.CancelledError:
         return

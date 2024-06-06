@@ -8,23 +8,31 @@ import requests
 ICON = "\U000f046b"  # 󰑫
 
 
+def get_count():
+    url = "https://miniflux.tobyvin.dev/v1/feeds/counters"
+    headers = {"X-Auth-Token": os.environ.get("MINIFLUX_TOKEN")}
+    resp = requests.get(url, headers=headers)
+    return sum(resp.json().get("unreads").values())
+
+
 def main():
     match int(os.environ.get("BLOCK_BUTTON", "0")):
         case 1:
             subprocess.run(["xdg-open", "https://miniflux.tobyvin.dev"])
 
-    url = "https://miniflux.tobyvin.dev/v1/feeds/counters"
-    headers = {"X-Auth-Token": os.environ.get("MINIFLUX_TOKEN")}
-    resp = requests.get(url, headers=headers)
-    count = sum(resp.json().get("unreads").values())
+    try:
+        count = get_count()
+    except requests.exceptions.ConnectionError:
+        count = "x"
 
     print(f" {ICON} {count} \n")
-    if count > 10:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
-    elif count > 0:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
+    match count:
+        case str(c) | int(c) if c > 10:
+            print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+            print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
+        case int(c) if c > 0:
+            print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
+            print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
 
 
 if __name__ == "__main__":
