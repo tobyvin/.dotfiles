@@ -43,7 +43,7 @@ def get_volume():
 def print_status():
     match get_volume():
         case None:
-            print(flush=True)
+            output = {}
         case v if is_muted():
             output = {
                 "full_text": f" {ICONS["mute"]} {v}% ",
@@ -54,7 +54,7 @@ def print_status():
             output = {"full_text": f" {ICONS["high"]} {v}% "}
         case v if v > 33:
             output = {"full_text": f" {ICONS["medium"]} {v}% "}
-        case _:
+        case v:
             output = {"full_text": f" {ICONS["low"]} {v}% "}
 
     print(json.dumps(output, ensure_ascii=False), flush=True)
