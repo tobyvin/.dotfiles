@@ -6,7 +6,7 @@ max_length=30
 interval=persist
 
 [weather]
-command=curl -s wttr.in/?m\&format="%c+%t\n" | sed 's/\s\++\(.*\)C/ \1/'
+command=$SCRIPT_DIR/i3blocks-wttr
 interval=600
 
 [miniflux]
