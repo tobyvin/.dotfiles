@@ -4,13 +4,10 @@ local M = {
 	event = "BufReadPre",
 	dependencies = {
 		{ "hrsh7th/cmp-nvim-lsp", opts = {} },
-		{ "folke/neodev.nvim", opts = {} },
-		{ "folke/neoconf.nvim", cmd = "Neoconf", dependencies = { "nvim-lspconfig" }, opts = {} },
 	},
 }
 
 function M:config()
-	require("neoconf")
 	require("lspconfig").util.default_config.capabilities =
 		require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
 
