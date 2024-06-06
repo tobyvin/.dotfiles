@@ -6,6 +6,7 @@ import os
 import sys
 from asyncio import CancelledError, TaskGroup, run
 from collections import defaultdict, deque
+from functools import cached_property
 from itertools import islice
 
 from dbus_next import Variant
@@ -37,100 +38,135 @@ class Printer:
     YELLOW = f"#{os.environ.get("BASE16_COLOR_0A_HEX")}"
     ICONS = {
         "icon": "\U000f075a",  # 󰝚
-        "prev": "\U000f04ae ",  # 󰒮
-        "play": "\U000f040a ",  # 󰐊
-        "pause": "\U000f03e4 ",  # 󰏤
-        "next": "\U000f04ad ",  # 󰒭
+        "prev": "\U000f04ae",  # 󰒮
+        "play": "\U000f040a",  # 󰐊
+        "pause": "\U000f03e4",  # 󰏤
+        "next": "\U000f04ad",  # 󰒭
         "high": "\U000f057e",  # 󰕾
         "med": "\U000f0580",  # 󰖀
         "low": "\U000f057f",  # 󰕿
     }
 
-    FMT = " {icon} {title} {prev} {play_pause} {next} {vol} {volume:.0%} "
-
     def __init__(self, player, width: int = 10):
-        self.player = {}
-        self.values = {
-            "icon": Printer.ICONS["icon"],
-            "prev": "XDELETEX",
-            "play_pause": "XDELETEX",
-            "next": "XDELETEX",
-            "vol": "XDELETEX",
-            "volume": 1337,
-        }
         self.width = width
-        self.iter = [""]
-        self.update_props(player)
-
-    def update_props(self, props):
-        old_title = self.player.get("Metadata", {}).get("xesam:title")
-        self.player |= props
-
-        match self.player.get("Metadata", {}).get("xesam:title"):
-            case None:
-                pass
-            case "":
-                self.iter = [""]
-            case str(s) if s != old_title:
-                self.iter = deque(list(s + " "))
-
-        if self.player.get("CanGoPrevious"):
-            self.values["prev"] = Printer.ICONS["prev"]
-
-        match self.player.get("PlaybackStatus"):
-            case "Playing" if self.player.get("CanPause"):
-                self.values["play_pause"] = Printer.ICONS["pause"]
-            case _ if self.player.get("CanPlay"):
-                self.values["play_pause"] = Printer.ICONS["play"]
-
-        if self.player.get("CanGoNext"):
-            self.values["next"] = Printer.ICONS["next"]
-
-        if self.player.get("Volume"):
-            self.values["volume"] = self.player.get("Volume")
-        match self.player.get("Volume"):
-            case float(vol) if vol > 0.66:
-                self.values["vol"] = Printer.ICONS["high"]
-            case float(vol) if vol > 0.33:
-                self.values["vol"] = Printer.ICONS["med"]
-            case float(vol):
-                self.values["vol"] = Printer.ICONS["low"]
-
-        match self.player.get("PlaybackStatus"):
-            case "Playing":
-                self.colors = {
-                    "color": Printer.BLACK,
-                    "background": Printer.GREEN,
-                }
-            case "Paused":
-                self.colors = {
-                    "color": Printer.BLACK,
-                    "background": Printer.YELLOW,
-                }
-            case "Stopped":
-                self.colors = {}
+        self.player = player
 
     def __iter__(self):
         while self.iter:
-            full_text = (
-                Printer.FMT.format(
-                    title="".join(islice(self.iter, 0, self.width)),
-                    **self.values,
-                    **self.player,
-                )
-                .strip()
-                .replace("XDELETEX ", "")
-                .replace(" 133700%", "")
-            )
-
-            output = {"full_text": full_text.center(len(full_text) + 2)}
-            output.update(self.colors)
-            yield output
+            yield {
+                "full_text": self.full_text,
+                "short_text": self.short_text,
+                "color": self.color,
+                "background": self.background,
+            }
 
             if len(self.iter) > self.width:
                 self.iter.rotate(-1)
             else:
                 break
+
+    @property
+    def player(self):
+        return self._player
+
+    @player.setter
+    def player(self, value):
+        self._player = value
+        # clear possibly outdated properties
+        # See: https://stackoverflow.com/a/69367025/11477336
+        for attr in [
+            "title",
+            "controls",
+            "volume",
+            "color",
+            "background",
+            "short_text",
+        ]:
+            self.__dict__.pop(attr, None)
+
+    @cached_property
+    def title(self):
+        title = self.player.get("Metadata", {"xesam:title": self.prev_title}).get(
+            "xesam:title"
+        )
+        if title != self.prev_title:
+            self.__dict__.pop("iter", None)
+            self.prev_title = title
+        return self.prev_title
+
+    @cached_property
+    def controls(self) -> str:
+        controls = []
+
+        if self.player.get("CanGoPrevious"):
+            controls.append(Printer.ICONS["prev"])
+
+        match self.player.get("PlaybackStatus"):
+            case "Playing" if self.player.get("CanPause"):
+                controls.append(Printer.ICONS["pause"])
+            case _ if self.player.get("CanPlay"):
+                controls.append(Printer.ICONS["play"])
+
+        if self.player.get("CanGoNext"):
+            controls.append(Printer.ICONS["next"])
+
+        if len(controls) > 0:
+            return "  ".join(controls) + " "
+
+    @cached_property
+    def volume(self) -> str:
+        match self.player.get("Volume"):
+            case float(vol) if vol > 0.66:
+                return f"{Printer.ICONS["high"]} {vol:.0%}"
+            case float(vol) if vol > 0.33:
+                return f"{Printer.ICONS["med"]} {vol:.0%}"
+            case float(vol):
+                return f"{Printer.ICONS["low"]} {vol:.0%}"
+
+    @cached_property
+    def background(self):
+        match self.player.get("PlaybackStatus"):
+            case "Playing":
+                return Printer.GREEN
+            case "Paused":
+                return Printer.YELLOW
+            case _:
+                return None
+
+    @cached_property
+    def color(self):
+        match self.player.get("PlaybackStatus"):
+            case "Playing" | "Paused":
+                return Printer.BLACK
+            case _:
+                return None
+
+    @cached_property
+    def iter(self) -> list | deque:
+        match self.player.get("Metadata", {}).get("xesam:title", ""):
+            case str(""):
+                return [""]
+            case str(s):
+                return deque(list(s + " "))
+
+    @cached_property
+    def short_text(self) -> str:
+        s = f" {Printer.ICONS["icon"]} "
+        if c := self.controls:
+            s += f" {c} "
+        return s
+
+    @property
+    def full_text(self) -> str:
+        s = f" {Printer.ICONS["icon"]} {"".join(islice(self.iter, 0, self.width))} "
+
+        if c := self.controls:
+            s += f"{c} "
+
+        if v := self.volume:
+            s += f"{v} "
+
+        return s
 
     async def print(self):
         for status in iter(self):
@@ -139,8 +175,6 @@ class Printer:
 
 
 class MPRIS:
-    PROPS = ["xesam:title"]
-
     def __init__(self, task_group: TaskGroup):
         self.task_group = task_group
         self.printer_task = None
@@ -194,7 +228,7 @@ class MPRIS:
 
     def on_properties_changed(self, bus_name: str, property, invalidated):
         props = parse_dbus_values(property)
-        self.players[bus_name].update_props(props)
+        self.players[bus_name].player |= props
         match props:
             case {"PlaybackStatus": "Playing"}:
                 if bus_name in self.active_players:
