@@ -8,23 +8,25 @@ import json
 from dbus_next.aio import MessageBus
 
 
+BUS_NAME = "org.freedesktop.Notifications"
+OBJECT_PATH = "/org/freedesktop/Notifications"
+DUNST_INTERFACE = "org.dunstproject.cmd0"
+PROPERTIES_INTERFACE = "org.freedesktop.DBus.Properties"
+
+
 class Dunst:
     @classmethod
     async def connect(cls):
         self = cls()
         self.bus = await MessageBus().connect()
 
-        introspection = await self.bus.introspect(
-            "org.freedesktop.Notifications", "/org/freedesktop/Notifications"
-        )
-
         self.obj = self.bus.get_proxy_object(
-            "org.freedesktop.Notifications",
-            "/org/freedesktop/Notifications",
-            introspection,
+            BUS_NAME,
+            OBJECT_PATH,
+            await self.bus.introspect(BUS_NAME, OBJECT_PATH),
         )
 
-        self.dunst = self.obj.get_interface("org.dunstproject.cmd0")
+        self.dunst = self.obj.get_interface(DUNST_INTERFACE)
         self.paused = await self.dunst.get_paused()
         self.displayed = await self.dunst.get_displayed_length()
         self.waiting = await self.dunst.get_waiting_length()
@@ -71,7 +73,7 @@ class Dunst:
             self.print_status()
 
     async def listener(self):
-        properties = self.obj.get_interface("org.freedesktop.DBus.Properties")
+        properties = self.obj.get_interface(PROPERTIES_INTERFACE)
         properties.on_properties_changed(self.on_properties_changed)
 
         await self.bus.wait_for_disconnect()
