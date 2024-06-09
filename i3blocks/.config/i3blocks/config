@@ -25,6 +25,7 @@ command=$SCRIPT_DIR/i3blocks-memory
 
 [cpu]
 command=$SCRIPT_DIR/i3blocks-cpu
+format=json
 
 [gpu]
 command=$SCRIPT_DIR/i3blocks-gpu

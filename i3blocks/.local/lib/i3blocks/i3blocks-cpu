@@ -1,25 +1,41 @@
 #!/usr/bin/env python3
 
 import os
+import json
 
 ICON = "\U000f0ee0"  # 󰻠
+BLACK = f"#{os.environ.get("BASE16_COLOR_00_HEX")}"
+RED = f"#{os.environ.get("BASE16_COLOR_08_HEX")}"
+YELLOW = f"#{os.environ.get("BASE16_COLOR_0A_HEX")}"
+AQUA = f"#{os.environ.get("BASE16_COLOR_0C_HEX")}"
 
 
 def main():
-    with open("/proc/loadavg", "r") as stat:
-        load, _ = stat.readline().split(None, 1)
-    load = round(float(load))
+    off = json.loads(os.environ.get("values", json.dumps([0 for i in range(10)])))
 
-    print(f" {ICON} {load}% \n")
-    if load > 90:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
-    elif load > 60:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
-    elif load > 30:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_0C_HEX")}")
+    with open("/proc/stat", "r") as f:
+        val = [int(x) for x in f.readline().strip().split(" ")[2:]]
+
+    if elapsed := sum(val + off):
+        usage = sum(val[0:3] + val[5:] + off[0:3] + off[5:]) / elapsed
+    else:
+        usage = 0
+
+    output = {
+        "full_text": " {} {:.0%} ".format(ICON, usage),
+        "values": [-x for x in val],
+    }
+    if usage > 90:
+        output["color"] = BLACK
+        output["background"] = RED
+    elif usage > 60:
+        output["color"] = BLACK
+        output["background"] = YELLOW
+    elif usage > 30:
+        output["color"] = BLACK
+        output["background"] = AQUA
+
+    print(json.dumps(output, ensure_ascii=False), flush=True)
 
 
 if __name__ == "__main__":
