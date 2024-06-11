@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cache_dir="${XDG_CACHE_HOME:-"$HOME/.cache"}"
-cache="$cache_dir/wmenu_run"
+cache="$cache_dir/sway-menu-run"
 
 uptodate() {
 	IFS=:
@@ -28,7 +28,7 @@ get_bin() {
 [ ! -e "$cache_dir" ] && mkdir -p "$cache_dir"
 
 if [ ! -e "$cache" ] || ! uptodate; then
-	get_bin | sort -u | tee "$cache"
+	get_bin | sort -u | tee "$cache" | sway-menu
 else
 	cat "$cache"
 fi
