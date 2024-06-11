@@ -33,11 +33,15 @@ class Printer:
 
 
 class Blocklet:
-    EVENTS = [
+    SET_EVENTS = [
         i3ipc.Event.WINDOW_FOCUS,
         i3ipc.Event.WINDOW_TITLE,
         i3ipc.Event.WINDOW_NEW,
+    ]
+
+    CLEAR_EVENTS = [
         i3ipc.Event.WINDOW_CLOSE,
+        i3ipc.Event.WORKSPACE_FOCUS,
     ]
 
     def __init__(self, task_group: TaskGroup):
@@ -50,26 +54,28 @@ class Blocklet:
         self = cls(task_group)
         self.i3 = await Connection().connect()
 
-        for event in Blocklet.EVENTS:
-            self.i3.on(event, lambda _, event: self.update_focus(event.container.name))
+        for event in Blocklet.SET_EVENTS:
+            self.i3.on(event, lambda _, e: self.set(e.container.name))
 
-        self.i3.on(
-            i3ipc.Event.WORKSPACE_FOCUS,
-            lambda _, event: self.update_focus(),
-        )
+        for event in Blocklet.CLEAR_EVENTS:
+            self.i3.on(event, lambda _, e: self.clear())
 
         return self
 
     async def main(self):
         if focused := (await self.i3.get_tree()).find_focused():
-            self.update_focus(focused.name)
+            self.set(focused.name)
         await self.i3.main()
 
-    def update_focus(self, title: str = None):
+    def set(self, title: str = None):
         if self.printer_task is not None:
             self.printer_task.cancel()
-
         self.printer_task = self.task_group.create_task(Printer(title).print())
+
+    def clear(self):
+        if self.printer_task is not None:
+            self.printer_task.cancel()
+            print(flush=True)
 
 
 async def main():
