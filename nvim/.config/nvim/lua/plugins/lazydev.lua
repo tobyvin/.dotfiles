@@ -2,6 +2,7 @@
 local M = {
 	"folke/lazydev.nvim",
 	ft = "lua",
+	cmd = "LazyDev",
 	dependencies = {
 		"Bilal2453/luvit-meta",
 		{

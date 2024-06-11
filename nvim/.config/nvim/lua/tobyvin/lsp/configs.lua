@@ -12,7 +12,7 @@ local M = {
 				},
 			},
 		},
-		---@type fun(new_config: lspconfig.options.bashls, new_root_dir: any)
+		---@type fun(new_config: lspconfig.Config, new_root_dir: any)
 		on_new_config = function(new_config, new_root_dir)
 			if vim.iter(vim.fs.dir(new_root_dir)):any(function(n)
 				return n == "PKGBUILD"
@@ -101,11 +101,6 @@ local M = {
 						maxLineLength = 88,
 					},
 					pyflakes = { enabled = false },
-					rope_autoimport = {
-						enabled = true,
-						code_actions = { enabled = true },
-						completions = { enabled = false },
-					},
 				},
 			},
 		},
