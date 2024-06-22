@@ -38,6 +38,11 @@ command=$SCRIPT_DIR/i3blocks-mpris
 interval=persist
 format=json
 
+[mic]
+command=$SCRIPT_DIR/i3blocks-mic
+interval=persist
+format=json
+
 [volume]
 command=$SCRIPT_DIR/i3blocks-volume
 interval=persist

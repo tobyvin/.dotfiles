@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+
+import asyncio
+import json
+import os
+import subprocess
+import sys
+from enum import StrEnum
+
+
+class Icon(StrEnum):
+    ACTIVE = "\U000f036c"  # 󰍬
+    MUTE = "\U000f036d"  # 󰍭
+    IDLE = "\U000f036e"  # 󰍮
+
+
+class Color(StrEnum):
+    BLACK = f"#{os.environ.get("BASE16_COLOR_00_HEX")}"
+    RED = f"#{os.environ.get("BASE16_COLOR_08_HEX")}"
+    YELLOW = f"#{os.environ.get("BASE16_COLOR_0A_HEX")}"
+    AQUA = f"#{os.environ.get("BASE16_COLOR_0C_HEX")}"
+
+
+def print_status():
+    name = subprocess.run(
+        ["pactl", "get-default-source"],
+        capture_output=True,
+        encoding="UTF-8",
+    ).stdout.strip()
+
+    stdout = subprocess.run(
+        ["pactl", "--format=json", "list", "sources"],
+        capture_output=True,
+        encoding="UTF-8",
+    ).stdout.strip()
+
+    source = next(filter(lambda s: s["name"] == name, json.loads(stdout)), None)
+
+    match source:
+        case None | {"state": "SUSPENDED"}:
+            output = {}
+        case {"mute": True}:
+            output = {
+                "full_text": f" {Icon.MUTE} ",
+                "color": Color.BLACK,
+                "background": Color.YELLOW,
+            }
+        case {"state": "RUNNING"}:
+            output = {"full_text": f" {Icon.ACTIVE} "}
+        case {"state": "IDLE"}:
+            output = {"full_text": f" {Icon.IDLE} "}
+
+    print(json.dumps(output, ensure_ascii=False), flush=True)
+
+
+async def listener():
+    process = await asyncio.create_subprocess_exec(
+        "pactl",
+        "--format=json",
+        "subscribe",
+        stdout=asyncio.subprocess.PIPE,
+    )
+
+    while True:
+        line = await process.stdout.readline()
+
+        if not line:
+            await asyncio.sleep(1)
+            continue
+
+        match json.loads(line.decode("UTF-8")):
+            case (
+                {"event": "change", "on": "server"}
+                | {"event": "change", "on": "source"}
+                | {"event": "new", "on": "source-output"}
+                | {"event": "remove", "on": "source-output"}
+            ):
+                print_status()
+
+
+async def button_handler():
+    loop = asyncio.get_event_loop()
+    reader = asyncio.StreamReader()
+    protocol = asyncio.StreamReaderProtocol(reader)
+    await loop.connect_read_pipe(lambda: protocol, sys.stdin)
+
+    while True:
+        line = await reader.readline()
+
+        if not line:
+            await asyncio.sleep(1)
+            continue
+
+        match json.loads(line):
+            case {"button": 1}:
+                pass
+            case {"button": 2}:
+                pass
+            case {"button": 3}:
+                subprocess.run(
+                    ["wpctl", "set-mute", "@DEFAULT_AUDIO_SOURCE@", "toggle"]
+                )
+            case {"button": 4}:
+                pass
+            case {"button": 5}:
+                pass
+
+
+async def main():
+    print_status()
+    try:
+        async with asyncio.TaskGroup() as task_group:
+            task_group.create_task(listener())
+            task_group.create_task(button_handler())
+    except asyncio.CancelledError:
+        return
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
