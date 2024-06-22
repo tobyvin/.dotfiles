@@ -18,10 +18,10 @@ def main():
     used = 100 - round(100 * meminfo["MemAvailable"] / meminfo["MemTotal"])
 
     print(f" {ICON} {used}% \n")
-    if used > 95:
+    if used > 90:
         print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
         print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
-    elif used > 80:
+    elif used > 75:
         print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
         print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
 

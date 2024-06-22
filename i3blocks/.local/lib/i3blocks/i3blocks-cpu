@@ -25,13 +25,13 @@ def main():
         "full_text": " {} {:.0%} ".format(ICON, usage),
         "values": [-x for x in val],
     }
-    if usage > 90:
+    if usage > 0.9:
         output["color"] = BLACK
         output["background"] = RED
-    elif usage > 60:
+    elif usage > 0.6:
         output["color"] = BLACK
         output["background"] = YELLOW
-    elif usage > 30:
+    elif usage > 0.3:
         output["color"] = BLACK
         output["background"] = AQUA
 
