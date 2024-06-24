@@ -2,6 +2,8 @@ local function try_lint()
 	local lint = require("lint")
 	local names = lint._resolve_linter_by_ft(vim.bo.filetype)
 
+	names = vim.list_extend({}, names)
+
 	if #names == 0 then
 		vim.list_extend(names, lint.linters_by_ft["_"] or {})
 	end
@@ -11,11 +13,11 @@ local function try_lint()
 	names = vim.iter(names)
 		:filter(function(name)
 			local linter = lint.linters[name]
-			if not linter then
-				vim.notify("Linter not found: " .. name, vim.log.levels.WARN, { title = "nvim-lint" })
+			if type(linter) == "function" then
+				linter = linter()
 			end
-			---@diagnostic disable-next-line: undefined-field, return-type-mismatch
-			return (type(linter) == "table" and linter.condition and linter.condition()) or linter
+			---@diagnostic disable-next-line: undefined-field
+			return linter.condition == nil or linter.condition()
 		end)
 		:totable()
 
@@ -31,34 +33,21 @@ local M = {
 		linters_by_ft = {
 			htmldjango = { "djlint" },
 			lua = { "selene" },
-			markdown = { "markdownlint" },
 			zsh = { "zsh" },
 			systemd = { "systemdlint" },
 		},
 		linters = {
-			markdownlint = {
-				prepend_args = {
-					"--config",
-					("%s/markdownlint/markdownlint.yaml"):format(vim.env.XDG_CONFIG_HOME),
-				},
-			},
 			selene = {
 				prepend_args = {
-					"--config",
 					function()
-						return vim.fs.find("selene.toml", {
-							upward = true,
-							stop = vim.env.HOME,
-							path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
-						})[1]
+						return string.format(
+							"--config=%s",
+							vim.fs.joinpath(vim.fs.root(0, "selene.toml"), "selene.toml")
+						)
 					end,
 				},
 				condition = function()
-					return vim.fs.find("selene.toml", {
-						upward = true,
-						stop = vim.env.HOME,
-						path = vim.fs.dirname(vim.api.nvim_buf_get_name(0)),
-					})[1]
+					return vim.fs.root(0, "selene.toml")
 				end,
 			},
 		},
@@ -76,11 +65,13 @@ function M:config(opts)
 	local lint = require("lint")
 	lint.linters_by_ft = opts.linters_by_ft
 	vim.iter(opts.linters):each(function(name, linter)
-		linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[name] or {})
-		linter.args = vim.iter({ linter.prepend_args }):flatten():rev():fold(linter.args or {}, function(args, arg)
-			table.insert(args, 1, arg)
-			return args
-		end)
+		if type(linter) == "table" and type(lint.linters[name]) == "table" then
+			linter = vim.tbl_deep_extend("keep", linter, require("lint").linters[name] or {})
+			linter.args = vim.iter({ linter.prepend_args }):flatten():rev():fold(linter.args or {}, function(args, arg)
+				table.insert(args, 1, arg)
+				return args
+			end)
+		end
 		lint.linters[name] = linter
 	end)
 end
