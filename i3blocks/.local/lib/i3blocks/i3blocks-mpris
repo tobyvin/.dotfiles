@@ -158,6 +158,7 @@ class Printer:
             self.sections[self.width] = Section.VOLUME
 
         self.updated.set()
+        self.print()
 
     async def handle_button(self, data) -> bool:
         with open("/tmp/mpris.json", "w") as f:
@@ -197,8 +198,6 @@ class Printer:
                     await self.playerctl.call_shift()
                 case (_, _):
                     return
-
-            self.print()
         except DBusError:
             pass
 
