@@ -8,8 +8,13 @@ local M = {
 }
 
 function M:config()
-	require("lspconfig").util.default_config.capabilities =
+	local capabilities = require("lspconfig").util.default_config.capabilities
+	capabilities = vim.tbl_deep_extend(
+		"force",
+		capabilities,
 		require("cmp_nvim_lsp").default_capabilities(vim.lsp.protocol.make_client_capabilities())
+	)
+	require("lspconfig").util.default_config.capabilities = capabilities
 
 	require("lspconfig.ui.windows").default_options.border = "single"
 
