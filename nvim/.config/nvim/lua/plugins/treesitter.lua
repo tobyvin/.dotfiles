@@ -47,6 +47,7 @@ local M = {
 			"typst",
 			"vue",
 			"yaml",
+			"zig",
 		},
 		-- BUG: Required for TSUpdateSync to work in headless.
 		-- Ref: https://github.com/nvim-treesitter/nvim-treesitter/issues/2900

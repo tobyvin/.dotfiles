@@ -1,3 +1,5 @@
+---@module "lspconfig"
+
 local ms = vim.lsp.protocol.Methods
 
 local M = {
