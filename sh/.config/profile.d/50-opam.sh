@@ -6,4 +6,4 @@ export CAML_LD_LIBRARY_PATH="$OPAM_SWITCH_PREFIX/lib/stublibs:/usr/lib/ocaml/stu
 export OCAML_TOPLEVEL_PATH="$OPAM_SWITCH_PREFIX/lib/toplevel"
 export MANPATH="$MANPATH:$OPAM_SWITCH_PREFIX/man"
 
-append_path "$OPAM_SWITCH_PREFIX/bin"
+prepend_path "$OPAM_SWITCH_PREFIX/bin"

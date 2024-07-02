@@ -3,13 +3,13 @@
 
 # Most of this script is a user scoped version of /etc/profile
 
-# Append "$1" to $PATH when not already in.
+# Prepend "$1" to $PATH when not already in.
 # This function API is accessible to scripts in $XDG_CONFIG_HOME/profile.d
-append_path() {
+prepend_path() {
 	case ":$PATH:" in
 	*:"$1":*) ;;
 	*)
-		PATH="${PATH:+$PATH:}$1"
+		PATH="$1${PATH:+:$PATH}"
 		;;
 	esac
 }
@@ -21,11 +21,6 @@ for generator in /usr/lib/systemd/user-environment-generators/*; do
 	export $($generator | xargs)
 done
 
-append_path "$HOME/.local/bin"
-
-# Force PATH to be environment
-export PATH
-
 # Load profiles from $XDG_CONFIG_HOME/profile.d
 if test -d "$XDG_CONFIG_HOME"/profile.d/; then
 	for profile in "$XDG_CONFIG_HOME"/profile.d/*.sh; do
@@ -33,6 +28,11 @@ if test -d "$XDG_CONFIG_HOME"/profile.d/; then
 	done
 	unset profile
 fi
+
+prepend_path "$HOME/.local/bin"
+
+# Force PATH to be environment
+export PATH
 
 # Unload our profile API functions
 unset -f append_path

@@ -4,6 +4,6 @@
 export GOPRIVATE=git.sr.ht
 export GOPATH="$XDG_DATA_HOME/go"
 
-append_path "$GOPATH/bin"
+prepend_path "$GOPATH/bin"
 
 export PATH

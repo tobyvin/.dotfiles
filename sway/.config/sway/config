@@ -5,7 +5,7 @@ set $down j
 set $up k
 set $right l
 
-set $menu sway-menu
+set $menu wmenu
 
 set $out1 -
 set $out2 -
@@ -98,7 +98,7 @@ bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 
 bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL
-bindsym $mod+shift+space exec sway-menu-run | $menu | xargs -r swaymsg exec --
+bindsym $mod+shift+space exec wmenu-run | $menu | xargs -r swaymsg exec --
 
 bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete

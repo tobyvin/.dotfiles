@@ -6,6 +6,6 @@ export PERL5LIB="$PERL_LOCAL_LIB_ROOT/lib/perl5"
 export PERL_MB_OPT="--install_base '$PERL_LOCAL_LIB_ROOT'"
 export PERL_MM_OPT="INSTALL_BASE=$PERL_LOCAL_LIB_ROOT"
 
-append_path "$PERL_LOCAL_LIB_ROOT/bin"
+prepend_path "$PERL_LOCAL_LIB_ROOT/bin"
 
 export PATH
