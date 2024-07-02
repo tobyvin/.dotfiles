@@ -64,6 +64,7 @@ class Printer:
         self.bus_name = bus_name
         self.updated = asyncio.Event()
         self.title = None
+        self.title_iter = ""
         self.mpris = None
         self.player = None
         self.playerctl = None
@@ -115,7 +116,7 @@ class Printer:
         self.width += len(f" {Printer.ICONS["icon"]} ")
         self.sections[self.width] = Section.ICON
 
-        title = self.properties.get("Metadata", {}).get("xesam:title")
+        title = self.properties.get("Metadata", {}).get("xesam:title", "")
         if title != self.title:
             self.title = title
             self.title_iter = self.title + " "
@@ -161,9 +162,6 @@ class Printer:
         self.print()
 
     async def handle_button(self, data) -> bool:
-        with open("/tmp/mpris.json", "w") as f:
-            f.write(json.dumps(data))
-
         match data:
             case {"button": b, "relative_x": x, "width": w}:
                 button = b
