@@ -5,8 +5,6 @@ set $down j
 set $up k
 set $right l
 
-set $menu wmenu
-
 set $out1 -
 set $out2 -
 
@@ -21,7 +19,27 @@ set $ws08 8
 set $ws09 9
 set $ws10 10
 
+set $base00 #1d2021
+set $base01 #3c3836
+set $base02 #504945
+set $base03 #665c54
+set $base04 #bdae93
+set $base05 #d5c4a1
+set $base06 #ebdbb2
+set $base07 #fbf1c7
+set $base08 #fb4934
+set $base09 #fe8019
+set $base0A #fabd2f
+set $base0B #b8bb26
+set $base0C #8ec07c
+set $base0D #83a598
+set $base0E #d3869b
+set $base0F #d65d0e
+
 include ~/.config/sway/config.d/*
+
+set $menu wmenu -i -f'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
+set $menu-run wmenu-run -i -f'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
 
 # Property              Border  BG      Text    Indicator Child Border
 client.focused          $base05 $base0D $base00 $base0D $base0D
@@ -98,7 +116,7 @@ bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 
 bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL
-bindsym $mod+shift+space exec wmenu-run | $menu | xargs -r swaymsg exec --
+bindsym $mod+shift+space exec $menu-run
 
 bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
