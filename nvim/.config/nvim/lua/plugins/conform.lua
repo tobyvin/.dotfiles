@@ -26,6 +26,8 @@ local M = {
 		formatters = {
 			latexindent = {
 				prepend_args = {
+					"-g",
+					"/dev/null",
 					"-l",
 					("%s/latexindent/indentconfig.yaml"):format(vim.env.XDG_CONFIG_HOME),
 				},
