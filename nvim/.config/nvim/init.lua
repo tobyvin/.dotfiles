@@ -1,4 +1,6 @@
 U = require("tobyvin.utils")
+vim.ui.select = U.ui.select
+vim.ui.input = U.ui.input
 require("tobyvin.options")
 require("tobyvin.filetype")
 require("tobyvin.autocmds")

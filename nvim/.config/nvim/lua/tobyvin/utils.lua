@@ -1,29 +1,16 @@
 local M = {
-	fs = require("tobyvin.utils.fs"),
 	buf = require("tobyvin.utils.buf"),
-	dashboard = require("tobyvin.utils.dashboard"),
-	session = require("tobyvin.utils.session"),
 	dap = require("tobyvin.utils.dap"),
+	dashboard = require("tobyvin.utils.dashboard"),
+	fs = require("tobyvin.utils.fs"),
 	lsp = require("tobyvin.utils.lsp"),
+	session = require("tobyvin.utils.session"),
+	ui = require("tobyvin.utils.ui"),
 }
 
 function M.inspect(v)
 	print(vim.inspect(v))
 	return v
-end
-
-function M.select(items, opts, on_choice)
-	if #items == 1 then
-		on_choice(items[1])
-	elseif #items > 1 then
-		vim.ui.select(items, opts, function(item, idx)
-			if item ~= nil then
-				on_choice(item, idx)
-			end
-		end)
-	else
-		vim.print("No results found")
-	end
 end
 
 function M.lazy_require(modname)
