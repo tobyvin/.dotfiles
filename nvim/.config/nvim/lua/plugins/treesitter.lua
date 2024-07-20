@@ -22,6 +22,7 @@ local M = {
 			"cpp",
 			"c_sharp",
 			"css",
+			"comment",
 			"dap_repl",
 			"diff",
 			"gitignore",
