@@ -34,42 +34,32 @@ command=$SCRIPT_DIR/i3blocks-gpu
 command=$SCRIPT_DIR/i3blocks-net
 
 [mpris_icon]
-command=$SCRIPT_DIR/mpris-icon
+command=i3blocks-mpris icon
 interval=persist
 format=json
-separator=false
-separator_block_width=0
 
 [mpris_title]
-command=$SCRIPT_DIR/mpris-title
+command=i3blocks-mpris title
 interval=persist
 format=json
-separator=false
-separator_block_width=0
 
 [mpris_prev]
-command=$SCRIPT_DIR/mpris-prev
+command=i3blocks-mpris prev
 interval=persist
 format=json
-separator=false
-separator_block_width=0
 
 [mpris_play]
-command=$SCRIPT_DIR/mpris-play
+command=i3blocks-mpris play
 interval=persist
 format=json
-separator=false
-separator_block_width=0
 
 [mpris_next]
-command=$SCRIPT_DIR/mpris-next
+command=i3blocks-mpris next
 interval=persist
 format=json
-separator=false
-separator_block_width=0
 
 [mpris_volume]
-command=$SCRIPT_DIR/mpris-volume
+command=i3blocks-mpris volume
 interval=persist
 format=json
 
