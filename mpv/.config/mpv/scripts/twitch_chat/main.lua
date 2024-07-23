@@ -1,3 +1,4 @@
+local mp = require("mp")
 local Chat = require("chat")
 local msg = require("mp.msg")
 

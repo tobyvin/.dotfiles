@@ -128,6 +128,7 @@ bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard --menu-cmd "$menu -l
 bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type --menu-cmd "$menu -l 10"
 
 bindsym $mod+t exec twitch-live | $menu -l 10 | cut -d ':' -f1 | xargs -r -I_ swaymsg "exec streamlink-twitch-gui --launch _"
+bindsym $mod+m exec sway-mpv | $menu -l 10 | sway-mpv
 
 bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-

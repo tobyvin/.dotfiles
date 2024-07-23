@@ -1,3 +1,5 @@
+local mp = require("mp")
+
 ---@class twitch.Chat
 ---@field cwd string
 ---@field channel string
