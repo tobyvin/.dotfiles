@@ -77,12 +77,12 @@ for_window [class="^[Ss]team$" title="^Steam$"] floating disable
 for_window [class="^[Ss]team$" title="^Sign in to Steam$"] move to scratchpad
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px
-for_window [app_id="discord" title="^Discord Updater$"] move to scratchpad
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 
 assign [app_id="" title="^Streamlink Twitch GUI$"] $ws06
 assign [app_id="mpv"] $ws06
 assign [app_id="discord"] $ws07
+assign [app_id="vesktop"] $ws07
 
 no_focus [app_id="deno" title="^Peek preview$"]
 
