@@ -1,6 +1,4 @@
-interval=5
-
-[i3blocks-title]
+[i3blocks]
 command=$SCRIPT_DIR/i3blocks-title
 max_length=30
 interval=persist
@@ -15,6 +13,7 @@ interval=30
 
 [notmuch]
 command=$SCRIPT_DIR/i3blocks-notmuch
+interval=5
 
 [disk]
 command=$SCRIPT_DIR/i3blocks-disk
@@ -22,16 +21,20 @@ interval=20
 
 [memory]
 command=$SCRIPT_DIR/i3blocks-memory
+interval=5
 
 [cpu]
 command=$SCRIPT_DIR/i3blocks-cpu
+interval=5
 format=json
 
 [gpu]
 command=$SCRIPT_DIR/i3blocks-gpu
+interval=5
 
 [net]
 command=$SCRIPT_DIR/i3blocks-net
+interval=5
 
 [mpris_icon]
 command=i3blocks-mpris icon
@@ -60,11 +63,6 @@ format=json
 
 [mpris_volume]
 command=i3blocks-mpris volume
-interval=persist
-format=json
-
-[mic]
-command=$SCRIPT_DIR/i3blocks-mic
 interval=persist
 format=json
 
