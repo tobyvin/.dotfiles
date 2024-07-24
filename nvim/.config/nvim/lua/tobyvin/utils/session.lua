@@ -1,7 +1,10 @@
-local M = {}
+local M = {
+	---@diagnostic disable-next-line: param-type-mismatch
+	session_dir = vim.fs.joinpath(vim.fn.stdpath("state"), "session"),
+}
 
 ---@return string session_path
-function M.session_path()
+function M.session_name()
 	if vim.v.this_session and vim.v.this_session ~= "" then
 		return vim.v.this_session
 	end
@@ -12,11 +15,11 @@ function M.session_path()
 		error(("Invalid session name: '%s'"):format(name))
 	end
 
-	return U.fs.xdg.data("nvim", "session", name)
+	return vim.fs.joinpath(M.session_dir, name)
 end
 
 function M.write()
-	local is_ok, res = pcall(M.session_path)
+	local is_ok, res = pcall(M.session_name)
 	if not is_ok then
 		return vim.notify(res, vim.log.levels.ERROR)
 	end
@@ -31,7 +34,7 @@ function M.write()
 end
 
 function M.read()
-	local is_ok, session_file = pcall(M.session_path)
+	local is_ok, session_file = pcall(M.session_name)
 	if not is_ok then
 		return vim.notify(session_file, vim.log.levels.ERROR)
 	end
