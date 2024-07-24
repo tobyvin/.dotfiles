@@ -39,7 +39,6 @@ set $base0F #d65d0e
 include ~/.config/sway/config.d/*
 
 set $menu wmenu -i -f'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
-set $menu-run wmenu-run -i -f'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
 
 # Property              Border  BG      Text    Indicator Child Border
 client.focused          $base05 $base0D $base00 $base0D $base0D
@@ -72,13 +71,17 @@ output * bg ~/.local/share/gruvbox/sway.png fill
 for_window [shell=".*"] inhibit_idle fullscreen
 for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
 for_window [app_id="^$" title="^$"] floating enable, move position cursor
-for_window [class="^[Ss]team$"] floating enable
-for_window [class="^[Ss]team$" title="^Steam$"] floating disable
-for_window [class="^[Ss]team$" title="^Sign in to Steam$"] move to scratchpad
+for_window [class="^steam$"] floating enable
+for_window [class="^steam$" title="^Steam$"] floating disable
+for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
+for_window [class="^steam_app_252950$" title="^Rocket League.*"] floating disable
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 
+
+assign [class="^steam$" title="^Steam$"] $ws03
+assign [class="^steam_app_\d+$" instance="^steam_app_\d+$"] $ws03
 assign [app_id="" title="^Streamlink Twitch GUI$"] $ws06
 assign [app_id="mpv"] $ws06
 assign [app_id="discord"] $ws07
@@ -115,8 +118,8 @@ bindsym $mod+w exec $BROWSER
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 
-bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL
-bindsym $mod+shift+space exec $menu-run
+bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL --wrapper='swaymsg exec --'
+bindsym $mod+shift+space exec dmenu_path | $menu | xargs swaymsg exec --
 
 bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
