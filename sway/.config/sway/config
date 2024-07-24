@@ -251,7 +251,8 @@ bar {
 
 include /etc/sway/config.d/*
 
-exec_always {
+exec {
 	import-gsettings
 	systemctl --user start sway-session.target
+	swaymsg "workspace $ws02, move workspace output $out1; workspace $ws01"
 }
