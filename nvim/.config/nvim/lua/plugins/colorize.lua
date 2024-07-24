@@ -18,7 +18,7 @@ local M = {
 			"htmldjango",
 		},
 		user_default_options = {
-			mode = "virtualtext",
+			mode = "virtualtext_inline",
 		},
 	},
 }
