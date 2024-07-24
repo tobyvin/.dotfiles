@@ -13,11 +13,10 @@ if [ "$#" -eq 0 ]; then
     esac | sed '1s|File: ||'
   ) 2>/dev/null"
 
-
 	# shellcheck disable=2046
 	set -- $(
-		projectr -mgt ~/src ~/pkg ~/dkr ~/doc -P ~/.dotfiles --exclude-cwd |
-			fzf-tmux -p100,30 -- --tac --exit-0 -d/ --with-nth 4.. \
+		projectr -mgt ~/.local/src ~/.local/pkg -P ~/.dotfiles --exclude-cwd |
+			fzf-tmux -p100,30 -- --tac --exit-0 -d/ --with-nth -1 \
 				--bind "focus:transform-header(echo {} | sed 's|$HOME|~|')" \
 				--preview-window='right,60,<60(hidden)' --preview="$PREVIEW_CMD"
 	)

@@ -16,7 +16,7 @@ require("lazy").setup("plugins", {
 		lazy = true,
 	},
 	dev = {
-		path = "~/src",
+		path = "~/.local/src",
 		patterns = { "tobyvin" },
 	},
 	install = {
