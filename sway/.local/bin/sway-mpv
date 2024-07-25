@@ -3,7 +3,7 @@
 if [ ! -t 0 ]; then
 	set -- "$@" "$(cat)"
 elif [ $# -eq 0 ]; then
-	IFS=: grep -Po '# title: \K.*' "$XDG_STATE_HOME"/mpv/watch_later/* | while IFS=: read -r file match; do
+	grep -Po '# title: \K.*' "$XDG_STATE_HOME"/mpv/watch_later/* | while IFS=: read -r file match; do
 		grep -Pom1 '# \K.*' "$file" | tr -d '\n'
 		printf ': %s\n' "$match"
 	done
@@ -11,4 +11,4 @@ elif [ $# -eq 0 ]; then
 fi
 
 # shellcheck disable=SC2068
-swaymsg exec -- mpv "${1%*:*}"
+swaymsg exec -- mpv --msg-level=all=no "${1%*:*}"
