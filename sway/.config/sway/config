@@ -82,10 +82,10 @@ for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 
 assign [class="^steam$" title="^Steam$"] $ws03
 assign [class="^steam_app_\d+$" instance="^steam_app_\d+$"] $ws03
-assign [app_id="" title="^Streamlink Twitch GUI$"] $ws06
-assign [app_id="mpv"] $ws06
-assign [app_id="discord"] $ws07
-assign [app_id="vesktop"] $ws07
+assign [app_id="" title="^Streamlink Twitch GUI$"] $ws07
+assign [app_id="mpv"] $ws07
+assign [app_id="discord"] $ws08
+assign [app_id="vesktop"] $ws08
 
 no_focus [app_id="deno" title="^Peek preview$"]
 
@@ -190,8 +190,9 @@ bindsym $mod+Ctrl+Right move workspace to output right
 bindsym $mod+Ctrl+6 workspace back_and_forth
 bindsym $mod+Tab workspace back_and_forth
 
-bindsym $mod+s workspace $ws06
-bindsym $mod+d workspace $ws07
+bindsym $mod+a workspace $ws06
+bindsym $mod+s workspace $ws07
+bindsym $mod+d workspace $ws08
 bindsym $mod+1 workspace $ws01
 bindsym $mod+2 workspace $ws02
 bindsym $mod+3 workspace $ws03
@@ -203,8 +204,9 @@ bindsym $mod+8 workspace $ws08
 bindsym $mod+9 workspace $ws09
 bindsym $mod+0 workspace $ws10
 
-bindsym $mod+Shift+s move container to workspace $ws06, workspace $ws06
-bindsym $mod+Shift+d move container to workspace $ws07, workspace $ws07
+bindsym $mod+Shift+a move container to workspace $ws06, workspace $ws06
+bindsym $mod+Shift+s move container to workspace $ws07, workspace $ws07
+bindsym $mod+Shift+d move container to workspace $ws08, workspace $ws08
 bindsym $mod+Shift+1 move container to workspace $ws01, workspace $ws01
 bindsym $mod+Shift+2 move container to workspace $ws02, workspace $ws02
 bindsym $mod+Shift+3 move container to workspace $ws03, workspace $ws03
