@@ -124,6 +124,7 @@ bindsym $mod+shift+space exec dmenu_path | $menu | xargs swaymsg exec --
 
 bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
+bindsym $mod+c exec slurp | grim -g - - | tesseract - - | wl-copy
 
 bindsym $mod+p exec passmenu | $menu | passmenu | wl-copy -o
 bindsym $mod+Shift+p exec passmenu | $menu | passmenu | wtype -
