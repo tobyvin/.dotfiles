@@ -7,6 +7,12 @@ local M = {
 function M:config(opts)
 	require("presence").setup(opts)
 
+	vim.api.nvim_create_autocmd("SessionLoadPost", {
+		callback = function()
+			require("presence"):handle_win_enter()
+		end,
+	})
+
 	vim.api.nvim_create_autocmd("FocusLost", {
 		group = vim.api.nvim_create_augroup("tobyvin.presence_idle", { clear = true }),
 		callback = function()
