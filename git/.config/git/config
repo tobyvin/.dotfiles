@@ -49,9 +49,6 @@ difftool = true
 [merge]
 tool = nvimdiff
 
-[mergetool "nvimdiff"]
-layout = "MERGED"
-
 [trailer]
 separators = ":#"
 
