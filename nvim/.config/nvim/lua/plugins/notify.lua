@@ -18,10 +18,6 @@ local M = {
 function M:init()
 	---@diagnostic disable-next-line: duplicate-set-field
 	vim.notify = function(...)
-		-- TODO: fix for bug in conform causing `err.message` to be nil in notify callback
-		if select(1, ...) == nil then
-			return
-		end
 		return require("notify").notify(...)
 	end
 end

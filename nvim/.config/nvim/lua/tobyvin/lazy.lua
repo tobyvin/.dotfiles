@@ -18,6 +18,7 @@ require("lazy").setup("plugins", {
 	dev = {
 		path = "~/.local/src",
 		patterns = { "tobyvin" },
+		fallback = true,
 	},
 	install = {
 		colorscheme = {

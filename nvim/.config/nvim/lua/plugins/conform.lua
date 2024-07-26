@@ -1,6 +1,7 @@
 ---@type LazyPluginSpec
 local M = {
 	"stevearc/conform.nvim",
+	dev = true,
 	version = "*",
 	cmd = { "ConformInfo" },
 	opts = {
