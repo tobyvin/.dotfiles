@@ -3,12 +3,13 @@ local M = {}
 function M.select(items, opts, on_choice)
 	vim.validate({
 		items = { items, "table", false },
-		opts = { opts, { "table", nil }, false },
+		opts = { opts, { "table", "nil" }, false },
 		on_choice = { on_choice, "function", false },
 	})
 
 	opts = vim.tbl_extend("keep", opts or {}, {
 		format_item = tostring,
+		prompt = "Select",
 	})
 
 	local fmt_items = vim.iter(items)
@@ -20,10 +21,8 @@ function M.select(items, opts, on_choice)
 
 	---@type vim.api.keyset.win_config
 	local config = {
-		width = vim.iter(fmt_items):fold(vim.api.nvim_strwidth(opts.prompt), function(acc, item)
-			return math.max(vim.api.nvim_strwidth(item), acc)
-		end),
-		height = #items,
+		width = vim.iter(fmt_items):map(vim.api.nvim_strwidth):fold(vim.api.nvim_strwidth(opts.prompt), math.max),
+		height = math.min(#items, 10),
 		zindex = 200,
 		style = "minimal",
 		border = "single",
@@ -103,16 +102,19 @@ end
 
 function M.input(opts, on_confirm)
 	vim.validate({
-		opts = { opts, "table", true },
+		opts = { opts, { "table", "nil" }, true },
 		on_confirm = { on_confirm, "function", false },
 	})
 
-	opts = opts or {}
+	opts = vim.tbl_extend("keep", opts or {}, {
+		prompt = "Input",
+	})
+
 	M.completion = opts.completion
 
 	local config = {
 		relative = "cursor",
-		width = vim.print(math.max(vim.api.nvim_strwidth(opts.prompt or ""), 20)),
+		width = math.max(vim.api.nvim_strwidth(opts.prompt or ""), 20),
 		height = 1,
 		row = 1,
 		col = 0,
