@@ -18,7 +18,7 @@ local M = {
 				if vim.wo.diff then
 					return "]c"
 				else
-					return [[<Cmd>lua require("gitsigns').nav_hunk("next", { preview = true })<CR>]]
+					return [[<Cmd>lua require("gitsigns").nav_hunk("next")<CR>]]
 				end
 			end, { expr = true, desc = "next hunk", buffer = bufnr })
 
@@ -26,7 +26,7 @@ local M = {
 				if vim.wo.diff then
 					return "[c"
 				else
-					return [[<Cmd>lua require("gitsigns").nav_hunk("prev", { preview = true })<CR>]]
+					return [[<Cmd>lua require("gitsigns").nav_hunk("prev")<CR>]]
 				end
 			end, {
 				expr = true,

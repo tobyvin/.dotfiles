@@ -52,6 +52,7 @@ vim.opt.updatetime = 500
 vim.opt.wildignore:append({ "*.o", "*.rej", "*.so", "*~", "*.pyc", "*pycache*", "Cargo.lock" })
 vim.opt.wildmode = "longest:full,full"
 vim.opt.wrap = false
+vim.opt.wrapscan = false
 
 vim.api.nvim_create_autocmd("FileType", {
 	group = vim.api.nvim_create_augroup("options", { clear = true }),
