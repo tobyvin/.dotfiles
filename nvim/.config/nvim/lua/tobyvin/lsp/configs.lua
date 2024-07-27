@@ -2,6 +2,7 @@
 
 local ms = vim.lsp.protocol.Methods
 
+---@type table<string, lspconfig.Config>
 local M = {
 	bashls = {
 		filetypes = { "sh", "PKGBUILD" },
@@ -140,6 +141,39 @@ local M = {
 				},
 			},
 		},
+		on_attach = function(client, bufnr)
+			vim.keymap.set({ "x", "n" }, "gx", function()
+				local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+				local resp, err = client.request_sync("experimental/externalDocs", params, nil, bufnr)
+
+				if resp == nil then
+					if err then
+						vim.notify(
+							string.format("External docs request failed: %s", err),
+							vim.log.levels.ERROR,
+							{ title = client.name }
+						)
+					end
+					return "gx"
+				else
+					if resp.err then
+						vim.notify(
+							string.format(
+								"%s error: [%s] %s",
+								client.name,
+								resp.err.code or "unknown code",
+								resp.err.data or "(no description)"
+							),
+							vim.log.levels.ERROR,
+							{ title = client.name }
+						)
+					elseif resp.result then
+						vim.ui.open(resp.result["local"] or resp.result.web or resp.result)
+					end
+					return "<Ignore>"
+				end
+			end, { expr = true, desc = "open external docs", buffer = bufnr })
+		end,
 	},
 	ruff_lsp = {
 		on_attach = function(client)
