@@ -268,5 +268,5 @@ include /etc/sway/config.d/*
 exec {
 	import-gsettings
 	systemctl --user start sway-session.target
-	swaymsg "workspace $ws02, move workspace output $out1; workspace $ws01"
+	swaymsg "workspace $ws06; workspace $ws01"
 }
