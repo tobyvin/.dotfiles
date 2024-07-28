@@ -55,9 +55,8 @@ vim.opt.wrap = false
 vim.opt.wrapscan = false
 
 vim.api.nvim_create_autocmd("FileType", {
-	group = vim.api.nvim_create_augroup("options", { clear = true }),
+	group = vim.api.nvim_create_augroup("user.options", { clear = true }),
 	callback = function()
-		---@diagnostic disable-next-line: param-type-mismatch
 		vim.opt_local.formatoptions:remove("o")
 	end,
 })

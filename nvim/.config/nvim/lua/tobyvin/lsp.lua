@@ -1,4 +1,4 @@
-local augroup = vim.api.nvim_create_augroup("lsp", { clear = true })
+local augroup = vim.api.nvim_create_augroup("user.lsp", { clear = true })
 
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = augroup,

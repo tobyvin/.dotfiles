@@ -14,7 +14,7 @@ function M:config(opts)
 	})
 
 	vim.api.nvim_create_autocmd("FocusLost", {
-		group = vim.api.nvim_create_augroup("tobyvin.presence_idle", { clear = true }),
+		group = vim.api.nvim_create_augroup("user.presence", { clear = true }),
 		callback = function()
 			local idle_timer = vim.defer_fn(function()
 				require("presence").log:debug("Idle timeout reached...")

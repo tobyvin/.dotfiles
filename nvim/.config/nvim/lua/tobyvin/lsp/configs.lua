@@ -142,7 +142,7 @@ local M = {
 			},
 		},
 		on_attach = function(client, bufnr)
-			vim.keymap.set({ "x", "n" }, "gx", function()
+			local function external_docs()
 				local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
 				local resp, err = client.request_sync("experimental/externalDocs", params, nil, bufnr)
 
@@ -172,14 +172,18 @@ local M = {
 					end
 					return "<Ignore>"
 				end
-			end, { expr = true, desc = "open external docs", buffer = bufnr })
+			end
+
+			vim.keymap.set({ "x", "n" }, "gx", external_docs, {
+				expr = true,
+				desc = "open external docs",
+				buffer = bufnr,
+			})
 		end,
 	},
 	ruff_lsp = {
 		on_attach = function(client)
-			if client.name == "ruff_lsp" then
-				client.server_capabilities.hoverProvider = false
-			end
+			client.server_capabilities.hoverProvider = false
 		end,
 	},
 	taplo = {},
@@ -209,7 +213,7 @@ local M = {
 					onOpenAndSave = true,
 				},
 				latexindent = {
-					["local"] = string.format("%s/latexindent/indentconfig.yaml", vim.env.XDG_CONFIG_HOME),
+					["local"] = vim.fs.joinpath(vim.env.XDG_CONFIG_HOME, "latexindent/indentconfig.yaml"),
 					modifyLineBreaks = true,
 				},
 			},
@@ -217,7 +221,6 @@ local M = {
 		on_attach = function(_, bufnr)
 			vim.b[bufnr].tex_flavor = "latex"
 			vim.wo[0][bufnr].spell = true
-			vim.keymap.set("n", "gx", vim.cmd.TexlabForward, { desc = "open in pdf" })
 		end,
 	},
 	typos_lsp = {

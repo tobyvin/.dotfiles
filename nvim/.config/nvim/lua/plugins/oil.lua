@@ -19,7 +19,7 @@ function M:init()
 	end, { desc = "Open parent directory" })
 
 	vim.api.nvim_create_autocmd("User", {
-		group = vim.api.nvim_create_augroup("tobyvin_oil", { clear = true }),
+		group = vim.api.nvim_create_augroup("user.oil", { clear = true }),
 		pattern = "SessionSavePre",
 		callback = function(args)
 			if vim.bo[args.buf].filetype == "oil" then
