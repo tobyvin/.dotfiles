@@ -10,6 +10,7 @@ vim.opt.cursorline = true
 vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff" }
 vim.opt.equalalways = false
 vim.opt.expandtab = false
+vim.opt.exrc = true
 vim.opt.fillchars:append("fold: ")
 vim.opt.foldenable = false
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
