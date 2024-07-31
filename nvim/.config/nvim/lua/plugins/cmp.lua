@@ -1,3 +1,9 @@
+local function in_comment()
+	return vim.api.nvim_get_mode()["mode"] ~= "c"
+		and require("cmp.config.context").in_treesitter_capture("comment")
+		and require("cmp.config.context").in_syntax_group("Comment")
+end
+
 ---@type LazyPluginSpec
 local M = {
 	"hrsh7th/nvim-cmp",
@@ -8,34 +14,23 @@ local M = {
 		"hrsh7th/cmp-nvim-lsp",
 		"hrsh7th/cmp-cmdline",
 	},
-}
-
-function M:config()
-	local cmp = require("cmp")
-
-	local default = require("cmp.config.default")()
-	local context = require("cmp.config.context")
-
-	local in_comment = function()
-		return vim.api.nvim_get_mode()["mode"] ~= "c"
-			and context.in_treesitter_capture("comment")
-			and context.in_syntax_group("Comment")
-	end
-
-	cmp.setup.global({
+	opts = {
 		enabled = function()
-			return default.enabled() and not in_comment()
+			return require("cmp.config.default")().enabled() and vim.api.nvim_get_mode()["mode"] == "c"
+				or not require("cmp.config.context").in_treesitter_capture("comment")
+				or not require("cmp.config.context").in_syntax_group("Comment")
 		end,
 		window = {
-			completion = cmp.config.window.bordered({
+			completion = {
 				border = "single",
+				winhighlight = "CursorLine:Visual,Search:None",
 				scrolloff = 1,
-			}),
-			documentation = cmp.config.window.bordered({
+			},
+			documentation = {
 				border = "single",
-			}),
+				winhighlight = "CursorLine:Visual,Search:None",
+			},
 		},
-		---@diagnostic disable-next-line: missing-fields
 		formatting = {
 			format = function(_, vim_item)
 				vim_item.menu = nil
@@ -43,34 +38,72 @@ function M:config()
 			end,
 		},
 		mapping = {
-			["<C-p>"] = { i = cmp.mapping.select_prev_item() },
-			["<C-n>"] = { i = cmp.mapping.select_next_item() },
-			["<C-d>"] = { i = cmp.mapping.scroll_docs(4) },
-			["<C-u>"] = { i = cmp.mapping.scroll_docs(-4) },
-			["<C-Space>"] = { i = cmp.mapping.complete({}) },
-			["<CR>"] = { i = cmp.mapping.confirm() },
-			["<C-y>"] = { i = cmp.mapping.confirm({ select = false }) },
-			["<C-e>"] = { i = cmp.mapping.abort() },
+			["<C-p>"] = {
+				i = function(fallback)
+					if not require("cmp").select_prev_item() then
+						local release = require("cmp").core:suspend()
+						fallback()
+						vim.schedule(release)
+					end
+				end,
+			},
+			["<C-n>"] = {
+				i = function(fallback)
+					if not require("cmp").select_next_item() then
+						local release = require("cmp").core:suspend()
+						fallback()
+						vim.schedule(release)
+					end
+				end,
+			},
+			["<C-d>"] = {
+				i = function(fallback)
+					if not require("cmp").scroll_docs(4) then
+						fallback()
+					end
+				end,
+			},
+			["<C-u>"] = {
+				i = function(fallback)
+					if not require("cmp").scroll_docs(-4) then
+						fallback()
+					end
+				end,
+			},
+			["<C-Space>"] = {
+				i = function(fallback)
+					if not require("cmp").complete({}) then
+						fallback()
+					end
+				end,
+			},
+			["<CR>"] = {
+				i = function(fallback)
+					if not require("cmp").confirm() then
+						fallback()
+					end
+				end,
+			},
+			["<C-y>"] = {
+				i = function(fallback)
+					if not require("cmp").confirm({ select = false }) then
+						fallback()
+					end
+				end,
+			},
+			["<C-e>"] = {
+				i = function(fallback)
+					if not require("cmp").abort() then
+						fallback()
+					end
+				end,
+			},
 		},
 		sources = {
 			{ name = "nvim_lsp" },
 			{ name = "path" },
 		},
-	})
-
-	cmp.setup.cmdline(":", {
-		mapping = cmp.mapping.preset.cmdline(),
-		sources = {
-			{ name = "cmdline" },
-		},
-	})
-
-	cmp.setup.cmdline({ "/", "?", "@" }, {
-		mapping = cmp.mapping.preset.cmdline(),
-		sources = {
-			{ name = "buffer", keyword_length = 3 },
-		},
-	})
-end
+	},
+}
 
 return M
