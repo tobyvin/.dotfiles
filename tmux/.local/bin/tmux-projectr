@@ -1,41 +1,23 @@
 #!/bin/sh
 
 if [ "$#" -eq 0 ]; then
-	PREVIEW_CMD="(
-    onefetch --include-hidden --no-art --no-color-palette {}  &&
-      printf '\n'
-    tree -CL 3 --gitignore --noreport --filelimit=50 {} &&
-      printf '\n'
-    case {}/ in
-      */dkr/*) bat -f --style=header {}/docker-compose.yml;;
-      */pkg/*) bat -f --style=header {}/PKGBUILD;;
-      *) bat -f --style=header {}/README.md;;
-    esac | sed '1s|File: ||'
-  ) 2>/dev/null"
-
-	# shellcheck disable=2046
-	set -- $(
-		projectr -mgt ~/.local/src --exclude-cwd |
-			fzf-tmux -p100,30 -- --tac --exit-0 -d/ --with-nth -1 \
-				--bind "focus:transform-header(echo {} | sed 's|$HOME|~|')" \
-				--preview-window='right,60,<60(hidden)' --preview="$PREVIEW_CMD"
-	)
-
+	set -- "$(
+		find ~/.local/src/* -prune ! -path "$(pwd)" -printf "%T+\t%p\n" | sort | cut -f2 |
+			fzf --tmux --tac --exit-0 -d/ --with-nth=-1 --preview='lesspipe.sh {}'
+	)"
 	test -n "$1" || exit 0
 fi
 
-if [ -z "$2" ]; then
-	if [ -z "$(tmux list-sessions -f "#{==:#{session_path},$1}" -F '#S' 2>/dev/null)" ]; then
-		tmux new-session -dc "$1"
-	fi
-
-	set -- "$1" "$(tmux list-sessions -f "#{==:#{session_path},$1}" -F '#S' 2>/dev/null)"
-elif ! tmux has-session -t "$2" 2>/dev/null; then
-	tmux new-session -dc "$1" -s "$2"
+if [ ! -d "$1" ]; then
+	exit 1
 fi
 
-if [ -z "$TMUX" ] && [ -z "$2" ]; then
-	tmux attach-session -t "$2"
-elif tmux has-session -t "$2" 2>/dev/null; then
-	tmux switch-client -t "$2"
+if ! session="$(tmux ls -f "#{==:#{session_path},$1}" -F '#S' 2>/dev/null | grep ^)"; then
+	session="$(tmux new -dc "$1" -PF'#S')"
+fi
+
+if [ -z "$TMUX" ]; then
+	tmux attach-session -t "$session"
+else
+	tmux switch-client -t "$session"
 fi
