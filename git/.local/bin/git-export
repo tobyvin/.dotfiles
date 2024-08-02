@@ -2,27 +2,84 @@
 
 GIT_SERVER=${GIT_SERVER:-"git.tobyvin.dev"}
 
+SCRIPT="$(basename "$0")"
+
+long='help,init::,force'
+short='hi::f'
+
+if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
+	exit 1
+fi
+
+eval set -- "$opts"
+
 help() {
 	cat <<-EOF
-		$(ssh "git@$GIT_SERVER" -- export --help | sed 's/<REPO> //g; /^\s\+REPO/d')
+		$(ssh "git@$GIT_SERVER" -- export --help)
+
+		OPTIONS ($SCRIPT)
+		    -i, --init [<NAME>] Set $GIT_SERVER as the remote for the local repo and
+		                        initialize the bare repository, <NAME>, on the
+		                        remote.
+
+		                        If <NAME> is ommited, it will default to
+		                        using the basename of the repository.
+
+		                        This will fail if origin is already set, unless '-f'
+		                        or '--force' is passed.
+
+		    -f, --force         When setting the remote via the '-i' or '--init'
+		                        option, overwrite the existing origin.
 
 		NOTE
-		    The was run via the git-export helper script/shim. The current GIT_DIR,
-		    is used as the <REPO> argument.
+		    This was run via the local git-export helper script. The current
+		    <GIT_DIR> is used in place of <REPO> argument.
+
 	EOF
 }
 
+if ! name="$(git rev-parse --show-toplevel | xargs basename)"; then
+	exit 1
+fi
+
+init=false
+force=false
 for arg; do
 	case "$arg" in
 	-h | --help)
 		help
 		exit 0
 		;;
+	-i | --init)
+		init=true
+		name=${2:-$name}
+		;;
+	-f | --force)
+		force=true
+		;;
 	esac
 done
 
-if ! repo=$(git remote get-url origin | grep -Po "$GIT_SERVER:\K.*") || [ -z "$repo" ]; then
-	exit 1
+origin=$(git remote get-url origin)
+
+if ! repo=$(printf '%s' "$origin" | grep -Po "$GIT_SERVER:\K.*") || [ -z "$repo" ]; then
+	if ! $init; then
+		printf 'Remote origin is not set to %s\n' "$GIT_SERVER" 1>&2
+		exit 1
+	fi
+
+	if [ -n "$origin" ]; then
+		if ! $force; then
+			printf "Remote origin is already set. Use '-f' or '--force' to overwrite it\n" 1>&2
+			exit 1
+		fi
+
+		git remote rm origin
+	fi
+
+	git remote add origin git@"$GIT_SERVER":
+	ssh "git@$GIT_SERVER" -- init "$name"
+	repo="$name"
 fi
 
 # shellcheck disable=SC2046
