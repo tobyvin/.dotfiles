@@ -1,69 +1,69 @@
 [user]
-email = tobyv@tobyvin.dev
-name = Toby Vincent
-username = tobyvin
-signingkey = 0xA0876F29023F43AF
+	email = tobyv@tobyvin.dev
+	name = Toby Vincent
+	username = tobyvin
+	signingkey = 0xA0876F29023F43AF
 
 [sendemail]
-from = Toby Vincent <tobyv@tobyvin.dev>
+	from = Toby Vincent <tobyv@tobyvin.dev>
 
 [commit]
-gpgsign = true
+	gpgsign = true
 
 [init]
-defaultBranch = main
+	defaultBranch = main
 
 [push]
-autoSetupRemote = true
-followTags = true
+	autoSetupRemote = true
+	followTags = true
 
 [pull]
-rebase = true
+	rebase = true
 
 [merge]
-ff = only
+	ff = only
 
 [fetch]
-prune = true
+	prune = true
 
 [revert]
-reference = true
+	reference = true
 
 [rerere]
-enabled = true
+	enabled = true
 
 [diff]
-colorMoved = default
-colorMovedWS = allow-indentation-change
-tool = difft
+	colorMoved = default
+	colorMovedWS = allow-indentation-change
+	tool = difft
 
 [difftool]
-prompt = false
+	prompt = false
 
 [difftool "difft"]
-cmd = difft "$LOCAL" "$REMOTE"
+	cmd = difft "$LOCAL" "$REMOTE"
 
 [pager]
-difftool = true
+	difftool = true
 
 [merge]
-tool = nvimdiff
+	tool = nvimdiff
 
 [trailer]
-separators = ":#"
+	separators = ":#"
 
 [trailer "fix"]
-key = "Fix #"
+	key = "Fix #"
 
 [filter "lfs"]
-clean = git-lfs clean -- %f
-smudge = git-lfs smudge -- %f
-process = git-lfs filter-process
-required = true
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
 
 [alias]
-st = status
-co = checkout
-rv = remote -v
-lg = log --oneline --decorate --branches --remotes --tags --abbrev-commit --graph
-ll = log --oneline --decorate --branches --remotes --tags --abbrev-commit --stat
+	st = status
+	co = checkout
+	rv = remote -v
+	lg = log --oneline --decorate --branches --remotes --tags --abbrev-commit --graph
+	ll = log --oneline --decorate --branches --remotes --tags --abbrev-commit --stat
