@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
 GIT_SERVER=${GIT_SERVER:-"git.tobyvin.dev"}
 
 SCRIPT="$(basename "$0")"
 
-long='help,init::,force'
-short='hi::f'
+long='help,delete,init,upstream,name:,section:,desc:'
+short='hdiu'
 
 if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
 	exit 1
@@ -18,18 +18,18 @@ help() {
 		$(ssh "git@$GIT_SERVER" -- export --help)
 
 		OPTIONS ($SCRIPT)
-		    -i, --init [<NAME>] Set $GIT_SERVER as the remote for the local repo and
-		                        initialize the bare repository, <NAME>, on the
-		                        remote.
+		    -i, --init      Initialize the bare repository on the remote.
+				-u, --upstream  Set $GIT_SERVER as the remote for the local repo.
+		    --name <NAME>   Name of the repository on the remote. By default it
+		                    will use the basename of the local repository. This
+		                    is also used as the value for cgitrc's repo.name option
 
-		                        If <NAME> is ommited, it will default to
-		                        using the basename of the repository.
+		    --section <SEC> Section name for the section for the repository on cgit.
+		                    By default, it will be in root section.
 
-		                        This will fail if origin is already set, unless '-f'
-		                        or '--force' is passed.
-
-		    -f, --force         When setting the remote via the '-i' or '--init'
-		                        option, overwrite the existing origin.
+		    --desc <DESC>   Description of the repository. If it is set to '-', the
+		                    description will be read from stdin. By default, it will
+		                    be blank.
 
 		NOTE
 		    This was run via the local git-export helper script. The current
@@ -38,49 +38,60 @@ help() {
 	EOF
 }
 
-if ! name="$(git rev-parse --show-toplevel | xargs basename)"; then
+if ! local_name=$(git rev-parse --show-toplevel | xargs basename); then
 	exit 1
 fi
+upstream_name=$(git remote get-url origin 2>/dev/null | grep -Po "$GIT_SERVER:\K.*")
 
+name=${upstream_name:-$local_name}
 init=false
-force=false
-for arg; do
-	case "$arg" in
+upstream=false
+while true; do
+	case "$1" in
 	-h | --help)
 		help
 		exit 0
 		;;
-	-i | --init)
-		init=true
-		name=${2:-$name}
+	-d | --delete) set -- "$@" "$1" ;;
+	-i | --init) init=true ;;
+	-u | --upstream) upstream=true ;;
+	--name)
+		shift
+		name="$1"
 		;;
-	-f | --force)
-		force=true
+	--section)
+		shift
+		set -- "$@" "section='$1'"
+		;;
+	--desc)
+		shift
+		set -- "$@" "desc='$1'"
+		;;
+	--)
+		shift
+		break
+		;;
+	*)
+		help
+		printf "Invalid argument: %s" "$1" 1>&2
+		exit 1
 		;;
 	esac
+	shift
 done
 
-origin=$(git remote get-url origin)
-
-if ! repo=$(printf '%s' "$origin" | grep -Po "$GIT_SERVER:\K.*") || [ -z "$repo" ]; then
-	if ! $init; then
-		printf 'Remote origin is not set to %s\n' "$GIT_SERVER" 1>&2
-		exit 1
-	fi
-
-	if [ -n "$origin" ]; then
-		if ! $force; then
-			printf "Remote origin is already set. Use '-f' or '--force' to overwrite it\n" 1>&2
-			exit 1
-		fi
-
-		git remote rm origin
-	fi
-
-	git remote add origin git@"$GIT_SERVER":
-	ssh "git@$GIT_SERVER" -- init "$name"
-	repo="$name"
+if [ -z "$name" ]; then
+	printf 'Failed to determine repo name\n' 1>&2
+	exit 1
 fi
 
-# shellcheck disable=SC2046
-ssh "git@$GIT_SERVER" -- export "$repo" $([ $# -gt 0 ] && printf '"%q" ' "$@")
+if $upstream; then
+	git remote rm origin 2>/dev/null
+	git remote add origin git@"$GIT_SERVER":"$name"
+fi
+
+if $init; then
+	ssh "git@$GIT_SERVER" -- init "$name" 2>/dev/null
+fi
+
+ssh "git@$GIT_SERVER" -- export "$name" "$@"
