@@ -1,0 +1,29 @@
+#!/bin/bash
+
+GIT_SERVER=${GIT_SERVER:-"git.tobyvin.dev"}
+
+help() {
+	cat <<-EOF
+		$(ssh "git@$GIT_SERVER" -- export --help | sed 's/<REPO> //g; /^\s\+REPO/d')
+
+		NOTE
+		    The was run via the git-export helper script/shim. The current GIT_DIR,
+		    is used as the <REPO> argument.
+	EOF
+}
+
+for arg; do
+	case "$arg" in
+	-h | --help)
+		help
+		exit 0
+		;;
+	esac
+done
+
+if ! repo=$(git remote get-url origin | grep -Po "$GIT_SERVER:\K.*") || [ -z "$repo" ]; then
+	exit 1
+fi
+
+# shellcheck disable=SC2046
+ssh "git@$GIT_SERVER" -- export "$repo" $([ $# -gt 0 ] && printf '"%q" ' "$@")
