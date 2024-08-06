@@ -1,11 +1,11 @@
 #!/bin/sh
 
-if [ "$#" -eq 0 ]; then
-	set -- "$(
-		find ~/.local/src/* -prune ! -path "$(pwd)" -printf "%T+\t%p\n" | sort | cut -f2 |
-			fzf --tmux --tac --exit-0 -d/ --with-nth=-1 --preview='lesspipe.sh {}'
-	)"
-	test -n "$1" || exit 0
+if [ "$1" = '-' ]; then
+	session="$(cat -)"
+	if [ -z "$session" ]; then
+		exit 0
+	fi
+	set -- "$session"
 fi
 
 if [ ! -d "$1" ]; then
