@@ -1,5 +1,10 @@
----@type LazySpec[]
+---@type LazySpec
 local M = {
+	{
+		"nvim-lua/plenary.nvim",
+		version = false,
+		optional = true,
+	},
 	{
 		"eandrju/cellular-automaton.nvim",
 		cmd = "CellularAutomaton",
@@ -22,6 +27,7 @@ local M = {
 	},
 	{
 		"f3fora/nvim-texlabconfig",
+		version = false,
 		build = "go build -o ~/.local/bin",
 		ft = { "tex", "bib" },
 		opts = {},

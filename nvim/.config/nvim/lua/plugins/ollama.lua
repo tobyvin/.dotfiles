@@ -1,14 +1,15 @@
+---@type LazySpec
 local M = {
-	"nomnivore/ollama.nvim",
-	dependencies = {
-		"nvim-lua/plenary.nvim",
-	},
-	cmd = {
-		"Ollama",
-		"OllamaModel",
-	},
-	opts = {
-		model = "deepseek-coder:6.7b",
+	"nvim-lua/plenary.nvim",
+	{
+		"nomnivore/ollama.nvim",
+		cmd = {
+			"Ollama",
+			"OllamaModel",
+		},
+		opts = {
+			model = "deepseek-coder:6.7b",
+		},
 	},
 }
 

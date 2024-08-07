@@ -181,11 +181,7 @@ local M = {
 			})
 		end,
 	},
-	ruff_lsp = {
-		on_attach = function(client)
-			client.server_capabilities.hoverProvider = false
-		end,
-	},
+	ruff = {},
 	taplo = {},
 	texlab = {
 		settings = {

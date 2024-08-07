@@ -1,6 +1,7 @@
 local M = {
 	"mfussenegger/nvim-jdtls",
 	ft = "java",
+	version = false,
 	opts = {
 		cmd = { "jdtls" },
 	},

@@ -1,18 +1,7 @@
----@type LazyPluginSpec
-local M = {
+---@type LazySpec
+local telescope = {
 	"nvim-telescope/telescope.nvim",
 	cmd = "Telescope",
-	dependencies = {
-		"nvim-lua/plenary.nvim",
-		{
-			"nvim-telescope/telescope-fzf-native.nvim",
-			build = "make",
-		},
-		"nvim-telescope/telescope-live-grep-args.nvim",
-		"nvim-telescope/telescope-dap.nvim",
-		"nvim-telescope/telescope-symbols.nvim",
-		"debugloop/telescope-undo.nvim",
-	},
 	opts = {
 		defaults = {
 			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
@@ -78,42 +67,72 @@ local M = {
 	},
 }
 
-function M:config(opts)
-	opts.extensions.undo = {
-		mappings = {
-			i = {
-				["<cr>"] = require("telescope-undo.actions").restore,
-				["<C-cr>"] = require("telescope-undo.actions").yank_additions,
-				["<S-cr>"] = require("telescope-undo.actions").yank_deletions,
-			},
-		},
-	}
+function telescope:init()
+	local builtin = function(name)
+		return function()
+			require("telescope.builtin")[name]()
+		end
+	end
 
-	require("telescope").setup(opts)
-	require("telescope").load_extension("fzf")
-	require("telescope").load_extension("undo")
+	vim.keymap.set("n", "<leader>fa", builtin("autocommands"), { desc = "autocommands" })
+	vim.keymap.set("n", "<leader>fb", builtin("buffers"), { desc = "buffers" })
+	vim.keymap.set("n", "<leader>fc", builtin("commands"), { desc = "commands" })
+	vim.keymap.set("n", "<leader>fd", builtin("lsp_dynamic_workspace_symbols"), { desc = "lsp symbols" })
+	vim.keymap.set("n", "<leader>ff", builtin("find_files"), { desc = "find files" })
+	vim.keymap.set("n", "<leader>fF", builtin("filetypes"), { desc = "filetypes" })
+	vim.keymap.set("n", "<leader>fh", builtin("help_tags"), { desc = "help" })
+	vim.keymap.set("n", "<leader>fH", builtin("highlights"), { desc = "highlights" })
+	vim.keymap.set("n", "<leader>fk", builtin("keymaps"), { desc = "keymaps" })
+	vim.keymap.set("n", "<leader>fm", builtin("marks"), { desc = "marks" })
+	vim.keymap.set("n", "<leader>fo", builtin("oldfiles"), { desc = "old files" })
+	vim.keymap.set("n", "<leader>fr", builtin("resume"), { desc = "resume" })
+	vim.keymap.set("n", "<leader>gt", builtin("git_status"), { desc = "status" })
+end
 
-	local builtin = require("telescope.builtin")
-	local extensions = require("telescope").extensions
+---@type LazySpec
+local telescope_live_grep_args = {
+	"nvim-telescope/telescope-live-grep-args.nvim",
+}
 
-	vim.keymap.set("n", "<leader>fa", builtin.autocommands, { desc = "autocommands" })
-	vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "buffers" })
-	vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "commands" })
-	vim.keymap.set("n", "<leader>fd", builtin.lsp_dynamic_workspace_symbols, { desc = "lsp symbols" })
-	vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "find files" })
-	vim.keymap.set("n", "<leader>fF", builtin.filetypes, { desc = "filetypes" })
-	vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "help" })
-	vim.keymap.set("n", "<leader>fH", builtin.highlights, { desc = "highlights" })
-	vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "keymaps" })
-	vim.keymap.set("n", "<leader>fm", builtin.marks, { desc = "marks" })
-	vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "old files" })
-	vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "resume" })
-	vim.keymap.set("n", "<leader>gt", builtin.git_status, { desc = "status" })
-	vim.keymap.set("n", "<leader>fg", extensions.live_grep_args.live_grep_args, { desc = "live grep" })
+function telescope_live_grep_args:init()
+	vim.keymap.set("n", "<leader>fg", function()
+		require("telescope").extensions.live_grep_args.live_grep_args()
+	end, { desc = "live grep" })
+
 	vim.keymap.set("v", "<leader>fg", function()
 		require("telescope-live-grep-args.shortcuts").grep_visual_selection()
 	end, { desc = "live grep selection" })
-	vim.keymap.set("n", "<leader>fu", extensions.undo.undo, { desc = "undo" })
 end
+
+---@type LazySpec
+local telescope_undo = {
+	"debugloop/telescope-undo.nvim",
+	specs = {
+		"nvim-telescope/telescope.nvim",
+		opts = {
+			extensions = {
+				undo = {},
+			},
+		},
+	},
+}
+
+function telescope_undo:init()
+	vim.keymap.set("n", "<leader>fu", function()
+		require("telescope").extensions.undo.undo()
+	end, { desc = "undo" })
+end
+
+---@type LazySpec
+local M = {
+	"nvim-lua/plenary.nvim",
+	{
+		"nvim-telescope/telescope-fzf-native.nvim",
+		build = "make",
+	},
+	telescope_undo,
+	telescope_live_grep_args,
+	telescope,
+}
 
 return M

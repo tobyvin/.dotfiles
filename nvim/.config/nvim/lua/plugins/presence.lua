@@ -1,4 +1,4 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"andweeb/presence.nvim",
 	event = "UIEnter",

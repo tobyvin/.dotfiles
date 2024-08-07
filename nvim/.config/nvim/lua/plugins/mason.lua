@@ -1,7 +1,6 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"williamboman/mason.nvim",
-	version = "*",
 	build = ":MasonUpdate",
 	lazy = false,
 	opts = {

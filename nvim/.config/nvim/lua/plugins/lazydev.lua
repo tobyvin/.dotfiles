@@ -1,10 +1,18 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"folke/lazydev.nvim",
 	ft = "lua",
 	cmd = "LazyDev",
 	dependencies = {
 		"Bilal2453/luvit-meta",
+	},
+	opts = {
+		library = {
+			{ path = "luvit-meta/library", words = { "vim%.uv" } },
+			"lazy.nvim",
+		},
+	},
+	specs = {
 		{
 			"hrsh7th/nvim-cmp",
 			opts = function(_, opts)
@@ -14,12 +22,6 @@ local M = {
 					group_index = 0,
 				})
 			end,
-		},
-	},
-	opts = {
-		library = {
-			{ path = "luvit-meta/library", words = { "vim%.uv" } },
-			"lazy.nvim",
 		},
 	},
 }

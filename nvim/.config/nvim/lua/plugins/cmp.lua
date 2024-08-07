@@ -1,24 +1,23 @@
-local function in_comment()
-	return vim.api.nvim_get_mode()["mode"] ~= "c"
-		and require("cmp.config.context").in_treesitter_capture("comment")
-		and require("cmp.config.context").in_syntax_group("Comment")
-end
-
----@type LazyPluginSpec
-local M = {
+---@type LazySpec
+local cmp = {
 	"hrsh7th/nvim-cmp",
-	event = { "InsertEnter", "CmdlineEnter" },
+	event = { "InsertEnter" },
+	version = false,
 	dependencies = {
-		"hrsh7th/cmp-buffer",
 		"hrsh7th/cmp-path",
-		"hrsh7th/cmp-nvim-lsp",
-		"hrsh7th/cmp-cmdline",
 	},
-	opts = {
+}
+
+function cmp:opts(opts)
+	local mapping = require("cmp.config.mapping")
+	local context = require("cmp.config.context")
+	local default = require("cmp.config.default")()
+
+	return vim.tbl_extend("keep", opts, {
 		enabled = function()
-			return require("cmp.config.default")().enabled() and vim.api.nvim_get_mode()["mode"] == "c"
-				or not require("cmp.config.context").in_treesitter_capture("comment")
-				or not require("cmp.config.context").in_syntax_group("Comment")
+			return default.enabled() and vim.api.nvim_get_mode()["mode"] == "c"
+				or not context.in_treesitter_capture("comment")
+				or not context.in_syntax_group("Comment")
 		end,
 		window = {
 			completion = {
@@ -37,73 +36,46 @@ local M = {
 				return vim_item
 			end,
 		},
-		mapping = {
-			["<C-p>"] = {
-				i = function(fallback)
-					if not require("cmp").select_prev_item() then
-						local release = require("cmp").core:suspend()
-						fallback()
-						vim.schedule(release)
-					end
-				end,
-			},
-			["<C-n>"] = {
-				i = function(fallback)
-					if not require("cmp").select_next_item() then
-						local release = require("cmp").core:suspend()
-						fallback()
-						vim.schedule(release)
-					end
-				end,
-			},
-			["<C-d>"] = {
-				i = function(fallback)
-					if not require("cmp").scroll_docs(4) then
-						fallback()
-					end
-				end,
-			},
-			["<C-u>"] = {
-				i = function(fallback)
-					if not require("cmp").scroll_docs(-4) then
-						fallback()
-					end
-				end,
-			},
-			["<C-Space>"] = {
-				i = function(fallback)
-					if not require("cmp").complete({}) then
-						fallback()
-					end
-				end,
-			},
-			["<CR>"] = {
-				i = function(fallback)
-					if not require("cmp").confirm() then
-						fallback()
-					end
-				end,
-			},
-			["<C-y>"] = {
-				i = function(fallback)
-					if not require("cmp").confirm({ select = false }) then
-						fallback()
-					end
-				end,
-			},
-			["<C-e>"] = {
-				i = function(fallback)
-					if not require("cmp").abort() then
-						fallback()
-					end
-				end,
-			},
-		},
+		mapping = mapping.preset.insert({
+			["<C-d>"] = mapping.scroll_docs(4),
+			["<C-u>"] = mapping.scroll_docs(-4),
+			["<C-Space>"] = mapping.complete(),
+			["<CR>"] = mapping.confirm({ select = false }),
+		}),
 		sources = {
-			{ name = "nvim_lsp" },
 			{ name = "path" },
 		},
+	})
+end
+
+---@type LazySpec
+local cmp_nvim_lsp = {
+	"hrsh7th/cmp-nvim-lsp",
+	opts = {},
+	specs = {
+		{
+			"hrsh7th/nvim-cmp",
+			opts = function(_, opts)
+				opts.sources = opts.sources or {}
+				table.insert(opts.sources, {
+					name = "nvim_lsp",
+				})
+			end,
+		},
 	},
+}
+
+function cmp_nvim_lsp:init()
+	local defaults = vim.lsp.protocol.make_client_capabilities()
+	---@diagnostic disable-next-line: duplicate-set-field
+	vim.lsp.protocol.make_client_capabilities = function()
+		return require("cmp_nvim_lsp").default_capabilities(defaults)
+	end
+end
+
+local M = {
+	cmp,
+	cmp_nvim_lsp,
 }
 
 return M

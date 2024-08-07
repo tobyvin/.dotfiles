@@ -1,28 +1,26 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"stevearc/conform.nvim",
-	dev = true,
-	version = "*",
 	cmd = { "ConformInfo" },
 	opts = {
 		format_on_save = false,
 		format_after_save = false,
 		formatters_by_ft = {
 			css = { "prettier" },
-			html = { "prettier" },
-			htmldjango = { "djlint" },
+			html = { "prettier", "injected" },
+			htmldjango = { "djlint", "injected" },
 			json = { "deno_fmt" },
 			jsonc = { "deno_fmt" },
 			lua = { "stylua" },
-			markdown = { "mdformat", "markdownlint" },
+			markdown = { "mdformat", "markdownlint", "injected" },
 			nginx = { "nginxfmt" },
-			plaintex = { "latexindent" },
+			plaintex = { "latexindent", "injected" },
 			sass = { "prettier" },
 			scss = { "prettier" },
 			sh = { "shfmt" },
-			tex = { "latexindent" },
-			typst = { "typstyle" },
-			["*"] = { "injected", "trim_whitespace", "trim_newlines" },
+			tex = { "latexindent", "injected" },
+			typst = { "typstyle", "injected" },
+			["*"] = { "trim_whitespace", "trim_newlines" },
 		},
 		formatters = {
 			latexindent = {

@@ -1,17 +1,10 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"rcarriga/nvim-notify",
-	version = "*",
 	opts = {
-		timeout = 3000,
-		background_colour = "Pmenu",
-		max_height = function()
-			return math.floor(vim.o.lines * 0.75)
-		end,
-		max_width = function()
-			return math.floor(vim.o.columns * 0.75)
-		end,
+		max_width = math.min(vim.o.columns, 80),
 		render = "wrapped-compact",
+		stages = "no_animation",
 	},
 }
 

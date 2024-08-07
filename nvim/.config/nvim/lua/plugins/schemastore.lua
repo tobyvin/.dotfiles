@@ -1,6 +1,7 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"b0o/SchemaStore.nvim",
+	version = false,
 }
 
 function M.init()

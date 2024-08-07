@@ -1,6 +1,7 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"nvim-treesitter/nvim-treesitter",
+	version = false,
 	build = ":TSUpdate",
 	event = "BufReadPre",
 	cmd = {

@@ -1,6 +1,7 @@
 ---@type LazyPluginSpec
 local M = {
 	"ellisonleao/gruvbox.nvim",
+	version = false,
 	priority = 1000,
 	opts = {
 		contrast = "hard",

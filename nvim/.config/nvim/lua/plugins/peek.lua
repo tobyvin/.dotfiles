@@ -1,4 +1,4 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"toppair/peek.nvim",
 	cond = vim.fn.executable("deno") == 1,

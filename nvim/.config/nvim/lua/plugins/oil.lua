@@ -1,7 +1,6 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"stevearc/oil.nvim",
-	version = "*",
 	cmd = { "Oil" },
 	opts = {
 		default_file_explorer = true,

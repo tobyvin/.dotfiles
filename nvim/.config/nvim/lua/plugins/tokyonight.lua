@@ -1,4 +1,4 @@
----@type LazyPluginSpec
+---@type LazySpec
 local M = {
 	"folke/tokyonight.nvim",
 	opts = {
