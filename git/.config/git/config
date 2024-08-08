@@ -13,19 +13,6 @@
 [init]
 	defaultBranch = main
 
-[push]
-	autoSetupRemote = true
-	followTags = true
-
-[pull]
-	rebase = true
-
-[merge]
-	ff = only
-
-[fetch]
-	prune = true
-
 [revert]
 	reference = true
 
@@ -62,8 +49,4 @@
 	required = true
 
 [alias]
-	st = status
-	co = checkout
-	rv = remote -v
-	lg = log --oneline --decorate --branches --remotes --tags --abbrev-commit --graph
-	ll = log --oneline --decorate --branches --remotes --tags --abbrev-commit --stat
+	lg = log --oneline --all --graph
