@@ -24,7 +24,6 @@ local M = {
 			"c_sharp",
 			"css",
 			"comment",
-			"dap_repl",
 			"diff",
 			"gitignore",
 			"go",
