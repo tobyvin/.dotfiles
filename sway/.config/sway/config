@@ -40,6 +40,8 @@ include ~/.config/sway/config.d/*
 
 set $menu wmenu -i -f'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
 
+set $j4_sock $XDG_RUNTIME_DIR/j4-dmenu-desktop.sock
+
 # Property              Border  BG      Text    Indicator Child Border
 client.focused          $base05 $base0D $base00 $base0D $base0D
 client.focused_inactive $base01 $base01 $base05 $base03 $base01
@@ -119,7 +121,7 @@ bindsym $mod+w exec $BROWSER
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
 
-bindsym $mod+space exec j4-dmenu-desktop --dmenu="$menu" --term=$TERMINAL --wrapper='swaymsg exec --'
+bindsym $mod+space exec echo > $j4_sock
 bindsym $mod+shift+space exec dmenu_path | $menu | xargs swaymsg exec --
 
 bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
@@ -269,4 +271,5 @@ exec {
 	import-gsettings
 	systemctl --user start sway-session.target
 	swaymsg "workspace $ws06; workspace $ws01"
+	j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
 }
