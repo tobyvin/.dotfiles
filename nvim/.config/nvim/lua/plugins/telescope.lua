@@ -2,6 +2,9 @@
 local telescope = {
 	"nvim-telescope/telescope.nvim",
 	cmd = "Telescope",
+	dependencies = {
+		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+	},
 	opts = {
 		defaults = {
 			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
@@ -23,7 +26,6 @@ local telescope = {
 			mappings = {
 				i = {
 					["<Esc>"] = "close",
-					["<C-h>"] = "which_key",
 					["<C-Down>"] = "cycle_history_next",
 					["<C-Up>"] = "cycle_history_prev",
 				},
@@ -55,15 +57,6 @@ local telescope = {
 				},
 			},
 		},
-		extensions = {
-			live_grep_args = {
-				theme = "ivy",
-			},
-		},
-	},
-	keys = {
-		"<leader>f",
-		"<leader>g",
 	},
 }
 
@@ -89,9 +82,24 @@ function telescope:init()
 	vim.keymap.set("n", "<leader>gt", builtin("git_status"), { desc = "status" })
 end
 
+function telescope:config(opts)
+	require("telescope").setup(opts)
+	require("telescope").load_extension("fzf")
+end
+
 ---@type LazySpec
 local telescope_live_grep_args = {
 	"nvim-telescope/telescope-live-grep-args.nvim",
+	specs = {
+		"nvim-telescope/telescope.nvim",
+		opts = {
+			extensions = {
+				live_grep_args = {
+					theme = "ivy",
+				},
+			},
+		},
+	},
 }
 
 function telescope_live_grep_args:init()
@@ -126,13 +134,9 @@ end
 ---@type LazySpec
 local M = {
 	"nvim-lua/plenary.nvim",
-	{
-		"nvim-telescope/telescope-fzf-native.nvim",
-		build = "make",
-	},
-	telescope_undo,
-	telescope_live_grep_args,
 	telescope,
+	telescope_live_grep_args,
+	telescope_undo,
 }
 
 return M

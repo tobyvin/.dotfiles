@@ -1,3 +1,20 @@
+local function i_map_with(name, call_fallback, ...)
+	local args = { ... }
+	return {
+		i = function(fallback)
+			if not require("cmp")[name](unpack(args)) then
+				call_fallback(fallback)
+			end
+		end,
+	}
+end
+
+local function i_map(name, ...)
+	return i_map_with(name, function(fb)
+		fb()
+	end, ...)
+end
+
 ---@type LazySpec
 local cmp = {
 	"hrsh7th/nvim-cmp",
@@ -6,18 +23,11 @@ local cmp = {
 	dependencies = {
 		"hrsh7th/cmp-path",
 	},
-}
-
-function cmp:opts(opts)
-	local mapping = require("cmp.config.mapping")
-	local context = require("cmp.config.context")
-	local default = require("cmp.config.default")()
-
-	return vim.tbl_extend("keep", opts, {
+	opts = {
 		enabled = function()
-			return default.enabled() and vim.api.nvim_get_mode()["mode"] == "c"
-				or not context.in_treesitter_capture("comment")
-				or not context.in_syntax_group("Comment")
+			return require("cmp.config.default")().enabled() and vim.api.nvim_get_mode()["mode"] == "c"
+				or not require("cmp.config.context").in_treesitter_capture("comment")
+				or not require("cmp.config.context").in_syntax_group("Comment")
 		end,
 		window = {
 			completion = {
@@ -36,17 +46,29 @@ function cmp:opts(opts)
 				return vim_item
 			end,
 		},
-		mapping = mapping.preset.insert({
-			["<C-d>"] = mapping.scroll_docs(4),
-			["<C-u>"] = mapping.scroll_docs(-4),
-			["<C-Space>"] = mapping.complete(),
-			["<CR>"] = mapping.confirm({ select = false }),
-		}),
+		mapping = {
+			["<C-p>"] = i_map_with("select_prev_item", function(fallback)
+				local release = require("cmp").core:suspend()
+				fallback()
+				vim.schedule(release)
+			end),
+			["<C-n>"] = i_map_with("select_next_item", function(fallback)
+				local release = require("cmp").core:suspend()
+				fallback()
+				vim.schedule(release)
+			end),
+			["<C-d>"] = i_map("scroll_docs", 4),
+			["<C-u>"] = i_map("scroll_docs", -4),
+			["<C-Space>"] = i_map("complete", {}),
+			["<CR>"] = i_map("confirm"),
+			["<C-y>"] = i_map("confirm", { select = false }),
+			["<C-e>"] = i_map("abort"),
+		},
 		sources = {
 			{ name = "path" },
 		},
-	})
-end
+	},
+}
 
 ---@type LazySpec
 local cmp_nvim_lsp = {
