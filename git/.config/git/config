@@ -50,3 +50,4 @@
 
 [alias]
 	lg = log --oneline --all --graph
+	st = status
