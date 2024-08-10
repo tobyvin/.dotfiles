@@ -13,17 +13,14 @@ installed solely by running `stow */` from the repository's root.
 
 ### Install script
 
-A [install.sh] helper script is provided that will stow packages, remove broken
-symlinks, and run package specific install scripts. The install script can be
-run with `./install.sh [package ..]`, defaulting to operating on all packages if
-none are specified.
+A [install.sh] helper script is provided that will stow packages and run package
+specific install scripts. It can be run with `./install.sh [package ..]`,
+defaulting to operating on all packages if none are specified.
 
-#### Removing broken symlinks
-
-The install script will do it's best to clean broken symlinks from the target
-directory. It's fairly strict about what it will remove, erroring on the side
-caution, as to not remove any symlinks that do (or did) not belong to the
-repository.
+It stows the packages using the `-R` (restow) option, which will remove any
+broken or missing symlinks belonging to the repository. Normally this spams the
+output with `UNLINK` and `LINK` for every file in every package, so it's piped
+through a small awk script to filter the output to only non-reverted actions.
 
 #### Package specific install scripts
 
