@@ -1,5 +1,5 @@
 user_pref("browser.aboutConfig.showWarning", false);
-user_pref("browser.startup.page", 3);
+user_pref("browser.startup.page", 0);
 user_pref("browser.startup.homepage", "about:blank");
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("browser.quitShortcut.disabled", false);
