@@ -7,7 +7,6 @@ vim.filetype.add({
 		nft = "nftables",
 		ron = "ron",
 		service = "systemd",
-		zsh = "sh",
 	},
 	filename = {
 		tridactylrc = "trytactylrc",

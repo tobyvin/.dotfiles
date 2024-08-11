@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/usr/bin/zsh
 
 HISTFILE="${XDG_STATE_HOME}/zsh/history"
 HISTSIZE=10000
