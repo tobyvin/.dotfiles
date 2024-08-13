@@ -60,31 +60,26 @@ function M.select(items, opts, on_choice)
 	vim.api.nvim_set_option_value("cursorline", true, { win = window })
 
 	vim.api.nvim_win_set_cursor(window, { 1, 0 })
-	local guicursor = vim.o.guicursor
-	vim.opt.guicursor = "a:noCursor"
 
-	local function make_on_choice(choosen)
-		return function()
-			local row = unpack(vim.api.nvim_win_get_cursor(window))
-			if vim.api.nvim_win_is_valid(window) then
-				vim.api.nvim_win_close(window, true)
-			end
-			vim.opt.guicursor = guicursor
-			if choosen then
-				on_choice(items[row], row)
-			else
-				on_choice(nil, nil)
-			end
+	local function cancel()
+		if vim.api.nvim_win_is_valid(window) then
+			vim.api.nvim_win_close(window, true)
 		end
 	end
 
-	vim.keymap.set({ "n", "v" }, "<cr>", make_on_choice(true), { buffer = buffer })
-	vim.keymap.set({ "n", "v" }, "<2-LeftMouse>", make_on_choice(true), { buffer = buffer })
-	vim.keymap.set({ "n", "v" }, "<esc>", make_on_choice(false), { buffer = buffer })
-	vim.keymap.set({ "n", "v" }, "q", make_on_choice(false), { buffer = buffer })
+	local function choose()
+		local row = unpack(vim.api.nvim_win_get_cursor(window))
+		cancel()
+		on_choice(items[row], row)
+	end
+
+	vim.keymap.set({ "n", "v" }, "<cr>", choose, { buffer = buffer })
+	vim.keymap.set({ "n", "v" }, "<2-LeftMouse>", choose, { buffer = buffer })
+	vim.keymap.set({ "n", "v" }, "q", cancel, { buffer = buffer })
+	vim.keymap.set({ "n" }, "<esc>", cancel, { buffer = buffer })
 	vim.api.nvim_create_autocmd({ "BufLeave" }, {
 		buffer = buffer,
-		callback = make_on_choice(false),
+		callback = cancel,
 	})
 
 	vim.api.nvim_create_autocmd({ "CursorMoved" }, {
