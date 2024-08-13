@@ -1,11 +1,23 @@
 [SpamFilter]
+
 [KillThreadsFilter]
+
 [ListMailsFilter]
+
 [ArchiveSentMailsFilter]
 sent_tag = sent
+
 [Filter.0]
 message = notify
 query = tag:new
 tags_blacklist = killed;spam
 tags = +notify
+
 [InboxFilter]
+
+[MailMover]
+folders = INBOX Archive Junk
+rename = True
+INBOX = 'tag:spam':Junk 'NOT tag:inbox':Archive
+Archive = 'tag:spam':Junk 'tag:inbox':INBOX
+Junk = 'NOT tag:spam AND tag:inbox':INBOX 'NOT tag:spam':Archive
