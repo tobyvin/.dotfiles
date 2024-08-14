@@ -93,17 +93,14 @@ local M = {
 		},
 	},
 	powershell_es = {},
-	pylsp = {
+	pyright = {
 		settings = {
-			pylsp = {
-				plugins = {
-					black = { enabled = false },
-					autopep8 = { enabled = false },
-					yapf = { enabled = false },
-					pycodestyle = {
-						maxLineLength = 88,
-					},
-					pyflakes = { enabled = false },
+			pyright = {
+				disableOrganizeImports = true,
+			},
+			python = {
+				analysis = {
+					ignore = { "*" },
 				},
 			},
 		},
@@ -181,7 +178,11 @@ local M = {
 			})
 		end,
 	},
-	ruff = {},
+	ruff = {
+		on_attach = function(client, _)
+			client.server_capabilities.hoverProvider = false
+		end,
+	},
 	taplo = {},
 	texlab = {
 		settings = {

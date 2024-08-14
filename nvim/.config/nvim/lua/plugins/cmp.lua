@@ -87,14 +87,6 @@ local cmp_nvim_lsp = {
 	},
 }
 
-function cmp_nvim_lsp:init()
-	local defaults = vim.lsp.protocol.make_client_capabilities()
-	---@diagnostic disable-next-line: duplicate-set-field
-	vim.lsp.protocol.make_client_capabilities = function()
-		return require("cmp_nvim_lsp").default_capabilities(defaults)
-	end
-end
-
 local M = {
 	cmp,
 	cmp_nvim_lsp,
