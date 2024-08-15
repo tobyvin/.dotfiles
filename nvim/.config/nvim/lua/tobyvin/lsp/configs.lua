@@ -179,9 +179,9 @@ local M = {
 		end,
 	},
 	ruff = {
-		on_attach = function(client, _)
-			client.server_capabilities.hoverProvider = false
-		end,
+		server_capabilities = {
+			hoverProvider = false,
+		},
 	},
 	taplo = {},
 	texlab = {
@@ -247,6 +247,9 @@ local M = {
 			yaml = {
 				keyOrdering = false,
 			},
+		},
+		server_capabilities = {
+			documentFormattingProvider = true,
 		},
 	},
 	zls = {},
