@@ -267,9 +267,10 @@ bar {
 
 include /etc/sway/config.d/*
 
+exec_always pkill -x j4-dmenu-deskto; j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
+
 exec {
 	import-gsettings
 	systemctl --user start sway-session.target
 	swaymsg "workspace $ws06; workspace $ws01"
-	j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
 }
