@@ -7,6 +7,7 @@ local M = {
 		format_after_save = false,
 		formatters_by_ft = {
 			css = { "prettier" },
+			graphql = { "prettier" },
 			html = { "prettier", "injected" },
 			htmldjango = { "djlint", "injected" },
 			json = { "deno_fmt" },
