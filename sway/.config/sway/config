@@ -267,7 +267,7 @@ bar {
 
 include /etc/sway/config.d/*
 
-exec_always pkill -x j4-dmenu-deskto; j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
+exec_always pgrep -x j4-dmenu-deskto || j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
 
 exec {
 	import-gsettings
