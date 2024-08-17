@@ -9,4 +9,6 @@ fi
 
 printf "%s: Installing plugins\n" "$0"
 
-sheldon -q lock
+sheldon lock --update 2>&1 |
+	grep -Po 'CLONED\K.*' |
+	xargs -L1 -r printf '%s: Installed: %s\n' "$0"
