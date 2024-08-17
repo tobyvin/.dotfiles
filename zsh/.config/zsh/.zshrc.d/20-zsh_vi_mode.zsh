@@ -39,7 +39,7 @@ function zvm_after_init() {
 	zvm_vi_put_after() {
 		CUTBUFFER=$(wl-paste)
 		_zvm_vi_put_after
-		zvm_highlight clear # zvm_vi_put_after introduces weird highlighting
+		zvm_highlight clear # fix weird highlighting
 	}
 
 	functions -c zvm_vi_put_before _zvm_vi_put_before
@@ -47,14 +47,15 @@ function zvm_after_init() {
 	zvm_vi_put_before() {
 		CUTBUFFER=$(wl-paste)
 		_zvm_vi_put_before
-		zvm_highlight clear # zvm_vi_put_before introduces weird highlighting
+		zvm_highlight clear # fix weird highlighting
 	}
 
 	functions -c zvm_vi_replace_selection _zvm_vi_replace_selection
 	unfunction zvm_vi_replace_selection
 	zvm_vi_replace_selection() {
-		CUTBUFFER=$(pbpaste)
+		CUTBUFFER=$(wl-paste)
 		_zvm_vi_replace_selection
+		zvm_highlight clear # fix weird highlighting
 		echo -en "${CUTBUFFER}" | wl_copy
 	}
 }
