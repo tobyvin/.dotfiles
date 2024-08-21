@@ -1,14 +1,9 @@
 #!/bin/sh
 
-if [ ! -t 0 ]; then
-	set -- "$@" "$(cat)"
-elif [ $# -eq 0 ]; then
-	for passwd in "$PASSWORD_STORE_DIR"/**/*.gpg; do
-		passwd="${passwd#"$PASSWORD_STORE_DIR"/}"
-		printf '%s\n' "${passwd%.gpg}"
-	done
-	exit 0
-fi
-
-# shellcheck disable=SC2068
-pass show $@ | head -n1
+for file in "$PASSWORD_STORE_DIR"/**/*.gpg; do
+	if [ -e "$file" ]; then
+		file="${file#"$PASSWORD_STORE_DIR"/}"
+		printf '%s\n' "${file%.gpg}"
+	fi
+done
+exit 0
