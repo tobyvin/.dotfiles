@@ -1,6 +1,8 @@
 [Unit]
 Description=Mailbox indexer service
 Documentation=man:notmuch(1)
+Wants=network-online.target
+After=network-online.target
 
 [Service]
 Type=oneshot
