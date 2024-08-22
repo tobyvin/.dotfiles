@@ -7,6 +7,10 @@ function M.select(items, opts, on_choice)
 		on_choice = { on_choice, "function", false },
 	})
 
+	if #items == 0 then
+		return
+	end
+
 	opts = vim.tbl_extend("keep", opts or {}, {
 		format_item = tostring,
 		prompt = "Select",

@@ -11,6 +11,7 @@ local M = {
 			DiffAdd = { link = "GruvboxGreen" },
 			DiffChange = { link = "GruvboxAqua" },
 			DiffText = { link = "GruvboxYellow" },
+			QuickFixLine = { link = "CursorLine" },
 		},
 	},
 }
