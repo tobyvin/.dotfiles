@@ -165,7 +165,9 @@ local M = {
 							{ title = client.name }
 						)
 					elseif resp.result then
-						vim.ui.open(resp.result["local"] or resp.result.web or resp.result)
+						local url = resp.result["local"] or resp.result.web or resp.result
+						url = string.gsub(url, "/macros/macro%.", "/macro%.")
+						vim.ui.open(url)
 					end
 					return "<Ignore>"
 				end
