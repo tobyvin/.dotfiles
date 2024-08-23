@@ -248,9 +248,9 @@ mode 'resize' {
 
 bar {
 	status_command SCRIPT_DIR=~/.local/lib/i3blocks i3blocks -vv
+	height 24
 	font pango:monospace 12
 	position top
-	tray_padding 5
 	colors {
 		background $base00
 		separator  $base01
