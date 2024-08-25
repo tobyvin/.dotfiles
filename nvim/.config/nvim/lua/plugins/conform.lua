@@ -21,7 +21,6 @@ local M = {
 			sh = { "shfmt" },
 			tex = { "latexindent", "injected" },
 			typst = { "typstyle", "injected" },
-			["*"] = { "trim_whitespace", "trim_newlines" },
 		},
 		formatters = {
 			latexindent = {
