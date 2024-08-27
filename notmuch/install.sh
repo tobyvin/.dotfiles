@@ -9,4 +9,5 @@ fi
 
 printf "%s: Installing service\n" "$0"
 
+mkdir -p "$XDG_DATA_HOME"/mail/gmail.com/tobyv13 "$XDG_DATA_HOME"/mail/tobyvin.dev/tobyv
 systemctl --user enable --now --no-block notmuch.service goimapnotify.service

@@ -4,11 +4,11 @@ tls on
 tls_trust_file /etc/ssl/certs/ca-certificates.crt
 syslog on
 
-account porkbun
+account personal
 from tobyv@tobyvin.dev
-host smtp.porkbun.com
-user tobyv@tobyvin.dev
-passwordeval "pass tobyv@tobyvin.dev"
+host mail.tobyvin.dev
+user tobyv
+passwordeval "pass mail.tobyvin.dev/tobyv/imap"
 port 587
 tls_starttls on
 
@@ -16,8 +16,8 @@ account gmail
 from tobyv13@gmail.com
 host smtp.gmail.com
 user tobyv13
-passwordeval "pass gmail"
+passwordeval "pass gmail.com/tobyv13@gmail.com"
 port 587
 tls_starttls on
 
-account default: porkbun
+account default: personal

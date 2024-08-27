@@ -19,3 +19,12 @@ if [ -d "$HOME"/src ]; then
 		done
 	done
 fi
+
+if [ -d "$XDG_DATA_HOME/mail/gmail" ]; then
+	mkdir -vp "$XDG_DATA_HOME/mail/gmail.com"
+	mv -Tnv "$XDG_DATA_HOME/mail/gmail" "$XDG_DATA_HOME/mail/gmail.com/tobyv13"
+fi
+
+if [ -d "$XDG_DATA_HOME/mail/porkbun" ]; then
+	printf 'Found unused porkbun directory: /home/tobyv/.local/share/mail/tobyvin.dev/tobyv\n'
+fi

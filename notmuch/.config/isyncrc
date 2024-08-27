@@ -2,29 +2,29 @@ Create Both
 Expunge Both
 SyncState *
 
-IMAPAccount porkbun
-Host imap.porkbun.com
-User tobyv@tobyvin.dev
-PassCmd "pass tobyv@tobyvin.dev"
+IMAPAccount personal
+Host mail.tobyvin.dev
+User tobyv
+PassCmd "pass mail.tobyvin.dev/tobyv/imap"
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
-IMAPStore porkbun-remote
-Account porkbun
+IMAPStore personal-remote
+Account personal
 
-MaildirStore porkbun-local
-Path ~/.local/share/mail/porkbun/
-Inbox ~/.local/share/mail/porkbun/INBOX
+MaildirStore personal-local
+Path ~/.local/share/mail/tobyvin.dev/tobyv/
+Inbox ~/.local/share/mail/tobyvin.dev/tobyv/INBOX
 
-Channel porkbun
-Far :porkbun-remote:
-Near :porkbun-local:
+Channel personal
+Far :personal-remote:
+Near :personal-local:
 Patterns *
 
 IMAPAccount gmail
 Host imap.gmail.com
 User tobyv13@gmail.com
-PassCmd "pass gmail"
+PassCmd "pass gmail.com/tobyv13@gmail.com"
 TLSType IMAPS
 CertificateFile /etc/ssl/certs/ca-certificates.crt
 
@@ -32,8 +32,8 @@ IMAPStore gmail-remote
 Account gmail
 
 MaildirStore gmail-local
-Path ~/.local/share/mail/gmail/
-Inbox ~/.local/share/mail/gmail/INBOX
+Path ~/.local/share/mail/gmail.com/tobyv13/
+Inbox ~/.local/share/mail/gmail.com/tobyv13/INBOX
 
 Channel gmail
 Far :gmail-remote:

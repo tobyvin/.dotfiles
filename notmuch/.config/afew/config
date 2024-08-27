@@ -2,8 +2,6 @@
 
 [KillThreadsFilter]
 
-[ListMailsFilter]
-
 [ArchiveSentMailsFilter]
 sent_tag = sent
 

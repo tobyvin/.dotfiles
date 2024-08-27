@@ -1,5 +1,11 @@
 #!/bin/sh
 
-for maildir in ${XDG_DATA_HOME}/mail/${MAILDIR:-*}/INBOX; do
-	maildir-rank-addr --maildir="$maildir"/INBOX --outputpath="${maildir%/INBOX}"/addressbook.tsv
+case "${MAILDIR%:*}" in
+personal) MAILDIR=tobyvin.dev/tobyv ;;
+gmail) MAILDIR=gmail.com/tobyv13 ;;
+*:*) MAILDIR=${MAILDIR%:*} ;;
+esac
+
+for maildir in ${XDG_DATA_HOME}/mail/${MAILDIR:-*}; do
+	maildir-rank-addr --maildir="$maildir" --outputpath="$maildir"/addressbook.tsv
 done
