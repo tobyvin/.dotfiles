@@ -63,7 +63,7 @@ bindkey -M vicmd '^[[3~' delete-char
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
-alias ls='ls --human-readable --color=auto'
+alias ls='ls --human-readable --color=auto --hyperlink=auto'
 alias ip='ip -color=auto'
 alias grep='grep --color=auto'
 alias diff='diff --color=auto'

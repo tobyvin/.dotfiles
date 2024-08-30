@@ -190,6 +190,7 @@ local M = {
 		settings = {
 			texlab = {
 				build = {
+					forwardSearchAfter = true,
 					args = {
 						"-interaction=nonstopmode",
 						"-synctex=1",
@@ -201,7 +202,7 @@ local M = {
 					executable = "zathura",
 					args = {
 						"--synctex-editor-command",
-						[[nvim-texlabconfig -file '%{input}' -line %{line}]],
+						[[nvim-texlabconfig -file '%%%{input}' -line %%%{line} -server ]] .. vim.v.servername,
 						"--synctex-forward",
 						"%l:1:%f",
 						"%p",

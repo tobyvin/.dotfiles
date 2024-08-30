@@ -28,7 +28,7 @@ local M = {
 	{
 		"f3fora/nvim-texlabconfig",
 		version = false,
-		build = "go build -o ~/.local/bin",
+		build = "go build -o /home/tobyv/.local/bin/",
 		ft = { "tex", "bib" },
 		opts = {},
 	},
