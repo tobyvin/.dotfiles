@@ -23,11 +23,15 @@ vim.keymap.set("n", "grr", vim.lsp.buf.references, { desc = "vim.lsp.buf.referen
 vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, { desc = "vim.lsp.buf.signature_help()" })
 
 vim.keymap.set("o", "o", function()
+	local v_left = vim.api.nvim_buf_get_mark(0, "<")
+	local v_right = vim.api.nvim_buf_get_mark(0, ">")
 	local cursor = vim.fn.winsaveview()
 	vim.cmd.normal({ "ggVG", bang = true, mods = { keepjumps = true } })
 	if cursor and not string.find(vim.v.operator, "[cd]") then
 		vim.defer_fn(function()
 			vim.fn.winrestview(cursor)
+			vim.api.nvim_buf_set_mark(0, "<", v_left[1], v_left[2], {})
+			vim.api.nvim_buf_set_mark(0, ">", v_right[1], v_right[2], {})
 		end, 0)
 	end
 end, { desc = "buffer text object" })
