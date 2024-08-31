@@ -37,33 +37,28 @@ interval=5
 command=$SCRIPT_DIR/i3blocks-net
 interval=5
 
-[mpris_icon]
-command=i3blocks-mpris icon
+[playerctl]
+command=i3blocks-playerctl icon
 interval=persist
 format=json
 
-[mpris_title]
-command=i3blocks-mpris title
+[playerctl]
+command=i3blocks-playerctl player
 interval=persist
 format=json
 
-[mpris_prev]
-command=i3blocks-mpris prev
+[playerctl]
+command=i3blocks-playerctl status
 interval=persist
 format=json
 
-[mpris_play]
-command=i3blocks-mpris play
+[playerctl]
+command=i3blocks-playerctl next
 interval=persist
 format=json
 
-[mpris_next]
-command=i3blocks-mpris next
-interval=persist
-format=json
-
-[mpris_volume]
-command=i3blocks-mpris volume
+[playerctl]
+command=i3blocks-playerctl volume
 interval=persist
 format=json
 
