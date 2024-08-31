@@ -1,91 +1,23 @@
-#!/usr/bin/env python3
+#!/bin/sh
 
-import asyncio
-from asyncio import TaskGroup, CancelledError
-from collections import deque
-from itertools import islice
+swaymsg -t get_tree |
+	jq --compact-output '.. | select(.focused? == true and .type == "con") | 
+			{ 
+				"full_text": (.name // ""), 
+				"short_text": ([.app_id, .window_title] | map(select(. != null and . != "")) | (first // "")),
+			}
+'
 
-import i3ipc
-from i3ipc.aio import Connection
-
-
-class Printer:
-    def __init__(self, title: str | None = None, width: int = 30):
-        self.width = width
-        match title:
-            case str("") | None:
-                self.iter = [""]
-            case str(s):
-                self.iter = deque(list(s + " "))
-
-    def __iter__(self):
-        while self.iter:
-            yield "".join(islice(self.iter, 0, self.width))
-            if len(self.iter) > self.width:
-                self.iter.rotate(-1)
-            else:
-                break
-
-    async def print(self):
-        for status in iter(self):
-            print(status, flush=True)
-            await asyncio.sleep(0.5)
-
-
-class Blocklet:
-    SET_EVENTS = [
-        i3ipc.Event.WINDOW_FOCUS,
-        i3ipc.Event.WINDOW_TITLE,
-        i3ipc.Event.WINDOW_NEW,
-    ]
-
-    CLEAR_EVENTS = [
-        i3ipc.Event.WINDOW_CLOSE,
-        i3ipc.Event.WORKSPACE_FOCUS,
-    ]
-
-    def __init__(self, task_group: TaskGroup):
-        self.i3 = None
-        self.task_group = task_group
-        self.printer_task = None
-
-    @classmethod
-    async def connect(cls, task_group: TaskGroup):
-        self = cls(task_group)
-        self.i3 = await Connection().connect()
-
-        for event in Blocklet.SET_EVENTS:
-            self.i3.on(event, lambda _, e: self.set(e.container.name))
-
-        for event in Blocklet.CLEAR_EVENTS:
-            self.i3.on(event, lambda _, e: self.clear())
-
-        return self
-
-    async def main(self):
-        if focused := (await self.i3.get_tree()).find_focused():
-            self.set(focused.name)
-        await self.i3.main()
-
-    def set(self, title: str = None):
-        if self.printer_task is not None:
-            self.printer_task.cancel()
-        self.printer_task = self.task_group.create_task(Printer(title).print())
-
-    def clear(self):
-        if self.printer_task is not None:
-            self.printer_task.cancel()
-            print(flush=True)
-
-
-async def main():
-    try:
-        async with TaskGroup() as task_group:
-            blocklet = await Blocklet.connect(task_group)
-            task_group.create_task(blocklet.main())
-    except CancelledError:
-        return
-
-
-if __name__ == "__main__":
-    asyncio.run(main())
+swaymsg --monitor -t subscribe '["window", "workspace"]' |
+	jq --compact-output --unbuffered '
+		if .change == "close" and .container.focused == true then
+			{ "full_text": "" }
+		elif .change == "focus" or (.change == "title" and .container.focused == true) then
+			.container | { 
+				"full_text": (.name // ""), 
+				"short_text": ([.app_id, .window_title] | map(select(. != null and . != "")) | (first // "")),
+			}
+		else
+			empty
+		end
+'

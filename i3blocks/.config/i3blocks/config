@@ -2,6 +2,7 @@
 command=$SCRIPT_DIR/i3blocks-title
 max_length=30
 interval=persist
+format=json
 
 [weather]
 command=$SCRIPT_DIR/i3blocks-wttr
