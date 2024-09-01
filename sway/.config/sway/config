@@ -120,7 +120,7 @@ bindsym $mod+Shift+return exec sway-ssh | $menu | sway-ssh
 bindsym $mod+w exec $BROWSER
 
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
-bindsym $mod+Print exec /usr/share/sway/scripts/grimshot --notify save area
+bindsym $mod+Print exec /usr/share/sway-contrib/grimshot --notify save area
 
 bindsym $mod+space exec echo > $j4_sock
 bindsym $mod+shift+space exec dmenu_path | $menu | xargs swaymsg exec --
