@@ -1,4 +1,6 @@
 U = require("tobyvin.utils")
+vim.notify = U.notify.notify
+vim.notify_once = U.notify.notify_once
 vim.ui.select = U.ui.select
 vim.ui.input = U.ui.input
 require("tobyvin.options")

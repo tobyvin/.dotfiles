@@ -150,6 +150,8 @@ local M = {
 							vim.log.levels.ERROR,
 							{ title = client.name }
 						)
+					else
+						vim.notify("No external docs found", vim.log.levels.WARN, { title = client.name })
 					end
 					return "gx"
 				else

@@ -4,6 +4,7 @@ local M = {
 	lsp = require("tobyvin.utils.lsp"),
 	session = require("tobyvin.utils.session"),
 	ui = require("tobyvin.utils.ui"),
+	notify = require("tobyvin.utils.notify")
 }
 
 ---@param ms integer
