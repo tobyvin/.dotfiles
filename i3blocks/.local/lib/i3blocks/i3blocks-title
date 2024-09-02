@@ -1,23 +1,17 @@
 #!/bin/sh
 
-swaymsg -t get_tree |
-	jq --compact-output '.. | select(.focused? == true and .type == "con") | 
-			{ 
-				"full_text": (.name // ""), 
-				"short_text": ([.app_id, .window_title] | map(select(. != null and . != "")) | (first // "")),
-			}
-'
+into_block='{ 
+	"full_text": (.name // ""), 
+	"short_text": ([.app_id, .window_title, .name] | map(select(. != null and . != "")) | (first // "")),
+} | .short_text |= .[0:(env.max_width // (. | length) | tonumber)]'
 
-swaymsg --monitor -t subscribe '["window", "workspace"]' |
-	jq --compact-output --unbuffered '
-		if .change == "close" and .container.focused == true then
+swaymsg -t get_tree | jq -c '.. | select(.focused? == true and .type == "con") | '"$into_block"
+
+swaymsg --monitor -t subscribe '["window", "workspace"]' | jq -c --unbuffered '
+		select((.change | test("close|focus|title")) and (.current.type == "workspace" or .container.focused)) |
+		if .current.type == "workspace" or .change == "close" then 
 			{ "full_text": "" }
-		elif .change == "focus" or (.change == "title" and .container.focused == true) then
-			.container | { 
-				"full_text": (.name // ""), 
-				"short_text": ([.app_id, .window_title] | map(select(. != null and . != "")) | (first // "")),
-			}
 		else
-			empty
+			.container | '"$into_block"'
 		end
 '
