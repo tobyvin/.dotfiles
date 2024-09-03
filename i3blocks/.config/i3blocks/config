@@ -1,6 +1,5 @@
 [i3blocks]
 command=$SCRIPT_DIR/i3blocks-title
-max_width=30
 interval=persist
 format=json
 
