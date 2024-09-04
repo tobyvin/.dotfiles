@@ -1,7 +1,7 @@
 [SpamFilter]
 [SpamStatusFilter]
 [KillThreadsFilter]
-[ArchiveSentMailsFilter]
+[SentMailsFilter]
 sent_tag = sent
 [InboxFilter]
 [MailMover]
