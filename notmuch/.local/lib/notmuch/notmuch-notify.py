@@ -1,9 +1,17 @@
 #!/usr/bin/env python3
 
-import notmuch
 import os
-from jeepney.io.blocking import open_dbus_connection
+
+import notmuch
 from jeepney import DBusAddress, new_method_call
+from jeepney.io.blocking import open_dbus_connection
+
+
+DBUS_ADDRESS = DBusAddress(
+    "/org/freedesktop/Notifications",
+    bus_name="org.freedesktop.Notifications",
+    interface="org.freedesktop.Notifications",
+)
 
 
 def default_config() -> str:
@@ -17,15 +25,9 @@ def default_config() -> str:
     )
 
 
-def notify(summary: str, body: str) -> int:
-    notifications = DBusAddress(
-        "/org/freedesktop/Notifications",
-        bus_name="org.freedesktop.Notifications",
-        interface="org.freedesktop.Notifications",
-    )
-
+def notify(summary: str, body: str) -> int | None:
     msg = new_method_call(
-        notifications,
+        DBUS_ADDRESS,
         "Notify",
         "susssasa{sv}i",
         (
@@ -40,7 +42,9 @@ def notify(summary: str, body: str) -> int:
         ),
     )
 
-    return open_dbus_connection(bus="SESSION").send_and_get_reply(msg)
+    id = open_dbus_connection(bus="SESSION").send_and_get_reply(msg)
+    if isinstance(id, int):
+        return id
 
 
 def main():
@@ -48,22 +52,12 @@ def main():
         os.environ["NOTMUCH_CONFIG"] = default_config()
 
     database = notmuch.Database(mode=notmuch.Database.MODE.READ_WRITE)
-    query = database.create_query("tag:notify")
-    count = query.count_messages()
-    messages = query.search_messages()
 
-    if count == 1:
-        message = next(messages)
-        print(message)
+    for message in database.create_query("tag:notify").search_messages():
         notify(message.get_header("From"), message.get_header("Subject"))
+        print(message)
         message.remove_tag("notify")
         del message
-    elif count > 1:
-        notify("You have new mail", f"{count} new messages...")
-        for message in query.search_messages():
-            print(message)
-            message.remove_tag("notify")
-            del message
 
 
 if __name__ == "__main__":

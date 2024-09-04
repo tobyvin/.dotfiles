@@ -5,7 +5,7 @@ name=Toby Vincent
 primary_email=tobyv@tobyvin.dev
 other_email=postmaster@tobyvin.dev;hostmaster@tobyvin.dev;webmaster@tobyvin.dev;tobyv13@gmail.com;tovince@siue.edu;
 [new]
-tags=new
+tags=new;notify
 ignore=.mbsyncstate;.uidvalidity;addressbook.tsv;mujmap.toml;
 [maildir]
 synchronize_flags=true
