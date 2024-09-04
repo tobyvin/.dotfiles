@@ -38,7 +38,7 @@ set $base0F #d65d0e
 
 include ~/.config/sway/config.d/*
 
-set $menu wmenu -i -f'monospace 12' -n$base06 -N$base00 -S$base00 -s$base09 -m$base06 -M$base0C
+set $menu ~/.local/bin/wmenu
 
 set $j4_sock $XDG_RUNTIME_DIR/j4-dmenu-desktop.sock
 

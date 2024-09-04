@@ -6,12 +6,20 @@ import sys
 import json
 
 from dbus_next.aio import MessageBus
+import i3ipc
+from i3ipc.aio import Connection
 
 
 BUS_NAME = "org.freedesktop.Notifications"
 OBJECT_PATH = "/org/freedesktop/Notifications"
 DUNST_INTERFACE = "org.dunstproject.cmd0"
 PROPERTIES_INTERFACE = "org.freedesktop.DBus.Properties"
+I3_EVENTS = [
+    i3ipc.Event.WINDOW_FOCUS,
+    i3ipc.Event.WINDOW_FULLSCREEN_MODE,
+    i3ipc.Event.WINDOW_CLOSE,
+    i3ipc.Event.WORKSPACE_FOCUS,
+]
 
 
 class Dunst:
@@ -31,7 +39,19 @@ class Dunst:
         self.displayed = await self.dunst.get_displayed_length()
         self.waiting = await self.dunst.get_waiting_length()
 
+        self.i3 = await Connection().connect()
+
+        for event in I3_EVENTS:
+            self.i3.on(event, self.handle_i3_event)
+
         return self
+
+    async def handle_i3_event(self, conn, e):
+        if e.container is None or e.change == "close":
+            await self.dunst.call_rule_enable("transient_skip", 0)
+        else:
+            await self.dunst.call_rule_enable("transient_skip", e.container.fullscreen_mode)
+
 
     def print_status(self):
         if self.paused:
@@ -110,6 +130,7 @@ async def main():
 
     try:
         async with asyncio.TaskGroup() as task_group:
+            task_group.create_task(dunst.i3.main())
             task_group.create_task(dunst.listener())
             task_group.create_task(dunst.button_handler())
     except asyncio.CancelledError:

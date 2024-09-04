@@ -1,33 +1,54 @@
+# vim:ft=cfg ts=4
+
 [global]
-    follow = mouse
-    width = (0,300)
-    height = 300
-    offset = 10x10
-    notification_limit = 20
+	background = "#282828"
+	foreground = "#ebdbb2"
+	highlight = "#ebdbb2"
+	follow = mouse
+	width = (0,300)
+	height = 143
+	offset = 10x10
+	notification_limit = 10
+	indicate_hidden = true
     frame_color = "#fe8019"
-    frame_width = 2
-    idle_threshold = 120
-    font = sans-serif 12
-    markup = full
-    min_icon_size = 16
-    icon_theme = gruvbox-dark-icons-gtk, Adwaita, hicolor
-    enable_recursive_icon_lookup = true
-    dmenu = "/usr/bin/wmenu -i -f 'monospace 12' -nebdbb2 -N282828 -S282828 -sfe8019 -mebdbb2 -M8ec07c"
-    mouse_left_click = do_action, close_current
-    mouse_middle_click = context, close_current
-    mouse_right_click = close_current
+	frame_width = 2
+	idle_threshold = 5m
+	font = sans-serif 12
+	markup = full
+	min_icon_size = 16
+	icon_theme = gruvbox-dark-icons-gtk, Adwaita, hicolor
+	enable_recursive_icon_lookup = true
+	dmenu = ~/.local/bin/wmenu
+	mouse_left_click = do_action,close_current
+	mouse_middle_click = context,close_current
+	mouse_right_click = close_current
 
-[urgency_low]
-    background = "#282828"
-    foreground = "#ebdbb2"
-    timeout = 5
+[spotify]
+	appname = Spotify
+	msg_urgency = low
+	set_transient = true
 
-[urgency_normal]
-    background = "#282828"
-    foreground = "#ebdbb2"
-    timeout = 20
+[low]
+    msg_urgency = low
+	frame_color = "#a89984"
+	timeout = 5
 
-[urgency_critical]
-    background = "#282828"
-    foreground = "#ebdbb2"
-    timeout = 0
+[critical]
+	msg_urgency = critical
+	frame_color = "#fb4934"
+	timeout = 0
+
+[transient]
+	match_transient = true
+	history_ignore = true
+
+[transient_skip]
+	enabled = false
+	format = ""
+
+[fullscreen]
+   fullscreen = delay
+
+[fullscreen_critical]
+	msg_urgency = critical
+	fullscreen = show
