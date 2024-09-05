@@ -3,6 +3,7 @@
 HISTFILE="${XDG_STATE_HOME}/zsh/history"
 HISTSIZE=10000
 SAVEHIST=10000
+FPATH="$XDG_DATA_HOME"/zsh/site-functions:$FPATH
 
 setopt no_beep
 setopt menu_complete
