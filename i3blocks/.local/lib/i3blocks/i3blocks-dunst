@@ -4,6 +4,7 @@ import asyncio
 import os
 import sys
 import json
+import pprint
 
 from dbus_next.aio import MessageBus
 import i3ipc
@@ -47,10 +48,14 @@ class Dunst:
         return self
 
     async def handle_i3_event(self, conn, e):
-        if e.container is None or e.change == "close":
-            await self.dunst.call_rule_enable("transient_skip", 0)
+        if e.change == "close":
+            enable = 0
+        elif isinstance(e, i3ipc.WorkspaceEvent):
+            enable = e.current.fullscreen_mode
         else:
-            await self.dunst.call_rule_enable("transient_skip", e.container.fullscreen_mode)
+            enable = e.container.fullscreen_mode
+
+        await self.dunst.call_rule_enable("transient_skip", enable)
 
 
     def print_status(self):
