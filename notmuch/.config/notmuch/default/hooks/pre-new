@@ -1,4 +1,4 @@
 #!/bin/sh
 
-afew -C "$XDG_CONFIG_HOME"/notmuch/default/config --move-mails
+afew -C "$XDG_CONFIG_HOME"/notmuch/default/config --move-mails --notmuch-args=--no-hooks
 mbsync "${MAILDIR:--a}"
