@@ -1,14 +1,22 @@
 #!/bin/sh
+# shellcheck disable=SC2011,SC2012,SC2016
 
 if [ ! -t 0 ]; then
 	set -- "$@" "$(cat)"
 elif [ $# -eq 0 ]; then
-	grep -Po '# title: \K.*' "$XDG_STATE_HOME"/mpv/watch_later/* | while IFS=: read -r file match; do
-		grep -Pom1 '# \K.*' "$file" | tr -d '\n'
-		printf ': %s\n' "$match"
+	ls -t -1 "$XDG_STATE_HOME"/mpv/watch_later/* | while read -r file; do
+		awk -f - "$file" <<-"EOF"
+			NR == 1 && /^# / && !/^# redirect entry/ { url = $0 }
+			END {
+				if (NR > 1 && sub(/^# /, "", url) && sub(/^# title: /, "")) {
+					printf "%s: %s\n", url, $0
+				}
+			}
+		EOF
 	done
+
 	exit 0
 fi
 
 # shellcheck disable=SC2068
-swaymsg exec -- mpv --msg-level=all=no "${1%*:*}"
+swaymsg exec -- mpv --msg-level=all=no "${1%: *}"
