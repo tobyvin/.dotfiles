@@ -30,8 +30,12 @@ vim.keymap.set("o", "o", function()
 	if cursor and not string.find(vim.v.operator, "[cd]") then
 		vim.defer_fn(function()
 			vim.fn.winrestview(cursor)
-			vim.api.nvim_buf_set_mark(0, "<", v_left[1], v_left[2], {})
-			vim.api.nvim_buf_set_mark(0, ">", v_right[1], v_right[2], {})
+			if pcall(vim.api.nvim_buf_set_mark, 0, "<", v_left[1], v_left[2], {}) then
+				pcall(vim.api.nvim_buf_set_mark, 0, "<", -1, -1, {})
+			end
+			if pcall(vim.api.nvim_buf_set_mark, 0, ">", v_right[1], v_right[2], {}) then
+				pcall(vim.api.nvim_buf_set_mark, 0, ">", -1, -1, {})
+			end
 		end, 0)
 	end
 end, { desc = "buffer text object" })
