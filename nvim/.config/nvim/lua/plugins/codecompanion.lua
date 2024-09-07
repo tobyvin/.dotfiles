@@ -23,6 +23,17 @@ local M = {
 					adapter = "ollama",
 				},
 			},
+			adapters = {
+				ollama = function()
+					return require("codecompanion.adapters").extend("ollama", {
+						schema = {
+							num_ctx = {
+								default = 8192,
+							},
+						},
+					})
+				end,
+			},
 		},
 	},
 }
