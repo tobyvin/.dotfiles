@@ -6,7 +6,7 @@ local M = {
 			htmldjango = { "djlint" },
 			lua = { "selene" },
 			zsh = { "zsh" },
-			systemd = { "systemdlint" },
+			systemd = { "systemd-analyze" },
 		},
 	},
 }
