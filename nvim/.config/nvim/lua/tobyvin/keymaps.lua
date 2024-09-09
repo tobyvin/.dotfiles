@@ -23,21 +23,16 @@ vim.keymap.set("n", "grr", vim.lsp.buf.references, { desc = "vim.lsp.buf.referen
 vim.keymap.set("i", "<C-S>", vim.lsp.buf.signature_help, { desc = "vim.lsp.buf.signature_help()" })
 
 vim.keymap.set("o", "o", function()
-	local v_left = vim.api.nvim_buf_get_mark(0, "<")
-	local v_right = vim.api.nvim_buf_get_mark(0, ">")
+	local vl = vim.api.nvim_buf_get_mark(0, "<")
+	local vr = vim.api.nvim_buf_get_mark(0, ">")
 	local cursor = vim.fn.winsaveview()
 	vim.cmd.normal({ "ggVG", bang = true, mods = { keepjumps = true } })
-	if cursor and not string.find(vim.v.operator, "[cd]") then
-		vim.defer_fn(function()
-			vim.fn.winrestview(cursor)
-			if pcall(vim.api.nvim_buf_set_mark, 0, "<", v_left[1], v_left[2], {}) then
-				pcall(vim.api.nvim_buf_set_mark, 0, "<", -1, -1, {})
-			end
-			if pcall(vim.api.nvim_buf_set_mark, 0, ">", v_right[1], v_right[2], {}) then
-				pcall(vim.api.nvim_buf_set_mark, 0, ">", -1, -1, {})
-			end
-		end, 0)
-	end
+	vim.schedule(function()
+		vim.fn.winrestview(cursor)
+		local _, max_lnum = unpack(vim.fn.getpos("$"))
+		vim.api.nvim_buf_set_mark(0, "<", math.min(vl[1], max_lnum), vl[2], {})
+		vim.api.nvim_buf_set_mark(0, ">", math.min(vr[1], max_lnum), vr[2], {})
+	end)
 end, { desc = "buffer text object" })
 
 vim.keymap.set("i", "<cr>", function()

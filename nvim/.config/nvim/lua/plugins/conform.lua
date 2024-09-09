@@ -81,10 +81,6 @@ local M = {
 
 function M:init()
 	U.formatexpr = function(...)
-		if not pcall(require, "fidget.progress") then
-			return require("conform").formatexpr(...)
-		end
-
 		local bufnr = vim.api.nvim_get_current_buf()
 		local handle = require("fidget.progress").handle.create({
 			title = "Formatting",
@@ -92,7 +88,7 @@ function M:init()
 			lsp_client = { name = "conform" },
 		})
 
-		local err = require("conform").formatexpr()
+		local err = require("conform").formatexpr(...)
 		if err == 1 then
 			handle.message = "Failed"
 		else
@@ -100,6 +96,9 @@ function M:init()
 		end
 
 		handle:finish()
+
+		-- HACK: fixes text flashing/rerendering on buffers without a formatter
+		vim.cmd.sleep("1m")
 		return err
 	end
 
