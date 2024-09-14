@@ -1,0 +1,19 @@
+configurations:
+  - host: mail.tobyvin.dev
+    port: 993
+    tls: true
+    username: tobyv
+    passwordCmd: pass mail.tobyvin.dev/tobyv/imap
+    boxes:
+      - mailbox: INBOX
+        onNewMail: "MAILDIR=personal:INBOX notmuch new"
+  - host: imap.gmail.com
+    port: 993
+    tls: true
+    tlsOptions:
+      reject_unauthorized: false
+    username: tobyv13@gmail.com
+    passwordCmd: pass gmail.com/tobyv13@gmail.com
+    boxes:
+      - mailbox: INBOX
+        onNewMail: "MAILDIR=gmail:INBOX notmuch new"
