@@ -1,4 +1,4 @@
 #!/bin/sh
 
 afew -C "$XDG_CONFIG_HOME"/notmuch/default/config --tag --new
-~/.local/lib/notmuch/notmuch-notify.py
+"$HOME"/.local/bin/notmuch-notify
