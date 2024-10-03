@@ -57,4 +57,91 @@ M.xdg = setmetatable({}, {
 	end,
 })
 
+function M.getflist()
+	return _G.flist
+end
+
+function M.setflist(flist, mode)
+	flist = flist or {}
+	if _G.flist == nil or mode == "a" then
+		_G.flist = vim.tbl_extend("keep", flist, {
+			title = "flist",
+			items = {},
+		})
+	else
+		vim.list_extend(_G.flist.items, flist.items or {})
+		flist.items = nil
+		_G.flist = vim.tbl_extend("force", _G.flist, flist)
+	end
+end
+
+function M.fopen()
+	error("Not implemented")
+end
+
+function M.fnext(opts)
+	opts = vim.tbl_extend("keep", opts or {}, {
+		count = 1,
+		bang = false,
+	})
+
+	if not _G.flist or #_G.flist.items == 0 then
+		error("No files")
+	elseif _G.flist.idx == #_G.flist.items then
+		error("No more items")
+	end
+
+	_G.flist.idx = _G.flist.idx and _G.flist.idx + opts.count or 1
+	local filename = _G.flist.items[_G.flist.idx].filename
+	vim.cmd.edit({ filename, bang = opts.bang })
+end
+
+function M.fprev(opts)
+	opts = vim.tbl_extend("keep", opts or {}, {
+		count = 1,
+		bang = false,
+	})
+
+	if not _G.flist or #_G.flist.items == 0 then
+		error("No files")
+	elseif _G.flist.idx == 1 then
+		error("No more items")
+	end
+
+	_G.flist.idx = _G.flist.idx and _G.flist.idx - opts.count or 1
+	local filename = _G.flist.items[_G.flist.idx].filename
+	vim.cmd.edit({ filename, bang = opts.bang })
+end
+
+function M.flist(dir)
+	local bufname = vim.api.nvim_buf_get_name(0)
+	if not dir then
+		if bufname then
+			dir = vim.fs.dirname(bufname)
+		else
+			dir = vim.uv.cwd()
+		end
+	end
+
+	local flist = {
+		title = dir,
+		items = {},
+	}
+
+	for name, type in vim.iter(vim.fs.dir(dir)) do
+		if type == "file" then
+			local filename = vim.fs.joinpath(dir, name)
+			table.insert(flist.items, {
+				filename = filename,
+				text = name,
+			})
+			if filename == bufname then
+				flist.idx = #flist.items
+			end
+		end
+	end
+
+	return flist
+end
+
 return M
