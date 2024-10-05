@@ -1,0 +1,24 @@
+#!/bin/sh
+
+swaymsg -t subscribe -m '[ "window" ]' |
+	jq -c --unbuffered 'select(.change == "focus" or .change == "fullscreen_mode") | .container |
+			if .fullscreen_mode == 1 then 
+				{ "id": .id, "sync": "enabled", "rt": 1 }
+			else 
+				{ "id": .id, "sync": "disabled", "rt": 0 }
+			end' |
+	while read -r vals; do
+		swaymsg -t get_tree | jq -r --argjson vals "$vals" --arg regex "$1" '.nodes[] | 
+			select((.. | .nodes?[]?.nodes?[]?.id == $vals.id) and (.name | test($regex))) |
+			if .adaptive_sync_status != $vals.sync then
+				[ .name, "adaptive_sync", $vals.sync ] | @sh
+			else
+				empty
+			end,
+			if .max_render_time != $vals.rt then
+				[ .name, "max_render_time", ($vals.rt | if . == 0 then "off" else . end) ] | @sh
+			else
+				empty
+			end'
+	done |
+	xargs -l1 swaymsg output

@@ -5,9 +5,6 @@ set $down j
 set $up k
 set $right l
 
-set $out1 -
-set $out2 -
-
 set $ws01 1
 set $ws02 2
 set $ws03 3
@@ -36,8 +33,6 @@ set $base0D #83a598
 set $base0E #d3869b
 set $base0F #d65d0e
 
-include ~/.config/sway/config.d/*
-
 set $menu $HOME/.local/bin/wmenu
 
 set $j4_sock $XDG_RUNTIME_DIR/j4-dmenu-desktop.sock
@@ -56,17 +51,6 @@ focus_on_window_activation focus
 force_display_urgency_hint 1000 ms
 default_border pixel
 hide_edge_borders --i3 smart
-
-workspace $ws01 output $out1 $out2
-workspace $ws02 output $out1 $out2
-workspace $ws03 output $out1 $out2
-workspace $ws04 output $out1 $out2
-workspace $ws05 output $out1 $out2
-workspace $ws06 output $out2 $out1
-workspace $ws07 output $out2 $out1
-workspace $ws08 output $out2 $out1
-workspace $ws09 output $out2 $out1
-workspace $ws10 output $out2 $out1
 
 output * bg ~/.local/share/gruvbox/sway.png fill
 
@@ -266,12 +250,14 @@ bar {
 	}
 }
 
+include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
-exec_always pgrep -x j4-dmenu-deskto || j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
+exec j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
 
-exec {
-	import-gsettings
-	systemctl --user start sway-session.target
-	swaymsg "workspace $ws06; workspace $ws01"
-}
+exec import-gsettings
+
+exec systemctl --user import-environment
+exec systemctl --user start sway-session.target
+
+exec swaymsg "workspace $ws06; workspace $ws01"
