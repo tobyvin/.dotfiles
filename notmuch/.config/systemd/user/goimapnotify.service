@@ -3,6 +3,7 @@ Description=Execute scripts on IMAP mailbox changes (new/deleted/updated message
 
 [Service]
 Type=simple
+ExecStartPre=/usr/bin/sleep 5
 ExecStart=/usr/bin/goimapnotify
 Restart=always
 RestartSec=30

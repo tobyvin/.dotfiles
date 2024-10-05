@@ -6,7 +6,10 @@ After=network-online.target
 
 [Service]
 Type=oneshot
+ExecStartPre=/usr/bin/sleep 5
 ExecStart=/usr/bin/notmuch new
+Restart=on-failure
+RestartSec=30
 
 [Install]
 WantedBy=default.target
