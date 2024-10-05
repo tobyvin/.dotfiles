@@ -65,6 +65,7 @@ for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px, urgent deny
 for_window [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"] resize set width 980px, urgent deny
+for_window [app_id="mpv" title="^twitch\.tv/*"] move container to workspace $ws07
 
 no_focus [app_id="deno" title="^Peek preview$"]
 no_focus [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"]
@@ -72,7 +73,6 @@ no_focus [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"]
 assign [class="^steam$" title="^Steam$"] $ws03
 assign [class="^steam_app_\d+$" instance="^steam_app_\d+$"] $ws03
 assign [app_id="" title="^Streamlink Twitch GUI$"] $ws07
-assign [app_id="mpv"] $ws07
 assign [app_id="discord"] $ws08
 assign [app_id="vesktop"] $ws08
 
