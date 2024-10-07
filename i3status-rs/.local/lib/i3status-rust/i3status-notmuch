@@ -1,7 +1,0 @@
-#!/bin/sh
-
-notmuch search --format=json tag:unread | jq -c 'length | {
-	icon: "mail",
-	state: (if . == 0 then "Idle" elif . < 10 then "Warning" else "Critical" end),
-	text: (. | tostring)
-}'
