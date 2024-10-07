@@ -1,39 +1,39 @@
 [i3blocks]
-command=$SCRIPT_DIR/i3blocks-title
+command=i3blocks-title
 interval=persist
 format=json
 
 [weather]
-command=$SCRIPT_DIR/i3blocks-wttr
+command=i3blocks-wttr
 interval=600
 
 [miniflux]
-command=$SCRIPT_DIR/i3blocks-miniflux
+command=i3blocks-miniflux
 interval=30
 
 [notmuch]
-command=$SCRIPT_DIR/i3blocks-notmuch
+command=i3blocks-notmuch
 interval=5
 
 [disk]
-command=$SCRIPT_DIR/i3blocks-disk
+command=i3blocks-disk
 interval=20
 
 [memory]
-command=$SCRIPT_DIR/i3blocks-memory
+command=i3blocks-memory
 interval=5
 
 [cpu]
-command=$SCRIPT_DIR/i3blocks-cpu
+command=i3blocks-cpu
 interval=5
 format=json
 
 [gpu]
-command=$SCRIPT_DIR/i3blocks-gpu
+command=i3blocks-gpu
 interval=5
 
 [net]
-command=$SCRIPT_DIR/i3blocks-net
+command=i3blocks-net
 interval=5
 
 [playerctl]
@@ -62,7 +62,7 @@ interval=persist
 format=json
 
 [volume]
-command=$SCRIPT_DIR/i3blocks-volume
+command=i3blocks-volume
 interval=persist
 format=json
 gui=pavucontrol
@@ -72,6 +72,6 @@ command=date +" %a %m/%d %T "
 interval=1
 
 [dunst]
-command=$SCRIPT_DIR/i3blocks-dunst
+command=i3blocks-dunst
 interval=persist
 format=json
