@@ -7,6 +7,7 @@ local M = {
 			lua = { "selene" },
 			zsh = { "zsh" },
 			systemd = { "systemd-analyze" },
+			awk = { "awk" },
 		},
 	},
 }
