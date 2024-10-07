@@ -19,7 +19,7 @@ if ! session="$(tmux ls -f "#{==:#{session_path},$1}" -F '#S' 2>/dev/null | grep
 fi
 
 if [ -z "$TMUX" ]; then
-	tmux attach-session -t "$session"
+	exec tmux attach-session -t "$session"
 else
 	tmux switch-client -t "$session"
 fi
