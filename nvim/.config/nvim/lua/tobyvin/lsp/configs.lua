@@ -233,6 +233,9 @@ local M = {
 			"markdown",
 			"tex",
 		},
+		init_options = {
+			config = vim.fs.joinpath(vim.env.XDG_CONFIG_HOME, "typos.toml"),
+		},
 	},
 	-- check out [tinymist](https://github.com/Myriad-Dreamin/tinymist) as a possible alternative
 	typst_lsp = {
