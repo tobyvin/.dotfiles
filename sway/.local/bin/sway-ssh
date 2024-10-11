@@ -8,4 +8,4 @@ elif [ $# -eq 0 ]; then
 fi
 
 # shellcheck disable=SC2068
-swaymsg exec -- "$TERMINAL" -e ssh $@ -t -- zsh -l -c '\"tmux new -A\"'
+swaymsg exec -- "$TERMINAL" -e ssh $@
