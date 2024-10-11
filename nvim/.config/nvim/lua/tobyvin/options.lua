@@ -1,5 +1,6 @@
 vim.g.mapleader = " "
 vim.g.maplocalleader = vim.g.mapleader
+vim.g.loaded_perl_provider = 0
 
 vim.opt.background = "dark"
 vim.opt.breakindent = true
