@@ -80,3 +80,19 @@ for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
 		source "$script"
 	fi
 done
+
+function src() {
+	if [ $# -eq 0 ]; then
+		set -- "$(projectr -mgE ~/.local/src |
+				fzf --tac -0 -1 -d/ --with-nth=-1 --preview='lesspipe.sh {}')"
+		if [ -z "$1" ]; then
+			return 0
+		fi
+	fi
+
+	if [ ! -d "$1" ]; then
+		return 1
+	fi
+
+	cd "$1"
+}

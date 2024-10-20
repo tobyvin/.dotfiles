@@ -1,3 +1,4 @@
+--tmux
 --bind ctrl-q:abort
 --bind ctrl-y:preview-up
 --bind ctrl-e:preview-down

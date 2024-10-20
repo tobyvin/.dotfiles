@@ -1,0 +1,19 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+	set -- "$(swaymsg -t get_tree |
+		jq -r '..|objects|select(.focused==true and .app_id == "Alacritty").name' |
+		cut -d' ' -f2 |
+		sed "s%^~%$HOME%")"
+elif [ "$1" = '-' ]; then
+	set -- "$(cat - | sed "s%^~%$HOME%")"
+fi
+
+if [ -n "$1" ]; then
+	case $TERMINAL in
+	alacritty) alacritty msg create-window --working-directory="$1" ;;
+	foot) foot --working-directory="$1" ;;
+	esac
+else
+	swaymsg exec -- "$TERMINAL"
+fi

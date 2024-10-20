@@ -11,7 +11,4 @@ mkdir -pv "${XDG_CACHE_HOME}/zsh"
 
 printf '%s: Writing zcompdump\n' "$0"
 
-zsh -s <<EOF
-	  autoload -U compinit
-	  compinit -u -d "${XDG_CACHE_HOME}/zsh/zcompdump"
-EOF
+pkill zsh --signal=USR1

@@ -99,7 +99,7 @@ bindsym $mod+Delete exec loginctl lock-session
 bindsym $mod+Escape exec powermenu | $menu -l 6 | powermenu
 bindsym Pause exec swaymsg "output - power toggle"
 
-bindsym $mod+return exec $TERMINAL
+bindsym $mod+return exec sway-term
 bindsym $mod+Shift+return exec sway-ssh | $menu | sway-ssh
 bindsym $mod+w exec $BROWSER
 
