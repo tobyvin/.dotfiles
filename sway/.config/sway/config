@@ -97,7 +97,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
 bindsym $mod+Delete exec loginctl lock-session
 bindsym $mod+Escape exec powermenu | $menu -l 6 | powermenu
-bindsym Pause exec swaymsg "output - power toggle"
+bindsym $mod+Pause exec swaymsg "output - power toggle"
 
 bindsym $mod+return exec $TERMINAL
 bindsym $mod+Shift+return exec sway-ssh | $menu | sway-ssh
@@ -214,7 +214,7 @@ bindsym $mod+Shift+f floating toggle
 
 bindsym $mod+backslash split horizontal
 bindsym $mod+Shift+backslash split none
-bindsym $mod+e layout toggle split tabbed
+bindsym $mod+e layout toggle tabbed splitv splith
 
 bindsym $mod+r mode 'resize'
 mode 'resize' {
