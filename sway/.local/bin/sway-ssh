@@ -7,5 +7,5 @@ elif [ $# -eq 0 ]; then
 	exit 0
 fi
 
-# shellcheck disable=SC2068
-swaymsg exec -- "$TERMINAL" -e ssh $@
+ssh -f -N -M -o "ControlPersist 30s" "$@" &&
+	swaymsg exec "'$TERMINAL' -o 'shell = { program = \"ssh\", args = [\"$1\"] }'"
