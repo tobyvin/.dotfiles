@@ -15,6 +15,7 @@ vim.opt.exrc = true
 vim.opt.fillchars:append("fold: ")
 vim.opt.foldenable = false
 vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
+vim.opt.foldlevelstart = 99
 vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
 vim.opt.formatoptions = "cqrnj"
