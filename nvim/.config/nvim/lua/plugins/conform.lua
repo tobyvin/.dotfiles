@@ -2,10 +2,50 @@
 local M = {
 	"stevearc/conform.nvim",
 	cmd = { "ConformInfo" },
+	dependencies = {
+		{
+			"codethread/qmk.nvim",
+			opts = {
+				name = "LAYOUT_5x6",
+				auto_format_pattern = nil,
+				comment_preview = {
+					position = "none",
+				},
+				layout = {
+					"x x x x x x _ x x x x x x",
+					"x x x x x x _ x x x x x x",
+					"x x x x x x _ x x x x x x",
+					"x x x x x x _ x x x x x x",
+					"_ _ x x _ _ _ _ _ x x _ _",
+					"_ _ _ _ x x _ x x _ _ _ _",
+					"_ _ _ _ x x _ x x _ _ _ _",
+					"_ _ _ _ x x _ x x _ _ _ _",
+				},
+			},
+			config = function(_, opts)
+				local config = require("qmk.config")
+				local utils = require("qmk.utils")
+
+				local ok, config_or_error = pcall(config.parse, opts)
+				if not ok then
+					utils.notify(config_or_error)
+					return
+				end
+				require("qmk").options = config_or_error
+			end,
+		},
+	},
 	opts = {
 		format_on_save = false,
 		format_after_save = false,
 		formatters_by_ft = {
+			c = function(bufnr)
+				if vim.api.nvim_buf_get_name(bufnr):match(".*keymap.c$") then
+					return { "qmk_keymap", lsp_format = "first" }
+				else
+					return {}
+				end
+			end,
 			css = { "prettier" },
 			graphql = { "prettier" },
 			html = { "prettier", "injected" },
@@ -75,9 +115,39 @@ local M = {
 				command = "typstyle",
 				stdin = true,
 			},
+			qmk_keymap = {
+				format = function(_, _, lines, callback)
+					local options = require("qmk").options
+					local parse = require("qmk.parse")
+					local format = require("qmk.format.qmk")
+
+					local keymaps, config = parse.parse(table.concat(lines, "\n"), options, parse.qmk)
+					local formatted = format(keymaps, config)
+					local out_lines = vim.list_slice(lines, 1, keymaps.pos.start + 1)
+					vim.list_extend(out_lines, formatted)
+					vim.list_extend(out_lines, lines, keymaps.pos.final + 1)
+					callback(nil, out_lines)
+				end,
+			},
 		},
 	},
 }
+
+function U.test_format()
+	local bufnr = vim.api.nvim_get_current_buf()
+	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+
+	local options = require("qmk").options
+	local parse = require("qmk.parse")
+	local format = require("qmk.format.qmk")
+
+	local keymaps, config = parse.parse(table.concat(lines, "\n"), options, parse.qmk)
+	local formatted = format(keymaps, config)
+	local out_lines = vim.list_slice(lines, 1, keymaps.pos.start)
+	vim.list_extend(out_lines, formatted)
+	vim.list_extend(out_lines, lines, keymaps.pos.final)
+	vim.print(out_lines)
+end
 
 function M:init()
 	U.formatexpr = function(...)
