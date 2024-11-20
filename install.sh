@@ -7,8 +7,11 @@ TARGET=${TARGET:-$HOME}
 
 if [ -r .installed ]; then
 	read -r DOTFILES_INSTALLED <.installed
-	export DOTFILES_INSTALLED
+else
+	DOTFILES_INSTALLED=$(git rev-list --abbrev --max-parents=0 HEAD)
 fi
+
+export DOTFILES_INSTALLED
 
 printf "%s: Stowing packages\n" "$0"
 # shellcheck disable=SC2086
@@ -26,7 +29,9 @@ stow -R "$@" ${1:-*}/ 2>&1 | awk '
 
 printf "%s: Installing packages\n" "$0"
 for f in ${1:-*}/install.sh; do
-	$f
+	if [ -e "$f" ]; then
+		$f
+	fi
 done
 
 git rev-parse ^@ >.installed

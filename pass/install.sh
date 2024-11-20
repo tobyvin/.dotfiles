@@ -16,7 +16,7 @@ if [ ! -d "$store" ]; then
 else
 	printf "%s: Syncing password-store\n" "$0"
 
-	if [ "$(date "+%s" -r "$store"/.git/FETCH_HEAD)" -lt "$(date +%s --date="12 hour ago")" ]; then
+	if [ "$(date +%s -r "$store"/.git/FETCH_HEAD)" -lt "$(date +%s --date="12 hour ago")" ]; then
 		git -C "$store" remote update origin
 	fi
 
