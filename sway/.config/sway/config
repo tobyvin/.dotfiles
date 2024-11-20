@@ -106,6 +106,9 @@ bindsym $mod+w exec $BROWSER
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway-contrib/grimshot --notify save area
 
+bindsym XF86Open exec echo > $j4_sock
+bindsym shift+XF86Open exec dmenu_path | $menu | xargs swaymsg exec --
+
 bindsym $mod+space exec echo > $j4_sock
 bindsym $mod+shift+space exec dmenu_path | $menu | xargs swaymsg exec --
 
