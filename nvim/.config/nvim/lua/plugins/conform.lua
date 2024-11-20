@@ -83,29 +83,13 @@ local M = {
 				end,
 			},
 			nginxfmt = {
-				command = "nginxfmt.py",
-				args = function(_, ctx)
+				prepend_args = function(_, ctx)
 					return {
 						"-i",
 						vim.bo[ctx.buf].tabstop,
 						"-",
 					}
 				end,
-				stdin = true,
-			},
-			nginxbeautifier = {
-				command = "nginxbeautifier",
-				args = function(_, ctx)
-					return {
-						vim.bo[ctx.buf].expandtab and "-s" or "-t",
-						vim.bo[ctx.buf].tabstop,
-						"-i",
-						"$FILENAME",
-						"-o",
-						"$FILENAME",
-					}
-				end,
-				stdin = false,
 			},
 			typstyle = {
 				meta = {
