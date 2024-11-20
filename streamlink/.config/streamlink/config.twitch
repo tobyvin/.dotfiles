@@ -1,4 +1,5 @@
 title=twitch.tv/{author} - {game} - {title}
 twitch-disable-hosting
-twitch-disable-ads
 twitch-low-latency
+# twitch-disable-ads
+twitch-proxy-playlist=https://eu.luminous.dev,https://eu2.luminous.dev
