@@ -19,22 +19,10 @@ local M = {
 			desc = "vim.lsp.buf.clear_references()",
 		})
 	end,
-	[ms.textDocument_documentSymbol] = function(bufnr)
-		vim.keymap.set("n", "gO", vim.lsp.buf.document_symbol, {
-			buffer = bufnr,
-			desc = "definition",
-		})
-	end,
 	[ms.textDocument_typeDefinition] = function(bufnr)
 		vim.keymap.set("n", "go", vim.lsp.buf.type_definition, {
 			buffer = bufnr,
 			desc = "vim.lsp.buf.type_definition()",
-		})
-	end,
-	[ms.textDocument_implementation] = function(bufnr)
-		vim.keymap.set("n", "g<c-i>", vim.lsp.buf.implementation, {
-			buffer = bufnr,
-			desc = "vim.lsp.buf.implementation()",
 		})
 	end,
 	[ms.textDocument_inlayHint] = function(bufnr)
