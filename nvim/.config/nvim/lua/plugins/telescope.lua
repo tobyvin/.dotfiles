@@ -36,7 +36,9 @@ local telescope = {
 				find_command = {
 					"fd",
 					"--type",
-					"f",
+					"file",
+					"--type",
+					"symlink",
 					"--hidden",
 					"--strip-cwd-prefix",
 				},
