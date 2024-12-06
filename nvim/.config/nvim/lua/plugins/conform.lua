@@ -117,24 +117,8 @@ local M = {
 	},
 }
 
-function U.test_format()
-	local bufnr = vim.api.nvim_get_current_buf()
-	local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
-
-	local options = require("qmk").options
-	local parse = require("qmk.parse")
-	local format = require("qmk.format.qmk")
-
-	local keymaps, config = parse.parse(table.concat(lines, "\n"), options, parse.qmk)
-	local formatted = format(keymaps, config)
-	local out_lines = vim.list_slice(lines, 1, keymaps.pos.start)
-	vim.list_extend(out_lines, formatted)
-	vim.list_extend(out_lines, lines, keymaps.pos.final)
-	vim.print(out_lines)
-end
-
 function M:init()
-	U.formatexpr = function(...)
+	_G.formatexpr = function(...)
 		local bufnr = vim.api.nvim_get_current_buf()
 		local handle = require("fidget.progress").handle.create({
 			title = "Formatting",
@@ -156,7 +140,7 @@ function M:init()
 		return err
 	end
 
-	vim.o.formatexpr = "v:lua.U.formatexpr()"
+	vim.o.formatexpr = "v:lua._G.formatexpr()"
 end
 
 return M

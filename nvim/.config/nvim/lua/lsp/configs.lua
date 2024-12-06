@@ -2,8 +2,39 @@
 
 local ms = vim.lsp.protocol.Methods
 
+local data_path = vim.fn.stdpath("data") --[[@as string]]
+
+local angular_cmd = {
+	"ngserver",
+	"--stdio",
+	"--tsProbeLocations",
+	table.concat({
+		vim.fs.joinpath(data_path, "mason", "packages", "angular-language-server"),
+		vim.uv.cwd(),
+	}, ","),
+	"--ngProbeLocations",
+	table.concat({
+		vim.fs.joinpath(
+			data_path,
+			"mason",
+			"packages",
+			"angular-language-server",
+			"node_modules",
+			"@angular",
+			"language-server"
+		),
+		vim.uv.cwd(),
+	}, ","),
+}
+
 ---@type table<string, lspconfig.Config>
 local M = {
+	angularls = {
+		cmd = angular_cmd,
+		on_new_config = function(new_config, _)
+			new_config.cmd = angular_cmd
+		end,
+	},
 	bashls = {
 		filetypes = { "sh", "PKGBUILD" },
 		settings = {
@@ -31,7 +62,6 @@ local M = {
 			[ms.textDocument_diagnostic] = vim.lsp.diagnostic.on_diagnostic,
 		},
 	},
-	denols = {},
 	dockerls = {},
 	gopls = {
 		cmd = {
@@ -224,6 +254,32 @@ local M = {
 			vim.b[bufnr].tex_flavor = "latex"
 			vim.wo[0][bufnr].spell = true
 		end,
+	},
+	ts_ls = {
+		settings = {
+			javascript = {
+				inlayHints = {
+					includeInlayEnumMemberValueHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayVariableTypeHints = false,
+				},
+			},
+			typescript = {
+				inlayHints = {
+					includeInlayEnumMemberValueHints = true,
+					includeInlayFunctionLikeReturnTypeHints = true,
+					includeInlayFunctionParameterTypeHints = true,
+					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
+					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
+					includeInlayPropertyDeclarationTypeHints = true,
+					includeInlayVariableTypeHints = false,
+				},
+			},
+		},
 	},
 	typos_lsp = {
 		filetypes = {

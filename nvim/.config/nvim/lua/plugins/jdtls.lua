@@ -8,7 +8,7 @@ local M = {
 }
 
 function M:config(opts)
-	require(self.main).start_or_attach(opts)
+	require("jdtls").start_or_attach(opts)
 end
 
 return M
