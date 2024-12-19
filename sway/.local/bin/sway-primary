@@ -7,8 +7,6 @@ else
 		wlrctl toplevel waitfor "$@" state:active
 		app_id=$(swaymsg -t get_tree | jq -r '..|objects|select(.focused==true).app_id')
 		swaymsg bindsym Shift+Insert exec "$0"
-		printf 'Binding Shift+Insert to paste primary selection for %s\n' "$app_id"
-
 		while
 			swaymsg -t subscribe '["workspace","window"]' |
 				jq -ce --arg app_id "$app_id" \
@@ -17,6 +15,5 @@ else
 			continue
 		done
 		swaymsg unbindsym Shift+Insert
-		printf 'Un-binding Shift+Insert\n'
 	done
 fi
