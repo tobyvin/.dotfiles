@@ -6,8 +6,8 @@
 	highlight = "#ebdbb2"
 	follow = mouse
 	width = (0,300)
-	height = 143
-	offset = 10x10
+	height = (0, 143)
+	offset = (10, 10)
 	notification_limit = 10
 	indicate_hidden = true
     frame_color = "#fe8019"
