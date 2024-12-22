@@ -78,6 +78,9 @@ end
 
 local augroup = vim.api.nvim_create_augroup("session", { clear = true })
 
+vim.api.nvim_create_user_command("SessionRead", read, { desc = "read session" })
+vim.api.nvim_create_user_command("SessionWrite", write, { desc = "write session" })
+
 vim.api.nvim_create_autocmd("VimEnter", {
 	group = augroup,
 	callback = function()

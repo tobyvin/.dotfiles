@@ -111,6 +111,7 @@ local M = {
 			},
 		},
 	},
+	mesonlsp = {},
 	ocamllsp = {},
 	omnisharp = {
 		cmd = { "omnisharp", "--languageserver", "--hostPID", tostring(vim.fn.getpid()) },
