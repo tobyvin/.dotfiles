@@ -1,0 +1,31 @@
+#!/bin/zsh
+
+prompt_opts=(cr percent sp subst)
+
+setopt transient_rprompt
+
+autoload -Uz vcs_info
+
+zstyle ':vcs_info:*' enable git
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vcs_info:*' unstagedstr '!'
+# zstyle ':vcs_info:git:*' formats '[%u%c%m]'
+zstyle ':vcs_info:git:*' formats '(%F{magenta}%b%f)%F{red}[%u%c%m]%f'
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+
++vi-git-untracked() {
+	if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) == 'true' ]] &&
+		git status --porcelain | grep -m 1 '^??' &>/dev/null; then
+		hook_com[misc]='?'
+	fi
+}
+
+prompt_tobyvin_precmd() {
+	vcs_info
+}
+
+add-zsh-hook precmd prompt_tobyvin_precmd
+
+PS1="${SSH_CLIENT+'%n@%m:'}"'%B%3~%b%(1j.%F{yellow}+%f.)%(?..%F{red})>%f '
+RPS1='${vcs_info_msg_0_}'
