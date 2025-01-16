@@ -4,6 +4,7 @@ HISTFILE="${XDG_STATE_HOME}/zsh/history"
 HISTSIZE=10000
 SAVEHIST=10000
 FPATH="$XDG_DATA_HOME"/zsh/site-functions:$FPATH
+KEYTIMEOUT=1
 
 setopt no_beep
 setopt menu_complete
@@ -19,6 +20,20 @@ setopt hist_verify
 setopt nonomatch
 setopt interactive_comments
 
+function zle-keymap-select() {
+	case $KEYMAP in
+	vicmd) echo -ne '\e[2 q';; # steady block
+	viins|main) echo -ne '\e[6 q';; # steady line
+	esac
+	zle reset-prompt
+}
+zle -N zle-keymap-select
+
+function zle-line-init() {
+	zle -K viins
+}
+zle -N zle-line-init
+
 bindkey -v
 bindkey -m 2>/dev/null
 
@@ -26,9 +41,6 @@ autoload -U select-word-style
 zle -N select-word-style
 select-word-style normal
 zstyle :zle:transpose-words word-style shell
-
-zstyle :completion:* cache-path "${XDG_CACHE_HOME}/zsh/zcompcache"
-zstyle :completion:* use-cache true
 
 hash -d rfc=/usr/share/doc/rfc/txt
 hash -d auto=$XDG_CONFIG_HOME/autostart
@@ -54,6 +66,7 @@ bindkey '^[[1;5C' forward-word
 bindkey '^[[1;5D' backward-word
 bindkey '^[t' transpose-words
 bindkey '^ ' forward-word
+bindkey '^?' backward-delete-char
 
 bindkey -M vicmd '^[q' push-line
 bindkey -M vicmd '^[Q' push-input-hold
@@ -64,6 +77,20 @@ bindkey -M vicmd '^[[3~' delete-char
 bindkey -M vicmd '^[[1;5C' forward-word
 bindkey -M vicmd '^[[1;5D' backward-word
 
+# History navigation
+autoload -U up-line-or-beginning-search
+zle -N up-line-or-beginning-search
+bindkey '^P' up-line-or-beginning-search
+
+autoload -U down-line-or-beginning-search
+zle -N down-line-or-beginning-search
+bindkey '^N' down-line-or-beginning-search
+
+# Edit current command in $EDITOR. From: https://unix.stackexchange.com/a/6622
+autoload edit-command-line
+zle -N edit-command-line
+bindkey -M vicmd '^v' edit-command-line
+
 alias ls='ls --human-readable --color=auto --hyperlink=auto'
 alias ip='ip -color=auto'
 alias grep='grep --color=auto'
@@ -71,6 +98,19 @@ alias diff='diff --color=auto'
 alias info='info --vi-keys'
 alias untar='tar -zxvf'
 alias userctl='systemctl --user'
+
+function title_precmd () {
+	print -Pn -- '\e]2;%n@%m:%~\a'
+}
+
+function title_preexec () {
+	print -Pn -- '\e]2;%n@%m:%~ %# ' 
+	print -n -- "${(q)1}\a"
+}
+
+autoload -Uz add-zsh-hook
+add-zsh-hook -Uz precmd title_precmd
+add-zsh-hook -Uz preexec title_preexec
 
 # Adopt the behavior of the system wide configuration for application specific settings
 #
@@ -81,18 +121,14 @@ for script in "$XDG_CONFIG_HOME"/zsh/.zshrc.d/*.zsh; do
 	fi
 done
 
-function src() {
-	if [ $# -eq 0 ]; then
-		set -- "$(projectr -mgE ~/.local/src |
-				fzf --tac -0 -1 -d/ --with-nth=-1 --preview='lesspipe.sh {}')"
-		if [ -z "$1" ]; then
-			return 0
-		fi
-	fi
 
-	if [ ! -d "$1" ]; then
-		return 1
-	fi
+zstyle :completion:* use-cache true
+zstyle :completion:* cache-path "$XDG_CACHE_HOME/zsh/zcompcache"
 
-	cd "$1"
+autoload -U compinit
+compinit -u -C -d "${XDG_CACHE_HOME}/zsh/zcompdump"
+
+TRAPUSR1() {
+	rehash
+	compinit -u -d "${XDG_CACHE_HOME}/zsh/zcompdump"
 }

@@ -1,12 +1,12 @@
 #!/bin/zsh
 
-fzf-history-widget() {
+function fzf-history-search() {
   local selected
   setopt localoptions noglobsubst noposixbuiltins pipefail no_aliases noglob nobash_rematch 2> /dev/null
 
 	selected=$(printf '%s\t%s\000' "${(kv)history[@]}" |
 		perl -0 -ne 'if (!$seen{(/^\s*[0-9]+\**\t(.*)/s, $1)}++) { s/\n/\n\t/g; print; }' |
-		fzf -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --query=${(qqq)LBUFFER} +m --read0)
+		fzf -n2..,.. --scheme=history --bind=ctrl-r:toggle-sort --wrap-sign '\t↳ ' --query="$BUFFER" +m --read0)
 
   local ret=$?
   if [ -n "$selected" ]; then
@@ -20,10 +20,10 @@ fzf-history-widget() {
   return $ret
 }
 
-zle     -N            fzf-history-widget
-bindkey -M emacs '^R' fzf-history-widget
-bindkey -M vicmd '^R' fzf-history-widget
-bindkey -M viins '^R' fzf-history-widget
+autoload fzf-history-search
+zle -N fzf-history-search
+bindkey -M main '^R' fzf-history-search
+bindkey -M vicmd '^R' fzf-history-search
 
 if [ -n "$BASE16_THEME" ] && [ -n "$BASE16_SHELL_ENABLE_VARS" ]; then
 	export FZF_DEFAULT_OPTS="$FZF_DEFAULT_OPTS
