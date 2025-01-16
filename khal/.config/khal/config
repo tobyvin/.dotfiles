@@ -1,0 +1,8 @@
+[calendars]
+[[calendars]]
+path = $XDG_DATA_HOME/calendars/*
+type = discover
+
+[[birthdays]]
+path = $XDG_DATA_HOME/contacts/922a294b-e582-4ef3-eed4-2418f86fe822
+type = birthdays
