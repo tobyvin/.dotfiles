@@ -20,6 +20,15 @@ setopt hist_verify
 setopt nonomatch
 setopt interactive_comments
 
+hash -d rfc=/usr/share/doc/rfc/txt
+hash -d auto=$XDG_CONFIG_HOME/autostart
+hash -d app=$XDG_DATA_HOME/applications
+
+autoload -U select-word-style
+zle -N select-word-style
+select-word-style normal
+zstyle :zle:transpose-words word-style shell
+
 function zle-keymap-select() {
 	case $KEYMAP in
 	vicmd) echo -ne '\e[2 q';; # steady block
@@ -34,18 +43,6 @@ function zle-line-init() {
 }
 zle -N zle-line-init
 
-bindkey -v
-bindkey -m 2>/dev/null
-
-autoload -U select-word-style
-zle -N select-word-style
-select-word-style normal
-zstyle :zle:transpose-words word-style shell
-
-hash -d rfc=/usr/share/doc/rfc/txt
-hash -d auto=$XDG_CONFIG_HOME/autostart
-hash -d app=$XDG_DATA_HOME/applications
-
 function push-input-hold {
 	buf="$BUFFER"
 	cur="$CURSOR"
@@ -55,10 +52,15 @@ function push-input-hold {
 }
 zle -N push-input-hold
 
+bindkey -v
+bindkey -m 2>/dev/null
+
 # See: https://wiki.archlinux.org/title/Zsh#Key_bindings
 bindkey '^[q' push-input
 bindkey '^[Q' push-input-hold
 bindkey '^[[Z' reverse-menu-complete
+bindkey '^[[H' beginning-of-line
+bindkey '^[[F' end-of-line
 bindkey '^[[1~' beginning-of-line
 bindkey '^[[4~' end-of-line
 bindkey '^[[3~' delete-char
