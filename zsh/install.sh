@@ -7,7 +7,7 @@ if ! command -v "$pkgname" >/dev/null; then
 	exit 0
 fi
 
-mkdir -pv "${XDG_CACHE_HOME}/zsh"
+mkdir -pv "${XDG_CACHE_HOME}/zsh" "${XDG_STATE_HOME}/zsh"
 
 printf '%s: Writing zcompdump\n' "$0"
 
