@@ -1,11 +1,18 @@
 #!/bin/sh
 
 if [ ! -t 0 ]; then
-	set -- "$@" "$(cat)"
+	args="$(cat)"
+	if [ -z "$args" ] && [ $# -eq 0 ]; then
+		exit 0
+	fi
+	set -- "$@" "$args"
 elif [ $# -eq 0 ]; then
 	sshr --resolve --port 22 --scan 0.0.0.0/24
 	exit 0
 fi
 
-ssh -f -N -M -o "ControlPersist 30s" "$@" &&
+if error=$(ssh -f -N -M -o "ControlPersist 30s" "$@" 2>&1); then
 	swaymsg exec "'$TERMINAL' -o 'shell = { program = \"ssh\", args = [\"$1\"] }'"
+else
+	notify-send -a sway-ssh -c network.error -i script-error "Error: $(basename "$0")" "$error"
+fi

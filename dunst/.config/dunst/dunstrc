@@ -10,7 +10,7 @@
 	offset = (10, 10)
 	notification_limit = 10
 	indicate_hidden = true
-    frame_color = "#fe8019"
+	frame_color = "#fe8019"
 	frame_width = 2
 	idle_threshold = 5m
 	font = sans-serif 12
@@ -27,6 +27,10 @@
 	appname = Spotify
 	msg_urgency = low
 	set_transient = true
+
+[error]
+	category = *.error
+	frame_color = "#fb4934"
 
 [low]
     msg_urgency = low
