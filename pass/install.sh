@@ -12,7 +12,7 @@ store=${PASSWORD_STORE_DIR:-$XDG_DATA_HOME/pass}
 if [ ! -d "$store" ]; then
 	printf "%s: Cloning password-store\n" "$0"
 
-	git clone git@git.sr.ht:~tobyvin/.password-store "$store"
+	git clone git@git.tobyvin.dev:.password-store "$store"
 else
 	printf "%s: Syncing password-store\n" "$0"
 
