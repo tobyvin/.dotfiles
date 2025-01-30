@@ -28,6 +28,11 @@
 	msg_urgency = low
 	set_transient = true
 
+[streamlink]
+	appname = Streamlink Twitch GUI
+	urgency = low
+	set_transient = true
+
 [error]
 	category = *.error
 	frame_color = "#fb4934"
