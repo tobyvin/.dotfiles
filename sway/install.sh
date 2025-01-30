@@ -10,3 +10,4 @@ fi
 printf "%s: Installing service\n" "$0"
 
 systemctl --user enable --now --no-block swayidle.service inhibridge.service
+systemctl --user enable --no-block swaylock.service
