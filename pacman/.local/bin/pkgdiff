@@ -1,0 +1,39 @@
+#!/bin/sh
+
+for arg; do
+	case $arg in
+	-*) ;;
+	*)
+		file="$arg"
+		break
+		;;
+	esac
+done
+
+if [ -z "$file" ]; then
+	printf "No file provided\n" >&2
+	exit 1
+fi
+
+pkgname=$(pacman -Qqo "$file" | (pacman -Q - | tr ' ' '-') 2>/dev/null)
+if [ -z "$pkgname" ]; then
+	exit 1
+fi
+
+arch="$(pacconf Architecture)"
+for cachedir in $(pacconf CacheDir); do
+	if [ -r "${cachedir}${pkgname}-${arch}".pkg.tar.zst ]; then
+		pkg="${cachedir}${pkgname}-${arch}".pkg.tar.zst
+	elif [ -r "${cachedir}${pkgname}"-any.pkg.tar.zst ]; then
+		pkg="${cachedir}${pkgname}"-any.pkg.tar.zst
+	else
+		continue
+	fi
+
+	printf '%s:%s <-> %s\n' "$pkg" "${file#/}" "$file"
+	bsdtar -xOf "$pkg" "${file#/}" | diff - "$@"
+	exit $?
+done
+
+printf "Failed to find '%s' in pacman cache\n" "$file"
+exit 1
