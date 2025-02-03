@@ -2,11 +2,17 @@
 
 import notmuch
 import os
+import subprocess
 
 ICON = "\U000f01ee"  # 󰇮
 
 
 def main():
+    terminal = os.environ.get("TERMINAL")
+    match int(os.environ.get("BLOCK_BUTTON", "0")):
+        case 1 if terminal is not None:
+            subprocess.run([terminal, "-T", "aerc", "-e", "aerc"])
+
     # Workaround for bug in the notmuch module's default config resolution
     if os.environ.get("NOTMUCH_CONFIG") is None:
         os.environ["NOTMUCH_CONFIG"] = os.path.join(
@@ -22,11 +28,11 @@ def main():
 
     print(f" {ICON} {count} \n")
     if count > 10:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
+        print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
+        print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
     elif count > 0:
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
+        print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
+        print(f"#{os.environ.get('BASE16_COLOR_0A_HEX')}")
 
 
 if __name__ == "__main__":
