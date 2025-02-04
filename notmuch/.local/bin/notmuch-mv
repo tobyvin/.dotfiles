@@ -1,0 +1,86 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import time
+import shutil
+import subprocess
+
+import notmuch
+
+UID: int = 0
+
+
+def default_config() -> str:
+    return os.path.join(
+        os.environ.get(
+            "XDG_CONFIG_HOME", os.path.join(os.path.expanduser("~"), ".config")
+        ),
+        "notmuch",
+        os.environ.get("NOTMUCH_PROFILE", "default"),
+        "config",
+    )
+
+
+def new_fname(db_path, fname, dest):
+    global UID
+
+    submaildir, basename = os.path.split(fname)
+    state = os.path.basename(submaildir)
+    flags = basename.rsplit(":", 1)[-1]
+    timestamp = int(time.time())
+    pid = os.getpid()
+    UID += 1
+    host = os.uname().nodename.split(".", 1)[0]
+    basename = "{}.{}_{}.{}:{}".format(timestamp, pid, UID, host, flags)
+    return os.path.join(db_path, dest, state, basename)
+
+
+def main():
+    dryrun = False
+    updated = False
+
+    match sys.argv:
+        case [_, "--dryrun"] | [_, "-n"]:
+            dryrun = True
+
+    if os.environ.get("NOTMUCH_CONFIG") is None:
+        os.environ["NOTMUCH_CONFIG"] = default_config()
+
+    database = notmuch.Database()
+    db_path = database.get_path()
+
+    rules = [
+        ("-folder:tobyvin.dev/tobyv/Trash tag:trash", "tobyvin.dev/tobyv/Trash"),
+        ("-folder:tobyvin.dev/tobyv/Junk tag:spam", "tobyvin.dev/tobyv/Junk"),
+        ("folder:tobyvin.dev/tobyv/Junk -tag:spam", "tobyvin.dev/tobyv/Archive"),
+        ("folder:tobyvin.dev/tobyv/Trash -tag:trash", "tobyvin.dev/tobyv/Archive"),
+        ("folder:tobyvin.dev/tobyv/INBOX -tag:inbox", "tobyvin.dev/tobyv/Archive"),
+        ("folder:tobyvin.dev/tobyv/Archive tag:sent", "tobyvin.dev/tobyv/Sent"),
+        ("folder:tobyvin.dev/tobyv/Archive tag:inbox", "tobyvin.dev/tobyv/INBOX"),
+    ]
+
+    for query_str, dest in rules:
+        maildir = os.path.dirname(dest)
+
+        for msg in database.create_query(query_str).search_messages():
+            for fname in [n for n in msg.get_filenames() if maildir in n]:
+                dest_fname = new_fname(db_path, fname, dest)
+                if not dryrun:
+                    os.makedirs(os.path.dirname(dest_fname), exist_ok=True)
+                    try:
+                        shutil.move(fname, dest_fname)
+                    except FileNotFoundError:
+                        continue
+                print("{} -> {}".format(fname, dest_fname).replace(db_path + "/", ""))
+                updated = True
+
+    if updated:
+        if not dryrun:
+            subprocess.check_call(["notmuch", "new", "--no-hooks"])
+        else:
+            print("Would update db")
+
+
+if __name__ == "__main__":
+    main()

@@ -9,9 +9,3 @@ query = tag:new
 tags_blacklist = killed;spam
 tags = +notify
 [InboxFilter]
-[MailMover]
-folders = tobyvin.dev/tobyv/INBOX tobyvin.dev/tobyv/Archive tobyvin.dev/tobyv/Junk
-rename = True
-tobyvin.dev/tobyv/INBOX = 'tag:spam':tobyvin.dev/tobyv/Junk 'NOT tag:inbox':tobyvin.dev/tobyv/Archive
-tobyvin.dev/tobyv/Archive = 'tag:spam':tobyvin.dev/tobyv/Junk 'tag:inbox':tobyvin.dev/tobyv/INBOX
-tobyvin.dev/tobyv/Junk = 'NOT tag:spam AND tag:inbox':tobyvin.dev/tobyv/INBOX 'NOT tag:spam':tobyvin.dev/tobyv/Archive
