@@ -1,5 +1,6 @@
 [general]
 live_config_reload = true
+import = ["~/.config/alacritty/theme.toml"]
 
 [window]
 dynamic_padding = true
@@ -13,8 +14,4 @@ normal = { family = "monospace" }
 hide_when_typing = true
 
 [keyboard]
-bindings = [
-    { action = "CreateNewWindow", key = "T", mods = "Control|Shift" },
-    { action = "ReceiveChar", key = "F", mode = "~Search", mods = "Control|Shift" },
-    { action = "ToggleFullscreen", key = "Return", mods = "Alt" },
-]
+bindings = [{ action = "CreateNewWindow", key = "T", mods = "Control|Shift" }]

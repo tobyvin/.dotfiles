@@ -18,9 +18,6 @@ post = "ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd)"
 [plugins.zsh-completions]
 github = "zsh-users/zsh-completions"
 
-[plugins.base16-shell]
-github = "tinted-theming/base16-shell"
-
 [plugins.zsh-syntax-highlighting]
 github = "zsh-users/zsh-syntax-highlighting"
 apply = ["defer"]
