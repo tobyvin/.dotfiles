@@ -39,6 +39,7 @@ local M = {
 		format_on_save = false,
 		format_after_save = false,
 		formatters_by_ft = {
+			awk = { "gawk" },
 			c = function(bufnr)
 				if vim.api.nvim_buf_get_name(bufnr):match(".*keymap.c$") then
 					return { "qmk_keymap", lsp_format = "first" }
