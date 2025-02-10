@@ -1,8 +1,12 @@
 [calendars]
-[[calendars]]
-path = $XDG_DATA_HOME/calendars/*
-type = discover
+[[personal]]
+path = $XDG_DATA_HOME/calendars/27816ea2-0359-8284-9f0b-c7f8d1c4d792
 
 [[birthdays]]
 path = $XDG_DATA_HOME/contacts/922a294b-e582-4ef3-eed4-2418f86fe822
 type = birthdays
+
+[keybindings]
+save = w
+external_edit = e
+export = x
