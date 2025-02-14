@@ -256,7 +256,7 @@ bar {
 include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
-exec sway-primary "firefox"
+exec sway-primary firefox discord android-messages-desktop
 exec j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
 
 exec import-gsettings
