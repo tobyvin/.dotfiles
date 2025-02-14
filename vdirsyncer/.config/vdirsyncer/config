@@ -32,6 +32,20 @@ fileext = ".ics"
 type = "http"
 url.fetch = ["command", "pass", "sonarr.tobyvin.dev/sonarr/calendar"]
 
+[pair holidays]
+a = "holidays_local"
+b = "holidays_remote"
+collections = null
+
+[storage holidays_local]
+type = "filesystem"
+path = "~/.local/share/calendars/holidays"
+fileext = ".ics"
+
+[storage holidays_remote]
+type = "http"
+url = "https://www.mozilla.org/media/caldata/USHolidays.ics"
+
 [pair contacts]
 a = "contacts_local"
 b = "contacts_remote"
