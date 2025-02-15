@@ -116,7 +116,7 @@ bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) 
 bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
 bindsym $mod+c exec slurp | grim -g - - | tesseract - - | wl-copy
 
-bindsym $mod+p exec passmenu | $menu | xargs -r pass show | head -n1 | wl-copy
+bindsym $mod+p exec passmenu | $menu | xargs -r pass show | head -n1 | wl-copy --paste-once
 bindsym $mod+Shift+p exec passmenu | $menu | xargs -r pass show | head -n1 | wtype -
 
 bindsym $mod+y exec yubikey-oath-dmenu --notify --clipboard --menu-cmd "$menu -l 10"

@@ -4,7 +4,7 @@ if [ $# -eq 0 ]; then
 	tmp=$(mktemp)
 	wl-paste --no-newline >"$tmp"
 
-	wl-paste --primary --no-newline | wl-copy
+	wl-paste --primary --no-newline | wl-copy --paste-once
 	wtype -M ctrl -k v
 
 	wl-copy <"$tmp"
