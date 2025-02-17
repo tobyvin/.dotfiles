@@ -113,8 +113,6 @@ bindsym shift+XF86Open exec dmenu_path | $menu | xargs swaymsg exec --
 bindsym $mod+space exec echo > $j4_sock
 bindsym $mod+shift+space exec dmenu_path | $menu | xargs swaymsg exec --
 
-bindsym $mod+v exec (cliphist list | $menu -l 10 || (cliphist list | head -n1)) | cliphist decode | wl-copy
-bindsym $mod+Shift+v exec cliphist list | $menu -l 10 | cliphist delete
 bindsym $mod+c exec slurp | grim -g - - | tesseract - - | wl-copy
 
 bindsym $mod+p exec passmenu | $menu | xargs -r pass show | head -n1 | wl-copy --paste-once
