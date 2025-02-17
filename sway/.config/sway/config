@@ -92,6 +92,7 @@ input type:keyboard {
 floating_modifier $mod
 
 bindsym $mod+q kill
+bindsym button2 kill
 bindsym $mod+Shift+c reload
 
 bindsym $mod+Shift+Escape exec swaynag -t warning -m 'Exit sway?' -B 'Yes' 'swaymsg exit'
