@@ -1,0 +1,122 @@
+#!/bin/sh
+# shellcheck disable=SC2016
+
+SCRIPT="$(basename "$0")"
+
+wordlist="$XDG_DATA_HOME"/dict/words_eff
+url='https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt'
+count=5
+max=9
+sep=' '
+digit=0
+trans='{print $0}'
+
+long='help,url:,count:,max:,sep:,digit::,upper,lower,title'
+short='hu:n:m:s:d::Ult'
+
+if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
+	printf "Try '%s --help' for more information.\n" "$SCRIPT" 1>&2
+	exit 1
+fi
+
+eval set -- "$opts"
+
+help() {
+	cat <<-EOF
+		Toby Vincent <tobyv@tobyvin.dev>
+
+		DESCRIPTION
+		    Generates a random phrase for a wordlist
+
+		USAGE:
+		    phrase [<OPTION> ...] [<WORDLIST>]
+
+		ARGS:
+		    WORDLIST File path to read wordlist from. Pass '-' to read from stdin.
+		             Default: '$wordlist'
+
+		OPTIONS:
+		    -h, --help          Show this help.
+		    -u, --url <URL>     Download <WORDLIST> from <URL> if it does not exists.
+		                        Default: '$url'
+		    -n, --count <NUM>   Number of words to use for phrase. (Default: '$count')
+		    -m, --max <NUM>     Max length words to use for phrase. (Default: '$max')
+		    -s, --sep <SEP>     Specify the word separator. (Default: '$sep')
+		    -d, --digit [<NUM>] Append a random digit to <NUM> word(s). If <NUM> is not
+		                        specified, digits are prepended to all words.
+		    -U, --upper         Convert words to UPPER case.
+		    -l, --lower         Convert words to lower case.
+		    -t, --title         Convert words to Title case.
+	EOF
+}
+
+while true; do
+	case "$1" in
+	-h | --help)
+		help
+		exit 0
+		;;
+	-u | --url)
+		shift
+		url="$1"
+		;;
+	-n | --count)
+		shift
+		count="$1"
+		;;
+	-m | --max)
+		shift
+		max="$1"
+		;;
+	-s | --sep)
+		shift
+		sep="$1"
+		;;
+	-d | --digit)
+		shift
+		if [ -n "$1" ]; then
+			digit="$1"
+		else
+			digit=-1
+		fi
+		;;
+	-U | --upper)
+		trans='{ print toupper($0) }'
+		;;
+	-l | --lower)
+		trans='{ print tolower($0) }'
+		;;
+	-t | --title)
+		trans='{ printf "%s%s\n", toupper(substr($0,1,1)), substr($0,2) }'
+		;;
+	--)
+		shift
+		break
+		;;
+	*)
+		help
+		printf "Invalid argument: %s" "$1" 1>&2
+		exit 1
+		;;
+	esac
+	shift
+done
+
+wordlist="${1:-"$XDG_DATA_HOME"/dict/words_eff}"
+
+if [ -z "$1" ] && [ ! -f "$wordlist" ]; then
+	mkdir -p "$XDG_DATA_HOME"/dict
+	curl -s "$url" >"$XDG_DATA_HOME"/dict/words_eff
+fi
+
+cut -f2 <"$XDG_DATA_HOME"/dict/words_eff |
+	awk 'length($0) <= '"$max" |
+	shuf -n "$count" |
+	awk "$trans" | while read -r word; do
+	printf '%s' "$word"
+	if [ "$digit" -ne 0 ]; then
+		printf '%d' "$(shuf -i0-9 -n1)"
+		digit=$((digit - 1))
+	fi
+	printf '\n'
+done | shuf | paste -s -d"$sep"
