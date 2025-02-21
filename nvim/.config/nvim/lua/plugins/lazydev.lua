@@ -6,6 +6,10 @@ local M = {
 	"LuaCATS/tex-luametatex",
 	"LuaCATS/tex-lualibs",
 	{
+		"https://gitlab.com/carsakiller/cc-tweaked-documentation",
+		name = "cc-tweaked",
+	},
+	{
 		"folke/lazydev.nvim",
 		ft = "lua",
 		cmd = "LazyDev",
@@ -17,6 +21,7 @@ local M = {
 				{ path = "tex-lualatex", words = { "tex" } },
 				{ path = "tex-luametatex", words = { "tex" } },
 				{ path = "tex-lualibs", words = { "tex" } },
+				{ path = "cc-tweaked", words = { "cc" } },
 			},
 		},
 		specs = {
