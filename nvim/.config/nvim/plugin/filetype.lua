@@ -11,6 +11,7 @@ vim.filetype.add({
 	filename = {
 		tridactylrc = "trytactylrc",
 		["nftables.conf"] = "nftables",
+		PKGBUILD = "PKGBUILD",
 	},
 	pattern = {
 		-- fontconfig

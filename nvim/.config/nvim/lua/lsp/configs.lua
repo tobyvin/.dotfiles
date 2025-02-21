@@ -4,6 +4,7 @@ local ms = vim.lsp.protocol.Methods
 
 local data_path = vim.fn.stdpath("data") --[[@as string]]
 
+---@type lspconfig.Config.command
 local angular_cmd = {
 	"ngserver",
 	"--stdio",
@@ -27,7 +28,10 @@ local angular_cmd = {
 	}, ","),
 }
 
----@type table<string, lspconfig.Config>
+---@class LspConfig: lspconfig.Config
+---@field cmd lspconfig.Config.command?
+
+---@type table<string, LspConfig>
 local M = {
 	angularls = {
 		cmd = angular_cmd,
@@ -36,7 +40,6 @@ local M = {
 		end,
 	},
 	bashls = {
-		filetypes = { "sh", "PKGBUILD" },
 		settings = {
 			bashIde = {
 				explainshellEndpoint = "https://explainshell.com",
@@ -46,14 +49,17 @@ local M = {
 				},
 			},
 		},
-		---@type fun(new_config: lspconfig.Config, new_root_dir: any)
-		on_new_config = function(new_config, new_root_dir)
-			if vim.iter(vim.fs.dir(new_root_dir)):any(function(n)
-				return n == "PKGBUILD"
-			end) then
-				new_config.settings.bashIde.shellcheckPath = "pkgbuildcheck"
-			end
-		end,
+	},
+	bashls_pkgbuild = {
+		settings = {
+			bashIde = {
+				explainshellEndpoint = "https://explainshell.com",
+				includeAllWorkspaceSymbols = true,
+				shellcheckArguments = {
+					string.format("--source-path=%s", vim.uv.cwd()),
+				},
+			},
+		},
 	},
 	clangd = {},
 	cssls = {
