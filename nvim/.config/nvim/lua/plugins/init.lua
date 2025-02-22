@@ -26,11 +26,6 @@ local M = {
 		ft = "tridactyl",
 	},
 	{
-		"nmac427/guess-indent.nvim",
-		event = { "BufReadPost", "BufNewFile" },
-		opts = {},
-	},
-	{
 		"f3fora/nvim-texlabconfig",
 		version = false,
 		build = "go build -o /home/tobyv/.local/bin/",
