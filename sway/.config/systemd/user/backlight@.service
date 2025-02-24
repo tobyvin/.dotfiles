@@ -1,6 +1,6 @@
 [Unit]
 Description=Set backlight to %i idle
-Conflicts=physlock.service
+Conflicts=lock.service
 PartOf=idle.target
 Before=idle.target
 
