@@ -10,5 +10,5 @@ base06=${base06:-ebdbb2}
 base09=${base09:-fe8019}
 base0C=${base0C:-8ec07c}
 
-exec /usr/bin/wmenu -i -f'monospace 12' -n"$base06" -N"$base00" -S"$base00" \
+exec /usr/bin/"$(basename "$0")" -i -f'monospace 12' -n"$base06" -N"$base00" -S"$base00" \
 	-s"$base09" -m"$base06" -M"$base0C" "$@"
