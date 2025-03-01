@@ -1,0 +1,29 @@
+#!/bin/sh
+
+cache="${XDG_CACHE_HOME:-"$HOME/.cache"}/wmenu-desktop"
+
+if [ $# -eq 0 ]; then
+	printf '%s\n' "$XDG_DATA_HOME" "$XDG_DATA_DIRS" |
+		tr ':' '\n' |
+		sed 's|/\?$|/applications|' |
+		xargs fd . --extension=.desktop -X desktop-entry.awk \; 2>/dev/null |
+		sort -t'	' -uk2 |
+		tee "$cache" | cut -f2
+	exit 0
+fi
+
+if [ "$1" = '-' ]; then
+	args="$(cat -)"
+	if [ -z "$args" ]; then
+		exit 0
+	fi
+	set -- "$args"
+fi
+
+entry=$(grep "$1" "$cache" | cut -f1)
+file="${entry%:*}"
+if [ "$file" != "$entry" ]; then
+	action="${entry#*:}"
+fi
+
+dex ${action:+--action="$action"} "$file"
