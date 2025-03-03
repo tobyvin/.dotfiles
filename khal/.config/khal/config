@@ -16,3 +16,14 @@ type = birthdays
 save = w
 external_edit = e
 export = x
+
+[default]
+default_calendar = personal
+
+[locale]
+default_timezone = Us/Central
+timeformat = %H:%M
+dateformat = %m/%d
+longdateformat = %Y/%m/%d
+datetimeformat = %m/%d %H:%M
+longdatetimeformat = %Y/%m/%d %H:%M
