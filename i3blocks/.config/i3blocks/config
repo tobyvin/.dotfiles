@@ -3,13 +3,13 @@ command=i3blocks-title
 interval=persist
 format=json
 
-[i3blocks]
-command=i3blocks-octoprint
-interval=30
-
 [weather]
 command=i3blocks-wttr
 interval=600
+
+[i3blocks]
+command=i3blocks-octoprint
+interval=30
 
 [miniflux]
 command=i3blocks-miniflux

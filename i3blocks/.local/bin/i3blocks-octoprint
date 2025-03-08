@@ -9,7 +9,13 @@ from requests.exceptions import ConnectionError, HTTPError
 import requests
 
 
-ICON = "P"
+ICONS = {
+    "Printing": "\U000f0e5b",  # 󰹛
+    "Heating": "\U000f18b8",  # 󱢸
+    "Alert": "\U000f11c0",  # 󱇀
+}
+ICONS["ERROR"] = ICONS["Alert"]
+
 BLACK = f"#{os.environ.get('BASE16_COLOR_00_HEX')}"
 RED = f"#{os.environ.get('BASE16_COLOR_08_HEX')}"
 YELLOW = f"#{os.environ.get('BASE16_COLOR_0A_HEX')}"
@@ -35,23 +41,25 @@ def main():
     try:
         data = get_info()
         state = data["state"]
-        time = data["progress"].get("printTimeLeft")
+        time = data["progress"].get("printTimeLeft", "?")
+        if isinstance(time, int):
+            time = timedelta(seconds=time)
     except (ConnectionError, HTTPError):
-        state = None
-        time = None
+        state = "ERROR"
+        time = "x"
 
-    match time, state:
-        case None, None:
-            print(f" {ICON} x \n")
-            print(BLACK)
+    if not (icon := ICONS.get(state)):
+        print("")
+        return
+
+    print(f" {icon} {time} \n")
+    print(BLACK)
+    match time:
+        case str("x"):
             print(RED)
-        case None, "Printing":
-            print(f" {ICON} ? \n")
-            print(BLACK)
+        case str("?"):
             print(YELLOW)
-        case int(c), "Printing" if c > 0:
-            print(f" {ICON} {timedelta(seconds=time)} \n")
-            print(BLACK)
+        case _:
             print(AQUA)
 
 
