@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+
+import os
+import subprocess
+from typing import Any
+from datetime import timedelta
+from requests.exceptions import ConnectionError, HTTPError
+
+import requests
+
+
+ICON = "P"
+BLACK = f"#{os.environ.get('BASE16_COLOR_00_HEX')}"
+RED = f"#{os.environ.get('BASE16_COLOR_08_HEX')}"
+YELLOW = f"#{os.environ.get('BASE16_COLOR_0A_HEX')}"
+AQUA = f"#{os.environ.get('BASE16_COLOR_0C_HEX')}"
+
+
+def get_info() -> dict[Any, Any]:
+    url = "https://octoprint.tobyvin.dev/api/job"
+    headers = {"X-Api-Key": os.environ.get("OCTOPRINT_TOKEN")}
+    resp = requests.get(url, headers=headers, timeout=5)
+    resp.raise_for_status()
+    return resp.json()
+
+
+def main():
+    match int(os.environ.get("BLOCK_BUTTON", "0")):
+        case 1:
+            subprocess.run(
+                ["swaymsg", "exec", "mpv", "https://octoprint.tobyvin.dev/stream/1/"],
+                capture_output=True,
+            )
+
+    try:
+        data = get_info()
+        state = data["state"]
+        time = data["progress"].get("printTimeLeft")
+    except (ConnectionError, HTTPError):
+        state = None
+        time = None
+
+    match time, state:
+        case None, None:
+            print(f" {ICON} x \n")
+            print(BLACK)
+            print(RED)
+        case None, "Printing":
+            print(f" {ICON} ? \n")
+            print(BLACK)
+            print(YELLOW)
+        case int(c), "Printing" if c > 0:
+            print(f" {ICON} {timedelta(seconds=time)} \n")
+            print(BLACK)
+            print(AQUA)
+
+
+if __name__ == "__main__":
+    main()
