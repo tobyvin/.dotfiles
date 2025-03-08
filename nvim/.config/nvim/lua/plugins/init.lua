@@ -32,6 +32,10 @@ local M = {
 		ft = { "tex", "bib" },
 		opts = {},
 	},
+	{
+		"brianhuster/live-preview.nvim",
+		ft = { "html" },
+	},
 }
 
 return M
