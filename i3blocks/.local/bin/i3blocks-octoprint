@@ -1,66 +1,366 @@
 #!/usr/bin/env python3
 
+import json
+import logging
 import os
 import subprocess
-from typing import Any
+import sys
+import time
+from dataclasses import dataclass, field
 from datetime import timedelta
-from requests.exceptions import ConnectionError, HTTPError
+from enum import StrEnum
+from subprocess import DEVNULL, Popen
+from typing import Any, Optional, Self
 
-import requests
+from jeepney import DBusAddress, new_method_call
+from jeepney.io.blocking import open_dbus_connection
+from paho.mqtt.client import Client, MQTTMessage
 
-
-ICONS = {
-    "Printing": "\U000f0e5b",  # 󰹛
-    "Heating": "\U000f18b8",  # 󱢸
-    "Alert": "\U000f11c0",  # 󱇀
-}
-ICONS["ERROR"] = ICONS["Alert"]
-
-BLACK = f"#{os.environ.get('BASE16_COLOR_00_HEX')}"
-RED = f"#{os.environ.get('BASE16_COLOR_08_HEX')}"
-YELLOW = f"#{os.environ.get('BASE16_COLOR_0A_HEX')}"
-AQUA = f"#{os.environ.get('BASE16_COLOR_0C_HEX')}"
+DBUS_ADDRESS = DBusAddress(
+    "/org/freedesktop/Notifications",
+    bus_name="org.freedesktop.Notifications",
+    interface="org.freedesktop.Notifications",
+)
 
 
-def get_info() -> dict[Any, Any]:
-    url = "https://octoprint.tobyvin.dev/api/job"
-    headers = {"X-Api-Key": os.environ.get("OCTOPRINT_TOKEN")}
-    resp = requests.get(url, headers=headers, timeout=5)
-    resp.raise_for_status()
-    return resp.json()
+def variant(v: Any) -> (str, Any):
+    match v:
+        case bool(v):
+            return ("b", v)
+        case int(v):
+            return ("i", v)
+        case str(v):
+            return ("s", v)
+
+
+def notify(summary, body, hints={"category": "3dprinter"}) -> int | None:
+    msg = new_method_call(
+        DBUS_ADDRESS,
+        "Notify",
+        "susssasa{sv}i",
+        (
+            "i3blocks-octoprint",
+            0,
+            "printer",
+            summary,
+            body,
+            [],
+            {k: variant(v) for k, v in hints.items()},
+            -1,
+        ),
+    )
+    id = open_dbus_connection(bus="SESSION").send_and_get_reply(msg)
+    if isinstance(id, int):
+        return id
+
+
+class Icon(StrEnum):
+    PRINTING = "\U000f0e5b"  # 󰹛
+    HEATING = "\U000f18b8"  # 󱢸
+    ALERT = "\U000f11c0"  # 󱇀
+
+
+class Color(StrEnum):
+    BLACK = "#" + os.environ.get("BASE16_COLOR_00_HEX")
+    WHITE = "#" + os.environ.get("BASE16_COLOR_05_HEX")
+    RED = "#" + os.environ.get("BASE16_COLOR_08_HEX")
+    YELLOW = "#" + os.environ.get("BASE16_COLOR_0A_HEX")
+    AQUA = "#" + os.environ.get("BASE16_COLOR_0C_HEX")
+
+    def keys(self):
+        return list(["color", "background"])
+
+    def __getitem__(self, key):
+        match self, key:
+            case _, "background":
+                return self
+            case Color.BLACK, "color":
+                return Color.WHITE
+            case _, "color":
+                return Color.BLACK
+
+
+@dataclass(frozen=True)
+class Temperature:
+    target: int = field(default=0)
+    actual: int = field(default=0)
+
+    @property
+    def enabled(self) -> bool:
+        return self.target > 0
+
+    @property
+    def heating(self) -> bool:
+        return (self.target - self.actual) > 1
+
+    def __str__(self) -> str:
+        s = "{:.1f}".format(self.actual)
+        if self.heating:
+            s += "/{:.1f}".format(self.target)
+        return s
+
+
+@dataclass(frozen=True)
+class Progress:
+    completion: int | float = 0
+    elapsed: Optional[int] = None
+    remaining: Optional[int] = None
+    origin: Optional[str] = None
+    name: Optional[str] = None
+
+    @classmethod
+    def decode(cls, values: int | dict[str, Any]) -> Self:
+        self = cls()
+        match values:
+            case int(c) | float(c):
+                return Progress(completion=c)
+            case {
+                "progress": {
+                    "completion": c,
+                    "printTime": e,
+                    "printTimeLeft": r,
+                    "printTimeLeftOrigin": o,
+                },
+                "job": {"file": {"name": n}},
+            }:
+                return Progress(c, e, r, o, n)
+
+        return self
+
+    @property
+    def trunc_name(self) -> str:
+        if self.name:
+            return self.name[:15] + (self.name[15:] and "...")
+        else:
+            return ""
+
+    @property
+    def time_elapsed(self) -> str:
+        return str(timedelta(seconds=self.elapsed)) if self.elapsed else "?"
+
+    @property
+    def time_remaining(self) -> str:
+        match self.remaining, self.origin:
+            case None, _:
+                return "?"
+            case int(r), None:
+                return f"{timedelta(seconds=r)}"
+            case int(r), o:
+                return f"{timedelta(seconds=r)} ({o})"
+
+    def notify(self) -> int | None:
+        notify(
+            "3D Print: status",
+            "\n".join(
+                [
+                    f"Name: {self.trunc_name}",
+                    f"Completion: {self.completion:.1f}%",
+                    f"Elapsed: {self.time_elapsed}",
+                    f"Remaining: {self.time_remaining}",
+                ]
+            ),
+        )
+
+    def __str__(self) -> str:
+        return "{:.1f}%".format(self.completion)
+
+
+@dataclass
+class Octoprint:
+    bed: Temperature = field(default_factory=Temperature)
+    tool0: Temperature = field(default_factory=Temperature)
+    progress: Progress = field(default_factory=Progress)
+    status: str = "UNKNOWN"
+
+    @property
+    def name(self):
+        return self.progress.name
+
+    @property
+    def printing(self):
+        return self.status == "PRINTING"
+
+    @property
+    def heating(self):
+        return self.bed.heating or self.tool0.heating
+
+    @property
+    def bg(self):
+        match self.status:
+            case "FAILED":
+                return Color.RED
+            case "PRINTING" if self.heating:
+                return Color.YELLOW
+            case "PRINTING":
+                return Color.AQUA
+            case _:
+                return ""
+
+    @property
+    def icon(self):
+        match self.status:
+            case "FAILED":
+                return Icon.ALERT
+            case "PRINTING" if self.heating:
+                return Icon.HEATING
+            case "PRINTING":
+                return Icon.PRINTING
+            case _:
+                return ""
+
+    @property
+    def full_text(self) -> dict[str, str]:
+        return {"full_text": " {} ".format(self.format(short=False))}
+
+    @property
+    def short_text(self) -> dict[str, str]:
+        return {"short_text": " {} ".format(self.format(short=True))}
+
+    def format(self, short=False) -> str:
+        match self.status:
+            case "FAILED":
+                return f"{self.icon} FAILED"
+            case "PRINTING" if short:
+                items = [self.icon, self.progress]
+                return f"{self.icon} {self.progress}"
+            case "PRINTING":
+                items = [self.icon, self.progress]
+                if self.tool0.enabled:
+                    items.append(f"E:{self.tool0}")
+                if self.bed.enabled:
+                    items.append(f"B:{self.bed}")
+                return " ".join([str(i) for i in items])
+            case _:
+                return ""
+
+    def json(self):
+        return json.dumps(
+            {**self.full_text, **self.short_text, **self.bg},
+            ensure_ascii=False,
+        )
 
 
 def main():
-    match int(os.environ.get("BLOCK_BUTTON", "0")):
-        case 1:
-            subprocess.run(
-                ["swaymsg", "exec", "mpv", "https://octoprint.tobyvin.dev/stream/1/"],
-                capture_output=True,
-            )
+    logging.basicConfig(level=getattr(logging, os.getenv("LOGLEVEL", "WARNING")))
+    logger = logging.getLogger(os.path.basename(sys.argv[0]))
 
-    try:
-        data = get_info()
-        state = data["state"]
-        time = data["progress"].get("printTimeLeft", "?")
-        if isinstance(time, int):
-            time = timedelta(seconds=time)
-    except (ConnectionError, HTTPError):
-        state = "ERROR"
-        time = "x"
+    octoprint = Octoprint()
+    mqttc = Client(
+        client_id="i3blocks-octoprint",
+        userdata=octoprint,
+        clean_session=True,
+    )
+    mqttc.enable_logger(logger)
 
-    if not (icon := ICONS.get(state)):
-        print("")
-        return
+    @mqttc.topic_callback("octoprint/event/PrinterStateChanged")
+    @mqttc.topic_callback("octoprint/progress/printing")
+    def on_state_changed(client: Client, data: Octoprint, msg: MQTTMessage):
+        match json.loads(msg.payload.decode()):
+            case {"_timestamp": ts} if (time.time() - ts) > 300:
+                return
+            case {"state_id": status}:
+                data.status = status
+            case {"printer_data": {"state": {"flags": {"printing": False}}}} if (
+                data.printing
+            ):
+                data.status = "UNKNOWN"
+            case {"path": n, "printer_data": p} | {"path": n, "progress": p}:
+                data.status = "PRINTING"
+                data.file = n
+                data.progress = Progress.decode(p)
 
-    print(f" {icon} {time} \n")
-    print(BLACK)
-    match time:
-        case str("x"):
-            print(RED)
-        case str("?"):
-            print(YELLOW)
-        case _:
-            print(AQUA)
+        if data.printing:
+            client.subscribe(("octoprint/temperature/+", 0))
+        else:
+            client.unsubscribe("octoprint/temperature/+")
+
+        print(data.json(), flush=True)
+
+    @mqttc.topic_callback("octoprint/event/PrintDone")
+    def on_print_done(client: Client, data: Octoprint, msg: MQTTMessage):
+        match json.loads(msg.payload.decode()):
+            case {"name": name, "time": time}:
+                notify(
+                    "3D Print: completed",
+                    "\n".join(["Name: {}", "Print time: {}"]).format(
+                        name, timedelta(seconds=time)
+                    ),
+                )
+
+    @mqttc.topic_callback("octoprint/event/PrintFailed")
+    def on_print_failed(client: Client, data: Octoprint, msg: MQTTMessage):
+        match json.loads(msg.payload.decode()):
+            case {"name": name, "time": time, "reason": "canceled"}:
+                notify(
+                    "3D Print: canceled",
+                    "\n".join(["Name: {}", "Print time: {}"]).format(
+                        name, timedelta(seconds=time)
+                    ),
+                    {"category": "3dprinter.warn"},
+                )
+            case {"name": name, "time": time, "reason": "failed"}:
+                notify(
+                    "3D Print: failed",
+                    "\n".join(["Name: {}", "Print time: {}"]).format(
+                        name, timedelta(seconds=time)
+                    ),
+                    {"category": "3dprinter.error"},
+                )
+
+    @mqttc.topic_callback("octoprint/temperature/+")
+    def on_temperature(client: Client, data: Octoprint, msg: MQTTMessage):
+        match msg.topic.split("/").pop(), json.loads(msg.payload.decode()):
+            case "tool0", {"target": t, "actual": a}:
+                data.tool0 = Temperature(target=t, actual=a)
+            case "bed", {"target": t, "actual": a}:
+                data.bed = Temperature(target=t, actual=a)
+        print(data.json(), flush=True)
+
+    @mqttc.connect_fail_callback()
+    def on_connect_fail(client: Client, data: Octoprint):
+        logger.error("Failed to connect to MQTT broker")
+        print(json.dumps({"full_text": f" {Icon.ALERT} x ", **Color.RED}))
+        os._exit(1)
+
+    passwd = subprocess.run(
+        ["pass", "show", "mqtt.tobyvin.dev/octoprint"],
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.strip()
+
+    mqttc.username_pw_set(username="octoprint", password=passwd)
+    mqttc.connect(host="frigg.asgard.tobyvin.dev")
+    mqttc.subscribe(
+        [
+            ("octoprint/event/PrinterStateChanged", 1),
+            ("octoprint/event/PrintDone", 1),
+            ("octoprint/event/PrintFailed", 1),
+            ("octoprint/progress/printing", 1),
+        ]
+    )
+    mqttc.loop_start()
+
+    stdio = {
+        "stdin": DEVNULL,
+        "stdout": DEVNULL,
+        "stderr": DEVNULL,
+    }
+
+    for line in sys.stdin:
+        match json.loads(line):
+            case {"button": 1}:
+                Popen(["xdg-open", "https://octoprint.tobyvin.dev"], **stdio)
+            case {"button": 2}:
+                octoprint.progress.notify()
+            case {"button": 3}:
+                Popen(["mpv", "https://octoprint.tobyvin.dev/stream/1/"], **stdio)
+            case {"button": 4}:
+                pass
+            case {"button": 5}:
+                pass
+
+        print(octoprint.json(), flush=True)
 
 
 if __name__ == "__main__":
