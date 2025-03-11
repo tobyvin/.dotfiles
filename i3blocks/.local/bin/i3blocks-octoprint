@@ -58,6 +58,7 @@ class Icon(StrEnum):
     PRINTING = "\U000f0e5b"  # 󰹛
     HEATING = "\U000f18b8"  # 󱢸
     ALERT = "\U000f11c0"  # 󱇀
+    NONE = ""
 
 
 class Color(StrEnum):
@@ -66,12 +67,15 @@ class Color(StrEnum):
     RED = "#" + os.environ.get("BASE16_COLOR_08_HEX")
     YELLOW = "#" + os.environ.get("BASE16_COLOR_0A_HEX")
     AQUA = "#" + os.environ.get("BASE16_COLOR_0C_HEX")
+    NONE = ""
 
     def keys(self):
         return list(["color", "background"])
 
     def __getitem__(self, key):
         match self, key:
+            case Color.NONE, _:
+                return Color.NONE
             case _, "background":
                 return self
             case Color.BLACK, "color":
@@ -194,7 +198,7 @@ class Octoprint:
             case "PRINTING":
                 return Color.AQUA
             case _:
-                return ""
+                return Color.NONE
 
     @property
     def icon(self):
@@ -206,32 +210,30 @@ class Octoprint:
             case "PRINTING":
                 return Icon.PRINTING
             case _:
-                return ""
+                return Icon.NONE
 
     @property
     def full_text(self) -> dict[str, str]:
-        return {"full_text": " {} ".format(self.format(short=False))}
-
-    @property
-    def short_text(self) -> dict[str, str]:
-        return {"short_text": " {} ".format(self.format(short=True))}
-
-    def format(self, short=False) -> str:
         match self.status:
             case "FAILED":
-                return f"{self.icon} FAILED"
-            case "PRINTING" if short:
-                items = [self.icon, self.progress]
-                return f"{self.icon} {self.progress}"
+                return {"full_text": f" {self.icon} FAILED "}
             case "PRINTING":
                 items = [self.icon, self.progress]
                 if self.tool0.enabled:
                     items.append(f"E:{self.tool0}")
                 if self.bed.enabled:
                     items.append(f"B:{self.bed}")
-                return " ".join([str(i) for i in items])
+                return {"full_text": " {} ".format(" ".join([str(i) for i in items]))}
             case _:
-                return ""
+                return {"full_text": ""}
+
+    @property
+    def short_text(self) -> dict[str, str]:
+        match self.status:
+            case "PRINTING":
+                return {"short_text": f" {self.icon} {self.progress} "}
+            case _:
+                return {"short_text": ""}
 
     def json(self):
         return json.dumps(
@@ -286,6 +288,7 @@ def main():
                         name, timedelta(seconds=time)
                     ),
                 )
+        print(data.json(), flush=True)
 
     @mqttc.topic_callback("octoprint/event/PrintFailed")
     def on_print_failed(client: Client, data: Octoprint, msg: MQTTMessage):
@@ -306,6 +309,7 @@ def main():
                     ),
                     {"category": "3dprinter.error"},
                 )
+        print(data.json(), flush=True)
 
     @mqttc.topic_callback("octoprint/temperature/+")
     def on_temperature(client: Client, data: Octoprint, msg: MQTTMessage):
