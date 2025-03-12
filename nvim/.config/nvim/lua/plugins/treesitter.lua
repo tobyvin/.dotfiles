@@ -36,6 +36,7 @@ local M = {
 			"json",
 			"latex",
 			"make",
+			"python",
 			"regex",
 			"ron",
 			"rust",
