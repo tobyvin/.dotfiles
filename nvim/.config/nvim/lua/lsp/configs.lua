@@ -92,6 +92,11 @@ local M = {
 			"html",
 			"htmldjango",
 		},
+		settings = {
+			html = {
+				provideFormatter = false,
+			},
+		},
 	},
 	-- jedi_language_server = {},
 	jinja_lsp = {},
