@@ -14,6 +14,22 @@ local M = {
 			},
 			preview_config = { border = "single" },
 			on_attach = function(bufnr)
+				local function with_opfunc(fn)
+					return function()
+						local _opfunc = vim.go.operatorfunc
+						_G._opfunc = function()
+							fn({
+								vim.api.nvim_buf_get_mark(0, "[")[1],
+								vim.api.nvim_buf_get_mark(0, "]")[1],
+							})
+							vim.go.operatorfunc = _opfunc
+							_G._opfunc = nil
+						end
+						vim.go.operatorfunc = "v:lua._opfunc"
+						return "g@"
+					end
+				end
+
 				vim.keymap.set("n", "]c", function()
 					if vim.wo.diff then
 						return "]c"
@@ -34,7 +50,13 @@ local M = {
 					buffer = bufnr,
 				})
 
-				vim.keymap.set("n", "<leader>gr", require("gitsigns").reset_hunk, {
+				vim.keymap.set("n", "<leader>gr", with_opfunc(require("gitsigns").reset_hunk), {
+					desc = "reset hunk",
+					buffer = bufnr,
+					expr = true,
+				})
+
+				vim.keymap.set("n", "<leader>grr", require("gitsigns").reset_hunk, {
 					desc = "reset hunk",
 					buffer = bufnr,
 				})
@@ -46,7 +68,13 @@ local M = {
 					buffer = bufnr,
 				})
 
-				vim.keymap.set("n", "<leader>gs", require("gitsigns").stage_hunk, {
+				vim.keymap.set("n", "<leader>gs", with_opfunc(require("gitsigns").stage_hunk), {
+					desc = "stage hunk",
+					buffer = bufnr,
+					expr = true,
+				})
+
+				vim.keymap.set("n", "<leader>gss", require("gitsigns").stage_hunk, {
 					desc = "stage hunk",
 					buffer = bufnr,
 				})
@@ -55,26 +83,6 @@ local M = {
 					require("gitsigns").stage_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
 				end, {
 					desc = "stage hunk",
-					buffer = bufnr,
-				})
-
-				vim.keymap.set("n", "<leader>gu", require("gitsigns").undo_stage_hunk, {
-					desc = "undo stage hunk",
-					buffer = bufnr,
-				})
-
-				vim.keymap.set("n", "<leader>gR", require("gitsigns").reset_buffer, {
-					desc = "reset buffer",
-					buffer = bufnr,
-				})
-
-				vim.keymap.set("n", "<leader>gS", require("gitsigns").stage_buffer, {
-					desc = "stage buffer",
-					buffer = bufnr,
-				})
-
-				vim.keymap.set("n", "<leader>gU", require("gitsigns").reset_buffer_index, {
-					desc = "undo stage buffer",
 					buffer = bufnr,
 				})
 			end,
