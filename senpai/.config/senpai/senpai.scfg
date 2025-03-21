@@ -1,7 +1,7 @@
-address chat.sr.ht
+address irc.tobyvin.dev
 
 nickname tobyvin
 realname Toby Vincent
 
 username tobyvin
-password-cmd pass sr.ht/senpai
+password-cmd pass irc.tobyvin.dev/tobyvin
