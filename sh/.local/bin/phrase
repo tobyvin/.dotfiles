@@ -7,12 +7,12 @@ wordlist="$XDG_DATA_HOME"/dict/words_eff
 url='https://www.eff.org/files/2016/07/18/eff_large_wordlist.txt'
 count=5
 max=9
-sep=' '
+delim=' '
 digit=0
 trans='{print $0}'
 
-long='help,url:,count:,max:,sep:,digit::,upper,lower,title'
-short='hu:n:m:s:d::Ult'
+long='help,url:,count:,max:,delimiter:,digit::,upper,lower,title'
+short='hu:n:m:d:i::Ult'
 
 if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
 	printf "Try '%s --help' for more information.\n" "$SCRIPT" 1>&2
@@ -36,17 +36,17 @@ help() {
 		             Default: '$wordlist'
 
 		OPTIONS:
-		    -h, --help          Show this help.
-		    -u, --url <URL>     Download <WORDLIST> from <URL> if it does not exists.
-		                        Default: '$url'
-		    -n, --count <NUM>   Number of words to use for phrase. (Default: '$count')
-		    -m, --max <NUM>     Max length words to use for phrase. (Default: '$max')
-		    -s, --sep <SEP>     Specify the word separator. (Default: '$sep')
-		    -d, --digit [<NUM>] Append a random digit to <NUM> word(s). If <NUM> is not
-		                        specified, digits are prepended to all words.
-		    -U, --upper         Convert words to UPPER case.
-		    -l, --lower         Convert words to lower case.
-		    -t, --title         Convert words to Title case.
+		    -h, --help              Show this help.
+		    -u, --url <URL>         Download <WORDLIST> from <URL> if it does not exists.
+		                            Default: '$url'
+		    -n, --count <NUM>       Number of words to use for phrase. (Default: '$count')
+		    -m, --max <NUM>         Max length words to use for phrase. (Default: '$max')
+		    -d, --delimiter <DELIM> Specify the word separator. (Default: '$delim')
+		    -i, --digit [<NUM>]     Append a random digit to <NUM> word(s). If <NUM> is not
+		                            specified, digits are prepended to all words.
+		    -U, --upper             Convert words to UPPER case.
+		    -l, --lower             Convert words to lower case.
+		    -t, --title             Convert words to Title case.
 	EOF
 }
 
@@ -68,11 +68,11 @@ while true; do
 		shift
 		max="$1"
 		;;
-	-s | --sep)
+	-d | --delimiter)
 		shift
-		sep="$1"
+		delim="$1"
 		;;
-	-d | --digit)
+	-i | --digit)
 		shift
 		if [ -n "$1" ]; then
 			digit="$1"
@@ -114,9 +114,9 @@ cut -f2 <"$XDG_DATA_HOME"/dict/words_eff |
 	shuf -n "$count" |
 	awk "$trans" | while read -r word; do
 	printf '%s' "$word"
-	if [ "$digit" -ne 0 ]; then
+	if [ "$digit" != 0 ]; then
 		printf '%d' "$(shuf -i0-9 -n1)"
 		digit=$((digit - 1))
 	fi
 	printf '\n'
-done | shuf | paste -s -d"$sep"
+done | shuf | paste -s -d"$delim"
