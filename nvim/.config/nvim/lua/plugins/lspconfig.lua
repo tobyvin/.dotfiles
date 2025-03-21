@@ -3,7 +3,6 @@ local M = {
 	"neovim/nvim-lspconfig",
 	version = false,
 	event = "BufReadPre",
-	dependencies = { "hrsh7th/cmp-nvim-lsp" },
 }
 
 function M:config()

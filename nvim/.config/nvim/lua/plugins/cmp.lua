@@ -19,6 +19,7 @@ end
 local cmp = {
 	"hrsh7th/nvim-cmp",
 	event = { "InsertEnter" },
+	enabled = false,
 	version = false,
 	dependencies = {
 		"hrsh7th/cmp-path",
@@ -73,6 +74,7 @@ local cmp = {
 ---@type LazySpec
 local cmp_nvim_lsp = {
 	"hrsh7th/cmp-nvim-lsp",
+	enabled = false,
 	opts = {},
 	specs = {
 		{

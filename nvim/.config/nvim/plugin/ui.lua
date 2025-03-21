@@ -1,10 +1,8 @@
 do
 	local function select(items, opts, on_choice)
-		vim.validate({
-			items = { items, "table", false },
-			opts = { opts, { "table", "nil" }, false },
-			on_choice = { on_choice, "function", false },
-		})
+		vim.validate("items", items, "table")
+		vim.validate("opts", opts, { "table", "nil" })
+		vim.validate("on_choice", on_choice, "function")
 
 		if #items == 0 then
 			return
@@ -103,10 +101,8 @@ end
 
 do
 	local function input(opts, on_confirm)
-		vim.validate({
-			opts = { opts, { "table", "nil" }, true },
-			on_confirm = { on_confirm, "function", false },
-		})
+		vim.validate("opts", opts, { "table", "nil" })
+		vim.validate("on_confirm", on_confirm, "function")
 
 		opts = vim.tbl_extend("keep", opts or {}, {
 			prompt = "Input",

@@ -1,7 +1,7 @@
 vim.opt.background = "dark"
 vim.opt.breakindent = true
 vim.opt.colorcolumn = "+1"
-vim.opt.completeopt = { "menuone", "noselect", "noinsert", "popup" }
+vim.opt.completeopt = { "menuone", "noselect", "noinsert", "popup", "preview" }
 vim.opt.conceallevel = 2
 vim.opt.cursorline = true
 vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff" }
@@ -10,7 +10,6 @@ vim.opt.expandtab = false
 vim.opt.exrc = true
 vim.opt.fillchars:append("fold: ")
 vim.opt.foldenable = false
-vim.opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 vim.opt.foldlevelstart = 99
 vim.opt.foldmethod = "expr"
 vim.opt.foldtext = ""
@@ -20,6 +19,7 @@ vim.opt.inccommand = "split"
 vim.opt.jumpoptions:append("stack")
 vim.opt.linebreak = true
 vim.opt.list = true
+vim.opt.messagesopt = { "wait:2000", "history:500" }
 vim.opt.modeline = true
 vim.opt.mouse = "a"
 vim.opt.number = true
@@ -49,7 +49,8 @@ vim.opt.undofile = true
 vim.opt.undolevels = 500
 vim.opt.updatetime = 500
 vim.opt.wildignore:append({ "*.o", "*.rej", "*.so", "*~", "*.pyc", "*pycache*", "Cargo.lock" })
-vim.opt.wildmode = "longest:full,full"
+vim.opt.wildmode = { "longest:full", "full", "noselect" }
+vim.opt.winborder = "single"
 vim.opt.wrap = false
 vim.opt.wrapscan = false
 

@@ -7,7 +7,7 @@ local telescope = {
 	},
 	opts = {
 		defaults = {
-			borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+			borderchars = false,
 			file_ignore_patterns = { "^.git/" },
 			vimgrep_arguments = {
 				"rg",
