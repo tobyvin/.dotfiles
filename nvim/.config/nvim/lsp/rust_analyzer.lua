@@ -1,0 +1,129 @@
+return {
+	cmd = { "rust-analyzer" },
+	filetypes = { "rust" },
+	root_dir = function(bufnr, cb)
+		local cargo_home = vim.env.CARGO_HOME or vim.fs.joinpath(vim.env.HOME, ".cargo")
+		local rust_home = vim.env.RUSTUP_HOME or vim.fs.joinpath(vim.env.HOME, ".rustup")
+		local is_lib = vim.iter({
+			vim.fs.joinpath(cargo_home, "registry", "src"),
+			vim.fs.joinpath(cargo_home, "git", "checkouts"),
+			vim.fs.joinpath(rust_home, "toolchains"),
+		})
+			:map(vim.fs.normalize)
+			:any(function(item)
+				return vim.startswith(vim.api.nvim_buf_get_name(bufnr), item)
+			end)
+
+		local cb_or_default = function(value)
+			cb(value or vim.fs.root(bufnr, { "Cargo.toml", "rust-project.json", ".git" }))
+		end
+
+		if is_lib then
+			local client = vim.iter(vim.lsp.get_clients({ name = "rust_analyzer" })):next()
+			cb_or_default(client and client.config.root_dir)
+		elseif vim.fn.executable("cargo") == 0 then
+			cb_or_default()
+		else
+			local cmd = { "cargo", "metadata", "--no-deps", "--format-version", "1" }
+			vim.system(cmd, { text = true }, function(obj)
+				cb_or_default(obj.stdout ~= "" and vim.json.decode(obj.stdout).workspace_root)
+			end)
+		end
+	end,
+	handlers = {
+		["experimental/externalDocs"] = function(err, result)
+			if result then
+				vim.ui.open(result["local"] or result.web or result)
+			end
+
+			return result, err
+		end,
+	},
+	commands = {
+		ReloadWorkspace = function(_, ctx)
+			local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+			vim.notify("Reloading workspace", vim.log.levels.INFO, { title = client.name })
+			client:request("rust-analyzer/reloadWorkspace", nil, function(err)
+				if err then
+					error(tostring(err))
+				end
+				vim.notify("Workspace reloaded", vim.log.levels.INFO, { title = client.name })
+			end, ctx.bufnr)
+		end,
+		ExternalDocs = function(_, ctx)
+			local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
+			client:request("experimental/externalDocs", nil, function(err, result)
+				if err then
+					error(tostring(err))
+				end
+
+				if result == nil then
+					vim.notify("No external docs found", vim.log.levels.WARN, { title = client.name })
+				end
+			end, ctx.bufnr)
+		end,
+	},
+	settings = {
+		["rust-analyzer"] = {
+			cargo = {
+				features = "all",
+				buildScripts = {
+					enable = true,
+				},
+			},
+			check = {
+				command = "clippy",
+			},
+			completion = {
+				postfix = {
+					enable = false,
+				},
+			},
+			imports = {
+				granularity = {
+					enforce = true,
+				},
+			},
+			procMacro = {
+				enable = true,
+				ignored = {
+					["tracing-attributes"] = {
+						"instrument",
+					},
+				},
+			},
+		},
+	},
+	capabilities = {
+		experimental = {
+			serverStatusNotification = true,
+		},
+	},
+	before_init = function(init_params, config)
+		-- See https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26
+		if config.settings and config.settings["rust-analyzer"] then
+			init_params.initializationOptions = config.settings["rust-analyzer"]
+		end
+	end,
+	on_attach = function(client, bufnr)
+		local function external_docs()
+			local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+			local resp, err = client:request_sync("experimental/externalDocs", params, nil, bufnr)
+			if err then
+				error(tostring(err))
+			end
+
+			if resp == nil then
+				return "gx"
+			else
+				return "<Ignore>"
+			end
+		end
+
+		vim.keymap.set({ "x", "n" }, "gx", external_docs, {
+			expr = true,
+			desc = "open external docs",
+			buffer = bufnr,
+		})
+	end,
+}

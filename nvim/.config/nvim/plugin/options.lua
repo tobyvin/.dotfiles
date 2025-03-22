@@ -19,7 +19,6 @@ vim.opt.inccommand = "split"
 vim.opt.jumpoptions:append("stack")
 vim.opt.linebreak = true
 vim.opt.list = true
-vim.opt.messagesopt = { "wait:2000", "history:500" }
 vim.opt.modeline = true
 vim.opt.mouse = "a"
 vim.opt.number = true

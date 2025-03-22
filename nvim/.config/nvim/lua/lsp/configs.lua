@@ -39,86 +39,11 @@ local M = {
 			new_config.cmd = angular_cmd
 		end,
 	},
-	bashls = {
-		settings = {
-			bashIde = {
-				explainshellEndpoint = "https://explainshell.com",
-				includeAllWorkspaceSymbols = true,
-				shellcheckArguments = {
-					string.format("--source-path=%s", vim.uv.cwd()),
-				},
-			},
-		},
-	},
-	bashls_pkgbuild = {
-		settings = {
-			bashIde = {
-				explainshellEndpoint = "https://explainshell.com",
-				includeAllWorkspaceSymbols = true,
-				shellcheckArguments = {
-					string.format("--source-path=%s", vim.uv.cwd()),
-				},
-			},
-		},
-	},
-	clangd = {},
-	cssls = {
-		handlers = {
-			-- TODO: Find out why html ls is missing diagnostic handler without this.
-			[ms.textDocument_diagnostic] = vim.lsp.diagnostic.on_diagnostic,
-		},
-	},
-	dockerls = {},
-	gopls = {
-		cmd = {
-			"gopls",
-			"serve",
-		},
-		settings = {
-			gopls = {
-				analyses = {
-					unusedparams = true,
-				},
-				staticcheck = true,
-			},
-		},
-	},
-	html = {
-		handlers = {
-			-- TODO: Find out why html ls is missing diagnostic handler without this.
-			[ms.textDocument_diagnostic] = vim.lsp.diagnostic.on_diagnostic,
-		},
-		filetypes = {
-			"html",
-			"htmldjango",
-		},
-		settings = {
-			html = {
-				provideFormatter = false,
-			},
-		},
-	},
-	-- jedi_language_server = {},
 	jinja_lsp = {},
 	lemminx = {
 		settings = {
 			xml = {
 				catalogs = { "/etc/xml/catalog" },
-			},
-		},
-	},
-	lua_ls = {
-		settings = {
-			Lua = {
-				workspace = {
-					checkThirdParty = false,
-				},
-				completion = {
-					callSnippet = "Replace",
-				},
-				format = {
-					enable = false,
-				},
 			},
 		},
 	},
@@ -146,83 +71,6 @@ local M = {
 				},
 			},
 		},
-	},
-	rust_analyzer = {
-		standalone = true,
-		settings = {
-			["rust-analyzer"] = {
-				cargo = {
-					features = "all",
-					buildScripts = {
-						enable = true,
-					},
-				},
-				check = {
-					command = "clippy",
-				},
-				completion = {
-					postfix = {
-						enable = false,
-					},
-				},
-				imports = {
-					granularity = {
-						enforce = true,
-					},
-				},
-				procMacro = {
-					enable = true,
-					ignored = {
-						["tracing-attributes"] = {
-							"instrument",
-						},
-					},
-				},
-			},
-		},
-		on_attach = function(client, bufnr)
-			local function external_docs()
-				local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
-				local resp, err = client.request_sync("experimental/externalDocs", params, nil, bufnr)
-
-				if resp == nil then
-					if err then
-						vim.notify(
-							string.format("External docs request failed: %s", err),
-							vim.log.levels.ERROR,
-							{ title = client.name }
-						)
-					else
-						vim.notify("No external docs found", vim.log.levels.WARN, { title = client.name })
-					end
-					return "gx"
-				else
-					if resp.err then
-						vim.notify(
-							string.format(
-								"%s error: [%s] %s",
-								client.name,
-								resp.err.code or "unknown code",
-								resp.err.data or "(no description)"
-							),
-							vim.log.levels.ERROR,
-							{ title = client.name }
-						)
-					elseif resp.result then
-						local url = resp.result["local"] or resp.result.web or resp.result
-						url = string.gsub(url, "/macros/macro%.", "/macro%.")
-						vim.ui.open(url)
-					end
-					return "<Ignore>"
-				end
-			end
-
-			vim.keymap.set({ "x", "n" }, "gx", external_docs, {
-				expr = true,
-				desc = "open external docs",
-				buffer = bufnr,
-			})
-		end,
 	},
 	ruff = {
 		server_capabilities = {
