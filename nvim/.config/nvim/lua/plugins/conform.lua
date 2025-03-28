@@ -47,10 +47,10 @@ local M = {
 					return {}
 				end
 			end,
-			css = { "css_beautify" },
+			css = { "prettier" },
 			graphql = { "prettier" },
-			html = { "html_beautify", "injected" },
-			htmldjango = { "html_beautify", "injected" },
+			html = { "prettier", "injected" },
+			htmldjango = { "prettier", "injected" },
 			json = { "deno_fmt" },
 			jsonc = { "deno_fmt" },
 			lua = { "stylua" },
