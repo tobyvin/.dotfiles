@@ -85,38 +85,6 @@ local capabilities = {
 
 vim.lsp.config["*"] = {
 	root_markers = { ".git" },
-	commands = {
-		LspRestart = function()
-			---@type table<string, [vim.lsp.Client, integer[]]>>
-			local queue = {}
-			for _, c in ipairs(vim.lsp.get_clients()) do
-				c:stop(true)
-				if vim.tbl_count(c.attached_buffers) > 0 then
-					queue[c.name] = { c, c.attached_buffers }
-				end
-			end
-
-			local timer = assert(vim.uv.new_timer())
-			timer:start(
-				500,
-				100,
-				vim.schedule_wrap(function()
-					for name, tuple in pairs(queue) do
-						local c, bufs = unpack(tuple)
-						if c:is_stopped() then
-							for bufnr, _ in pairs(bufs) do
-								vim.lsp.buf_attach_client(bufnr, c.id)
-							end
-							queue[name] = nil
-						end
-					end
-					if next(queue) == nil and not timer:is_closing() then
-						timer:close()
-					end
-				end)
-			)
-		end,
-	},
 	on_attach = function(client, bufnr)
 		vim.iter(capabilities)
 			:filter(function(method, _)
@@ -128,9 +96,8 @@ vim.lsp.config["*"] = {
 	end,
 }
 
-vim.iter({
+vim.lsp.enable({
 	"bashls",
-	"bashls_pkgbuild",
 	"clangd",
 	"cssls",
 	"dockerls",
@@ -139,9 +106,3 @@ vim.iter({
 	"lua_ls",
 	"rust_analyzer",
 })
-	:filter(function(client)
-		return vim.lsp.config[client]
-			and vim.lsp.config[client].cmd ~= nil
-			and vim.fn.executable(vim.lsp.config[client].cmd[1]) == 1
-	end)
-	:each(vim.lsp.enable)

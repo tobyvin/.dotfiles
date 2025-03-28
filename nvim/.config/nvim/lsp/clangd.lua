@@ -1,29 +1,39 @@
+---@brief
+---
+---https://clangd.llvm.org/installation.html
+--
+-- - **NOTE:** Clang >= 11 is recommended! See [#23](https://github.com/neovim/nvim-lspconfig/issues/23).
+-- - If `compile_commands.json` lives in a build directory, you should
+--   symlink it to the root of your source tree.
+--   ```
+--   ln -s /path/to/myproject/build/compile_commands.json /path/to/myproject/
+--   ```
+-- - clangd relies on a [JSON compilation database](https://clang.llvm.org/docs/JSONCompilationDatabase.html)
+--   specified as compile_commands.json, see https://clangd.llvm.org/installation#compile_commandsjson
 return {
-	default_config = {
-		cmd = { "clangd" },
-		filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
-		root_markers = {
-			".clangd",
-			".clang-tidy",
-			".clang-format",
-			"compile_commands.json",
-			"compile_flags.txt",
-			"configure.ac",
-			".git",
-		},
-		capabilities = {
-			textDocument = {
-				completion = {
-					editsNearCursor = true,
-				},
-			},
-			offsetEncoding = { "utf-8", "utf-16" },
-		},
+	cmd = { "clangd" },
+	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+	root_markers = {
+		".clangd",
+		".clang-tidy",
+		".clang-format",
+		"compile_commands.json",
+		"compile_flags.txt",
+		"configure.ac",
+		".git",
 	},
-	commands = {
-		ClangdSwitchSourceHeader = function(_, ctx)
-			local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
-			client:request("textDocument/switchSourceHeader", nil, function(err, result)
+	capabilities = {
+		textDocument = {
+			completion = {
+				editsNearCursor = true,
+			},
+		},
+		offsetEncoding = { "utf-8", "utf-16" },
+	},
+	on_attach = function(client, bufnr)
+		vim.api.nvim_buf_create_user_command(bufnr, "ClangdSwitchSourceHeader", function()
+			local params = vim.lsp.util.make_text_document_params(bufnr)
+			client:request("textDocument/switchSourceHeader", params, function(err, result)
 				if err then
 					error(tostring(err))
 				end
@@ -32,11 +42,12 @@ return {
 					return
 				end
 				vim.cmd.edit(vim.uri_to_fname(result))
-			end, ctx.bufnr)
-		end,
-		ClangdShowSymbolInfo = function(_, ctx)
-			local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
-			client:request("textDocument/symbolInfo", nil, function(err, result)
+			end, bufnr)
+		end, { desc = "Switch between source/header" })
+
+		vim.api.nvim_buf_create_user_command(bufnr, "ClangdShowSymbolInfo", function()
+			local params = vim.lsp.util.make_text_document_params(bufnr)
+			client:request("textDocument/symbolInfo", params, function(err, result)
 				if err or #result == 0 then
 					return
 				end
@@ -51,7 +62,7 @@ return {
 					border = vim.o.winborder,
 					title = "Symbol Info",
 				})
-			end, ctx.bufnr)
-		end,
-	},
+			end, bufnr)
+		end, { desc = "Show symbol info" })
+	end,
 }

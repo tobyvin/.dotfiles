@@ -1,3 +1,25 @@
+---@brief
+---
+---https://github.com/rust-lang/rust-analyzer
+--
+-- rust-analyzer (aka rls 2.0), a language server for Rust
+--
+--
+-- See [docs](https://rust-analyzer.github.io/book/configuration.html) for extra settings. The settings can be used like this:
+-- ```lua
+-- vim.lsp.config('rust_analyzer', {
+--   settings = {
+--     ['rust-analyzer'] = {
+--       diagnostics = {
+--         enable = false;
+--       }
+--     }
+--   }
+-- })
+-- ```
+--
+-- Note: do not set `init_options` for this LS config, it will be automatically populated by the contents of settings["rust-analyzer"] per
+-- https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26.
 return {
 	cmd = { "rust-analyzer" },
 	filetypes = { "rust" },
@@ -35,32 +57,7 @@ return {
 			if result then
 				vim.ui.open(result["local"] or result.web or result)
 			end
-
 			return result, err
-		end,
-	},
-	commands = {
-		ReloadWorkspace = function(_, ctx)
-			local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
-			vim.notify("Reloading workspace", vim.log.levels.INFO, { title = client.name })
-			client:request("rust-analyzer/reloadWorkspace", nil, function(err)
-				if err then
-					error(tostring(err))
-				end
-				vim.notify("Workspace reloaded", vim.log.levels.INFO, { title = client.name })
-			end, ctx.bufnr)
-		end,
-		ExternalDocs = function(_, ctx)
-			local client = assert(vim.lsp.get_client_by_id(ctx.client_id))
-			client:request("experimental/externalDocs", nil, function(err, result)
-				if err then
-					error(tostring(err))
-				end
-
-				if result == nil then
-					vim.notify("No external docs found", vim.log.levels.WARN, { title = client.name })
-				end
-			end, ctx.bufnr)
 		end,
 	},
 	settings = {
@@ -125,5 +122,19 @@ return {
 			desc = "open external docs",
 			buffer = bufnr,
 		})
+
+		vim.api.nvim_buf_create_user_command(bufnr, "RAExternalDocs", external_docs, {
+			desc = "Open external docs",
+		})
+
+		vim.api.nvim_buf_create_user_command(bufnr, "RAReload", function()
+			vim.notify("Reloading workspace", vim.log.levels.INFO, { title = client.name })
+			client:request("rust-analyzer/reloadWorkspace", nil, function(err)
+				if err then
+					error(tostring(err))
+				end
+				vim.notify("Workspace reloaded", vim.log.levels.INFO, { title = client.name })
+			end, bufnr)
+		end, { desc = "Reload rust-analyzer workspace" })
 	end,
 }

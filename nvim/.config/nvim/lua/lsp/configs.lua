@@ -115,32 +115,6 @@ local M = {
 			vim.wo[0][bufnr].spell = true
 		end,
 	},
-	ts_ls = {
-		settings = {
-			javascript = {
-				inlayHints = {
-					includeInlayEnumMemberValueHints = true,
-					includeInlayFunctionLikeReturnTypeHints = true,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-					includeInlayPropertyDeclarationTypeHints = true,
-					includeInlayVariableTypeHints = false,
-				},
-			},
-			typescript = {
-				inlayHints = {
-					includeInlayEnumMemberValueHints = true,
-					includeInlayFunctionLikeReturnTypeHints = true,
-					includeInlayFunctionParameterTypeHints = true,
-					includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all';
-					includeInlayParameterNameHintsWhenArgumentMatchesName = true,
-					includeInlayPropertyDeclarationTypeHints = true,
-					includeInlayVariableTypeHints = false,
-				},
-			},
-		},
-	},
 	typos_lsp = {
 		filetypes = {
 			"eml",
@@ -151,19 +125,6 @@ local M = {
 		},
 		init_options = {
 			config = vim.fs.joinpath(vim.env.XDG_CONFIG_HOME, "typos.toml"),
-		},
-	},
-	-- check out [tinymist](https://github.com/Myriad-Dreamin/tinymist) as a possible alternative
-	typst_lsp = {
-		capabilities = {
-			workspace = {
-				didChangeConfiguration = {
-					dynamicRegistration = true,
-				},
-			},
-		},
-		settings = {
-			exportPdf = "onType",
 		},
 	},
 	yamlls = {
