@@ -60,23 +60,6 @@ local M = {
 		},
 	},
 	powershell_es = {},
-	pyright = {
-		settings = {
-			pyright = {
-				disableOrganizeImports = true,
-			},
-			python = {
-				analysis = {
-					ignore = { "*" },
-				},
-			},
-		},
-	},
-	ruff = {
-		server_capabilities = {
-			hoverProvider = false,
-		},
-	},
 	taplo = {},
 	texlab = {
 		settings = {

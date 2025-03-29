@@ -104,5 +104,7 @@ vim.lsp.enable({
 	"gopls",
 	"html",
 	"lua_ls",
+	"pyright",
+	"ruff",
 	"rust_analyzer",
 })
