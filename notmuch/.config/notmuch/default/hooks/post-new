@@ -1,4 +1,5 @@
 #!/bin/sh
 
-afew -C "$XDG_CONFIG_HOME"/notmuch/default/config --tag --new
+notmuch tag -new -- tag:new and from:tobyv@tobyvin.dev
+notmuch tag +inbox +unread +notify -new -- tag:new
 "$HOME"/.local/bin/notmuch-notify

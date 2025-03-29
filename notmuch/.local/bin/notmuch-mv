@@ -6,7 +6,7 @@ import time
 import shutil
 import subprocess
 
-import notmuch
+import notmuch2
 
 UID: int = 0
 
@@ -47,8 +47,8 @@ def main():
     if os.environ.get("NOTMUCH_CONFIG") is None:
         os.environ["NOTMUCH_CONFIG"] = default_config()
 
-    database = notmuch.Database()
-    db_path = database.get_path()
+    database = notmuch2.Database()
+    db_path = database.default_path()
 
     rules = [
         ("-folder:tobyvin.dev/tobyv/Trash tag:trash", "tobyvin.dev/tobyv/Trash"),
@@ -63,8 +63,8 @@ def main():
     for query_str, dest in rules:
         maildir = os.path.dirname(dest)
 
-        for msg in database.create_query(query_str).search_messages():
-            for fname in [n for n in msg.get_filenames() if maildir in n]:
+        for msg in database.messages(query_str):
+            for fname in [n for n in msg.filenames() if maildir in n]:
                 dest_fname = new_fname(db_path, fname, dest)
                 if not dryrun:
                     os.makedirs(os.path.dirname(dest_fname), exist_ok=True)

@@ -2,7 +2,7 @@
 
 import os
 
-import notmuch
+import notmuch2
 from jeepney import DBusAddress, new_method_call
 from jeepney.io.blocking import open_dbus_connection
 
@@ -51,12 +51,12 @@ def main():
     if os.environ.get("NOTMUCH_CONFIG") is None:
         os.environ["NOTMUCH_CONFIG"] = default_config()
 
-    database = notmuch.Database(mode=notmuch.Database.MODE.READ_WRITE)
+    database = notmuch2.Database(mode=notmuch2.Database.MODE.READ_WRITE)
 
-    for message in database.create_query("tag:notify").search_messages():
-        notify(message.get_header("From"), message.get_header("Subject"))
+    for message in database.messages("tag:notify"):
+        notify(message.header("From"), message.header("Subject"))
         print(message)
-        message.remove_tag("notify")
+        message.tags.discard("notify")
         del message
 
 
