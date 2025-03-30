@@ -1,5 +1,4 @@
 player=mpv
-player-args=--profile=stream
 player-no-close
 hls-live-edge=5
 stream-segment-threads=4

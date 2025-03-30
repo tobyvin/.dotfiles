@@ -16,17 +16,13 @@ local function register_bindings(chat, bindings)
 	return names
 end
 
-local function get_channel()
-	local path = mp.get_property_native("path")
-	if path == "-" then
-		return mp.get_property_native("media-title"):match("twitch.tv/(%S+)")
-	else
-		return path:match("twitch%.tv/([^/]+)$")
+local function setup(name, value)
+	msg.debug(("Property changed: %s: %s"):format(name, value))
+	if not value then
+		return
 	end
-end
 
-local function setup()
-	local channel = get_channel()
+	local channel = value:match("twitch%.tv/([^/ ]+)")
 
 	if not channel then
 		msg.debug("Twitch channel not found")
@@ -46,4 +42,5 @@ local function setup()
 	msg.verbose(("Registering script-bindings: %s"):format(table.concat(names, ", ")))
 end
 
-mp.register_event("start-file", setup)
+mp.observe_property("path", "string", setup)
+mp.observe_property("media-title", "string", setup)
