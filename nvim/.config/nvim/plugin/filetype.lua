@@ -7,6 +7,7 @@ vim.filetype.add({
 		nft = "nftables",
 		ron = "ron",
 		service = "systemd",
+		PKGBUILD = "PKGBUILD",
 	},
 	filename = {
 		tridactylrc = "trytactylrc",
@@ -37,14 +38,15 @@ vim.filetype.add({
 		-- sudoedit/sudo -e match original ft
 		["/var/tmp/.*"] = function(_, bufnr, _)
 			local pid = vim.fn.getpid()
-			local cl = vim.fn.readfile(("/proc/%s/comm"):format(pid))
+			local comm = vim.fn.readfile(("/proc/%s/comm"):format(pid))
 
-			while #cl >= 1 and cl[1] == "nvim" do
+			while #comm >= 1 and comm[1] == "nvim" do
+				---@diagnostic disable-next-line: cast-local-type
 				pid = vim.fn.split(vim.fn.readfile(("/proc/%s/stat"):format(pid))[1])[4]
-				cl = vim.fn.split(vim.fn.readfile(("/proc/%s/cmdline"):format(pid))[1], "\n")
+				comm = vim.fn.split(vim.fn.readfile(("/proc/%s/cmdline"):format(pid))[1], "\n")
 
-				if #cl >= 1 and cl[1] == "sudoedit" or (#cl >= 2 and cl[1] == "sudo" and cl[2] == "-e") then
-					return vim.filetype.match({ buf = bufnr, filename = cl[#cl] })
+				if #comm >= 1 and comm[1] == "sudoedit" or (#comm >= 2 and comm[1] == "sudo" and comm[2] == "-e") then
+					return vim.filetype.match({ buf = bufnr, filename = comm[#comm] })
 				end
 			end
 
