@@ -1,5 +1,6 @@
 local mod_cache = nil
 
+---@type vim.lsp.Config
 return {
 	cmd = {
 		"gopls",

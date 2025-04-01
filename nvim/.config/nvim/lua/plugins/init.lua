@@ -22,6 +22,10 @@ local M = {
 		ft = "nftables",
 	},
 	{
+		"neovim/nvim-lspconfig",
+		version = false,
+	},
+	{
 		"tridactyl/vim-tridactyl",
 		ft = "tridactyl",
 	},

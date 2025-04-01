@@ -97,14 +97,26 @@ vim.lsp.config["*"] = {
 }
 
 vim.lsp.enable({
+	"angularls",
+	"basedpyright",
 	"bashls",
 	"clangd",
 	"cssls",
 	"dockerls",
 	"gopls",
 	"html",
+	"lemminx",
 	"lua_ls",
-	"pyright",
-	"ruff",
+	"mesonlsp",
+	"ocamllsp",
+	"omnisharp",
+	"perlnavigator",
 	"rust_analyzer",
+	"taplo",
+	"texlab",
+	"tinymist",
+	"ts_ls",
+	"typos_lsp",
+	"yamlls",
+	"zls",
 })

@@ -1,7 +1,3 @@
----@brief
--- https://github.com/microsoft/pyright
---
--- `pyright`, a static type checker and language server for python
 ---@type vim.lsp.Config
 return {
 	cmd = { "pyright-langserver", "--stdio" },
