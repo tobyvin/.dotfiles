@@ -83,17 +83,23 @@ local capabilities = {
 	end,
 }
 
+vim.api.nvim_create_autocmd("LspAttach", {
+	group = vim.api.nvim_create_augroup("user.lsp", { clear = true }),
+	desc = "setup lsp capabilities",
+	callback = function(args)
+		local client = vim.lsp.get_client_by_id(args.data.client_id)
+		if client then
+			for method, setup in pairs(capabilities) do
+				if client:supports_method(method, args.buf) then
+					setup(args.buf, client)
+				end
+			end
+		end
+	end,
+})
+
 vim.lsp.config["*"] = {
 	root_markers = { ".git" },
-	on_attach = function(client, bufnr)
-		vim.iter(capabilities)
-			:filter(function(method, _)
-				return client:supports_method(method, bufnr)
-			end)
-			:each(function(_, setup)
-				setup(bufnr, client)
-			end)
-	end,
 }
 
 vim.lsp.enable({

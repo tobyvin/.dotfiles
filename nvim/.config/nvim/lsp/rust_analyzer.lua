@@ -31,14 +31,6 @@ return {
 			end)
 		end
 	end,
-	handlers = {
-		["experimental/externalDocs"] = function(err, result)
-			if result then
-				vim.ui.open(result["local"] or result.web or result)
-			end
-			return result, err
-		end,
-	},
 	settings = {
 		["rust-analyzer"] = {
 			cargo = {
@@ -84,29 +76,33 @@ return {
 	on_attach = function(client, bufnr)
 		local function external_docs()
 			local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
-			local resp, err = client:request_sync("experimental/externalDocs", params, nil, bufnr)
-			if err then
-				error(tostring(err))
-			end
+			local resp = client:request_sync("experimental/externalDocs", params, nil, bufnr)
 
-			if resp == nil then
-				return "gx"
-			else
-				return "<Ignore>"
+			if resp then
+				if resp.err then
+					error(tostring(resp.err))
+				elseif resp.result then
+					vim.ui.open(resp.result["local"] or resp.result.web or resp.result)
+					return true
+				end
 			end
 		end
 
-		vim.keymap.set({ "x", "n" }, "gx", external_docs, {
+		vim.keymap.set({ "x", "n" }, "gx", function()
+			return external_docs() and "<Ignore>" or "gx"
+		end, {
 			expr = true,
 			desc = "open external docs",
 			buffer = bufnr,
 		})
 
-		vim.api.nvim_buf_create_user_command(bufnr, "RAExternalDocs", external_docs, {
+		vim.api.nvim_buf_create_user_command(bufnr, "RustExternalDocs", function()
+			return external_docs() or vim.notify("No external docs found", vim.log.levels.WARN, { title = client.name })
+		end, {
 			desc = "Open external docs",
 		})
 
-		vim.api.nvim_buf_create_user_command(bufnr, "RAReload", function()
+		vim.api.nvim_buf_create_user_command(bufnr, "RustReload", function()
 			vim.notify("Reloading workspace", vim.log.levels.INFO, { title = client.name })
 			client:request("rust-analyzer/reloadWorkspace", nil, function(err)
 				if err then
