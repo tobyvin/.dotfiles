@@ -50,6 +50,10 @@ do
 		local buffer = vim.api.nvim_create_buf(false, true)
 		local window = vim.api.nvim_open_win(buffer, true, config)
 
+		local ns_id = vim.api.nvim_create_namespace("select")
+		vim.api.nvim_set_hl(ns_id, "CursorLine", { reverse = true })
+		vim.api.nvim_win_set_hl_ns(window, ns_id)
+
 		vim.api.nvim_buf_set_lines(buffer, 0, 0, false, fmt_items)
 		vim.api.nvim_buf_set_lines(buffer, -2, -1, false, {})
 
@@ -62,7 +66,10 @@ do
 
 		vim.api.nvim_win_set_cursor(window, { 1, 0 })
 
+		vim.opt.guicursor:append("n:hor1")
+
 		local function cancel()
+			vim.opt.guicursor:remove("n:hor1")
 			if vim.api.nvim_win_is_valid(window) then
 				vim.api.nvim_win_close(window, true)
 			end
