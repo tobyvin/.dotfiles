@@ -9,7 +9,7 @@ do
 		end
 
 		if level == vim.log.levels.ERROR then
-			vim.api.nvim_err_writeln(msg)
+			vim.api.nvim_echo({ { msg } }, true, { err = true })
 		elseif level == vim.log.levels.WARN then
 			vim.api.nvim_echo({ { msg, "WarningMsg" } }, true, {})
 		else
