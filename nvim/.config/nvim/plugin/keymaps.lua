@@ -3,6 +3,9 @@ vim.keymap.set("n", "[q", "<cmd>cprev<cr>", { desc = "cprev" })
 vim.keymap.set("n", "]b", "<cmd>bnext<cr>", { desc = "bnext" })
 vim.keymap.set("n", "[b", "<cmd>bprev<cr>", { desc = "bprev" })
 
+vim.keymap.set("n", "gl", vim.diagnostic.setloclist, { desc = "vim.diagnostic.setloclist()" })
+vim.keymap.set("n", "gL", vim.diagnostic.setqflist, { desc = "vim.diagnostic.setqflist()" })
+
 vim.keymap.set("n", "<a-k>", ":move --<cr>==", { desc = "move --" })
 vim.keymap.set("n", "<a-j>", ":move +<cr>==", { desc = "move +" })
 vim.keymap.set("v", "<a-k>", ":move '<-2<cr>gv=gv", { desc = "move --" })
