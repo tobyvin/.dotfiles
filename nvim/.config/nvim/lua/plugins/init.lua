@@ -22,6 +22,10 @@ local M = {
 		ft = "nftables",
 	},
 	{
+		"wilriker/gcode.vim",
+		ft = "gcode",
+	},
+	{
 		"neovim/nvim-lspconfig",
 		version = false,
 	},

@@ -8,6 +8,7 @@ vim.filetype.add({
 		ron = "ron",
 		service = "systemd",
 		PKGBUILD = "PKGBUILD",
+		gcode = "gcode",
 	},
 	filename = {
 		tridactylrc = "trytactylrc",
