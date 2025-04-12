@@ -30,17 +30,9 @@ return {
 		end, { desc = "Organize Imports" })
 
 		vim.api.nvim_buf_create_user_command(0, "PyrightSetPythonPath", function(args)
-			if client.settings then
-				client.settings.python = vim.tbl_deep_extend("force", client.settings.python or {}, {
-					pythonPath = args.fargs[1],
-				})
-			else
-				client.config.settings = vim.tbl_deep_extend("force", client.config.settings, {
-					python = {
-						pythonPath = args.fargs[1],
-					},
-				})
-			end
+			client.settings.python = vim.tbl_deep_extend("force", client.settings.python --[[@as table?]] or {}, {
+				pythonPath = args.fargs[1],
+			})
 			client:notify("workspace/didChangeConfiguration", { settings = nil })
 		end, {
 			desc = "Reconfigure basedpyright with the provided python path",
