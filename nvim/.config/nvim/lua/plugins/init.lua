@@ -1,7 +1,8 @@
 ---@type LazySpec
 local M = {
 	{
-		"nvim-lua/plenary.nvim",
+		"emmanueltouzery/plenary.nvim",
+		branch = "winborder",
 		version = false,
 		optional = true,
 	},

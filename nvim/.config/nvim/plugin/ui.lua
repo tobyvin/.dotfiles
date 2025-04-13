@@ -134,7 +134,6 @@ do
 			col = 0,
 			zindex = 200,
 			style = "minimal",
-			border = "single",
 			title = opts.prompt,
 		}
 

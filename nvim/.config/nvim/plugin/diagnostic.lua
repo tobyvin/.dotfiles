@@ -14,7 +14,6 @@ vim.diagnostic.config({
 	float = {
 		scope = "cursor",
 		source = true,
-		border = "single",
 	},
 	update_in_insert = true,
 	severity_sort = true,

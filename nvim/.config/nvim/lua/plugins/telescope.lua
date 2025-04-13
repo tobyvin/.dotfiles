@@ -3,11 +3,11 @@ local telescope = {
 	"nvim-telescope/telescope.nvim",
 	cmd = "Telescope",
 	dependencies = {
+		"plenary.nvim",
 		{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 	},
 	opts = {
 		defaults = {
-			borderchars = false,
 			file_ignore_patterns = { "^.git/" },
 			vimgrep_arguments = {
 				"rg",
@@ -63,25 +63,28 @@ local telescope = {
 }
 
 function telescope:init()
-	local builtin = function(name)
-		return function()
-			require("telescope.builtin")[name]()
-		end
-	end
+	local builtin = setmetatable({}, {
+		__index = function(t, k)
+			return function()
+				t[k] = require("telescope.builtin")[k]
+				return t[k]()
+			end
+		end,
+	})
 
-	vim.keymap.set("n", "<leader>fa", builtin("autocommands"), { desc = "autocommands" })
-	vim.keymap.set("n", "<leader>fb", builtin("buffers"), { desc = "buffers" })
-	vim.keymap.set("n", "<leader>fc", builtin("commands"), { desc = "commands" })
-	vim.keymap.set("n", "<leader>fd", builtin("lsp_dynamic_workspace_symbols"), { desc = "lsp symbols" })
-	vim.keymap.set("n", "<leader>ff", builtin("find_files"), { desc = "find files" })
-	vim.keymap.set("n", "<leader>fF", builtin("filetypes"), { desc = "filetypes" })
-	vim.keymap.set("n", "<leader>fh", builtin("help_tags"), { desc = "help" })
-	vim.keymap.set("n", "<leader>fH", builtin("highlights"), { desc = "highlights" })
-	vim.keymap.set("n", "<leader>fk", builtin("keymaps"), { desc = "keymaps" })
-	vim.keymap.set("n", "<leader>fm", builtin("marks"), { desc = "marks" })
-	vim.keymap.set("n", "<leader>fo", builtin("oldfiles"), { desc = "old files" })
-	vim.keymap.set("n", "<leader>fr", builtin("resume"), { desc = "resume" })
-	vim.keymap.set("n", "<leader>gt", builtin("git_status"), { desc = "status" })
+	vim.keymap.set("n", "<leader>fa", builtin.autocommands, { desc = "autocommands" })
+	vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "buffers" })
+	vim.keymap.set("n", "<leader>fc", builtin.commands, { desc = "commands" })
+	vim.keymap.set("n", "<leader>fd", builtin.lsp_dynamic_workspace_symbols, { desc = "lsp symbols" })
+	vim.keymap.set("n", "<leader>ff", builtin.find_files, { desc = "find files" })
+	vim.keymap.set("n", "<leader>fF", builtin.filetypes, { desc = "filetypes" })
+	vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "help" })
+	vim.keymap.set("n", "<leader>fH", builtin.highlights, { desc = "highlights" })
+	vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "keymaps" })
+	vim.keymap.set("n", "<leader>fm", builtin.marks, { desc = "marks" })
+	vim.keymap.set("n", "<leader>fo", builtin.oldfiles, { desc = "old files" })
+	vim.keymap.set("n", "<leader>fr", builtin.resume, { desc = "resume" })
+	vim.keymap.set("n", "<leader>gt", builtin.git_status, { desc = "status" })
 end
 
 function telescope:config(opts)
@@ -108,10 +111,6 @@ function telescope_live_grep_args:init()
 	vim.keymap.set("n", "<leader>fg", function()
 		require("telescope").extensions.live_grep_args.live_grep_args()
 	end, { desc = "live grep" })
-
-	vim.keymap.set("v", "<leader>fg", function()
-		require("telescope-live-grep-args.shortcuts").grep_visual_selection()
-	end, { desc = "live grep selection" })
 end
 
 ---@type LazySpec
@@ -135,7 +134,6 @@ end
 
 ---@type LazySpec
 local M = {
-	"nvim-lua/plenary.nvim",
 	telescope,
 	telescope_live_grep_args,
 	telescope_undo,

@@ -34,7 +34,7 @@ require("lazy").setup("plugins", {
 		},
 	},
 	ui = {
-		border = "single",
+		border = vim.o.winborder,
 	},
 	change_detection = {
 		notify = false,
