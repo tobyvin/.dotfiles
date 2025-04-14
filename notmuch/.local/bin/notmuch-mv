@@ -64,7 +64,7 @@ def main():
         maildir = os.path.dirname(dest)
 
         for msg in database.messages(query_str):
-            for fname in [n for n in msg.filenames() if maildir in n]:
+            for fname in [n for n in msg.filenames() if maildir in str(n)]:
                 dest_fname = new_fname(db_path, fname, dest)
                 if not dryrun:
                     os.makedirs(os.path.dirname(dest_fname), exist_ok=True)
@@ -72,7 +72,7 @@ def main():
                         shutil.move(fname, dest_fname)
                     except FileNotFoundError:
                         continue
-                print("{} -> {}".format(fname, dest_fname).replace(db_path + "/", ""))
+                print("{} -> {}".format(fname, dest_fname).replace(str(db_path) + "/", ""))
                 updated = True
 
     if updated:
