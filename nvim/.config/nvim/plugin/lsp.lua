@@ -1,6 +1,6 @@
 local ms = vim.lsp.protocol.Methods
 
--- Table of setup functions to run when LSP client is attached based on capabilities
+-- Map of LSP capabilites and setup functions for supporting clients
 ---@type table<string, fun(bufnr:number, client:vim.lsp.Client)>
 local capabilities = {
 	[ms.completionItem_resolve] = function(bufnr, client)
@@ -12,20 +12,19 @@ local capabilities = {
 				if completionItem == nil then
 					return
 				end
-				client:request(vim.lsp.protocol.Methods.completionItem_resolve, completionItem, function(err, result)
+				client:request(ms.completionItem_resolve, completionItem, function(err, result)
 					if err ~= nil then
 						vim.notify(vim.inspect(err), vim.log.levels.ERROR)
 						return
 					end
 					if result and result.documentation then
-						local winData = vim.api.nvim__complete_set(info["selected"], {
+						local winData = vim.api.nvim__complete_set(info.selected, {
 							info = result.documentation.value,
 						})
 						if winData.winid ~= nil and vim.api.nvim_win_is_valid(winData.winid) then
 							vim.api.nvim_win_set_config(winData.winid, {
 								height = #vim.api.nvim_buf_get_lines(winData.bufnr, 0, 10, false),
-								---@diagnostic disable-next-line: assign-type-mismatch
-								border = vim.o.winborder == "" and "none" or vim.o.winborder,
+								border = vim.o.winborder == "" and "none" or vim.o.winborder --[[@as string]],
 							})
 							vim.treesitter.start(winData.bufnr, "markdown")
 							vim.wo[winData.winid].conceallevel = 3

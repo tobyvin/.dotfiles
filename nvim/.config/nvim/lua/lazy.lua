@@ -15,9 +15,7 @@ package.loaded["lazy"] = nil
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-	spec = {
-		import = "plugins",
-	},
+	spec = { import = "plugins" },
 	defaults = {
 		lazy = true,
 		version = "*",

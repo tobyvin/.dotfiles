@@ -7,12 +7,15 @@ local M = {
 		optional = true,
 	},
 	{
-		"eandrju/cellular-automaton.nvim",
-		cmd = "CellularAutomaton",
+		"f3fora/nvim-texlabconfig",
+		version = false,
+		build = "go build -o /home/tobyv/.local/bin/",
+		ft = { "tex", "bib" },
+		opts = {},
 	},
 	{
-		"rktjmp/playtime.nvim",
-		cmd = "Playtime",
+		"tridactyl/vim-tridactyl",
+		ft = "tridactyl",
 	},
 	{
 		"hjson/vim-hjson",
@@ -27,23 +30,12 @@ local M = {
 		ft = "gcode",
 	},
 	{
-		"neovim/nvim-lspconfig",
-		version = false,
+		"eandrju/cellular-automaton.nvim",
+		cmd = "CellularAutomaton",
 	},
 	{
-		"tridactyl/vim-tridactyl",
-		ft = "tridactyl",
-	},
-	{
-		"f3fora/nvim-texlabconfig",
-		version = false,
-		build = "go build -o /home/tobyv/.local/bin/",
-		ft = { "tex", "bib" },
-		opts = {},
-	},
-	{
-		"brianhuster/live-preview.nvim",
-		ft = { "html" },
+		"rktjmp/playtime.nvim",
+		cmd = "Playtime",
 	},
 }
 
