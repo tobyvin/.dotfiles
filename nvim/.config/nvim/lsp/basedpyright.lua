@@ -13,6 +13,7 @@ return {
 	},
 	settings = {
 		basedpyright = {
+			typeCheckingMode = "standard",
 			analysis = {
 				autoSearchPaths = true,
 				useLibraryCodeForTypes = true,
