@@ -54,11 +54,6 @@ return {
 			},
 			procMacro = {
 				enable = true,
-				ignored = {
-					["tracing-attributes"] = {
-						"instrument",
-					},
-				},
 			},
 		},
 	},
