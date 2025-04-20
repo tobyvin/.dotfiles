@@ -11,7 +11,13 @@ return {
 		"utf-8",
 	},
 	filetypes = { "cs", "vb" },
-	root_markers = { "*.sln", "*.csproj", "omnisharp.json", "function.json" },
+	root_markers = { ".sln", ".csproj", "omnisharp.json", "function.json" },
+	init_options = {},
+	capabilities = {
+		workspace = {
+			workspaceFolders = false, -- https://github.com/OmniSharp/omnisharp-roslyn/issues/909
+		},
+	},
 	settings = {
 		FormattingOptions = {
 			EnableEditorConfigSupport = true,
@@ -24,31 +30,15 @@ return {
 			EnableAnalyzersSupport = nil,
 			EnableImportCompletion = nil,
 			AnalyzeOpenDocumentsOnly = nil,
+			EnableDecompilationSupport = nil,
+		},
+		RenameOptions = {
+			RenameInComments = nil,
+			RenameOverloads = nil,
+			RenameInStrings = nil,
 		},
 		Sdk = {
 			IncludePrereleases = true,
 		},
 	},
-	before_init = function(_, config)
-		local function flatten(tbl)
-			local ret = {}
-			for k, v in pairs(tbl) do
-				if type(v) == "table" then
-					for _, pair in ipairs(flatten(v)) do
-						ret[#ret + 1] = k .. ":" .. pair
-					end
-				else
-					ret[#ret + 1] = k .. "=" .. vim.inspect(v)
-				end
-			end
-			return ret
-		end
-		if config.settings then
-			---@diagnostic disable-next-line: param-type-mismatch
-			vim.list_extend(config.cmd, flatten(config.settings))
-		end
-
-		config.capabilities = vim.deepcopy(config.capabilities)
-		config.capabilities.workspace.workspaceFolders = false -- https://github.com/OmniSharp/omnisharp-roslyn/issues/909
-	end,
 }
