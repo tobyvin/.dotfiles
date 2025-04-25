@@ -60,6 +60,7 @@ return {
 	capabilities = {
 		experimental = {
 			serverStatusNotification = true,
+			localDocs = true,
 		},
 	},
 	before_init = function(init_params, config)
@@ -73,14 +74,52 @@ return {
 			local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
 			local resp = client:request_sync("experimental/externalDocs", params, nil, bufnr)
 
-			if resp then
-				if resp.err then
-					error(tostring(resp.err))
-				elseif resp.result then
-					vim.ui.open(resp.result["local"] or resp.result.web or resp.result)
+			if not resp then
+				return false
+			end
+
+			if resp.err then
+				error(tostring(resp.err))
+			end
+
+			if resp.result["local"] then
+				local uri = resp.result["local"]
+				local cmd = {
+					"cargo",
+					"+nightly",
+					"-Z",
+					"unstable-options",
+					"config",
+					"get",
+					"--format=json",
+					"build.target",
+				}
+				local stdout = vim.system(cmd, { text = true }):wait().stdout
+				if stdout and stdout ~= "" then
+					local target = vim.json.decode(stdout).build.target
+					if target then
+						uri = uri:gsub("/target/doc/", ("/target/%s/doc/"):format(target))
+					end
+				end
+
+				local path = uri:gsub("^file://", ""):gsub("%.html#.*$", ".html")
+				if vim.uv.fs_stat(path) then
+					vim.ui.open(uri)
 					return true
 				end
 			end
+
+			if resp.result.web then
+				vim.ui.open(resp.result.web)
+				return true
+			end
+
+			if type(resp.result) == "string" then
+				vim.ui.open(resp.result)
+				return true
+			end
+
+			return false
 		end
 
 		vim.keymap.set({ "x", "n" }, "gx", function()
