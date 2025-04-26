@@ -83,7 +83,8 @@ return {
 			end
 
 			if resp.result["local"] then
-				local uri = resp.result["local"]
+				---@type string
+				local uri = resp.result["local"]:gsub("/[^/]+(/macro%.[^/]+.html)", "%1")
 				local cmd = {
 					"cargo",
 					"+nightly",
