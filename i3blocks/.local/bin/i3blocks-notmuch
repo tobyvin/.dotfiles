@@ -24,13 +24,14 @@ def main():
             "config",
         )
 
-    count = notmuch2.Database().count_messages(query="tag:unread")
-
-    print(f" {ICON} {count} \n")
-    if count > 10:
+    if not (count := notmuch2.Database().count_messages(query="tag:unread")):
+        print()
+    elif count > 10:
+        print(f" {ICON} {count} \n")
         print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
         print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
     elif count > 0:
+        print(f" {ICON} {count} \n")
         print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
         print(f"#{os.environ.get('BASE16_COLOR_0A_HEX')}")
 

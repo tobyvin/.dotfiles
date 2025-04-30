@@ -29,14 +29,17 @@ def main():
     except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError):
         count = "x"
 
-    print(f" {ICON} {count} \n")
     match count:
         case str(c) | int(c) if isinstance(c, str) or c > 10:
+            print(f" {ICON} {count} \n")
             print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
             print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
         case int(c) if c > 0:
+            print(f" {ICON} {count} \n")
             print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
             print(f"#{os.environ.get('BASE16_COLOR_0A_HEX')}")
+        case int(0):
+            print()
 
 
 if __name__ == "__main__":
