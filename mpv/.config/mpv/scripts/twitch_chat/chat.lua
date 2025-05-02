@@ -21,17 +21,6 @@ function Chat:new(channel)
 	}, self)
 end
 
-function Chat:register_bindings(bindings)
-	local names = {}
-	for name, callback in pairs(bindings) do
-		mp.add_key_binding(nil, name, function()
-			callback(self)
-		end)
-		table.insert(names, name)
-	end
-	return names
-end
-
 function Chat:open()
 	if self.process then
 		return
