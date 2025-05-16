@@ -75,43 +75,6 @@ autocontain -s twitter\.com twitter
 autocontain -s x\.com twitter
 autocontain -s walmart\.com walmart
 
-" https://github.com/krober/contain-amazon/blob/master/src/background.js
-autocontain -s 6pm\.com amazon
-autocontain -s abebooks\.com amazon
-autocontain -s aboutamazon\.com amazon
-autocontain -s acx\.com amazon
-autocontain -s alexa\.com amazon
-autocontain -s (gaming\.|)amazon\.(cn|in|co\.jp|com\.sg|com\.tr|fr|de|it|nl|es|co\.uk|ca|com\.mx|com\.au|com\.br|ae|se|sg|com\.be|eg|pl|sa|clothing|com|company|cruises|dog|energy|express|fund|game|gd|gent|hockey|international|jobs|kiwi|ltda|press|re|salon|shopping|soccer|tickets|tienda|tours|training|tv|wiki) amazon
-autocontain -s amazoninspire\.com amazon
-autocontain -s amazonpay\.in amazon
-autocontain -s amazonteam\.org amazon
-autocontain -s amzn\.to amazon
-autocontain -s audible\.(com|co\.uk|fr|com\.au|de|it|ca|in|co\.jp) amazon
-autocontain -s awscloud\.com amazon
-autocontain -s awsevents\.com amazon
-autocontain -s bookdepository\.com amazon
-autocontain -s boxofficemojo\.com amazon
-autocontain -s comixology\.com amazon
-autocontain -s createspace\.com amazon
-autocontain -s dpreview\.com amazon
-autocontain -s eastdane\.com amazon
-autocontain -s ext-twitch\.tv amazon
-autocontain -s fabric\.com amazon
-autocontain -s goodreads\.com amazon
-autocontain -s imdb\.com amazon
-autocontain -s junglee\.com amazon
-autocontain -s lab126\.com amazon
-autocontain -s mturk\.com amazon
-autocontain -s primevideo\.com amazon
-autocontain -s seattlespheres\.com amazon
-autocontain -s shopbop\.com amazon
-autocontain -s souq\.com amazon
-autocontain -s tenmarks\.com amazon
-autocontain -s wholefoodsmarket\.(com|co\.uk) amazon
-autocontain -s withoutabox\.com amazon
-autocontain -s woot\.com amazon
-autocontain -s zappos\.com amazon
-
 " https://github.com/mozilla/contain-facebook/blob/main/src/background.js
 autocontain -s akamaihd\.net facebook
 autocontain -s appspot\.com facebook
