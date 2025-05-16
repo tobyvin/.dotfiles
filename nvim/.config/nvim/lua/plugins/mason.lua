@@ -5,7 +5,6 @@ local M = {
 	lazy = false,
 	opts = {
 		ui = {
-			border = vim.o.winborder,
 			icons = {
 				package_installed = "✓",
 				package_pending = "➜",
@@ -22,7 +21,7 @@ local M = {
 local function pip_install(package, module)
 	return vim.schedule_wrap(function()
 		local res = vim.system({
-			vim.fs.joinpath(package:get_install_path(), "venv/bin/python"),
+			vim.fs.joinpath(vim.env.MASON, "packages", package.name, "venv/bin/python"),
 			"-m",
 			"pip",
 			"install",
