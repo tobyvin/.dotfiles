@@ -1,3 +1,5 @@
+local filenames
+
 vim.filetype.add({
 	extension = {
 		eml = "mail",
@@ -38,20 +40,23 @@ vim.filetype.add({
 		[".*%.conf"] = { "confini", { priority = -math.huge } },
 		-- sudoedit/sudo -e match original ft
 		["/var/tmp/.*"] = function(_, bufnr, _)
-			local pid = vim.fn.getpid()
-			local comm = vim.fn.readfile(("/proc/%s/comm"):format(pid))
+			if not filenames then
+				filenames = {}
+				local pid = vim.fn.getpid() --[[@as string]]
+				local comm = vim.fn.readfile(("/proc/%s/comm"):format(pid))
+				while #comm >= 1 and comm[1] == "nvim" do
+					pid = vim.fn.split(vim.fn.readfile(("/proc/%s/stat"):format(pid))[1])[4]
+					comm = vim.fn.split(vim.fn.readfile(("/proc/%s/cmdline"):format(pid))[1], "\n")
+				end
 
-			while #comm >= 1 and comm[1] == "nvim" do
-				---@diagnostic disable-next-line: cast-local-type
-				pid = vim.fn.split(vim.fn.readfile(("/proc/%s/stat"):format(pid))[1])[4]
-				comm = vim.fn.split(vim.fn.readfile(("/proc/%s/cmdline"):format(pid))[1], "\n")
-
-				if #comm >= 1 and comm[1] == "sudoedit" or (#comm >= 2 and comm[1] == "sudo" and comm[2] == "-e") then
-					return vim.filetype.match({ buf = bufnr, filename = comm[#comm] })
+				local iter = vim.iter(comm)
+				local cmd = iter:next()
+				if cmd == "sudoedit" or (cmd == "sudo" and iter:next() == "-e") then
+					filenames = iter:totable()
 				end
 			end
 
-			return vim.filetype.match({ buf = bufnr })
+			return filenames[bufnr] and vim.filetype.match({ buf = bufnr, filename = filenames[bufnr] }) or nil
 		end,
 	},
 })
