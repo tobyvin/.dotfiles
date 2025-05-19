@@ -23,13 +23,13 @@ DBUS_ADDRESS = DBusAddress(
 )
 
 
-def variant(v: Any) -> (str, Any):
+def variant(v: Any) -> tuple[str, Any]:
     match v:
         case bool(v):
             return ("b", v)
         case int(v):
             return ("i", v)
-        case str(v):
+        case _:
             return ("s", v)
 
 
@@ -62,26 +62,22 @@ class Icon(StrEnum):
 
 
 class Color(StrEnum):
-    BLACK = "#" + os.environ.get("BASE16_COLOR_00_HEX")
-    WHITE = "#" + os.environ.get("BASE16_COLOR_05_HEX")
-    RED = "#" + os.environ.get("BASE16_COLOR_08_HEX")
-    YELLOW = "#" + os.environ.get("BASE16_COLOR_0A_HEX")
-    AQUA = "#" + os.environ.get("BASE16_COLOR_0C_HEX")
+    BLACK = "#" + os.environ.get("BASE16_COLOR_00_HEX", "1d2021")
+    WHITE = "#" + os.environ.get("BASE16_COLOR_05_HEX", "d5c4a1")
+    RED = "#" + os.environ.get("BASE16_COLOR_08_HEX", "fb4934")
+    YELLOW = "#" + os.environ.get("BASE16_COLOR_0A_HEX", "fabd2f")
+    AQUA = "#" + os.environ.get("BASE16_COLOR_0C_HEX", "8ec07c")
     NONE = ""
 
-    def keys(self):
-        return list(["color", "background"])
-
-    def __getitem__(self, key):
-        match self, key:
-            case Color.NONE, _:
-                return Color.NONE
-            case _, "background":
-                return self
-            case Color.BLACK, "color":
-                return Color.WHITE
-            case _, "color":
-                return Color.BLACK
+    def json(self):
+        match self:
+            case Color.NONE:
+                fg = Color.NONE
+            case Color.BLACK:
+                fg = Color.WHITE
+            case _:
+                fg = Color.BLACK
+        return {"color": fg, "background": self}
 
 
 @dataclass(frozen=True)
@@ -106,7 +102,7 @@ class Temperature:
 
 @dataclass(frozen=True)
 class Progress:
-    completion: int | float = 0
+    completion: float = 0.0
     elapsed: Optional[int] = None
     remaining: Optional[int] = None
     origin: Optional[str] = None
@@ -114,10 +110,9 @@ class Progress:
 
     @classmethod
     def decode(cls, values: int | dict[str, Any]) -> Self:
-        self = cls()
         match values:
             case int(c) | float(c):
-                return Progress(completion=c)
+                return cls(completion=float(c))
             case {
                 "progress": {
                     "completion": c,
@@ -127,9 +122,9 @@ class Progress:
                 },
                 "job": {"file": {"name": n}},
             }:
-                return Progress(c, e, r, o, n)
-
-        return self
+                return cls(float(c), e, r, o, n)
+            case _:
+                return cls()
 
     @property
     def trunc_name(self) -> str:
@@ -175,10 +170,16 @@ class Octoprint:
     tool0: Temperature = field(default_factory=Temperature)
     progress: Progress = field(default_factory=Progress)
     status: str = "UNKNOWN"
+    file: str = ""
+    rc: int = 0
 
     @property
     def name(self):
         return self.progress.name
+
+    @property
+    def reconnecting(self):
+        return self.status == "RECONNECTING"
 
     @property
     def printing(self):
@@ -191,30 +192,32 @@ class Octoprint:
     @property
     def bg(self):
         match self.status:
-            case "FAILED":
-                return Color.RED
+            case "CONNECTED":
+                return Color.NONE
             case "PRINTING" if self.heating:
                 return Color.YELLOW
             case "PRINTING":
                 return Color.AQUA
             case _:
-                return Color.NONE
+                return Color.RED
 
     @property
     def icon(self):
         match self.status:
-            case "FAILED":
-                return Icon.ALERT
+            case "CONNECTED":
+                return Icon.NONE
             case "PRINTING" if self.heating:
                 return Icon.HEATING
             case "PRINTING":
                 return Icon.PRINTING
             case _:
-                return Icon.NONE
+                return Icon.ALERT
 
     @property
     def full_text(self) -> dict[str, str]:
         match self.status:
+            case "CONNECTED":
+                return {"full_text": ""}
             case "FAILED":
                 return {"full_text": f" {self.icon} FAILED "}
             case "PRINTING":
@@ -225,7 +228,7 @@ class Octoprint:
                     items.append(f"B:{self.bed}")
                 return {"full_text": " {} ".format(" ".join([str(i) for i in items]))}
             case _:
-                return {"full_text": ""}
+                return {"full_text": f" {self.icon} X "}
 
     @property
     def short_text(self) -> dict[str, str]:
@@ -237,7 +240,7 @@ class Octoprint:
 
     def json(self):
         return json.dumps(
-            {**self.full_text, **self.short_text, **self.bg},
+            {**self.full_text, **self.short_text, **self.bg.json()},
             ensure_ascii=False,
         )
 
@@ -279,7 +282,7 @@ def main():
         print(data.json(), flush=True)
 
     @mqttc.topic_callback("octoprint/event/PrintDone")
-    def on_print_done(client: Client, data: Octoprint, msg: MQTTMessage):
+    def on_print_done(_client: Client, data: Octoprint, msg: MQTTMessage):
         match json.loads(msg.payload.decode()):
             case {"name": name, "time": time}:
                 notify(
@@ -291,7 +294,7 @@ def main():
         print(data.json(), flush=True)
 
     @mqttc.topic_callback("octoprint/event/PrintFailed")
-    def on_print_failed(client: Client, data: Octoprint, msg: MQTTMessage):
+    def on_print_failed(_client: Client, data: Octoprint, msg: MQTTMessage):
         match json.loads(msg.payload.decode()):
             case {"name": name, "time": time, "reason": "canceled"}:
                 notify(
@@ -312,7 +315,7 @@ def main():
         print(data.json(), flush=True)
 
     @mqttc.topic_callback("octoprint/temperature/+")
-    def on_temperature(client: Client, data: Octoprint, msg: MQTTMessage):
+    def on_temperature(_client: Client, data: Octoprint, msg: MQTTMessage):
         match msg.topic.split("/").pop(), json.loads(msg.payload.decode()):
             case "tool0", {"target": t, "actual": a}:
                 data.tool0 = Temperature(target=t, actual=a)
@@ -320,11 +323,43 @@ def main():
                 data.bed = Temperature(target=t, actual=a)
         print(data.json(), flush=True)
 
-    @mqttc.connect_fail_callback()
-    def on_connect_fail(client: Client, data: Octoprint):
-        logger.error("Failed to connect to MQTT broker")
-        print(json.dumps({"full_text": f" {Icon.ALERT} x ", **Color.RED}))
-        os._exit(1)
+    @mqttc.connect_callback()
+    def on_connect(
+        client: Client,
+        data: Octoprint,
+        _flags: dict,
+        rc: int,
+    ):
+        flags = {
+            1: "Connection refused - incorrect protocol version",
+            2: "Connection refused - invalid client identifier",
+            3: "Connection refused - server unavailable",
+            4: "Connection refused - bad username or password",
+            5: "Connection refused - not authorised",
+        }
+        if rc == 0:
+            data.status = "CONNECTED"
+        elif data.rc != 0:
+            logger.error(f"Failed to connect to MQTT broker: {rc}: {flags[rc]}")
+
+        data.rc = rc
+
+        print(data.json(), flush=True)
+        if data.rc != 0:
+            client.reconnect()
+
+    @mqttc.disconnect_callback()
+    def on_disconnect(client: Client, *_args, **_kwargs):
+        timeout = 1
+        while True:
+            try:
+                client.reconnect()
+                break
+            except:
+                logger.error(f"Failed to connect to MQTT broker: retrying")
+                time.sleep(timeout)
+                if timeout < 32:
+                    timeout *= 2
 
     passwd = subprocess.run(
         ["pass", "show", "mqtt.tobyvin.dev/octoprint"],
@@ -334,7 +369,17 @@ def main():
     ).stdout.strip()
 
     mqttc.username_pw_set(username="octoprint", password=passwd)
-    mqttc.connect(host="frigg.asgard.tobyvin.dev")
+    mqttc.reconnect_delay_set()
+    timeout = 1
+    while True:
+        try:
+            mqttc.connect(host="frigg.asgard.tobyvin.dev")
+            break
+        except:
+            logger.error(f"Failed to connect to MQTT broker: retrying")
+            time.sleep(timeout)
+            if timeout < 32:
+                timeout *= 2
     mqttc.subscribe(
         [
             ("octoprint/event/PrinterStateChanged", 1),
@@ -345,20 +390,24 @@ def main():
     )
     mqttc.loop_start()
 
-    stdio = {
-        "stdin": DEVNULL,
-        "stdout": DEVNULL,
-        "stderr": DEVNULL,
-    }
-
     for line in sys.stdin:
         match json.loads(line):
             case {"button": 1}:
-                Popen(["xdg-open", "https://octoprint.tobyvin.dev"], **stdio)
+                Popen(
+                    ["xdg-open", "https://octoprint.tobyvin.dev"],
+                    stdin=DEVNULL,
+                    stdout=DEVNULL,
+                    stderr=DEVNULL,
+                )
             case {"button": 2}:
                 octoprint.progress.notify()
             case {"button": 3}:
-                Popen(["mpv", "https://octoprint.tobyvin.dev/stream/1/"], **stdio)
+                Popen(
+                    ["mpv", "https://octoprint.tobyvin.dev/stream/1/"],
+                    stdin=DEVNULL,
+                    stdout=DEVNULL,
+                    stderr=DEVNULL,
+                )
             case {"button": 4}:
                 pass
             case {"button": 5}:

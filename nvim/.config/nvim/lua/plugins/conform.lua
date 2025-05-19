@@ -58,6 +58,7 @@ local M = {
 			nginx = { "nginxfmt" },
 			plaintex = { "latexindent", "injected" },
 			sh = { "shfmt" },
+			python = { "ruff_format" },
 			sql = { "pg_format" },
 			tex = { "latexindent", "injected" },
 			typst = { "typstyle", "injected" },
