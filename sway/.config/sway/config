@@ -125,25 +125,25 @@ bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type --menu-cmd "$menu -
 bindsym $mod+t exec twitch-live | column -t -s'	' | $menu -l 10 | cut -f1 | xargs -r swaymsg -- exec streamlink-twitch-gui --launch
 bindsym $mod+m exec sway-mpv | $menu -l 10 | sway-mpv
 
-bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
-bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
-bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
-bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
-
-bindsym XF86AudioPlay exec playerctl play-pause
-bindsym XF86AudioNext exec playerctl next
-bindsym XF86AudioPrev exec playerctl previous
-bindsym XF86AudioRewind exec playerctl position 5+
-bindsym XF86AudioForward exec playerctl position 5-
-bindsym Shift+XF86AudioRaiseVolume exec playerctl volume 0.05+
-bindsym Shift+XF86AudioLowerVolume exec playerctl volume 0.05-
-bindsym XF86AudioRandomPlay exec playerctl shuffle toggle
-bindsym XF86AudioRepeat exec playerctl loop | sed -e 's/None/playlist/' -e 's/Playlist/track/' -e 's/Track/none/' | xargs playerctl loop
-bindsym XF86AudioMedia exec busctl --user call org.mpris.MediaPlayer2.playerctld /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2 Raise
-bindsym XF86AudioCycleTrack exec playerctld shift
-
-bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
-bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym --locked {
+	XF86MonBrightnessUp exec brightnessctl set +5%
+	XF86MonBrightnessDown exec brightnessctl set 5%-
+	XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+	XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+	XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
+	XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+	Shift+XF86AudioRaiseVolume exec playerctl volume 0.05+
+	Shift+XF86AudioLowerVolume exec playerctl volume 0.05-
+	XF86AudioPlay exec playerctl play-pause
+	XF86AudioNext exec playerctl next
+	XF86AudioPrev exec playerctl previous
+	XF86AudioRewind exec playerctl position 5+
+	XF86AudioForward exec playerctl position 5-
+	XF86AudioRandomPlay exec playerctl shuffle toggle
+	XF86AudioRepeat exec playerctl loop | sed -e 's/None/playlist/' -e 's/Playlist/track/' -e 's/Track/none/' | xargs playerctl loop
+	XF86AudioMedia exec busctl --user call org.mpris.MediaPlayer2.playerctld /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2 Raise
+	XF86AudioCycleTrack exec playerctld shift
+}
 
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
