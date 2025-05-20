@@ -361,25 +361,26 @@ def main():
                 if timeout < 32:
                     timeout *= 2
 
-    passwd = subprocess.run(
-        ["pass", "show", "mqtt.tobyvin.dev/octoprint"],
-        capture_output=True,
-        check=True,
-        text=True,
-    ).stdout.strip()
-
-    mqttc.username_pw_set(username="octoprint", password=passwd)
-    mqttc.reconnect_delay_set()
     timeout = 1
     while True:
         try:
+            passwd = subprocess.run(
+                ["pass", "show", "mqtt.tobyvin.dev/octoprint"],
+                capture_output=True,
+                check=True,
+                text=True,
+            ).stdout.strip()
+            mqttc.username_pw_set(username="octoprint", password=passwd)
+            mqttc.reconnect_delay_set()
             mqttc.connect(host="frigg.asgard.tobyvin.dev")
             break
-        except:
-            logger.error(f"Failed to connect to MQTT broker: retrying")
+        except Exception as err:
+            logger.error(f"Failed to connect to MQTT broker: {err}")
             time.sleep(timeout)
             if timeout < 32:
                 timeout *= 2
+            logger.error("Retrying...")
+
     mqttc.subscribe(
         [
             ("octoprint/event/PrinterStateChanged", 1),
