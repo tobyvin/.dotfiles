@@ -12,6 +12,7 @@
   "lazydev.nvim": { "branch": "main", "commit": "f59bd14a852ca43db38e3662395354cb2a9b13e0" },
   "luvit-meta": { "branch": "main", "commit": "1df30b60b1b4aecfebc785aa98943db6c6989716" },
   "mason.nvim": { "branch": "main", "commit": "7f265cd6ae56cecdd0aa50c8c73fc593b0604801" },
+  "mpv-types-lua": { "branch": "master", "commit": "ea1f7c2fb869691d716993d4aae659efc8a84932" },
   "nvim-colorizer.lua": { "branch": "master", "commit": "517df88cf2afb36652830df2c655df2da416a0ae" },
   "nvim-jdtls": { "branch": "master", "commit": "c23f200fee469a415c77265ca55b496feb646992" },
   "nvim-lint": { "branch": "master", "commit": "fdb04e9285edefbe25a02a31a35e8fbb10fe054d" },
