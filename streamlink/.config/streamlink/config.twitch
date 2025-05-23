@@ -3,5 +3,5 @@ twitch-disable-hosting
 twitch-low-latency
 # twitch-disable-ads
 twitch-proxy-playlist-fallback
-twitch-proxy-playlist=https://eu.luminous.dev,https://eu2.luminous.dev
+twitch-proxy-playlist=https://eu.luminous.dev,https://eu2.luminous.dev,https://as.luminous.dev
 twitch-proxy-playlist-exclude=kotton,son_of_magnustv,RocketLeague,togglebit
