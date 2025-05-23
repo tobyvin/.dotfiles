@@ -4,7 +4,7 @@ interval=persist
 format=json
 
 [weather]
-command=i3blocks-wttr
+command=i3blocks-weather
 interval=600
 
 [octoprint]

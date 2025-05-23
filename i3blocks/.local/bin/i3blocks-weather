@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+
+from enum import Enum
+import sys
+
+import requests
+
+
+class NFWeather(Enum):
+    Clear = ("", "")
+    Cloudy = ("", "")
+    PartlyCloudy = ("", "")
+    Fog = ("", "")
+    Hail = ("", "")
+    Haze = ("", "")
+    Lightning = ("", "")
+    Rain = ("", "")
+    Showers = ("", "")
+    Sleet = ("", "")
+    Snow = ("", "")
+    Sprinkle = ("", "")
+    Thunderstorm = ("", "")
+    Windy = ("", "")
+    CloudyGusts = ("", "")
+    CloudyHigh = ("", "")
+    CloudyWindy = ("", "")
+    LightWind = ("", "")
+    RainMix = ("", "")
+    RainWind = ("", "")
+    SleetStorm = ("", "")
+    SnowThunderstorm = ("", "")
+    SnowWind = ("", "")
+    StormShowers = ("", "")
+
+
+WMO_CODES = {
+    0: NFWeather.Clear,  # Sunny
+    1: NFWeather.PartlyCloudy,  # MainlySunny
+    2: NFWeather.CloudyHigh,  # PartlyCloudy
+    3: NFWeather.Cloudy,  # Cloudy
+    45: NFWeather.Fog,  # Foggy
+    48: NFWeather.Fog,  # Foggy
+    51: NFWeather.Sprinkle,  # LightDrizzle
+    53: NFWeather.Rain,  # Drizzle
+    55: NFWeather.RainWind,  # HeavyDrizzle
+    56: NFWeather.Sleet,  # LightFreezingDrizzle
+    57: NFWeather.Sleet,  # FreezingDrizzle
+    61: NFWeather.Sprinkle,  # LightRain
+    63: NFWeather.Rain,  # Rain
+    65: NFWeather.RainWind,  # HeavyRain
+    66: NFWeather.Sleet,  # LightFreezingRain
+    67: NFWeather.Sleet,  # FreezingRain
+    71: NFWeather.Snow,  # LightSnow
+    73: NFWeather.Snow,  # Snow
+    75: NFWeather.SnowWind,  # HeavySnow
+    77: NFWeather.Hail,  # SnowGrains
+    80: NFWeather.Sprinkle,  # LightShowers
+    81: NFWeather.Showers,  # Showers
+    82: NFWeather.StormShowers,  # HeavyShowers
+    85: NFWeather.Snow,  # LightSnowShowers
+    86: NFWeather.SnowWind,  # SnowShowers
+    95: NFWeather.Thunderstorm,  # Thunderstorm
+    96: NFWeather.SnowThunderstorm,  # LightThunderstormsWithHail
+    99: NFWeather.SleetStorm,  # ThunderstormWithHail
+}
+
+
+BASE_URL = "https://api.open-meteo.com/v1/forecast?current=temperature_2m,weather_code,is_day&timezone=auto&forecast_days=1&latitude={latitude}&longitude={longitude}"
+
+
+def get_weather():
+    (lat, long) = requests.get("https://ipinfo.io").json().get("loc", ",").split(",", 1)
+    w = requests.get(BASE_URL.format(latitude=lat, longitude=long)).json()
+    current = w["current"]
+    try:
+        icon = WMO_CODES[current["weather_code"]].value[current["is_day"]]
+    except Exception:
+        icon = "X"
+
+    return " {} {}{} ".format(
+        icon, current["temperature_2m"], w["current_units"]["temperature_2m"]
+    )
+
+
+def main():
+    try:
+        print(get_weather())
+    except Exception as e:
+        print(e, file=sys.stderr)
+
+
+if __name__ == "__main__":
+    main()
