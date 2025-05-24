@@ -1,0 +1,12 @@
+#!/bin/sh
+# shellcheck disable=3028
+match="file://${HOSTNAME:-${HOST:-$(uname -n)}}/"
+replace=file://localhost/
+
+for arg; do
+	case $arg in $match*) arg=$replace"${arg#"$match"}" ;; esac
+	shift
+	set -- "$@" "$arg"
+done
+
+exec handlr open "$@"
