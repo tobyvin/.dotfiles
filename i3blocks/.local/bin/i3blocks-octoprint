@@ -72,7 +72,7 @@ class Color(StrEnum):
     def json(self):
         match self:
             case Color.NONE:
-                fg = Color.NONE
+                return {}
             case Color.BLACK:
                 fg = Color.WHITE
             case _:
