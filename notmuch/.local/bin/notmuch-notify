@@ -54,8 +54,10 @@ def main():
     database = notmuch2.Database(mode=notmuch2.Database.MODE.READ_WRITE)
 
     for message in database.messages("tag:notify"):
-        notify(message.header("From"), message.header("Subject"))
-        print(message)
+        frm = message.header("From")
+        subject = message.header("Subject")
+        notify(frm, subject)
+        print(f"New mail: {frm} - {subject}")
         message.tags.discard("notify")
         del message
 
