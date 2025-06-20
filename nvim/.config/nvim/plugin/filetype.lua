@@ -58,5 +58,14 @@ vim.filetype.add({
 
 			return filenames[bufnr] and vim.filetype.match({ buf = bufnr, filename = filenames[bufnr] }) or nil
 		end,
+		[".*"] = {
+			function(_, bufnr)
+				local content = vim.api.nvim_buf_get_lines(bufnr, 0, 1, false)[1] or ""
+				if vim.regex([[^#!/usr/bin/env -S cargo +nightly -Zscript]]):match_str(content) ~= nil then
+					return "rust"
+				end
+			end,
+			{ priority = -math.huge },
+		},
 	},
 })

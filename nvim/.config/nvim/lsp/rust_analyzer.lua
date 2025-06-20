@@ -27,7 +27,9 @@ return {
 		else
 			local cmd = { "cargo", "metadata", "--no-deps", "--format-version", "1" }
 			vim.system(cmd, { text = true }, function(obj)
-				cb_or_default(obj.stdout ~= "" and vim.json.decode(obj.stdout).workspace_root)
+				vim.schedule(function()
+					cb_or_default(obj.stdout ~= "" and vim.json.decode(obj.stdout).workspace_root)
+				end)
 			end)
 		end
 	end,
