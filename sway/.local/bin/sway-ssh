@@ -7,7 +7,8 @@ if [ ! -t 0 ]; then
 	fi
 	set -- "$@" "$args"
 elif [ $# -eq 0 ]; then
-	sshr --resolve --port 22 --scan 0.0.0.0/24 | sed 's/.local$//'
+	sshr --resolve --port 22 --scan 0.0.0.0/24 --exclude "$XDG_STATE_HOME"/sshr/exclude |
+		sed 's/.local$//'
 	exit 0
 fi
 
