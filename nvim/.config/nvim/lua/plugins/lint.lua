@@ -3,11 +3,11 @@ local M = {
 	"mfussenegger/nvim-lint",
 	opts = {
 		linters_by_ft = {
+			awk = { "gawk" },
 			htmldjango = { "djlint" },
 			lua = { "selene" },
-			zsh = { "zsh" },
 			systemd = { "systemd-analyze" },
-			awk = { "gawk" },
+			zsh = { "zsh" },
 		},
 	},
 }

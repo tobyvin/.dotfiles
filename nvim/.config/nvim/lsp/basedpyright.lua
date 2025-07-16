@@ -18,7 +18,11 @@ return {
 				autoSearchPaths = true,
 				useLibraryCodeForTypes = true,
 				diagnosticMode = "openFilesOnly",
+				diagnosticSeverityOverrides = {
+					reportUnusedImport = "none",
+				},
 			},
+			disableOrganizeImports = true,
 		},
 	},
 	on_attach = function(client, bufnr)

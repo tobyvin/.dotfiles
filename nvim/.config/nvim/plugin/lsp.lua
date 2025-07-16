@@ -16,6 +16,7 @@ vim.lsp.enable({
 	"ocamllsp",
 	"omnisharp",
 	"perlnavigator",
+	"ruff",
 	"rust_analyzer",
 	"taplo",
 	"texlab",
