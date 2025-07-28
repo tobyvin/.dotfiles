@@ -71,8 +71,6 @@ for_window [app_id="authenticator" title="Yubico Authenticator"] floating enable
 no_focus [app_id="deno" title="^Peek preview$"]
 no_focus [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"]
 
-assign [class="^steam$" title="^Steam$"] $ws03
-assign [class="^steam_app_\d+$" instance="^steam_app_\d+$"] $ws03
 assign [app_id="" title="^Streamlink Twitch GUI$"] $ws07
 assign [app_id="discord"] $ws08
 assign [app_id="vesktop"] $ws08
