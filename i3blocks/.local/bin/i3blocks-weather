@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 
 from enum import Enum
+import os
+import re
+import subprocess
 import sys
 
 import requests
@@ -65,28 +68,63 @@ WMO_CODES = {
 }
 
 
+class Weather:
+    exception: Exception | None
+    temp: str
+    code: NFWeather
+    icon: str
+    unit: str
+
+    def __init__(self, data, exception=None):
+        self.exception = exception
+        if exception is not None:
+            self.temp = "x"
+            self.code = NFWeather.Clear
+        else:
+            self.temp = "{}{}".format(
+                data["current"]["temperature_2m"],
+                data["current_units"]["temperature_2m"],
+            )
+            self.code = WMO_CODES[data["current"]["weather_code"]]
+        self.icon = self.code.value[data["current"]["is_day"]]
+
+    def print(self):
+        print(" {} {} ".format(self.icon, self.temp))
+        if self.temp == "x":
+            print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
+            print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
+
+    def notify(self):
+        title = "Current Weather"
+        desc = " ".join(re.findall("[A-Z][^A-Z]*", self.code.name))
+        if self.exception:
+            body = "Error: {}".format(self.exception)
+        else:
+            body = "Weather: {} {}\nTemperature: {}".format(self.icon, desc, self.temp)
+        subprocess.run(["notify-send", title, body])
+
+
 BASE_URL = "https://api.open-meteo.com/v1/forecast?current=temperature_2m,weather_code,is_day&timezone=auto&forecast_days=1&latitude={latitude}&longitude={longitude}"
 
 
 def get_weather():
     (lat, long) = requests.get("https://ipinfo.io").json().get("loc", ",").split(",", 1)
-    w = requests.get(BASE_URL.format(latitude=lat, longitude=long)).json()
-    current = w["current"]
-    try:
-        icon = WMO_CODES[current["weather_code"]].value[current["is_day"]]
-    except Exception:
-        icon = "X"
-
-    return " {} {}{} ".format(
-        icon, current["temperature_2m"], w["current_units"]["temperature_2m"]
-    )
+    return requests.get(BASE_URL.format(latitude=lat, longitude=long)).json()
 
 
 def main():
     try:
-        print(get_weather())
+        weather = Weather(get_weather())
     except Exception as e:
+        e.add_note("Failed to get weather API")
         print(e, file=sys.stderr)
+        weather = Weather({}, e)
+
+    weather.print()
+
+    match int(os.environ.get("BLOCK_BUTTON", "0")):
+        case 1:
+            weather.notify()
 
 
 if __name__ == "__main__":
