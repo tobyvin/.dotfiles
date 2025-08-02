@@ -20,6 +20,7 @@ local M = {
 		},
 		user_default_options = {
 			mode = "virtualtext",
+			xterm = true,
 		},
 		virtualtext_inline = true,
 	},
