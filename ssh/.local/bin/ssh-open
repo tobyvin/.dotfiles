@@ -1,16 +1,11 @@
 #!/usr/bin/sh
 
-if [ -z "$SSH_CLIENT" ]; then
-	$(command -vp xdg-open) "$@"
-	exit 0
-fi
-
 HOSTNAME=$(uname -n)
 
 printf %s "$@" |
 	sed -e "s/localhost/$HOSTNAME/" -e "s/127\(\.[0-9]\{1,3\}\)\{3\}/$HOSTNAME/" |
-	if [ -S "$XDG_RUNTIME_DIR"/xdg-open.socket ]; then
-		if stderr=$(nc -UN "$XDG_RUNTIME_DIR"/xdg-open.socket | grep .); then
+	if [ -S "$XDG_RUNTIME_DIR"/ssh-open.socket ]; then
+		if stderr=$(nc -UN "$XDG_RUNTIME_DIR"/ssh-open.socket | grep .); then
 			printf %s\\n "$stderr" 1>&2
 			exit 1
 		fi

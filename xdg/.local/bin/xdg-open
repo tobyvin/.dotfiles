@@ -9,4 +9,8 @@ for arg; do
 	set -- "$@" "$arg"
 done
 
-exec handlr open "$@"
+if command -v handlr >/dev/null; then
+	exec handlr open "$@"
+else
+	exec command -p xdg-open "$@"
+fi
