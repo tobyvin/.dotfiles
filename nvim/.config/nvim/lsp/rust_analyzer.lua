@@ -84,7 +84,7 @@ return {
 				error(tostring(resp.err))
 			end
 
-			if resp.result["local"] then
+			if resp.result["local"] and vim.env.SSH_CLIENT == nil then
 				---@type string
 				local uri = resp.result["local"]:gsub("/[^/]+(/macro%.[^/]+.html)", "%1")
 				local cmd = {

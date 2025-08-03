@@ -1,16 +1,21 @@
 #!/bin/sh
+
+if command -v handlr >/dev/null; then
+	cmd="handlr open"
+else
+	cmd="$(command -p xdg-open)"
+fi
+
 # shellcheck disable=3028
-match="file://${HOSTNAME:-${HOST:-$(uname -n)}}/"
-replace=file://localhost/
+host=${HOSTNAME:-${HOST:-$(uname -n)}}
 
 for arg; do
-	case $arg in $match*) arg=$replace"${arg#"$match"}" ;; esac
+	case $arg in
+	"file://$host/"*) arg=file://localhost/"${arg#"file://$host/"}" ;;
+	http://* | https://*) [ -n "$SSH_CLIENT" ] && cmd=ssh-open ;;
+	esac
 	shift
 	set -- "$@" "$arg"
 done
 
-if command -v handlr >/dev/null; then
-	exec handlr open "$@"
-else
-	exec command -p xdg-open "$@"
-fi
+exec $cmd "$@"
