@@ -1,0 +1,7 @@
+[Unit]
+Description=xdg-open socket listener
+
+[Service]
+ExecStart=/usr/bin/xargs swaymsg exec xdg-open
+StandardInput=socket
+StandardOutput=null

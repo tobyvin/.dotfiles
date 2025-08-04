@@ -1,0 +1,9 @@
+[Unit]
+Description=xdg-open socket listener
+
+[Socket]
+ListenStream=%t/xdg-open.socket
+Accept=yes
+
+[Install]
+WantedBy=sockets.target
