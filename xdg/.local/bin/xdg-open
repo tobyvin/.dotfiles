@@ -3,7 +3,7 @@
 if command -v handlr >/dev/null; then
 	cmd="handlr open"
 else
-	cmd="$(command -p xdg-open)"
+	cmd="$(command -p xdg-open 2>/dev/null)"
 fi
 
 # shellcheck disable=3028
