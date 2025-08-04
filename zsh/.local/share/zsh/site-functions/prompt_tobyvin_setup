@@ -8,18 +8,49 @@ autoload -Uz vcs_info
 
 zstyle ':vcs_info:*' enable git
 zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' stagedstr '+'
 zstyle ':vcs_info:*' unstagedstr '!'
-# zstyle ':vcs_info:git:*' formats '[%u%c%m]'
-zstyle ':vcs_info:git:*' formats '(%F{magenta}%b%f)%F{red}[%u%c%m]%f'
-zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+zstyle ':vcs_info:*' stagedstr '+'
+zstyle ':vcs_info:git:*' formats '%F{magenta}%b%f %F{red}%u%c%m%f'
+zstyle ':vcs_info:git:*' actionformats '%F{magenta}%b%f%F{yellow}(%a %7.7m)%f%F{red}%u%c%f'
 
-+vi-git-untracked() {
-	if [[ $(git rev-parse --is-inside-work-tree 2>/dev/null) == 'true' ]] &&
-		git status --porcelain | grep -m 1 '^??' &>/dev/null; then
-		hook_com[misc]='?'
+zstyle ':vcs_info:git*+set-message:*' hooks git-untracked
+function +vi-git-untracked() {
+	if [ "$(git rev-parse --is-inside-work-tree 2>/dev/null)" == 'true' ] &&
+		git status --porcelain | grep -m 1 '^?? ' 2>/dev/null; then
+		hook_com[staged]+='?'
 	fi
 }
+
+### git: Show remote branch name for remote-tracking branches
+zstyle ':vcs_info:git*+set-message:*' hooks git-remotebranch
+function +vi-git-remotebranch() {
+    local remote
+
+    # Are we on a remote-tracking branch?
+    remote=${$(git rev-parse --verify ${hook_com[branch]}@{upstream} \
+        --symbolic-full-name 2>/dev/null)/refs\/remotes\/}
+    if [[ -n ${remote} && ${remote#*/} != ${hook_com[branch]} ]] ; then
+        hook_com[branch]+=":${remote}"
+    fi
+}
+
+zstyle ':vcs_info:git*+set-message:*' hooks git-st
+function +vi-git-st() {
+    # Exit early in case the worktree is on a detached HEAD
+    git rev-parse ${hook_com[branch]}@{upstream} >/dev/null 2>&1 || return 0
+    count="$(git rev-list --left-right --count ${hook_com[branch]}@{upstream}...HEAD 2>/dev/null)"
+
+		case "$count" in
+		"") p="" ;;
+		"0	0") p="=" ;;
+		"0	"*) p=">" ;;
+		*"	0") p="<" ;;
+		*) p="<>" ;;
+		esac
+
+    hook_com[misc]+="$p"
+}
+
 
 prompt_tobyvin_precmd() {
 	vcs_info
