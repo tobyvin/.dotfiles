@@ -27,5 +27,5 @@ prompt_tobyvin_precmd() {
 
 add-zsh-hook precmd prompt_tobyvin_precmd
 
-PS1="${SSH_CLIENT+'%n@%m:'}"'%B%3~%b%(1j.%F{yellow}+%f.)%(?..%F{red})>%f '
+PS1="${SSH_CONNECTION+%n@%m:}"'%B%3~%b%(1j.%F{yellow}+%f.)%(?..%F{red})>%f '
 RPS1='${vcs_info_msg_0_}'

@@ -12,7 +12,7 @@ host=${HOSTNAME:-${HOST:-$(uname -n)}}
 for arg; do
 	case $arg in
 	"file://$host/"*) arg=file://localhost/"${arg#"file://$host/"}" ;;
-	http://* | https://*) [ -n "$SSH_CLIENT" ] && cmd=ssh-open ;;
+	http://* | https://*) [ -n "$SSH_CONNECTION" ] && cmd=ssh-open ;;
 	esac
 	shift
 	set -- "$@" "$arg"
