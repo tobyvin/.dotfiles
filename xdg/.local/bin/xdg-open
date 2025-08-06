@@ -9,7 +9,10 @@ if [ -n "$SSH_CONNECTION" ]; then
 fi
 
 for arg; do
-	if (handlr mime --json "$arg" | jq -r '.[] | .mime' | xargs handlr get | xargs desktopfiles -t) >/dev/null 2>&1; then
+	if (
+		command -v handlr && handlr mime --json "$arg" | jq -r '.[] | .mime' |
+			xargs handlr get | xargs desktopfiles -t
+	) >/dev/null 2>&1; then
 		executer="terminal"
 	fi
 	case $arg in
