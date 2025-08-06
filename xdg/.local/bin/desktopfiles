@@ -1,0 +1,20 @@
+#!/bin/sh
+
+for arg; do
+	case $arg in
+	-t | --term) term='Terminal\s*=\s*true' ;;
+	*.desktop) glob="$arg" ;;
+	*) exe="Exec=.*$arg.*" ;;
+	esac
+	shift
+done
+
+printf '%s\n' "$XDG_DATA_HOME:$XDG_DATA_DIRS" | tr : '\n' |
+	while read -r data_dir; do
+		if [ -d "$data_dir"/applications ]; then
+			printf '%s/applications\n' "$data_dir"
+		fi
+	done |
+	xargs rg --regexp="${exe:-.}" --glob="$glob" --files-with-matches --null \
+		--type-add='desktop:*.desktop' --type=desktop |
+	xargs --null rg --regexp="${term:-.}" --files-with-matches

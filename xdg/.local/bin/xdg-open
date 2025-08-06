@@ -1,21 +1,27 @@
 #!/bin/sh
 
-if command -v handlr >/dev/null; then
-	cmd="handlr open"
-else
-	cmd="$(command -p xdg-open 2>/dev/null)"
-fi
-
 # shellcheck disable=3028
 host=${HOSTNAME:-${HOST:-$(uname -n)}}
+executer="$XDG_CURRENT_DESKTOP"
+
+if [ -n "$SSH_CONNECTION" ]; then
+	executer="ssh"
+fi
 
 for arg; do
+	if (handlr mime --json "$arg" | jq -r '.[] | .mime' | xargs handlr get | xargs desktopfiles -t) >/dev/null 2>&1; then
+		executer="terminal"
+	fi
 	case $arg in
 	"file://$host/"*) arg=file://localhost/"${arg#"file://$host/"}" ;;
-	http://* | https://*) [ -n "$SSH_CONNECTION" ] && cmd=ssh-open ;;
+	file:///*) arg=file://localhost/"${arg#"file:///"}" ;;
 	esac
 	shift
 	set -- "$@" "$arg"
 done
 
-exec $cmd "$@"
+case "$executer" in
+ssh) exec ssh-open "$@" ;;
+*sway*) swaymsg exec handlr open "$@" ;;
+terminal | *) exec handlr open "$@" ;;
+esac
