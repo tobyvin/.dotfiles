@@ -1,0 +1,7 @@
+#!/bin/sh
+
+set -e
+
+CDPATH='' cd -- "$(git -C "$(dirname -- "$(realpath "$0")")" rev-parse --show-toplevel)"
+git pull
+./install.sh
