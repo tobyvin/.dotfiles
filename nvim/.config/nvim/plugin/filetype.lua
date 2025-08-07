@@ -30,6 +30,8 @@ vim.filetype.add({
 		[".*/etc/systemd/network/.*%.d/.*%.conf"] = "systemd",
 		[".*/etc/systemd/network/.*%.d/%.#.*"] = "systemd",
 		[".*/etc/systemd/network/%.#.*"] = "systemd",
+		-- kea configs are json with comments
+		[".*/etc/kea/kea-.*%.conf"] = "jsonc",
 		-- muttrc xdg base dir
 		[".*/mutt/.*%.rc"] = "muttrc",
 		-- goimapnotify
