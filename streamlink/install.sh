@@ -7,7 +7,7 @@ if ! command -v "$pkgname" >/dev/null; then
 	exit 0
 fi
 
-if ! find "$XDG_DATA_HOME"/streamlink/plugins/twitch.py -mtime +7 -print | grep -q .; then
+if [ -e "$XDG_DATA_HOME"/streamlink/plugins/twitch.py ] && ! find "$XDG_DATA_HOME"/streamlink/plugins/twitch.py -mtime +7 -print | grep -q .; then
 	printf "%s: Installing plugins\n" "$0"
 
 	curl -Lo "$XDG_DATA_HOME"/streamlink/plugins/twitch.py \
