@@ -8,9 +8,13 @@ ICON = "\U000f01ee"  # 󰇮
 
 
 def main():
+    terminal = os.environ.get("TERMINAL")
     match int(os.environ.get("BLOCK_BUTTON", "0")):
-        case 1:
-            subprocess.run(["handlr", "launch", "x-scheme-handler/mailto"])
+        case 1 if terminal is not None:
+            subprocess.run(
+                ["swaymsg", "exec", "--", terminal, "-T", "aerc", "-e", "aerc"],
+                capture_output=True,
+            )
 
     # Workaround for bug in the notmuch module's default config resolution
     if os.environ.get("NOTMUCH_CONFIG") is None:
