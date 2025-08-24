@@ -2,7 +2,7 @@
 	email = tobyv@tobyvin.dev
 	name = Toby Vincent
 	username = tobyvin
-	signingkey = 0xA0876F29023F43AF
+	signingkey = tobyv@tobyvin.dev
 
 [sendemail]
 	from = Toby Vincent <tobyv@tobyvin.dev>
