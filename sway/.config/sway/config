@@ -85,7 +85,8 @@ input type:touchpad {
 }
 
 input type:keyboard {
-	xkb_options "caps:escape"
+	xkb_options caps:escape
+	xkb_numlock enabled
 }
 
 floating_modifier $mod
@@ -217,8 +218,8 @@ bindsym $mod+backslash split horizontal
 bindsym $mod+Shift+backslash split none
 bindsym $mod+e layout toggle tabbed splitv splith
 
-bindsym $mod+r mode 'resize'
-mode 'resize' {
+bindsym $mod+r mode resize
+mode resize {
 	bindsym $left resize shrink width 10px
 	bindsym $down resize grow height 10px
 	bindsym $up resize shrink height 10px
@@ -229,7 +230,7 @@ mode 'resize' {
 	bindsym Up resize shrink height 10px
 	bindsym Right resize grow width 10px
 
-	bindsym Escape mode 'default'
+	bindsym Escape mode default
 }
 
 bar {
