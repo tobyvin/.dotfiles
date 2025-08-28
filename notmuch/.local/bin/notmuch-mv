@@ -22,7 +22,7 @@ def default_config() -> str:
     )
 
 
-def new_fname(db_path, fname, dest):
+def new_fname(db_path, fname, folder):
     global UID
 
     submaildir, basename = os.path.split(fname)
@@ -33,7 +33,7 @@ def new_fname(db_path, fname, dest):
     UID += 1
     host = os.uname().nodename.split(".", 1)[0]
     basename = "{}.{}_{}.{}:{}".format(timestamp, pid, UID, host, flags)
-    return os.path.join(db_path, dest, state, basename)
+    return os.path.join(db_path, folder, state, basename)
 
 
 def main():
@@ -50,36 +50,57 @@ def main():
     database = notmuch2.Database()
     db_path = database.default_path()
 
+    maildir = "tobyvin.dev/tobyv/"
     rules = [
-        ("-folder:tobyvin.dev/tobyv/Trash tag:trash", "tobyvin.dev/tobyv/Trash"),
-        ("-folder:tobyvin.dev/tobyv/Junk tag:spam", "tobyvin.dev/tobyv/Junk"),
-        ("folder:tobyvin.dev/tobyv/Junk -tag:spam", "tobyvin.dev/tobyv/Archive"),
-        ("folder:tobyvin.dev/tobyv/Trash -tag:trash", "tobyvin.dev/tobyv/Archive"),
-        ("folder:tobyvin.dev/tobyv/INBOX -tag:inbox", "tobyvin.dev/tobyv/Archive"),
-        ("folder:tobyvin.dev/tobyv/Archive tag:sent", "tobyvin.dev/tobyv/Sent"),
-        ("folder:tobyvin.dev/tobyv/Archive tag:inbox", "tobyvin.dev/tobyv/INBOX"),
+        ("-folder:Trash tag:trash", "Trash"),
+        ("folder:Trash -tag:trash", "Archive"),
+        ("-folder:Junk tag:spam", "Junk"),
+        ("folder:Junk -tag:spam", "Archive"),
+        ("-folder:Sent tag:sent", "Sent"),
+        ("folder:Sent -tag:sent", "Archive"),
+        ("-folder:INBOX tag:inbox", "INBOX"),
+        ("folder:INBOX -tag:inbox", "Archive"),
     ]
 
-    for query_str, dest in rules:
-        maildir = os.path.dirname(dest)
+    if dryrun:
+        makedirs = lambda name: print(f"mkdir (dryrun): {name}")  # noqa: E731
+        copy = lambda src, dst: print("copy (dryrun):", end=" ")  # noqa: E731
+        move = lambda src, dst: print("move (dryrun):", end=" ")  # noqa: E731
+        updatedb = lambda: print("Would update db", file=sys.stderr)  # noqa: E731
+    else:
+        makedirs = lambda name: os.makedirs(name, exist_ok=True)  # noqa: E731
+        copy = lambda src, dst: shutil.copy(src, dst)  # noqa: E731
+        move = lambda src, dst: shutil.move(src, dst)  # noqa: E731
+        updatedb = lambda: subprocess.check_call(["notmuch", "new", "--no-hooks"])  # noqa: E731
 
-        for msg in database.messages(query_str):
-            for fname in [n for n in msg.filenames() if maildir in str(n)]:
-                dest_fname = new_fname(db_path, fname, dest)
-                if not dryrun:
-                    os.makedirs(os.path.dirname(dest_fname), exist_ok=True)
-                    try:
-                        shutil.move(fname, dest_fname)
-                    except FileNotFoundError:
-                        continue
-                print("{} -> {}".format(fname, dest_fname).replace(str(db_path) + "/", ""))
+    for query, folder in rules:
+        query.replace("folder:", f"folder:{maildir}")
+        folder = os.path.join(maildir, folder)
+
+        for msg in database.messages(query):
+            for src in [
+                n for n in msg.filenames() if maildir in str(n) and folder not in str(n)
+            ]:
+                if [m for m in msg.filenames() if folder in str(m)]:
+                    break
+                dst = new_fname(db_path, src, folder)
+                if not os.path.exists(os.path.dirname(dst)):
+                    makedirs(os.path.dirname(dst))
+                try:
+                    if ("INBOX" in str(src) and "inbox" in msg.tags) or (
+                        "Sent" in str(src) and "sent" in msg.tags
+                    ):
+                        copy(src, dst)
+                    else:
+                        move(src, dst)
+                except FileNotFoundError as e:
+                    print(f"Error: {e}", file=sys.stderr)
+                    continue
+                print("{} -> {}".format(src, dst).replace(str(db_path) + "/", ""))
                 updated = True
 
     if updated:
-        if not dryrun:
-            subprocess.check_call(["notmuch", "new", "--no-hooks"])
-        else:
-            print("Would update db")
+        updatedb()
 
 
 if __name__ == "__main__":

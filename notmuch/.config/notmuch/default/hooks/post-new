@@ -1,5 +1,10 @@
 #!/bin/sh
 
-notmuch tag -new -- tag:new and from:tobyv@tobyvin.dev
-notmuch tag +inbox +unread +notify -new -- tag:new
+notmuch tag +inbox +sent +unread +notify -new -- tag:new folder:/INBOX\$/ and folder:/Sent\$/
+notmuch tag +inbox +unread +notify -new -- tag:new folder:/INBOX\$/
+notmuch tag +sent -new -- tag:new folder:/Sent\$/
+notmuch tag +draft -new -- tag:new folder:/Draft\$/
+notmuch tag +spam +unread +notify -new -- tag:new folder:/Junk\$/
+notmuch tag +trash -new -- tag:new folder:/Trash\$/
+notmuch tag -new -- tag:new
 "$HOME"/.local/bin/notmuch-notify
