@@ -32,6 +32,23 @@ fileext = ".ics"
 type = "http"
 url.fetch = ["command", "pass", "sonarr.tobyvin.dev/sonarr/calendar"]
 
+[pair google]
+a = "google_local"
+b = "google_remote"
+collections = ["60n5e6lfe5bb8bug075r8mh6l0@group.calendar.google.com"]
+metadata = ["color", "displayname", "description", "order"]
+
+[storage google_local]
+type = "filesystem"
+path = "~/.local/share/calendars/google"
+fileext = ".ics"
+
+[storage google_remote]
+type = "google_calendar"
+token_file = "~/.local/state/vdirsyncer/google_token"
+client_id.fetch = ["command", "pass", "cloud.google.com/vdirsyncer/client_id"]
+client_secret.fetch = ["command", "pass", "cloud.google.com/vdirsyncer/client_secret"]
+
 [pair holidays]
 a = "holidays_local"
 b = "holidays_remote"
