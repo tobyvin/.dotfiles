@@ -1,0 +1,28 @@
+#!/bin/sh
+#
+# Inspired by: https://git.sr.ht/~whynothugo/dotfiles/tree/9476ece5d5b09651fb5e93481137ac211322708c/item/home/.local/lib/waybar-yubikey
+
+socket="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/yubikey-touch-detector.socket"
+
+while true; do
+	if [ -e "$socket" ]; then
+		nc -U "$socket" | while evnt="$(dd bs=1 count=5 2>/dev/null)"; do
+			case "$evnt" in
+			*_1) set -- "$@" "${evnt%_*}" ;;
+			*_0) for arg; do
+				shift
+				[ "$arg" = "${evnt%_*}" ] || set -- "$@" "$arg"
+			done ;;
+			esac
+
+			printf '%s%s%s\n' "${1+ 󰣮 }" "$*" "${1+ }"
+		done
+	fi
+	sleep 1
+done | jq \
+	--raw-input \
+	--unbuffered \
+	--compact-output \
+	--arg color "#$BASE16_COLOR_00_HEX" \
+	--arg background "#$BASE16_COLOR_0A_HEX" \
+	'{"fulltext": ., "color": $color, "background": $background}'
