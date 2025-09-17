@@ -1,28 +1,55 @@
-#!/bin/sh
-#
-# Inspired by: https://git.sr.ht/~whynothugo/dotfiles/tree/9476ece5d5b09651fb5e93481137ac211322708c/item/home/.local/lib/waybar-yubikey
+#!/usr/bin/env python
 
-socket="${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/yubikey-touch-detector.socket"
+import json
+import os
+import socket
+import sys
 
-while true; do
-	if [ -e "$socket" ]; then
-		nc -U "$socket" | while evnt="$(dd bs=1 count=5 2>/dev/null)"; do
-			case "$evnt" in
-			*_1) set -- "$@" "${evnt%_*}" ;;
-			*_0) for arg; do
-				shift
-				[ "$arg" = "${evnt%_*}" ] || set -- "$@" "$arg"
-			done ;;
-			esac
+import threading
+import time
 
-			printf '%s%s%s\n' "${1+ 󰣮 }" "$*" "${1+ }"
-		done
-	fi
-	sleep 1
-done | jq \
-	--raw-input \
-	--unbuffered \
-	--compact-output \
-	--arg color "#$BASE16_COLOR_00_HEX" \
-	--arg background "#$BASE16_COLOR_0A_HEX" \
-	'{"fulltext": ., "color": $color, "background": $background}'
+
+def print_json(output={}):
+    print(json.dumps(output, ensure_ascii=False), flush=True)
+
+
+def main():
+    icon = "\U000f0309"  # 󰌉
+    colors = {
+        "color": f"#{os.environ.get('BASE16_COLOR_00_HEX')}",
+        "background": f"#{os.environ.get('BASE16_COLOR_0A_HEX')}",
+    }
+    socket_path = os.path.expandvars("$XDG_RUNTIME_DIR/yubikey-touch-detector.socket")
+    status: dict[str, bool] = {}
+    timer = None
+
+    while True:
+        try:
+            sock = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+            sock.connect(socket_path)
+        except Exception:
+            print("Cannot connect to yubikey-touch-detector", file=sys.stderr)
+            time.sleep(60)
+            continue
+
+        while data := sock.recv(5):
+            [name, stat] = data.decode().split("_")
+            status[name] = int(stat) == 1
+
+            if timer and timer.is_alive():
+                timer.cancel()
+
+            if msg := " | ".join([k for k, v in status.items() if v]):
+                output = {"full_text": f" {icon} {msg} "} | colors
+                timer = threading.Timer(0.75, print_json, [output])
+                timer.start()
+            else:
+                print_json()
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("received signal, exiting", file=sys.stderr)
+        sys.exit(1)

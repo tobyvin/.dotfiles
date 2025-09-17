@@ -3,10 +3,6 @@ command=i3blocks-title
 interval=persist
 format=json
 
-[weather]
-command=i3blocks-weather
-interval=600
-
 [octoprint]
 command=i3blocks-octoprint
 interval=persist
@@ -19,6 +15,15 @@ interval=30
 [notmuch]
 command=i3blocks-notmuch
 interval=5
+
+[yubikey]
+command=i3blocks-yubikey
+interval=persist
+format=json
+
+[weather]
+command=i3blocks-weather
+interval=600
 
 [disk]
 command=i3blocks-disk
