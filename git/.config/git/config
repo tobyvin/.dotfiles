@@ -3,39 +3,30 @@
 	name = Toby Vincent
 	username = tobyvin
 	signingkey = tobyv@tobyvin.dev
-
 [sendemail]
 	from = Toby Vincent <tobyv@tobyvin.dev>
-
 [commit]
 	gpgsign = true
-
 [init]
 	defaultBranch = main
-
 [revert]
 	reference = true
-
 [rerere]
 	enabled = true
-
 [diff]
 	colorMoved = default
 	colorMovedWS = allow-indentation-change
 	tool = difft
-
 [difftool]
 	prompt = false
-
 [difftool "difft"]
 	cmd = difft "$LOCAL" "$REMOTE"
-
 [pager]
 	difftool = true
-
 [merge]
 	tool = nvimdiff
-
+[stash]
+	showIncludeUntracked = true
 [trailer]
 	separators = ":#"
 
@@ -47,7 +38,6 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-
 [alias]
 	lg = log --oneline --all --graph
 	st = status
