@@ -25,6 +25,6 @@ done
 
 case "$executer" in
 ssh) exec ssh-open "$@" ;;
-*sway*) swaymsg exec handlr open "$@" ;;
+*sway*) swaymsg exec -- 'handlr open "'"$*"'"' ;;
 terminal | *) exec handlr open "$@" ;;
 esac
