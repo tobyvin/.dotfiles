@@ -1,0 +1,84 @@
+---
+runtime:
+  threads: ~
+release:
+  check: false
+manifest:
+  enable: true
+  secondary:
+    - path: "<xdgConfig>/ludusavi/manifest_custom.yaml"
+      enable: true
+language: en-US
+theme: dark
+roots:
+  - store: steam
+    path: "<xdgData>/Steam"
+  - store: steam
+    path: /srv/games/pool1/SteamLibrary
+  - store: steam
+    path: /srv/games/pool2/SteamLibrary
+  - store: heroic
+    path: "<xdgConfig>/heroic"
+  - store: lutris
+    path: "<xdgData>/lutris"
+    database: ~
+redirects:
+  - kind: restore
+    source: /srv/games/SteamLibrary
+    target: /srv/games/pool1/SteamLibrary
+backup:
+  path: "<home>/.local/state/ludusavi"
+  ignoredGames: []
+  filter:
+    excludeStoreScreenshots: false
+    cloud:
+      exclude: false
+      epic: false
+      gog: false
+      origin: false
+      steam: false
+      uplay: false
+    ignoredPaths: []
+    ignoredRegistry: []
+  toggledPaths: {}
+  toggledRegistry: {}
+  sort:
+    key: status
+    reversed: false
+  retention:
+    full: 1
+    differential: 0
+  format:
+    chosen: simple
+    zip:
+      compression: zstd
+    compression:
+      deflate:
+        level: 6
+      bzip2:
+        level: 6
+      zstd:
+        level: 10
+  onlyConstructive: false
+restore:
+  path: "<home>/.local/state/ludusavi"
+  ignoredGames: []
+  toggledPaths: {}
+  toggledRegistry: {}
+  sort:
+    key: status
+    reversed: false
+  reverseRedirects: true
+scan:
+  showDeselectedGames: true
+  showUnchangedGames: true
+  showUnscannedGames: true
+cloud:
+  remote: ~
+  path: ludusavi-backup
+  synchronize: false
+apps:
+  rclone:
+    path: ""
+    arguments: "--fast-list --ignore-checksum"
+customGames: []

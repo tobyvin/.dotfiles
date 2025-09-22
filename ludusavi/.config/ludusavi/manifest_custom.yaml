@@ -1,0 +1,40 @@
+PCSX2:
+  files:
+    "<xdgConfig>/PCSX2/gamesettings":
+      tags:
+        - config
+      when:
+        - os: linux
+    "<xdgConfig>/PCSX2/inis":
+      tags:
+        - config
+      when:
+        - os: linux
+    "<xdgConfig>/PCSX2/inputprofiles":
+      tags:
+        - config
+      when:
+        - os: linux
+    "<xdgConfig>/PCSX2/memcards":
+      tags:
+        - save
+      when:
+        - os: linux
+    "<xdgConfig>/PCSX2/sstates":
+      tags:
+        - save
+      when:
+        - os: linux
+mupen64plus:
+  files:
+    "<xdgConfig>/mupen64plus/mupen64plus.cfg":
+      tags:
+        - config
+    "<xdgConfig>/mupen64plus/InputAutoCfg.ini":
+      tags:
+        - config
+    "<xdgData>/mupen64plus/save":
+      tags:
+        - save
+      when:
+        - os: linux
