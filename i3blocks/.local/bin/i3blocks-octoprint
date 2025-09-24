@@ -227,6 +227,8 @@ class Octoprint:
                 if self.bed.enabled:
                     items.append(f"B:{self.bed}")
                 return {"full_text": " {} ".format(" ".join([str(i) for i in items]))}
+            case "UNKNOWN":
+                return {"full_text": ""}
             case _:
                 return {"full_text": f" {self.icon} X "}
 
@@ -355,8 +357,8 @@ def main():
             try:
                 client.reconnect()
                 break
-            except:
-                logger.error(f"Failed to connect to MQTT broker: retrying")
+            except Exception:
+                logger.error("Failed to connect to MQTT broker: retrying")
                 time.sleep(timeout)
                 if timeout < 32:
                     timeout *= 2
