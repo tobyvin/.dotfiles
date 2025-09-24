@@ -71,12 +71,6 @@ local capabilities = {
 			end
 		end, { desc = "complete", expr = true })
 	end,
-	[ms.textDocument_typeDefinition] = function(bufnr)
-		vim.keymap.set("n", "go", vim.lsp.buf.type_definition, {
-			buffer = bufnr,
-			desc = "vim.lsp.buf.type_definition()",
-		})
-	end,
 	[ms.textDocument_inlayHint] = function(bufnr)
 		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 	end,
