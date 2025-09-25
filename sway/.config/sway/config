@@ -61,6 +61,7 @@ for_window [class="^steam$"] floating enable
 for_window [class="^steam$" title="^Steam$"] floating disable
 for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
 for_window [class="^steam_app_252950$" title="^Rocket League.*"] floating disable
+for_window [class="^steam_app_311210$"] urgent deny, focus_on_window_activation urgent
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px, urgent deny
