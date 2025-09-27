@@ -261,7 +261,7 @@ exec j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_soc
 
 exec import-gsettings
 
-exec "systemctl --user import-environment; systemctl --user start sway-session.target"
+exec systemctl --user start sway-session.target
 exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
 
 exec swaymsg "workspace $ws06; workspace $ws01"
