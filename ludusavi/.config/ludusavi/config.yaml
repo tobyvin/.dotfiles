@@ -38,12 +38,13 @@ backup:
       origin: false
       steam: false
       uplay: false
-    ignoredPaths: []
+    ignoredPaths:
+      - "<xdgData>/Steam/userdata/75410844/1086940/remote"
     ignoredRegistry: []
   toggledPaths: {}
   toggledRegistry: {}
   sort:
-    key: status
+    key: name
     reversed: false
   retention:
     full: 1
