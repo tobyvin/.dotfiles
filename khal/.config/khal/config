@@ -1,18 +1,21 @@
 [calendars]
 [[personal]]
-path = $XDG_DATA_HOME/calendars/27816ea2-0359-8284-9f0b-c7f8d1c4d792
+path = $XDG_DATA_HOME/calendars/personal
 
 [[family]]
-path = $XDG_DATA_HOME/calendars/google/60n5e6lfe5bb8bug075r8mh6l0@group.calendar.google.com
+path = $XDG_DATA_HOME/calendars/family
 
 [[shows]]
 path = $XDG_DATA_HOME/calendars/shows
+
+[[movies]]
+path = $XDG_DATA_HOME/calendars/movies
 
 [[holidays]]
 path = $XDG_DATA_HOME/calendars/holidays
 
 [[birthdays]]
-path = $XDG_DATA_HOME/contacts/922a294b-e582-4ef3-eed4-2418f86fe822
+path = $XDG_DATA_HOME/contacts/personal
 type = birthdays
 
 [keybindings]
