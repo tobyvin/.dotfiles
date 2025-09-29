@@ -30,3 +30,7 @@ dateformat = %y/%m/%d
 longdateformat = %Y/%m/%d
 datetimeformat = %y/%m/%d %H:%M
 longdatetimeformat = %Y/%m/%d %H:%M
+
+[palette]
+edit = 'white', '', '', 'white', ''
+edit focus = 'white', 'black', '', 'white', 'black'
