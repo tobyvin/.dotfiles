@@ -1,0 +1,14 @@
+[Unit]
+Description=Synchronise calendars and contacts
+Documentation=man:pimsync
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+ExecStartPre=/usr/bin/sleep 5
+ExecStart=/usr/bin/pimsync daemon
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=default.target
