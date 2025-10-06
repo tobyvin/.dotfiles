@@ -30,6 +30,10 @@ stow -R "$@" ${1:-*}/ 2>&1 | awk '
 	}
 '
 
+# source profile to, e.g., update/set env vars for install scripts
+# shellcheck source=sh/.profile
+. "$TARGET"/.profile
+
 printf "%s: Installing packages\n" "$0"
 for f in ${1:-*}/install.sh; do
 	if [ -e "$f" ]; then
