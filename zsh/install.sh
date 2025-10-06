@@ -11,4 +11,4 @@ mkdir -pv "${XDG_CACHE_HOME}/zsh" "${XDG_STATE_HOME}/zsh"
 
 printf '%s: Writing zcompdump\n' "$0"
 
-pkill zsh --signal=USR1
+pkill -u "$USER" zsh --signal=USR1
