@@ -1,7 +1,7 @@
 #!/bin/zsh
 
-# source system zprofile, as we disabled global_rc in zshenv
-source /etc/zprofile
+# disable global zshrc, see ~/.zshenv
+unsetopt global_rcs
 
 # Adopt the behavior of the system wide configuration
 #
