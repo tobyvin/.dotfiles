@@ -6,6 +6,7 @@ SAVEHIST=10000
 FPATH="$XDG_DATA_HOME"/zsh/site-functions:$FPATH
 KEYTIMEOUT=1
 
+setopt global_rcs
 setopt no_beep
 setopt menu_complete
 setopt auto_pushd
