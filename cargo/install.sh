@@ -7,6 +7,8 @@ if ! command -v "$pkgname" >/dev/null; then
 	exit 0
 fi
 
+mkdir -p "$XDG_DATA_HOME"/cargo/bin
+
 if [ ! -L "$XDG_DATA_HOME"/cargo/bin ]; then
 	if [ -d "$XDG_DATA_HOME"/cargo/bin ]; then
 		mv -vt "$HOME"/.local/bin "$XDG_DATA_HOME"/cargo/bin/*
