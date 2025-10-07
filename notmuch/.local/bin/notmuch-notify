@@ -55,7 +55,10 @@ def main():
 
     for message in database.messages("tag:notify"):
         frm = message.header("From")
-        subject = message.header("Subject")
+        try:
+            subject = message.header("Subject")
+        except LookupError:
+            subject = "(no subject)"
         notify(frm, subject)
         print(f"New mail: {frm} - {subject}")
         message.tags.discard("notify")
