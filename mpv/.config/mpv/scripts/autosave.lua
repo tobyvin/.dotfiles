@@ -2,7 +2,7 @@ local mp = require("mp")
 local utils = require("mp.utils")
 
 local function init()
-	if not mp.get_property_bool("save-position-on-quit", true) then
+	if not mp.get_property_bool("save-position-on-quit") then
 		return
 	end
 

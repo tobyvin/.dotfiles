@@ -8,7 +8,7 @@ local msg = require("mp.msg")
 local function register_bindings(chat, bindings)
 	local names = {}
 	for name, callback in pairs(bindings) do
-		mp.add_key_binding(nil, name, function()
+		mp.add_key_binding("", name, function()
 			callback(chat)
 		end)
 		table.insert(names, name)

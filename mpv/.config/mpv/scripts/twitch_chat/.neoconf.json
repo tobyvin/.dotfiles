@@ -1,9 +1,0 @@
-{
-  "lspconfig": {
-    "lua_ls": {
-      "Lua.diagnostics.globals": [
-        "mp"
-      ]
-    }
-  }
-}
