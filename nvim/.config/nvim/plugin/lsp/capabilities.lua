@@ -1,7 +1,7 @@
 local ms = vim.lsp.protocol.Methods
 
 -- Map of LSP capabilites and setup functions for supporting clients
----@type table<string, fun(bufnr:number, client:vim.lsp.Client)>
+---@type table<vim.lsp.protocol.Method.ClientToServer.Request, fun(bufnr:number, client:vim.lsp.Client)>
 local capabilities = {
 	[ms.completionItem_resolve] = function(bufnr, client)
 		vim.api.nvim_create_autocmd("CompleteChanged", {
@@ -53,26 +53,23 @@ local capabilities = {
 	end,
 	[ms.textDocument_completion] = function(bufnr, client)
 		vim.lsp.completion.enable(true, client.id, bufnr, { autotrigger = true })
-
-		vim.keymap.set("i", "<CR>", function()
-			return vim.fn.pumvisible() ~= 0 and "<C-y>" or "<CR>"
-		end, { desc = "complete accept", expr = true })
-
-		vim.keymap.set("i", "<C-n>", function()
-			if vim.fn.pumvisible() ~= 0 then
-				return "<C-n>"
-			elseif next(vim.lsp.get_clients({ bufnr = 0 })) then
-				vim.lsp.completion.get()
-				return "<Ignore>"
-			elseif vim.bo.omnifunc == "" then
-				return "<C-x><C-n>"
-			else
-				return "<C-x><C-o>"
-			end
-		end, { desc = "complete", expr = true })
 	end,
-	[ms.textDocument_inlayHint] = function(bufnr)
-		vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
+	[ms.textDocument_inlayHint] = function(_, client)
+		vim.lsp.inlay_hint.enable(true, { client_id = client.id })
+	end,
+	[ms.textDocument_linkedEditingRange] = function(_, client)
+		vim.lsp.linked_editing_range.enable(true, { client_id = client.id })
+	end,
+	[ms.textDocument_inlineCompletion] = function(_, client)
+		vim.lsp.inline_completion.enable(true, { client_id = client.id })
+	end,
+	[ms.textDocument_documentColor] = function(bufnr)
+		vim.lsp.document_color.enable(true, bufnr)
+	end,
+	[ms.textDocument_colorPresentation] = function(bufnr)
+		vim.api.nvim_buf_create_user_command(bufnr, "ColorPresentation", vim.lsp.document_color.color_presentation, {
+			desc = "Select from a list of presentations for the color under the cursor.",
+		})
 	end,
 }
 
@@ -82,6 +79,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)
 		if client then
+			---@cast capabilities table<vim.lsp.protocol.Method.ClientToServer.Request, fun(bufnr:number, client:vim.lsp.Client)>
 			for method, setup in pairs(capabilities) do
 				if client:supports_method(method, args.buf) then
 					setup(args.buf, client)
