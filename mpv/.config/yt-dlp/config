@@ -2,6 +2,9 @@
 --yes-playlist
 
 --cookies-from-browser=firefox
+# workaround for kick vods, needs updated when firefox updates
+# See: https://github.com/yt-dlp/yt-dlp/wiki/FAQ#im-getting-http-error-403-and-the-site-has-an-open-issue-on-the-tracker-thats-labeled-cloudflare-related-what-can-i-do
+--user-agent="Mozilla/5.0 (X11; Linux x86_64; rv:143.0) Gecko/20100101 Firefox/143.0"
 --mark-watched
 --sponsorblock-mark=all
 --sponsorblock-remove=sponsor
