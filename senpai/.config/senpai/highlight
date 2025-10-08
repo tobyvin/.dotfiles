@@ -1,8 +1,0 @@
-#!/bin/sh
-
-FOCUS=$(swaymsg -t get_tree | jq '..|objects|select(.focused==true)|.name' | grep -c senpai)
-
-if [ "$HERE" -eq 0 ] || [ "$FOCUS" -eq 0 ]; then
-	printf "%s" "$MESSAGE" | sed 's#\#\\#g' |
-		notify-send -a senpai -c im.received -i im-irc "[$BUFFER] $SENDER" "$(cat -)"
-fi
