@@ -20,10 +20,44 @@ if [ "$1" = '-' ]; then
 	set -- "$args"
 fi
 
-entry=$(grep "$1" "$cache" | cut -f1)
-file="${entry%:*}"
-if [ "$file" != "$entry" ]; then
-	action="${entry#*:}"
+while IFS='	' read -r entry name; do
+	if [ "$name" = "$1" ]; then
+		file="${entry%:*}"
+		if [ "$file" != "$entry" ]; then
+			action=${entry#*:}
+		fi
+		break
+	fi
+done <"$cache"
+
+if [ -z "$file" ]; then
+	printf 'Failed to find "%s" in cache.\n' "$1" >&2
+	exit 1
 fi
 
-dex ${action:+--action="$action"} "$file"
+awk -v term="$TERMINAL" -v action=${action+"$action"} -f - "$file" <<-"EOF" |
+	BEGIN {
+		FS = "="
+		found = 0
+		terminal = 0
+		name = ""
+		icon = ""
+		exec = ""
+	}
+	$0 == "[Desktop " (action ? "Action " action : "Entry" ) "]" { found = 1; next }
+	$1 == "Icon" { sub("^Icon\\s*=\\s*", "--icon "); icon = $0 }
+	$1 == "Terminal" && $2 ~ "true" { terminal = 1 }
+	found == 0 { next }
+	/^\[Desktop .*]$/ { nextfile }
+	$1 == "Name" { sub("^Name\\s*=\\s*", ""); name = $0 }
+	$1 == "Exec" { sub("^Exec\\s*=\\s*", ""); exec = $0 }
+	END {
+		gsub("%[fFuUdDnNvm]", "", exec)
+		gsub("%i", icon, exec)
+		gsub("%c", name, exec)
+		gsub("%k", FILENAME, exec)
+		if (terminal) { exec = term " -T '" name "' -e " exec }
+		if (exec != "") { print exec }
+	}
+EOF
+	xargs -r swaymsg exec --
