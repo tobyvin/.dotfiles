@@ -34,8 +34,7 @@ set $base0E #d3869b
 set $base0F #d65d0e
 
 set $menu $HOME/.local/bin/wmenu
-
-set $j4_sock $XDG_RUNTIME_DIR/j4-dmenu-desktop.sock
+set $launcher j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL --usage-log=$XDG_CACHE_HOME/j4-dmenu-desktop.log  --use-xdg-de --i3-ipc
 
 # Property              Border  BG      Text    Indicator Child Border
 client.focused          $base05 $base0D $base00 $base0D $base0D
@@ -108,10 +107,10 @@ bindsym $mod+w exec $BROWSER
 bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
 bindsym $mod+Print exec /usr/share/sway-contrib/grimshot --notify save area
 
-bindsym XF86Open exec echo > $j4_sock
+bindsym XF86Open exec $launcher
 bindsym shift+XF86Open exec wmenu-run
 
-bindsym $mod+space exec echo > $j4_sock
+bindsym $mod+space exec $launcher
 bindsym $mod+shift+space exec wmenu-run
 
 bindsym $mod+c exec slurp | grim -g - - | tesseract - - | wl-copy
@@ -257,7 +256,6 @@ include ~/.config/sway/config.d/*
 include /etc/sway/config.d/*
 
 exec sway-primary firefox discord vesktop android-messages-desktop
-exec j4-dmenu-desktop --dmenu="$menu" --term-mode=$TERMINAL -I --wait-on=$j4_sock
 
 exec import-gsettings
 
