@@ -15,6 +15,7 @@ return {
 		basedpyright = {
 			typeCheckingMode = "standard",
 			analysis = {
+				stubPath = vim.fs.joinpath(vim.fn.stdpath("data"), "site/pack/core/opt/python-type-stubs"),
 				autoSearchPaths = true,
 				useLibraryCodeForTypes = true,
 				diagnosticMode = "openFilesOnly",

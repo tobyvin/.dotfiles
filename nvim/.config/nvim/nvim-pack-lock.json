@@ -1,0 +1,173 @@
+{
+  "plugins": {
+    "SchemaStore.nvim": {
+      "rev": "caad543",
+      "src": "https://github.com/b0o/SchemaStore.nvim"
+    },
+    "cc-tweaked-documentation": {
+      "rev": "a7fe7ad",
+      "src": "https://gitlab.com/carsakiller/cc-tweaked-documentation.git"
+    },
+    "cellular-automaton.nvim": {
+      "rev": "1606e9d",
+      "src": "https://github.com/eandrju/cellular-automaton.nvim"
+    },
+    "conform.nvim": {
+      "rev": "3543d00",
+      "src": "https://github.com/stevearc/conform.nvim",
+      "version": ">=0.0.0"
+    },
+    "ferris.nvim": {
+      "rev": "2758655",
+      "src": "https://github.com/vxpm/ferris.nvim"
+    },
+    "fidget.nvim": {
+      "rev": "b61e8af",
+      "src": "https://github.com/j-hui/fidget.nvim",
+      "version": ">=0.0.0"
+    },
+    "gcode.vim": {
+      "rev": "a3bbe02",
+      "src": "https://github.com/wilriker/gcode.vim"
+    },
+    "gitsigns.nvim": {
+      "rev": "7010000",
+      "src": "https://github.com/lewis6991/gitsigns.nvim",
+      "version": ">=0.0.0"
+    },
+    "gruvbox.nvim": {
+      "rev": "61b0b3b",
+      "src": "https://github.com/ellisonleao/gruvbox.nvim",
+      "version": ">=0.0.0"
+    },
+    "image.nvim": {
+      "rev": "446a8a5",
+      "src": "https://github.com/3rd/image.nvim",
+      "version": ">=0.0.0"
+    },
+    "lazydev.nvim": {
+      "rev": "f59bd14",
+      "src": "https://github.com/folke/lazydev.nvim",
+      "version": ">=0.0.0"
+    },
+    "luvit-meta": {
+      "rev": "0ea4ff6",
+      "src": "https://github.com/Bilal2453/luvit-meta"
+    },
+    "magick.nvim": {
+      "rev": "1584372",
+      "src": "https://github.com/kiyoon/magick.nvim"
+    },
+    "mason.nvim": {
+      "rev": "ad7146a",
+      "src": "https://github.com/williamboman/mason.nvim"
+    },
+    "mpv-types-lua": {
+      "rev": "ea1f7c2",
+      "src": "https://github.com/disco0/mpv-types-lua"
+    },
+    "nvim-colorizer.lua": {
+      "rev": "51cf7c9",
+      "src": "https://github.com/NvChad/nvim-colorizer.lua"
+    },
+    "nvim-jdtls": {
+      "rev": "380ac14",
+      "src": "https://github.com/mfussenegger/nvim-jdtls"
+    },
+    "nvim-lint": {
+      "rev": "fe16081",
+      "src": "https://github.com/mfussenegger/nvim-lint",
+      "version": ">=0.0.0"
+    },
+    "nvim-texlabconfig": {
+      "rev": "bac44e8",
+      "src": "https://github.com/f3fora/nvim-texlabconfig"
+    },
+    "nvim-treesitter": {
+      "rev": "0606c7a9",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter",
+      "version": "'main'"
+    },
+    "nvim-treesitter-textobjects": {
+      "rev": "1b2d85d",
+      "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
+      "version": "'main'"
+    },
+    "oil.nvim": {
+      "rev": "975a77c",
+      "src": "https://github.com/stevearc/oil.nvim",
+      "version": ">=0.0.0"
+    },
+    "playtime.nvim": {
+      "rev": "d742773",
+      "src": "https://github.com/rktjmp/playtime.nvim"
+    },
+    "plenary.nvim": {
+      "rev": "7750bc8",
+      "src": "https://github.com/emmanueltouzery/plenary.nvim",
+      "version": "'winborder'"
+    },
+    "presence.nvim": {
+      "rev": "87c857a",
+      "src": "https://github.com/andweeb/presence.nvim"
+    },
+    "python-type-stubs": {
+      "rev": "692c37c",
+      "src": "https://github.com/microsoft/python-type-stubs"
+    },
+    "qmk.nvim": {
+      "rev": "11328d3",
+      "src": "https://github.com/codethread/qmk.nvim",
+      "version": ">=0.0.0"
+    },
+    "telescope-fzf-native.nvim": {
+      "rev": "1f08ed6",
+      "src": "https://github.com/nvim-telescope/telescope-fzf-native.nvim"
+    },
+    "telescope-live-grep-args.nvim": {
+      "rev": "b80ec2c",
+      "src": "https://github.com/nvim-telescope/telescope-live-grep-args.nvim"
+    },
+    "telescope-undo.nvim": {
+      "rev": "928d0c2",
+      "src": "https://github.com/debugloop/telescope-undo.nvim"
+    },
+    "telescope.nvim": {
+      "rev": "b4da76b",
+      "src": "https://github.com/nvim-telescope/telescope.nvim"
+    },
+    "tex-lualatex": {
+      "rev": "ef7e563",
+      "src": "https://github.com/LuaCATS/tex-lualatex"
+    },
+    "tex-lualibs": {
+      "rev": "4485a9c",
+      "src": "https://github.com/LuaCATS/tex-lualibs"
+    },
+    "tex-luametatex": {
+      "rev": "db662be",
+      "src": "https://github.com/LuaCATS/tex-luametatex"
+    },
+    "tex-luatex": {
+      "rev": "729a3e4",
+      "src": "https://github.com/LuaCATS/tex-luatex"
+    },
+    "typst-preview.nvim": {
+      "rev": "dea4525",
+      "src": "https://github.com/chomosuke/typst-preview.nvim",
+      "version": ">=0.0.0"
+    },
+    "vim-hjson": {
+      "rev": "265ec4f",
+      "src": "https://github.com/hjson/vim-hjson"
+    },
+    "vim-nftables": {
+      "rev": "26f8a50",
+      "src": "https://github.com/nfnty/vim-nftables"
+    },
+    "vim-tridactyl": {
+      "rev": "fdd069b",
+      "src": "https://github.com/tridactyl/vim-tridactyl"
+    }
+  }
+}

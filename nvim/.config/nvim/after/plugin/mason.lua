@@ -1,18 +1,13 @@
----@type LazySpec
-local M = {
-	"williamboman/mason.nvim",
-	build = ":MasonUpdate",
-	lazy = false,
-	opts = {
-		ui = {
-			icons = {
-				package_installed = "✓",
-				package_pending = "➜",
-				package_uninstalled = "✗",
-			},
+local mason = require("mason")
+mason.setup({
+	ui = {
+		icons = {
+			package_installed = "✓",
+			package_pending = "➜",
+			package_uninstalled = "✗",
 		},
 	},
-}
+})
 
 ---Install python package using pip
 ---@param package Package Mason base package
@@ -38,12 +33,7 @@ local function pip_install(package, module)
 	end)
 end
 
-function M:config(opts)
-	require("mason").setup(opts)
-	require("mason-registry").refresh(function()
-		local mdformat = require("mason-registry").get_package("mdformat")
-		mdformat:on("install:success", pip_install(mdformat, "mdformat-gfm"))
-	end)
-end
-
-return M
+require("mason-registry").refresh(function()
+	local mdformat = require("mason-registry").get_package("mdformat")
+	mdformat:on("install:success", pip_install(mdformat, "mdformat-gfm"))
+end)
