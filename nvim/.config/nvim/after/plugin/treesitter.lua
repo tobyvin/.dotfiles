@@ -1,4 +1,9 @@
-local install = require("nvim-treesitter").install({
+local success, nvim_treesitter = pcall(require, "nvim-treesitter")
+if not success then
+	return
+end
+
+local install = nvim_treesitter.install({
 	"cmake",
 	"cpp",
 	"c_sharp",

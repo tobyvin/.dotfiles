@@ -1,4 +1,8 @@
-local telescope = require("telescope")
+local success, telescope = pcall(require, "telescope")
+if not success then
+	return
+end
+
 telescope.setup({
 	defaults = {
 		file_ignore_patterns = { "^.git/" },

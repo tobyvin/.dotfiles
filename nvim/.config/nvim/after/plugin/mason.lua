@@ -1,4 +1,8 @@
-local mason = require("mason")
+local success, mason = pcall(require, "mason")
+if not success then
+	return
+end
+
 mason.setup({
 	ui = {
 		icons = {

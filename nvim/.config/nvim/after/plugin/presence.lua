@@ -1,4 +1,8 @@
-local presence = require("presence")
+local success, presence = pcall(require, "presence")
+if not success then
+	return
+end
+
 presence.setup({})
 
 vim.api.nvim_create_autocmd("SessionLoadPost", {

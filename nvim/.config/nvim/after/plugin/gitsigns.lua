@@ -1,4 +1,7 @@
-local gitsigns = require("gitsigns")
+local success, gitsigns = pcall(require, "gitsigns")
+if not success then
+	return
+end
 
 local function with_opfunc(fn)
 	return function()

@@ -1,4 +1,7 @@
-local lint = require("lint")
+local success, lint = pcall(require, "lint")
+if not success then
+	return
+end
 
 lint.linters_by_ft = {
 	awk = { "gawk" },
@@ -34,10 +37,10 @@ end
 local augroup = vim.api.nvim_create_augroup("user.lint", { clear = true })
 vim.api.nvim_create_autocmd("FileType", {
 	group = augroup,
-	pattern = vim.tbl_keys(require("lint").linters_by_ft),
+	pattern = vim.tbl_keys(lint.linters_by_ft),
 	callback = function(args)
 		vim.api.nvim_clear_autocmds({ buffer = args.buf, group = augroup })
-		local debounced_lint = debounce(100, require("lint").try_lint)
+		local debounced_lint = debounce(100, lint.try_lint)
 		debounced_lint()
 		vim.api.nvim_create_autocmd({ "BufWritePost", "BufReadPost", "InsertLeave" }, {
 			group = augroup,

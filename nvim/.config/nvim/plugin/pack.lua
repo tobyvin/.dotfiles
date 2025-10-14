@@ -1,33 +1,11 @@
-local builds = {}
-local augroup = vim.api.nvim_create_augroup("build", { clear = true })
 vim.api.nvim_create_autocmd("PackChanged", {
-	group = augroup,
+	group = vim.api.nvim_create_augroup("build_system", { clear = true }),
 	pattern = "*",
 	callback = function(args)
 		local pkg = args.data
-		if pkg.kind ~= "delete" and pkg.spec.data then
-			local build_fn
-			if type(pkg.spec.data.build) == "function" then
-				build_fn = function()
-					return pcall(pkg.spec.data.build, pkg)
-				end
-			elseif type(pkg.spec.data.build) == "table" and vim.islist(pkg.spec.data.build) then
-				build_fn = function()
-					return vim.system(pkg.spec.data.build, {
-						cwd = pkg.path,
-						text = true,
-					})
-						:wait().code == 0
-				end
-			elseif type(pkg.spec.data.build) == "string" then
-				build_fn = function()
-					return pcall(vim.cmd[pkg.spec.data.build])
-				end
-			end
-
-			if build_fn then
-				builds[pkg.spec.name] = build_fn
-			end
+		local build_fn = (pkg.spec.data or {}).build
+		if pkg.kind == "update" and type(build_fn) == "function" then
+			pcall(build_fn, pkg)
 		end
 	end,
 })
@@ -45,11 +23,8 @@ vim.pack.add({
 		src = "https://github.com/nvim-treesitter/nvim-treesitter",
 		version = "main",
 		data = {
-			build = function()
-				local update = require("nvim-treesitter").update()
-				if #vim.api.nvim_list_uis() == 0 then
-					update:wait(300000)
-				end
+			build = function(_)
+				vim.cmd("TSUpdate")
 			end,
 		},
 	},
@@ -64,7 +39,7 @@ vim.pack.add({
 	{
 		src = "https://github.com/williamboman/mason.nvim",
 		data = {
-			build = function()
+			build = function(_)
 				require("mason.api.command").MasonUpdate()
 			end,
 		},
@@ -99,11 +74,25 @@ vim.pack.add({
 	"https://github.com/debugloop/telescope-undo.nvim",
 	{
 		src = "https://github.com/nvim-telescope/telescope-fzf-native.nvim",
-		data = { build = { "make" } },
+		data = {
+			build = function(pkg)
+				vim.system({ "sh" }, {
+					cwd = pkg.path,
+					stdin = "make",
+				})
+			end,
+		},
 	},
 	{
 		src = "https://github.com/f3fora/nvim-texlabconfig",
-		data = { build = { "go", "build", "-o", vim.fs.joinpath(vim.env.HOME, ".local/bin/") } },
+		data = {
+			build = function(pkg)
+				vim.system({ "sh" }, {
+					cwd = pkg.path,
+					stdin = ("go build -o %s"):format(vim.fs.joinpath(vim.env.HOME, ".local/bin/")),
+				})
+			end,
+		},
 	},
 	"https://github.com/Bilal2453/luvit-meta",
 	"https://github.com/LuaCATS/tex-luatex",
@@ -131,32 +120,3 @@ vim.pack.add({
 }, {
 	confirm = #vim.api.nvim_list_uis() ~= 0,
 })
-
-if #builds > 0 then
-	local progress = {
-		kind = "progress",
-		status = "running",
-		title = "build",
-	}
-
-	progress.id = vim.api.nvim_echo({ { "Building plugins..." } }, true, progress)
-
-	for pkg_name, build_fn in pairs(builds) do
-		progress.status = "running"
-		vim.api.nvim_echo({ { ("Building %s..."):format(pkg_name) } }, true, progress)
-		local success, err = build_fn()
-		if not success then
-			progress.status = "failed"
-			local msg = "failed to build"
-			if err then
-				msg = ("%s: %s"):format(msg, err)
-			end
-			vim.api.nvim_echo({ { msg, "ErrorMsg" } }, true, progress)
-		end
-	end
-
-	progress.status = "success"
-	vim.api.nvim_echo({ { "done" } }, true, progress)
-
-	builds = {}
-end

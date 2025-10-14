@@ -1,3 +1,8 @@
+local success, oil = pcall(require, "oil")
+if not success then
+	return
+end
+
 local git_ignored = setmetatable({}, {
 	__index = function(t, k)
 		local result = vim.system({
@@ -24,8 +29,6 @@ local git_ignored = setmetatable({}, {
 		return ret
 	end,
 })
-
-local oil = require("oil")
 
 oil.setup({
 	default_file_explorer = true,

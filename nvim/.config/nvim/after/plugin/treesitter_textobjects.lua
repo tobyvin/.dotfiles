@@ -1,4 +1,9 @@
-require("nvim-treesitter-textobjects").setup({
+local success, nvim_treesitter_textobjects = pcall(require, "nvim-treesitter-textobjects")
+if not success then
+	return
+end
+
+nvim_treesitter_textobjects.setup({
 	select = {
 		lookahead = true,
 	},

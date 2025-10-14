@@ -1,4 +1,9 @@
-require("lazydev").setup({
+local success, lazydev = pcall(require, "lazydev")
+if not success then
+	return
+end
+
+lazydev.setup({
 	library = {
 		{ path = "luvit-meta", words = { "vim%.uv" } },
 		{ path = "tex-luatex", words = { "tex" } },
