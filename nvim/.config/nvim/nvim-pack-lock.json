@@ -36,9 +36,8 @@
       "version": ">=0.0.0"
     },
     "gruvbox.nvim": {
-      "rev": "61b0b3b",
-      "src": "https://github.com/ellisonleao/gruvbox.nvim",
-      "version": ">=0.0.0"
+      "rev": "5e0a460",
+      "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
     "image.nvim": {
       "rev": "446a8a5",
