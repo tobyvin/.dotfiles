@@ -3,9 +3,53 @@ local latest = vim.version.range("*")
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
 	{ src = "https://github.com/emmanueltouzery/plenary.nvim", version = "winborder" },
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", data = {
-		build = "TSUpdate",
-	} },
+	{
+		src = "https://github.com/nvim-treesitter/nvim-treesitter",
+		version = "main",
+		data = {
+			build = function(_)
+				if vim.fn.executable("tree-sitter") == 0 then
+					return
+				end
+				local update = require("nvim-treesitter").update({
+					"cmake",
+					"cpp",
+					"c_sharp",
+					"css",
+					"comment",
+					"diff",
+					"gitignore",
+					"go",
+					"graphql",
+					"html",
+					"java",
+					"javascript",
+					"jsdoc",
+					"jsonc",
+					"json",
+					"latex",
+					"make",
+					"python",
+					"regex",
+					"ron",
+					"rust",
+					"scss",
+					"sql",
+					"svelte",
+					"toml",
+					"tsx",
+					"typescript",
+					"typst",
+					"vue",
+					"yaml",
+					"zig",
+				})
+				if #vim.api.nvim_list_uis() == 0 then
+					update:wait(300000)
+				end
+			end,
+		},
+	},
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
 	{ src = "https://github.com/stevearc/oil.nvim", version = latest },
 	{ src = "https://github.com/williamboman/mason.nvim", data = {

@@ -7,14 +7,9 @@ if ! command -v "$pkgname" >/dev/null; then
 	exit 0
 fi
 
-# TODO: migrate this to new vim.pack based config
-# if ! git diff --quiet "$DOTFILES_INSTALLED" HEAD -- nvim/.config/nvim/lazy-lock.json; then
-# 	printf "%s: Installing plugins\n" "$0"
-#
-# 	nvim --headless -c 'Lazy! restore' -c qa
-# 	nvim --headless -c 'Lazy! clean' -c qa
-#
-# 	printf "%s: Installing treesitter parsers\n" "$0"
-#
-# 	nvim --headless -c 'TSUpdateSync' -c qa | sed 's/$/\n/'
-# fi
+printf "%s: Installing plugins" "$0"
+
+# TODO: fix newlines in vim.pack.add or output buffering
+nvim --headless -c 'lua vim.pack.clean()' -c qa 2>&1 |
+	sed -u 's/vim.pack:/\nvim.pack:/g'
+printf "\n"
