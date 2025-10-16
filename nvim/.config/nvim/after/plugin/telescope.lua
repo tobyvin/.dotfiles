@@ -55,16 +55,18 @@ telescope.setup({
 				},
 			},
 		},
-		extensions = {
-			live_grep_args = {
-				theme = "ivy",
-			},
-			undo = {},
+	},
+	extensions = {
+		live_grep_args = {
+			theme = "ivy",
 		},
+		undo = {},
 	},
 })
 
-telescope.load_extension("fzf")
+if not pcall(telescope.load_extension, "fzf") then
+	vim.notify("Failed to load extension: fzf", vim.log.levels.ERROR, { title = "telescope" })
+end
 
 local builtin = require("telescope.builtin")
 vim.keymap.set("n", "<leader>fa", builtin.autocommands, { desc = "autocommands" })
