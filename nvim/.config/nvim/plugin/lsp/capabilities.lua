@@ -64,7 +64,7 @@ local capabilities = {
 		vim.lsp.inline_completion.enable(true, { client_id = client.id })
 	end,
 	[ms.textDocument_documentColor] = function(bufnr)
-		vim.lsp.document_color.enable(true, bufnr)
+		vim.lsp.document_color.enable(true, bufnr, { style = "virtual" })
 	end,
 	[ms.textDocument_colorPresentation] = function(bufnr)
 		vim.api.nvim_buf_create_user_command(bufnr, "ColorPresentation", vim.lsp.document_color.color_presentation, {

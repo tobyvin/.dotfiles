@@ -35,12 +35,15 @@ do
 			title = opts.prompt,
 		}
 
-		if opts.kind == "codeaction" then
-			---@cast items {action: lsp.Command|lsp.CodeAction, ctx: lsp.HandlerContext}[]
+		vim.print(opts.kind)
+		if opts.kind == "codeaction" or opts.kind == "color_presentation" then
 			config.relative = "cursor"
 			config.row = 1
 			config.col = 0
-			config.footer = vim.lsp.get_client_by_id(items[1].ctx.client_id).name
+			if opts.kind == "codeaction" then
+				---@cast items {action: lsp.Command|lsp.CodeAction, ctx: lsp.HandlerContext}[]
+				config.footer = vim.lsp.get_client_by_id(items[1].ctx.client_id).name
+			end
 		else
 			config.relative = "editor"
 			config.col = math.floor((vim.o.columns - config.width) / 2)
