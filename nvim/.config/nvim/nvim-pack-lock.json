@@ -65,10 +65,6 @@
       "rev": "ea1f7c2",
       "src": "https://github.com/disco0/mpv-types-lua"
     },
-    "nvim-colorizer.lua": {
-      "rev": "51cf7c9",
-      "src": "https://github.com/NvChad/nvim-colorizer.lua"
-    },
     "nvim-jdtls": {
       "rev": "380ac14",
       "src": "https://github.com/mfussenegger/nvim-jdtls"
@@ -150,11 +146,6 @@
     "tex-luatex": {
       "rev": "729a3e4",
       "src": "https://github.com/LuaCATS/tex-luatex"
-    },
-    "typst-preview.nvim": {
-      "rev": "dea4525",
-      "src": "https://github.com/chomosuke/typst-preview.nvim",
-      "version": ">=0.0.0"
     },
     "vim-hjson": {
       "rev": "265ec4f",

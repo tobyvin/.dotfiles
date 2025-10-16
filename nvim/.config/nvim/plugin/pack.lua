@@ -84,7 +84,6 @@ vim.pack.add({
 	"https://github.com/mfussenegger/nvim-jdtls",
 	"https://github.com/microsoft/python-type-stubs",
 	"https://github.com/b0o/SchemaStore.nvim",
-	"https://github.com/NvChad/nvim-colorizer.lua",
 	"https://github.com/tridactyl/vim-tridactyl",
 	"https://github.com/hjson/vim-hjson",
 	"https://github.com/nfnty/vim-nftables",
