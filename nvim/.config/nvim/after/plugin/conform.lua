@@ -105,6 +105,25 @@ if pcall(require, "qmk") then
 	end
 end
 
+-- TODO: replace with nvim_echo progress once extui handles progress messages
+-- local progress = {
+-- 	kind = "progress",
+-- 	title = "format",
+-- 	status = "running",
+-- }
+--
+-- _G.formatexpr = function(...)
+-- 	local bufnr = vim.api.nvim_get_current_buf()
+-- 	progress.status = "running"
+-- 	progress.id = vim.api.nvim_echo({ { ("buffer - %s"):format(bufnr) } }, true, progress)
+-- 	local err = conform.formatexpr(...)
+-- 	progress.status = err == 1 and "failed" or "success"
+-- 	progress.id = vim.api.nvim_echo({
+-- 		{ ("buffer - %s"):format(bufnr), err == 1 and "ErrorMsg" or nil },
+-- 	}, true, progress)
+-- 	return err
+-- end
+
 _G.formatexpr = function(...)
 	local bufnr = vim.api.nvim_get_current_buf()
 	local handle = require("fidget.progress").handle.create({
@@ -121,9 +140,6 @@ _G.formatexpr = function(...)
 	end
 
 	handle:finish()
-
-	-- HACK: fixes text flashing/rerendering on buffers without a formatter
-	vim.cmd.sleep("5m")
 	return err
 end
 

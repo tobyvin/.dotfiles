@@ -49,37 +49,37 @@ gitsigns.setup({
 			buffer = bufnr,
 		})
 
-		vim.keymap.set("n", "<leader>gr", with_opfunc(require("gitsigns").reset_hunk), {
+		vim.keymap.set("n", "<leader>gr", with_opfunc(gitsigns.reset_hunk), {
 			desc = "reset hunk",
 			buffer = bufnr,
 			expr = true,
 		})
 
-		vim.keymap.set("n", "<leader>grr", require("gitsigns").reset_hunk, {
+		vim.keymap.set("n", "<leader>grr", gitsigns.reset_hunk, {
 			desc = "reset hunk",
 			buffer = bufnr,
 		})
 
 		vim.keymap.set("v", "<leader>gr", function()
-			require("gitsigns").reset_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
+			gitsigns.reset_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
 		end, {
 			desc = "reset hunk",
 			buffer = bufnr,
 		})
 
-		vim.keymap.set("n", "<leader>gs", with_opfunc(require("gitsigns").stage_hunk), {
+		vim.keymap.set("n", "<leader>gs", with_opfunc(gitsigns.stage_hunk), {
 			desc = "stage hunk",
 			buffer = bufnr,
 			expr = true,
 		})
 
-		vim.keymap.set("n", "<leader>gss", require("gitsigns").stage_hunk, {
+		vim.keymap.set("n", "<leader>gss", gitsigns.stage_hunk, {
 			desc = "stage hunk",
 			buffer = bufnr,
 		})
 
 		vim.keymap.set("v", "<leader>gs", function()
-			require("gitsigns").stage_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
+			gitsigns.stage_hunk({ vim.fn.getpos(".")[2], vim.fn.getpos("v")[2] })
 		end, {
 			desc = "stage hunk",
 			buffer = bufnr,

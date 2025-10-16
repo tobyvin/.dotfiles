@@ -21,7 +21,13 @@ vim.keymap.set("o", "o", function()
 	local vl = vim.api.nvim_buf_get_mark(0, "<")
 	local vr = vim.api.nvim_buf_get_mark(0, ">")
 	local cursor = vim.fn.winsaveview()
-	vim.cmd.normal({ "ggVG", bang = true, mods = { keepjumps = true } })
+
+	vim.api.nvim_win_set_cursor(0, { 1, 0 })
+	if vim.fn.mode() ~= "V" then
+		vim.cmd.normal({ "V", bang = true })
+	end
+	vim.api.nvim_win_set_cursor(0, { vim.api.nvim_buf_line_count(0), 0 })
+
 	vim.schedule(function()
 		vim.fn.winrestview(cursor)
 		local _, max_lnum = unpack(vim.fn.getpos("$"))

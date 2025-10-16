@@ -1,5 +1,5 @@
 local success, nvim_treesitter = pcall(require, "nvim-treesitter")
-if not success then
+if not success or vim.fn.executable("tree-sitter") == 0 then
 	return
 end
 
