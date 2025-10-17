@@ -59,7 +59,8 @@
     },
     "mason.nvim": {
       "rev": "ad7146a",
-      "src": "https://github.com/williamboman/mason.nvim"
+      "src": "https://github.com/williamboman/mason.nvim",
+      "version": ">=0.0.0"
     },
     "mpv-types-lua": {
       "rev": "ea1f7c2",

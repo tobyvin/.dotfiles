@@ -10,6 +10,5 @@ fi
 printf "%s: Installing plugins" "$0"
 
 # TODO: fix newlines in vim.pack.add or output buffering
-nvim --headless -c qa 2>&1 |
-	sed -u 's/vim.pack:/\nvim.pack:/g'
+nvim --headless -c ':lua vim.pack.clean()' -c qa 2>&1 | sed -u 's/vim.pack:/\nvim.pack:/g'
 printf "\n"
