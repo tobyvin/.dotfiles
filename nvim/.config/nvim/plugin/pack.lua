@@ -2,7 +2,7 @@ local latest = vim.version.range("*")
 
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
-	{ src = "https://github.com/emmanueltouzery/plenary.nvim", version = "winborder" },
+	"https://github.com/nvim-lua/plenary.nvim",
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", data = {
 		build = "TSUpdate",
 	} },
@@ -11,9 +11,9 @@ vim.pack.add({
 	{ src = "https://github.com/williamboman/mason.nvim", version = latest, data = {
 		build = "MasonUpdate",
 	} },
-	{ src = "https://github.com/mfussenegger/nvim-lint", version = latest },
 	{ src = "https://github.com/stevearc/conform.nvim", version = latest },
-	{ src = "https://github.com/codethread/qmk.nvim", version = latest },
+	"https://github.com/codethread/qmk.nvim",
+	"https://github.com/mfussenegger/nvim-lint",
 	{ src = "https://github.com/lewis6991/gitsigns.nvim", version = latest },
 	{ src = "https://github.com/j-hui/fidget.nvim", version = latest },
 	"https://github.com/nvim-telescope/telescope.nvim",

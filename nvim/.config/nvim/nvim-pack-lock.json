@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "caad543",
+      "rev": "e71cc06",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "cc-tweaked-documentation": {
@@ -71,16 +71,15 @@
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lint": {
-      "rev": "fe16081",
-      "src": "https://github.com/mfussenegger/nvim-lint",
-      "version": ">=0.0.0"
+      "rev": "9da1fb9",
+      "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-texlabconfig": {
       "rev": "bac44e8",
       "src": "https://github.com/f3fora/nvim-texlabconfig"
     },
     "nvim-treesitter": {
-      "rev": "0606c7a9",
+      "rev": "846d5113",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
@@ -99,9 +98,8 @@
       "src": "https://github.com/rktjmp/playtime.nvim"
     },
     "plenary.nvim": {
-      "rev": "7750bc8",
-      "src": "https://github.com/emmanueltouzery/plenary.nvim",
-      "version": "'winborder'"
+      "rev": "b9fd522",
+      "src": "https://github.com/nvim-lua/plenary.nvim"
     },
     "presence.nvim": {
       "rev": "87c857a",
@@ -112,9 +110,8 @@
       "src": "https://github.com/microsoft/python-type-stubs"
     },
     "qmk.nvim": {
-      "rev": "11328d3",
-      "src": "https://github.com/codethread/qmk.nvim",
-      "version": ">=0.0.0"
+      "rev": "3c804c1",
+      "src": "https://github.com/codethread/qmk.nvim"
     },
     "telescope-fzf-native.nvim": {
       "rev": "1f08ed6",
