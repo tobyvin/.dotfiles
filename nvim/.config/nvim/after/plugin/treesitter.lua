@@ -4,6 +4,7 @@ if not success or vim.fn.executable("tree-sitter") == 0 then
 end
 
 local install = nvim_treesitter.install({
+	"bash",
 	"cmake",
 	"cpp",
 	"c_sharp",
