@@ -3,8 +3,6 @@ if not success then
 	return
 end
 
-presence.setup({})
-
 vim.api.nvim_create_autocmd("SessionLoadPost", {
 	callback = function()
 		presence:handle_win_enter()

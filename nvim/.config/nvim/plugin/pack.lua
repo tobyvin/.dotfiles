@@ -3,21 +3,12 @@ local latest = vim.version.range("*")
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
 	{ src = "https://github.com/emmanueltouzery/plenary.nvim", version = "winborder" },
-	{
-		src = "https://github.com/nvim-treesitter/nvim-treesitter",
-		version = "main",
-		data = {
-			build = function(_)
-				local update = require("nvim-treesitter").update()
-				if #vim.api.nvim_list_uis() == 0 then
-					update:wait(300000)
-				end
-			end,
-		},
-	},
+	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", data = {
+		build = "TSUpdate",
+	} },
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
 	{ src = "https://github.com/stevearc/oil.nvim", version = latest },
-	{ src = "https://github.com/williamboman/mason.nvim", data = {
+	{ src = "https://github.com/williamboman/mason.nvim", version = latest, data = {
 		build = "MasonUpdate",
 	} },
 	{ src = "https://github.com/mfussenegger/nvim-lint", version = latest },
@@ -56,4 +47,7 @@ vim.pack.add({
 	"https://github.com/andweeb/presence.nvim",
 	"https://github.com/eandrju/cellular-automaton.nvim",
 	"https://github.com/rktjmp/playtime.nvim",
-}, { confirm = #vim.api.nvim_list_uis() ~= 0 })
+}, {
+	load = true,
+	confirm = #vim.api.nvim_list_uis() ~= 0,
+})
