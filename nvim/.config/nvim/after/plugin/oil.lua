@@ -1,7 +1,4 @@
-local success, oil = pcall(require, "oil")
-if not success then
-	return
-end
+local oil = require("oil")
 
 -- helper function to parse output
 local function parse_output(proc)
@@ -58,7 +55,7 @@ oil.setup({
 	skip_confirm_for_simple_edits = true,
 	view_options = {
 		is_hidden_file = function(name, bufnr)
-			local dir = require("oil").get_current_dir(bufnr)
+			local dir = oil.get_current_dir(bufnr)
 			local is_dotfile = vim.startswith(name, ".") and name ~= ".."
 			-- if no local directory (e.g. for ssh connections), just hide dotfiles
 			if not dir then

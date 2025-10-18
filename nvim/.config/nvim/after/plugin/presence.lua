@@ -1,7 +1,4 @@
-local success, presence = pcall(require, "presence")
-if not success then
-	return
-end
+local presence = require("presence")
 
 vim.api.nvim_create_autocmd("SessionLoadPost", {
 	callback = function()

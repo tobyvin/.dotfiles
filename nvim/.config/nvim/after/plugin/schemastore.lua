@@ -1,7 +1,4 @@
-local success, schemastore = pcall(require, "schemastore")
-if not success then
-	return
-end
+local schemastore = require("schemastore")
 
 vim.lsp.config("jsonls", {
 	settings = {

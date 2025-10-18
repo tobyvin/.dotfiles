@@ -1,7 +1,4 @@
-local success, conform = pcall(require, "conform")
-if not success then
-	return
-end
+local conform = require("conform")
 
 conform.setup({
 	format_on_save = {},
@@ -63,8 +60,11 @@ conform.setup({
 	},
 })
 
-if pcall(require, "qmk") then
-	local opts = {
+do
+	local qmk = require("qmk")
+	local parse = require("qmk.parse")
+	local format = require("qmk.format.qmk")
+	qmk.options = require("qmk.config").parse({
 		name = "LAYOUT_5x6",
 		auto_format_pattern = nil,
 		comment_preview = {
@@ -80,13 +80,11 @@ if pcall(require, "qmk") then
 			"_ _ _ _ x x _ x x _ _ _ _",
 			"_ _ _ _ x x _ x x _ _ _ _",
 		},
-	}
+	})
 
-	local parse = require("qmk.parse")
-	local format = require("qmk.format.qmk")
 	conform.formatters.qmk_keymap = {
 		format = function(_, _, lines, callback)
-			local keymaps, config = parse.parse(table.concat(lines, "\n"), opts, parse.qmk)
+			local keymaps, config = parse.parse(table.concat(lines, "\n"), qmk.options, parse.qmk)
 			local formatted = format(keymaps, config)
 			local out_lines = vim.list_slice(lines, 1, keymaps.pos.start + 1)
 			vim.list_extend(out_lines, formatted)

@@ -1,9 +1,4 @@
-local success, mason = pcall(require, "mason")
-if not success then
-	return
-end
-
-mason.setup({
+require("mason").setup({
 	ui = {
 		icons = {
 			package_installed = "✓",

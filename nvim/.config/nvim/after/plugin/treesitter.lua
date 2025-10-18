@@ -1,46 +1,4 @@
-local success, nvim_treesitter = pcall(require, "nvim-treesitter")
-if not success or vim.fn.executable("tree-sitter") == 0 then
-	return
-end
-
-local install = nvim_treesitter.install({
-	"bash",
-	"cmake",
-	"cpp",
-	"c_sharp",
-	"css",
-	"comment",
-	"diff",
-	"gitignore",
-	"go",
-	"graphql",
-	"html",
-	"java",
-	"javascript",
-	"jsdoc",
-	"jsonc",
-	"json",
-	"latex",
-	"make",
-	"python",
-	"regex",
-	"ron",
-	"rust",
-	"scss",
-	"sql",
-	"svelte",
-	"toml",
-	"tsx",
-	"typescript",
-	"typst",
-	"vue",
-	"yaml",
-	"zig",
-})
-
-if #vim.api.nvim_list_uis() == 0 then
-	install:wait(300000)
-end
+local nvim_treesitter = require("nvim-treesitter")
 
 vim.api.nvim_create_autocmd("FileType", {
 	callback = function(args)
@@ -52,3 +10,44 @@ vim.api.nvim_create_autocmd("FileType", {
 		end
 	end,
 })
+
+if vim.fn.executable("tree-sitter") == 0 then
+	local install = nvim_treesitter.install({
+		"bash",
+		"cmake",
+		"cpp",
+		"c_sharp",
+		"css",
+		"comment",
+		"diff",
+		"gitignore",
+		"go",
+		"graphql",
+		"html",
+		"java",
+		"javascript",
+		"jsdoc",
+		"jsonc",
+		"json",
+		"latex",
+		"make",
+		"python",
+		"regex",
+		"ron",
+		"rust",
+		"scss",
+		"sql",
+		"svelte",
+		"toml",
+		"tsx",
+		"typescript",
+		"typst",
+		"vue",
+		"yaml",
+		"zig",
+	})
+
+	if #vim.api.nvim_list_uis() == 0 then
+		install:wait(300000)
+	end
+end
