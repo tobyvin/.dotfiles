@@ -22,9 +22,9 @@ fi
 
 while IFS='	' read -r entry name; do
 	if [ "$name" = "$1" ]; then
-		file="${entry%:*}"
+		file="${entry%%#*}"
 		if [ "$file" != "$entry" ]; then
-			action=${entry#*:}
+			section=${entry#*#}
 		fi
 		break
 	fi
@@ -35,7 +35,7 @@ if [ -z "$file" ]; then
 	exit 1
 fi
 
-awk -v term="$TERMINAL" -v action=${action+"$action"} -f - "$file" <<-"EOF" |
+awk -v term="$TERMINAL" -v section=${section+"$section"} -f - "$file" <<-"EOF" |
 	BEGIN {
 		FS = "="
 		found = 0
