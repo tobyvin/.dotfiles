@@ -3,9 +3,18 @@ local latest = vim.version.range("*")
 vim.pack.add({
 	"https://github.com/ellisonleao/gruvbox.nvim",
 	"https://github.com/nvim-lua/plenary.nvim",
-	{ src = "https://github.com/nvim-treesitter/nvim-treesitter", version = "main", data = {
-		build = "TSUpdate",
-	} },
+	{
+		src = "https://github.com/nvim-treesitter/nvim-treesitter",
+		version = "main",
+		data = {
+			build = function()
+				local update = require("nvim-treesitter").update()
+				if #vim.api.nvim_list_uis() == 0 then
+					update:wait(300000)
+				end
+			end,
+		},
+	},
 	{ src = "https://github.com/nvim-treesitter/nvim-treesitter-textobjects", version = "main" },
 	{ src = "https://github.com/stevearc/oil.nvim", version = latest },
 	{ src = "https://github.com/williamboman/mason.nvim", version = latest, data = {
