@@ -262,4 +262,4 @@ exec import-gsettings
 exec systemctl --user start sway-session.target
 exec swaymsg -t subscribe '["shutdown"]' && systemctl --user stop sway-session.target
 
-exec swaymsg "workspace $ws06; workspace $ws01"
+exec swaymsg "workspace $ws08; workspace $ws01"
