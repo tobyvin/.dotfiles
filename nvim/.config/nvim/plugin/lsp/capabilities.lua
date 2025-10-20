@@ -1,33 +1,38 @@
 local ms = vim.lsp.protocol.Methods
+local augroup = vim.api.nvim_create_augroup("user.lsp", { clear = true })
 
 -- Map of LSP capabilites and setup functions for supporting clients
 ---@type table<vim.lsp.protocol.Method.ClientToServer.Request, fun(bufnr:number, client:vim.lsp.Client)>
 local capabilities = {
 	[ms.completionItem_resolve] = function(bufnr, client)
 		vim.api.nvim_create_autocmd("CompleteChanged", {
+			group = augroup,
 			buffer = bufnr,
 			callback = function()
 				local info = vim.fn.complete_info({ "selected" })
-				local completionItem = vim.tbl_get(vim.v.completed_item, "user_data", "nvim", "lsp", "completion_item")
-				if completionItem == nil then
+				local item = vim.tbl_get(vim.v.completed_item, "user_data", "nvim", "lsp", "completion_item")
+				if item == nil then
 					return
 				end
-				client:request(ms.completionItem_resolve, completionItem, function(err, result)
+				client:request(ms.completionItem_resolve, item, function(err, result)
 					if err ~= nil then
 						vim.notify(vim.inspect(err), vim.log.levels.ERROR)
 						return
 					end
 					if result and result.documentation then
-						local winData = vim.api.nvim__complete_set(info.selected, {
+						local popup = vim.api.nvim__complete_set(info.selected, {
 							info = result.documentation.value,
 						})
-						if winData.winid ~= nil and vim.api.nvim_win_is_valid(winData.winid) then
-							vim.api.nvim_win_set_config(winData.winid, {
-								height = #vim.api.nvim_buf_get_lines(winData.bufnr, 0, 10, false),
-								border = vim.o.winborder == "" and "none" or vim.o.winborder --[[@as string]],
+						if popup.winid ~= nil and vim.api.nvim_win_is_valid(popup.winid) then
+							vim.api.nvim_win_set_config(popup.winid, {
+								height = #vim.api.nvim_buf_get_lines(popup.bufnr, 0, vim.o.pumheight or -1, false),
+								border = vim.o.winborder:gsub("^$", "none"),
+								title = item.label,
 							})
-							vim.treesitter.start(winData.bufnr, "markdown")
-							vim.wo[winData.winid].conceallevel = 3
+							vim.wo[popup.winid].conceallevel = 3
+						end
+						if popup.bufnr ~= nil and vim.api.nvim_buf_is_valid(popup.bufnr) then
+							vim.bo[popup.bufnr].filetype = result.documentation.kind
 						end
 					end
 				end, bufnr)
@@ -74,7 +79,7 @@ local capabilities = {
 }
 
 vim.api.nvim_create_autocmd("LspAttach", {
-	group = vim.api.nvim_create_augroup("user.lsp", { clear = true }),
+	group = augroup,
 	desc = "setup lsp capabilities",
 	callback = function(args)
 		local client = vim.lsp.get_client_by_id(args.data.client_id)

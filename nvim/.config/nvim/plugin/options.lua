@@ -1,10 +1,11 @@
 vim.opt.background = "dark"
 vim.opt.breakindent = true
 vim.opt.colorcolumn = "+1"
-vim.opt.complete = "o,F,w,b,u,t"
-vim.opt.completeopt = { "fuzzy", "menuone", "noselect", "noinsert", "popup", "preview" }
+vim.opt.complete = "o,F,.,w,b,u,t"
+vim.opt.completeopt = { "menuone", "noselect", "noinsert", "popup", "preinsert" }
 vim.opt.conceallevel = 2
 vim.opt.cursorline = true
+vim.opt.dictionary = { "spell", "/usr/share/dict/words" }
 vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff" }
 vim.opt.equalalways = false
 vim.opt.expandtab = false
