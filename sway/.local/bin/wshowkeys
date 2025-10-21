@@ -1,0 +1,10 @@
+#!/bin/sh
+
+exec /usr/bin/"$(basename "$0")" \
+	-F'monospace 18' \
+	-abottom \
+	-aright \
+	-b"${BASE16_COLOR_00_HEX:-1d2021}" \
+	-f"${BASE16_COLOR_06_HEX:-ebdbb2}" \
+	-s"${BASE16_COLOR_09_HEX:-fe8019}" \
+	"$@"
