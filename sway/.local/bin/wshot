@@ -1,0 +1,12 @@
+#!/bin/sh
+
+swaymsg -t get_outputs | jq -r '.[].name' | while read -r out; do
+	swaymsg assign [app_id="swayimg_$out"] output "$out"
+	grim -o"$out" - | swayimg --class="swayimg_$out" --scale=real --fullscreen - &
+done
+
+slurp | grim -g - - | wl-copy --type image/png
+
+swaymsg -t get_outputs | jq -r '.[].name' | while read -r out; do
+	swaymsg [app_id="swayimg_$out"] kill
+done

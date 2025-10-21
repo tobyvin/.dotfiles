@@ -104,7 +104,7 @@ bindsym $mod+return exec $TERMINAL
 bindsym $mod+Shift+return exec sway-ssh | $menu | sway-ssh
 bindsym $mod+w exec $BROWSER
 
-bindsym Print exec slurp | grim -g - - | wl-copy --type image/png
+bindsym Print exec wshot
 bindsym $mod+Print exec /usr/share/sway-contrib/grimshot --notify save area
 
 bindsym XF86Open exec $launcher
