@@ -1,13 +1,15 @@
 #!/bin/sh
 
 cache="${XDG_CACHE_HOME:-"$HOME/.cache"}/wmenu-desktop"
+term="$TERMINAL -T '%c' -e"
 
 if [ $# -eq 0 ]; then
 	printf '%s\n' "$XDG_DATA_HOME" "$XDG_DATA_DIRS" |
 		tr ':' '\n' |
 		sed 's|/\?$|/applications|' |
-		xargs fd . --extension=.desktop -X desktop-entry.awk \; 2>/dev/null |
-		sort -t'	' -uk2 |
+		xargs fd . --extension=.desktop \
+			-X desktop-entry.awk -v term="$term" \; 2>/dev/null |
+		sort -t'	' -ubk2,2 |
 		tee "$cache" | cut -f2
 	exit 0
 fi
@@ -20,44 +22,17 @@ if [ "$1" = '-' ]; then
 	set -- "$args"
 fi
 
-while IFS='	' read -r entry name; do
+while IFS='	' read -r entry name exec; do
 	if [ "$name" = "$1" ]; then
-		file="${entry%%#*}"
-		if [ "$file" != "$entry" ]; then
-			section=${entry#*#}
-		fi
 		break
 	fi
+	unset exec
 done <"$cache"
 
-if [ -z "$file" ]; then
+if [ -z "$exec" ]; then
 	printf 'Failed to find "%s" in cache.\n' "$1" >&2
 	exit 1
 fi
 
-awk -v term="$TERMINAL" -v section=${section+"$section"} -f - "$file" <<-"EOF" |
-	BEGIN {
-		FS = "="
-		found = 0
-		terminal = 0
-		name = ""
-		icon = ""
-		exec = ""
-	}
-	$0 == "[Desktop " (action ? "Action " action : "Entry" ) "]" { found = 1; next }
-	$1 == "Icon" { sub("^Icon\\s*=\\s*", "--icon "); icon = $0 }
-	$1 == "Terminal" && $2 ~ "true" { terminal = 1 }
-	found == 0 { next }
-	/^\[Desktop .*]$/ { nextfile }
-	$1 == "Name" { sub("^Name\\s*=\\s*", ""); name = $0 }
-	$1 == "Exec" { sub("^Exec\\s*=\\s*", ""); exec = $0 }
-	END {
-		gsub("%[fFuUdDnNvm]", "", exec)
-		gsub("%i", icon, exec)
-		gsub("%c", name, exec)
-		gsub("%k", FILENAME, exec)
-		if (terminal) { exec = term " -T '" name "' -e " exec }
-		if (exec != "") { print exec }
-	}
-EOF
-	xargs -r swaymsg exec --
+printf '%s\n' "$exec"
+# swaymsg exec --
