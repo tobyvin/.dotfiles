@@ -1,8 +1,8 @@
 local conform = require("conform")
 
 conform.setup({
-	format_on_save = {},
-	format_after_save = {},
+	format_on_save = false,
+	format_after_save = false,
 	formatters_by_ft = {
 		awk = { "gawk" },
 		css = { "prettier" },
