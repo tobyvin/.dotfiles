@@ -1,30 +1,47 @@
+local server_capability_map = vim.lsp.protocol._request_name_to_server_capability
+
 ---@class lsp.server.opts
----@field handlers table<string,fun(method: string, params: any, callback: function)>
 ---@field on_request fun(method: string, params: any)?
 ---@field on_notify fun(method: string, params: any)?
----@field capabilities table
+---@field handlers table<vim.lsp.protocol.Method.ClientToServer,fun(method: string, params: any, callback: function)>
 
 --- Create a in-process LSP server that can be used as `cmd` with |vim.lsp.start|
 --- Example:
---- <pre>lua
+--- ```lua
 --- vim.lsp.start({
 ---   name = "my-in-process-server",
 ---   cmd = vim.lsp.server({
----   handlers = {
----
----   }
----   })
+---     handlers = {
+---       ---@param params lsp.HoverParams
+---       ["textDocument/hover"] = function(_, params, callback)
+---         local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
+---         local lnum = params.position.line
+---         local col = params.position.character
+---         -- use bufnr/lnum/col to provide actual text
+---         callback({
+---           contents = {
+---             kind = "plaintext",
+---             value = "just some dummy text",
+---           }
+---         })
+---       end,
+---     },
+---   }),
 --- })
+--- ```
 ---
 --- Ref: https://github.com/neovim/neovim/pull/24338
 ---
 --- @param opts nil|lsp.server.opts
 function vim.lsp.server(opts)
 	opts = opts or {}
-	local capabilities = opts.capabilities or {}
 	local on_request = opts.on_request or function(_, _) end
 	local on_notify = opts.on_notify or function(_, _) end
 	local handlers = opts.handlers or {}
+	local capabilities = {}
+	for request_name, _ in pairs(handlers) do
+		vim.list_extend(capabilities, server_capability_map[request_name] or {})
+	end
 
 	return function(dispatchers)
 		local closing = false
