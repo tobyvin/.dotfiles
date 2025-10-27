@@ -1,35 +1,33 @@
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function buf_build(client, bufnr)
 	local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
-	client.request("textDocument/build", params, function(err, result)
+	---@diagnostic disable-next-line: param-type-mismatch
+	client:request("textDocument/build", params, function(err, result)
 		if err then
-			return vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
+			return vim.notify(("%s: %s"):format(err.code, err.message), vim.log.levels.ERROR)
 		end
-		local texlab_build_status = {
-			[0] = "Success",
-			[1] = "Error",
-			[2] = "Failure",
-			[3] = "Cancelled",
-		}
-		vim.notify("Build " .. texlab_build_status[result.status], vim.log.levels.INFO)
+		local status = { [0] = "Success", [1] = "Error", [2] = "Failure", [3] = "Cancelled" }
+		vim.notify(("Build %s"):format(status[result.status]), vim.log.levels.INFO)
 	end, bufnr)
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function buf_search(client, bufnr)
 	local params = vim.lsp.util.make_position_params(nil, client.offset_encoding)
-	client.request("textDocument/forwardSearch", params, function(err, result)
+	---@diagnostic disable-next-line: param-type-mismatch
+	client:request("textDocument/forwardSearch", params, function(err, result)
 		if err then
-			return vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
+			return vim.notify(("%s: %s"):format(err.code, err.message), vim.log.levels.ERROR)
 		end
-		local texlab_forward_status = {
-			[0] = "Success",
-			[1] = "Error",
-			[2] = "Failure",
-			[3] = "Unconfigured",
-		}
-		vim.notify("Search " .. texlab_forward_status[result.status], vim.log.levels.INFO)
+		local status = { [0] = "Success", [1] = "Error", [2] = "Failure", [3] = "Unconfigured" }
+		vim.notify(("Search %s"):format(status[result.status]), vim.log.levels.INFO)
 	end, bufnr)
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function buf_cancel_build(client, bufnr)
 	client:exec_cmd({
 		title = "cancel",
@@ -37,17 +35,22 @@ local function buf_cancel_build(client, bufnr)
 	}, { bufnr = bufnr })
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function dependency_graph(client, bufnr)
 	client:exec_cmd({
+		title = "showDependencyGraph",
 		command = "texlab.showDependencyGraph",
-	}, function(err, result)
+	}, { bufnr = bufnr }, function(err, result)
 		if err then
-			return vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
+			return vim.notify(("%s: %s"):format(err.code, err.message), vim.log.levels.ERROR)
 		end
-		vim.notify("The dependency graph has been generated:\n" .. result, vim.log.levels.INFO)
-	end, { bufnr = bufnr })
+		vim.notify(("The dependency graph has been generated:\n%s"):format(result), vim.log.levels.INFO)
+	end)
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function clean_artifacts(client, bufnr)
 	client:exec_cmd({
 		title = "cleanArtifacts",
@@ -55,12 +58,14 @@ local function clean_artifacts(client, bufnr)
 		arguments = { { uri = vim.uri_from_bufnr(bufnr) } },
 	}, { bufnr = bufnr }, function(err, _)
 		if err then
-			return vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
+			return vim.notify(("%s: %s"):format(err.code, err.message), vim.log.levels.ERROR)
 		end
 		vim.notify("Cleaned artifacts files", vim.log.levels.INFO)
 	end)
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function clean_auxiliary(client, bufnr)
 	client:exec_cmd({
 		title = "cleanAuxiliary",
@@ -68,12 +73,14 @@ local function clean_auxiliary(client, bufnr)
 		arguments = { { uri = vim.uri_from_bufnr(bufnr) } },
 	}, { bufnr = bufnr }, function(err, _)
 		if err then
-			return vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
+			return vim.notify(("%s: %s"):format(err.code, err.message), vim.log.levels.ERROR)
 		end
 		vim.notify("Cleaned auxiliary files", vim.log.levels.INFO)
 	end)
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function buf_find_envs(client, bufnr)
 	client:exec_cmd({
 		title = "findEnvironments",
@@ -83,7 +90,7 @@ local function buf_find_envs(client, bufnr)
 		},
 	}, { bufnr = bufnr }, function(err, result)
 		if err then
-			return vim.notify(err.code .. ": " .. err.message, vim.log.levels.ERROR)
+			return vim.notify(("%s: %s"):format(err.code, err.message), vim.log.levels.ERROR)
 		end
 		local env_names = vim.iter(ipairs(result))
 			:map(function(index, env)
@@ -102,6 +109,8 @@ local function buf_find_envs(client, bufnr)
 	end)
 end
 
+---@param client vim.lsp.Client
+---@param bufnr integer
 local function buf_change_env(client, bufnr)
 	local pos = vim.api.nvim_win_get_cursor(0)
 	local uri = vim.uri_from_bufnr(bufnr)
@@ -146,8 +155,6 @@ return {
 			forwardSearch = {
 				executable = "zathura",
 				args = {
-					"--synctex-editor-command",
-					[[nvim-texlabconfig -file '%%%{input}' -line %%%{line} -server ]] .. vim.v.servername,
 					"--synctex-forward",
 					"%l:1:%f",
 					"%p",
