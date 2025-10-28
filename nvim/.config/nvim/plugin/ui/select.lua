@@ -36,7 +36,6 @@ local function select(items, opts, on_choice)
 		title = opts.prompt,
 	}
 
-	vim.print(opts.kind)
 	if opts.kind == "codeaction" or opts.kind == "color_presentation" then
 		config.relative = "cursor"
 		config.row = 1
