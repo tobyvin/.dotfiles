@@ -148,7 +148,15 @@ return {
 			rootDirectory = nil,
 			build = {
 				executable = "latexmk",
-				args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+				args = {
+					"-pdf",
+					"-verbose",
+					"-file-line-error",
+					"-interaction=nonstopmode",
+					"-synctex=1",
+					"-lualatex",
+					"%f",
+				},
 				onSave = true,
 				forwardSearchAfter = true,
 			},
