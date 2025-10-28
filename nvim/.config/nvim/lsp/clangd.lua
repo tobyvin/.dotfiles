@@ -1,5 +1,5 @@
 ---@type vim.lsp.Config
-return {
+local M = {
 	cmd = { "clangd" },
 	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
 	root_markers = {
@@ -19,9 +19,16 @@ return {
 		},
 		offsetEncoding = { "utf-8", "utf-16" },
 	},
+	---@param init_result { offsetEncoding?: string }
+	on_init = function(client, init_result)
+		if init_result.offsetEncoding then
+			client.offset_encoding = init_result.offsetEncoding
+		end
+	end,
 	on_attach = function(client, bufnr)
 		vim.api.nvim_buf_create_user_command(bufnr, "ClangdSwitchSourceHeader", function()
 			local params = vim.lsp.util.make_text_document_params(bufnr)
+			---@diagnostic disable-next-line: param-type-mismatch
 			client:request("textDocument/switchSourceHeader", params, function(err, result)
 				if err then
 					error(tostring(err))
@@ -36,6 +43,7 @@ return {
 
 		vim.api.nvim_buf_create_user_command(bufnr, "ClangdShowSymbolInfo", function()
 			local params = vim.lsp.util.make_text_document_params(bufnr)
+			---@diagnostic disable-next-line: param-type-mismatch
 			client:request("textDocument/symbolInfo", params, function(err, result)
 				if err or #result == 0 then
 					return
@@ -55,3 +63,10 @@ return {
 		end, { desc = "Show symbol info" })
 	end,
 }
+
+local files = vim.fs.find("compile_commands.json", { type = "file" })
+if files[1] then
+	table.insert(M.cmd --[[@as table]], ("--compile-commands-dir=%s"):format(vim.fs.dirname(files[1])))
+end
+
+return M
