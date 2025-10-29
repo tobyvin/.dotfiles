@@ -12,3 +12,8 @@ printf "%s: Installing plugins" "$0"
 # TODO: fix newlines in vim.pack.add or output buffering
 nvim --headless -c ':lua vim.pack.clean()' -c qa 2>&1 | sed -u 's/vim.pack:/\nvim.pack:/g'
 printf "\n"
+
+if [ -d "$XDG_DATA_HOME"/nvim/lazy ] || [ -d "$XDG_STATE_HOME"/nvim/lazy ]; then
+	printf "%s: Removing lazy directories" "$0"
+	rm -rf "$XDG_DATA_HOME"/nvim/lazy "$XDG_STATE_HOME"/nvim/lazy
+fi
