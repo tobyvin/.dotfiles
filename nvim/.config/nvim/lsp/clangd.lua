@@ -64,9 +64,4 @@ local M = {
 	end,
 }
 
-local files = vim.fs.find("compile_commands.json", { type = "file" })
-if files[1] then
-	table.insert(M.cmd --[[@as table]], ("--compile-commands-dir=%s"):format(vim.fs.dirname(files[1])))
-end
-
 return M
