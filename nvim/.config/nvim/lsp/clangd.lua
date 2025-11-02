@@ -1,6 +1,18 @@
 ---@type vim.lsp.Config
 local M = {
-	cmd = { "clangd" },
+	cmd = function(dispatchers, config)
+		local cmd = { "clangd" }
+		local files = vim.fs.find("compile_commands.json", { type = "file" })
+		if files[1] then
+			table.insert(cmd, ("--compile-commands-dir=%s"):format(vim.fs.dirname(files[1])))
+		end
+
+		return vim.lsp.rpc.start(cmd, dispatchers, {
+			cwd = config.cmd_cwd,
+			env = config.cmd_env,
+			detached = config.detached,
+		})
+	end,
 	filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
 	root_markers = {
 		".clangd",
@@ -26,6 +38,9 @@ local M = {
 		end
 	end,
 	on_attach = function(client, bufnr)
+		-- client.server_capabilities.documentFormattingProvider = false
+		-- client.server_capabilities.documentRangeFormattingProvider = false
+
 		vim.api.nvim_buf_create_user_command(bufnr, "ClangdSwitchSourceHeader", function()
 			local params = vim.lsp.util.make_text_document_params(bufnr)
 			---@diagnostic disable-next-line: param-type-mismatch

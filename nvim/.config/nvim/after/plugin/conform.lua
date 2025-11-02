@@ -1,11 +1,32 @@
 local conform = require("conform")
 
+---Converts editorconfig properties into inline style used by clang-format
+---@param editorconfig table
+---@return string?
+local function editorconfig2clang_format(editorconfig)
+	local params = {}
+	if editorconfig.indent_style == "tab" then
+		params["UseTab"] = "Always"
+	end
+	if editorconfig.indent_size then
+		params["TabWidth"] = vim.b.editorconfig.indent_size
+		params["IndentWidth"] = vim.b.editorconfig.indent_size
+		params["ContinuationIndentWidth"] = vim.b.editorconfig.indent_size
+	end
+	return ("{%s}"):format(vim.iter(params)
+		:map(function(k, v)
+			return ("%s: %s"):format(k, v)
+		end)
+		:join(", "))
+end
+
 conform.setup({
-	format_on_save = false,
-	format_after_save = false,
 	formatters_by_ft = {
 		awk = { "gawk" },
+		c = { "clang-format" },
+		cpp = { "clang-format" },
 		css = { "prettier" },
+		cuda = { "clang-format" },
 		graphql = { "prettier" },
 		html = { "prettier", "injected" },
 		htmldjango = { "prettier", "injected" },
@@ -14,13 +35,25 @@ conform.setup({
 		lua = { "stylua" },
 		markdown = { "mdformat", "injected" },
 		nginx = { "nginxfmt" },
+		objc = { "clang-format" },
+		objcpp = { "clang-format" },
 		plaintex = { "latexindent", "injected" },
+		proto = { "clang-format" },
 		sh = { "shfmt" },
 		sql = { "pg_format" },
 		tex = { "latexindent", "injected" },
 		typst = { "typstyle", "injected" },
 	},
 	formatters = {
+		["clang-format"] = {
+			prepend_args = function(_, ctx)
+				local editorconfig = vim.b[ctx.buf].editorconfig
+				if editorconfig then
+					return { "--style", editorconfig2clang_format(editorconfig) }
+				end
+				return {}
+			end,
+		},
 		latexindent = {
 			prepend_args = {
 				"-g",

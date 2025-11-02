@@ -1,4 +1,0 @@
-If:
-  PathMatch: ./build/compile_commands.json
-CompileFlags:
-  CompilationDatabase: ./build
