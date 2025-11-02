@@ -1,7 +1,7 @@
 ---@type vim.lsp.Config
 return {
 	cmd = {
-		"omnisharp",
+		"OmniSharp",
 		"-z", -- https://github.com/OmniSharp/omnisharp-vscode/pull/4300
 		"--languageserver",
 		"--hostPID",
