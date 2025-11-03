@@ -1,12 +1,35 @@
 #!/bin/sh
 
-swaymsg -t get_outputs | jq -r '.[].name' | while read -r out; do
+# shellcheck disable=2046
+outputs=$(swaymsg -t get_outputs | jq -r '.[].name')
+image=$(mktemp --suffix=.png)
+
+cleanup() {
+	rm -f "$image"
+	for out in $outputs; do
+		swaymsg --quiet [app_id="swayimg_$out"] kill
+	done
+}
+
+trap "trap - SIGTERM && cleanup" INT TERM EXIT
+
+for out in $outputs; do
 	swaymsg assign [app_id="swayimg_$out"] output "$out"
-	grim -o"$out" - | swayimg --class="swayimg_$out" --scale=real --fullscreen - &
+	swaymsg exec -- "grim -o'$out' - | swayimg --class='swayimg_$out' --scale=real --fullscreen -"
 done
 
-slurp | grim -g - - | wl-copy --type image/png
+if ! slurp | grim -g - "$image" 2>/dev/null; then
+	exit 1
+fi
 
-swaymsg -t get_outputs | jq -r '.[].name' | while read -r out; do
-	swaymsg [app_id="swayimg_$out"] kill
+wl-copy --type image/png <"$image"
+
+for out in $outputs; do
+	swaymsg --quiet [app_id="swayimg_$out"] kill
 done
+
+notify-send 'Screenshot captured' \
+	"Screenshot copied to clipboard" \
+	--app-name=wshot \
+	--hint=string:image-path:"file://$image" \
+	--wait
