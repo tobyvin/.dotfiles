@@ -48,7 +48,7 @@ conform.setup({
 		["clang-format"] = {
 			prepend_args = function(_, ctx)
 				local editorconfig = vim.b[ctx.buf].editorconfig
-				if editorconfig then
+				if editorconfig and not vim.tbl_isempty(editorconfig) then
 					return { "--style", editorconfig2clang_format(editorconfig) }
 				end
 				return {}
