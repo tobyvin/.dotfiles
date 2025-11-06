@@ -14,10 +14,12 @@ table.insert(lint.linters.selene.args, function()
 		return string.format("--config=%s", vim.fs.joinpath(root, "selene.toml"))
 	end
 	local fname = vim.api.nvim_buf_get_name(0)
-	local is_runtime = vim.iter(vim.api.nvim_list_runtime_paths()):any(function(path)
-		return vim.fs.relpath(path, fname) ~= nil
-	end)
-	if is_runtime then
+	local use_default = vim.fs.basename(fname) == ".nvim.lua"
+		or vim.iter(vim.api.nvim_list_runtime_paths()):any(function(path)
+			return vim.fs.relpath(path, fname) ~= nil
+		end)
+
+	if use_default then
 		return string.format("--config=%s", vim.fs.joinpath(vim.fn.stdpath("config"), "selene.toml"))
 	end
 end)
