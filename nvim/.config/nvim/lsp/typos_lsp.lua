@@ -6,6 +6,7 @@ return {
 		"gitcommit",
 		"mail",
 		"markdown",
+		"scdoc",
 		"tex",
 	},
 	root_markers = { "typos.toml", "_typos.toml", ".typos.toml" },
