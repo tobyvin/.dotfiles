@@ -21,6 +21,8 @@
 	prompt = false
 [difftool "difft"]
 	cmd = difft "$LOCAL" "$REMOTE"
+[mergetool]
+	keepBackup = false
 [pager]
 	difftool = true
 [merge]
