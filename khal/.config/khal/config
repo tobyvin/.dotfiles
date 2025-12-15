@@ -19,7 +19,6 @@ path = $XDG_DATA_HOME/contacts/personal
 type = birthdays
 
 [keybindings]
-save = w
 external_edit = e
 export = x
 
