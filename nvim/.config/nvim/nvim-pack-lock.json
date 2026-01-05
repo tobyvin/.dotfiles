@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "e71cc06",
+      "rev": "5ed01fc84e587e0883e7d04122684d768eb76bbc",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "cc-tweaked-documentation": {
@@ -45,7 +45,7 @@
       "version": ">=0.0.0"
     },
     "lazydev.nvim": {
-      "rev": "f59bd14",
+      "rev": "01bc2aacd51cf9021eb19d048e70ce3dd09f7f93",
       "src": "https://github.com/folke/lazydev.nvim",
       "version": ">=0.0.0"
     },
@@ -54,7 +54,7 @@
       "src": "https://github.com/Bilal2453/luvit-meta"
     },
     "magick.nvim": {
-      "rev": "1584372",
+      "rev": "9d4a9900c11409560f9d411773c932955494ec1f",
       "src": "https://github.com/kiyoon/magick.nvim"
     },
     "mason.nvim": {
@@ -67,11 +67,11 @@
       "src": "https://github.com/disco0/mpv-types-lua"
     },
     "nvim-jdtls": {
-      "rev": "380ac14",
+      "rev": "f73731b543f5971e0da9665eb1d7ceffe1fde71f",
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lint": {
-      "rev": "9da1fb9",
+      "rev": "1f19dacd945a7b1a57f29f32b2d7168384df3d36",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-texlabconfig": {
@@ -79,12 +79,12 @@
       "src": "https://github.com/f3fora/nvim-texlabconfig"
     },
     "nvim-treesitter": {
-      "rev": "846d5113",
+      "rev": "6e42d823ce0a5a76180c473c119c7677738a09d1",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "1b2d85d",
+      "rev": "f7122acf1bd2c9e4626651ad33bf5944be9d9392",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
@@ -114,7 +114,7 @@
       "src": "https://github.com/codethread/qmk.nvim"
     },
     "telescope-fzf-native.nvim": {
-      "rev": "1f08ed6",
+      "rev": "6fea601bd2b694c6f2ae08a6c6fab14930c60e2c",
       "src": "https://github.com/nvim-telescope/telescope-fzf-native.nvim"
     },
     "telescope-live-grep-args.nvim": {
@@ -126,7 +126,7 @@
       "src": "https://github.com/debugloop/telescope-undo.nvim"
     },
     "telescope.nvim": {
-      "rev": "b4da76b",
+      "rev": "4d0f5e0e7f69071e315515c385fab2a4eff07b3d",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "tex-lualatex": {
@@ -142,7 +142,7 @@
       "src": "https://github.com/LuaCATS/tex-luametatex"
     },
     "tex-luatex": {
-      "rev": "729a3e4",
+      "rev": "b8efbe933a70e2f79afd02aeddc3ad2de24e6e5c",
       "src": "https://github.com/LuaCATS/tex-luatex"
     },
     "vim-hjson": {
