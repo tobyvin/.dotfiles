@@ -27,15 +27,19 @@ gitsigns.setup({
 	},
 	on_attach = function(bufnr)
 		vim.keymap.set("n", "]c", function()
-			if vim.wo.diff then
+			if vim.o.diff then
 				return "]c"
 			else
 				return [[<Cmd>lua require("gitsigns").nav_hunk("next")<CR>]]
 			end
-		end, { expr = true, desc = "next hunk", buffer = bufnr })
+		end, {
+			expr = true,
+			desc = "next hunk",
+			buffer = bufnr,
+		})
 
 		vim.keymap.set("n", "[c", function()
-			if vim.wo.diff then
+			if vim.o.diff then
 				return "[c"
 			else
 				return [[<Cmd>lua require("gitsigns").nav_hunk("prev")<CR>]]
