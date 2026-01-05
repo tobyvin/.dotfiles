@@ -9,7 +9,7 @@ vim.api.nvim_create_autocmd("PackChanged", {
 		if #vim.api.nvim_list_uis() == 0 then
 			vim.print("\n")
 		end
-		if type(build) == "table" and pkg.kind == "install" or pkg.kind == "update" then
+		if type(build) == "table" and (pkg.kind == "install" or pkg.kind == "update") then
 			success, res = pcall(vim.system, build, { cwd = pkg.path })
 			if success and #vim.api.nvim_list_uis() == 0 then
 				res:wait(300000)
