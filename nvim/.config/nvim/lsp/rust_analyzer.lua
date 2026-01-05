@@ -35,6 +35,19 @@ return {
 	end,
 	settings = {
 		["rust-analyzer"] = {
+			lens = {
+				debug = { enable = true },
+				enable = true,
+				implementations = { enable = true },
+				references = {
+					adt = { enable = true },
+					enumVariant = { enable = true },
+					method = { enable = true },
+					trait = { enable = true },
+				},
+				run = { enable = true },
+				updateTest = { enable = true },
+			},
 			cargo = {
 				features = "all",
 				buildScripts = {
@@ -64,16 +77,42 @@ return {
 			serverStatusNotification = true,
 			localDocs = true,
 		},
+		commands = {
+			commands = {
+				"rust-analyzer.showReferences",
+				"rust-analyzer.runSingle",
+				"rust-analyzer.debugSingle",
+			},
+		},
 	},
 	before_init = function(init_params, config)
 		-- See https://github.com/rust-lang/rust-analyzer/blob/eb5da56d839ae0a9e9f50774fa3eb78eb0964550/docs/dev/lsp-extensions.md?plain=1#L26
 		if config.settings and config.settings["rust-analyzer"] then
 			init_params.initializationOptions = config.settings["rust-analyzer"]
 		end
+		---@param command table{ title: string, command: string, arguments: any[] }
+		vim.lsp.commands["rust-analyzer.runSingle"] = function(command)
+			local r = command.arguments[1]
+			local cmd = { "cargo", unpack(r.args.cargoArgs) }
+			if r.args.executableArgs and #r.args.executableArgs > 0 then
+				vim.list_extend(cmd, { "--", unpack(r.args.executableArgs) })
+			end
+
+			local proc = vim.system(cmd, { cwd = r.args.cwd })
+
+			local result = proc:wait()
+
+			if result.code == 0 then
+				vim.notify(result.stdout, vim.log.levels.INFO)
+			else
+				vim.notify(result.stderr, vim.log.levels.ERROR)
+			end
+		end
 	end,
 	on_attach = function(client, bufnr)
 		local function external_docs()
 			local params = vim.lsp.util.make_position_params(0, client.offset_encoding)
+			---@diagnostic disable-next-line: param-type-mismatch
 			local resp = client:request_sync("experimental/externalDocs", params, nil, bufnr)
 
 			if not resp then
@@ -84,6 +123,8 @@ return {
 				error(tostring(resp.err))
 			end
 
+			-- FROM: https://docs.rs/esp-hal/1.0.0/esp_hal/index.html
+			-- INTO: https://docs.espressif.com/projects/rust/esp-hal/1.0.0/esp32c3/esp_hal/index.html
 			if resp.result["local"] and vim.env.SSH_CONNECTION == nil then
 				---@type string
 				local uri = resp.result["local"]:gsub("/[^/]+(/macro%.[^/]+.html)", "%1")
@@ -141,6 +182,7 @@ return {
 
 		vim.api.nvim_buf_create_user_command(bufnr, "RustReload", function()
 			vim.notify("Reloading workspace", vim.log.levels.INFO, { title = client.name })
+			---@diagnostic disable-next-line: param-type-mismatch
 			client:request("rust-analyzer/reloadWorkspace", nil, function(err)
 				if err then
 					error(tostring(err))
