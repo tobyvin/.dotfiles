@@ -100,8 +100,9 @@ local server = vim.lsp.server({
 		end,
 	},
 	on_exit = function(_, _, client_id)
-		if vim.lsp.get_client_by_id(client_id).name == "spellls" then
-			vim.lsp.stop_client(client_id)
+		local client = vim.lsp.get_client_by_id(client_id)
+		if client and client.name == "spellls" then
+			client:stop()
 		end
 	end,
 })
