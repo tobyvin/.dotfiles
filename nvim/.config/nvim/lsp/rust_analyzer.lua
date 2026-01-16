@@ -121,11 +121,11 @@ return {
 
 			if resp.err then
 				error(tostring(resp.err))
+			elseif not resp.result then
+				return false
 			end
 
-			-- FROM: https://docs.rs/esp-hal/1.0.0/esp_hal/index.html
-			-- INTO: https://docs.espressif.com/projects/rust/esp-hal/1.0.0/esp32c3/esp_hal/index.html
-			if resp.result["local"] and vim.env.SSH_CONNECTION == nil then
+			if type(resp.result["local"]) == "string" and vim.env.SSH_CONNECTION == nil then
 				---@type string
 				local uri = resp.result["local"]:gsub("/[^/]+(/macro%.[^/]+.html)", "%1")
 				local cmd = {
@@ -153,7 +153,7 @@ return {
 				end
 			end
 
-			if resp.result.web then
+			if type(resp.result.web) == "string" then
 				vim.ui.open(resp.result.web)
 				return true
 			end
