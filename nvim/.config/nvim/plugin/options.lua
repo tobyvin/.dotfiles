@@ -24,6 +24,7 @@ vim.opt.list = true
 vim.opt.modeline = true
 vim.opt.mouse = "a"
 vim.opt.number = true
+vim.opt.pumblend = 15
 vim.opt.pumheight = 10
 vim.opt.pummaxwidth = 60
 vim.opt.pumwidth = 30
