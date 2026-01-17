@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "5ed01fc84e587e0883e7d04122684d768eb76bbc",
+      "rev": "fb7b9034285a5658c746faa12eff8c1c9d9b11b1",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "cc-tweaked-documentation": {
@@ -31,12 +31,12 @@
       "src": "https://github.com/wilriker/gcode.vim"
     },
     "gitsigns.nvim": {
-      "rev": "7010000",
+      "rev": "42d6aed4e94e0f0bbced16bbdcc42f57673bd75e",
       "src": "https://github.com/lewis6991/gitsigns.nvim",
       "version": ">=0.0.0"
     },
     "gruvbox.nvim": {
-      "rev": "5e0a460",
+      "rev": "a472496e1a4465a2dd574389dcf6cdb29af9bf1b",
       "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
     "image.nvim": {
@@ -58,7 +58,7 @@
       "src": "https://github.com/kiyoon/magick.nvim"
     },
     "mason.nvim": {
-      "rev": "ad7146a",
+      "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
       "src": "https://github.com/williamboman/mason.nvim",
       "version": ">=0.0.0"
     },
@@ -71,7 +71,7 @@
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lint": {
-      "rev": "1f19dacd945a7b1a57f29f32b2d7168384df3d36",
+      "rev": "ca6ea12daf0a4d92dc24c5c9ae22a1f0418ade37",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-texlabconfig": {
@@ -79,12 +79,12 @@
       "src": "https://github.com/f3fora/nvim-texlabconfig"
     },
     "nvim-treesitter": {
-      "rev": "6e42d823ce0a5a76180c473c119c7677738a09d1",
+      "rev": "8aada0e3940c573e38b417a226b43bc8675f8958",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "f7122acf1bd2c9e4626651ad33bf5944be9d9392",
+      "rev": "baa6b4ec28c8be5e4a96f9b1b6ae9db85ec422f8",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
@@ -126,7 +126,7 @@
       "src": "https://github.com/debugloop/telescope-undo.nvim"
     },
     "telescope.nvim": {
-      "rev": "4d0f5e0e7f69071e315515c385fab2a4eff07b3d",
+      "rev": "a8c2223ea6b185701090ccb1ebc7f4e41c4c9784",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "tex-lualatex": {

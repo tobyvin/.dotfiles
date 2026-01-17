@@ -18,13 +18,6 @@ local function with_opfunc(fn)
 end
 
 gitsigns.setup({
-	signs = {
-		add = { text = "▎" },
-		change = { text = "▎" },
-		delete = { text = "󰐊" },
-		topdelete = { text = "󰐊" },
-		changedelete = { text = "▎" },
-	},
 	on_attach = function(bufnr)
 		vim.keymap.set("n", "]c", function()
 			if vim.o.diff then
