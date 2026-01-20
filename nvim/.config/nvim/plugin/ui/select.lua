@@ -73,6 +73,7 @@ local function select(items, opts, on_choice)
 
 	local function cancel()
 		vim.opt.guicursor:remove("n:hor1")
+		-- vim.on_key(nil, ns_id, {})
 		if vim.api.nvim_win_is_valid(window) then
 			vim.api.nvim_win_close(window, true)
 		end
@@ -92,6 +93,27 @@ local function select(items, opts, on_choice)
 		buffer = buffer,
 		callback = cancel,
 	})
+
+	--- Attempt at search query in title bar
+	-- vim.w[window].query = ""
+	-- vim.on_key(function(key, _)
+	-- 	key = vim.fn.keytrans(key)
+	-- 	if key == "<BS>" then
+	-- 		vim.w[window].query = string.sub(vim.w[window].query, 1, string.len(vim.w[window].query) - 1)
+	-- 	elseif key == "<Space>" or vim.fn.strchars(key) == 1 and vim.fn.char2nr(key) > 31 then
+	-- 		vim.w[window].query = vim.w[window].query .. key
+	-- 	else
+	-- 		return
+	-- 	end
+	--	-- TODO: filter buffer contents to matching results
+	-- 	vim.api.nvim_win_set_config(window, {
+	-- 		title = {
+	-- 			{ opts.prompt .. " " },
+	-- 			{ vim.w[window].query, "Float" },
+	-- 		},
+	-- 	})
+	-- 	return ""
+	-- end, ns_id, {})
 
 	if opts.kind == "codeaction" then
 		vim.api.nvim_create_autocmd({ "CursorMoved" }, {
