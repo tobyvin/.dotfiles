@@ -6,8 +6,8 @@ vim.lsp.enable({
 	"basedpyright",
 	"bashls",
 	"clangd",
-	"cssls",
 	"csharp_ls",
+	"cssls",
 	"dockerls",
 	"gopls",
 	"html",
@@ -23,6 +23,7 @@ vim.lsp.enable({
 	"tombi",
 	"ts_ls",
 	"typos_lsp",
+	"vhdl_ls",
 	"yamlls",
 	"zls",
 })
