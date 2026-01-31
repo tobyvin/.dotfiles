@@ -77,6 +77,11 @@ interval=persist
 format=json
 gui=pavucontrol
 
+[calendar]
+command=i3blocks-calendar
+interval=persist
+format=json
+
 [time]
 command=date +" %a %m/%d %T "
 interval=1
