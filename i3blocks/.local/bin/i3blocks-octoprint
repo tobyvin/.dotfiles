@@ -364,17 +364,18 @@ def main():
                     timeout *= 2
 
     timeout = 1
+    passwd = subprocess.run(
+        ["pass", "show", "mqtt.tobyvin.dev/tobyv"],
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.strip()
+    mqttc.username_pw_set(username="tobyv", password=passwd)
+    mqttc.reconnect_delay_set()
+    mqttc.tls_set()
     while True:
         try:
-            passwd = subprocess.run(
-                ["pass", "show", "mqtt.tobyvin.dev/tobyv"],
-                capture_output=True,
-                check=True,
-                text=True,
-            ).stdout.strip()
-            mqttc.username_pw_set(username="tobyv", password=passwd)
-            mqttc.reconnect_delay_set()
-            mqttc.connect(host="frigg.asgard.tobyvin.dev")
+            mqttc.connect(host="mqtt.tobyvin.dev", port=8883)
             break
         except Exception as err:
             logger.error(f"Failed to connect to MQTT broker: {err}")
