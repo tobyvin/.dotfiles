@@ -4,7 +4,7 @@
 CALENDARS=$XDG_DATA_HOME/calendars
 
 render() {
-	khal -a personal list now eod --json all | jq -c \
+	khal list -a personal now eod --json all | jq -c \
 		--arg black "#$BASE16_COLOR_00_HEX" \
 		--arg white "#$BASE16_COLOR_05_HEX" \
 		--arg yellow "#$BASE16_COLOR_0A_HEX" \
