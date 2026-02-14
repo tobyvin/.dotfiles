@@ -16,15 +16,13 @@
 [diff]
 	colorMoved = default
 	colorMovedWS = allow-indentation-change
-	tool = difft
+	tool = nvim_difftool
 [difftool]
 	prompt = false
-[difftool "difft"]
-	cmd = difft "$LOCAL" "$REMOTE"
+[difftool "nvim_difftool"]
+	cmd = nvim -c \"packadd nvim.difftool\" -c \"DiffTool $LOCAL $REMOTE\"
 [mergetool]
 	keepBackup = false
-[pager]
-	difftool = true
 [merge]
 	tool = nvimdiff
 [stash]
