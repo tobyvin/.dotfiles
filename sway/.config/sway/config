@@ -63,6 +63,7 @@ for_window [class="^steam_app_252950$" title="^Rocket League.*"] floating disabl
 for_window [class="^steam_app_311210$"] urgent deny, focus_on_window_activation urgent
 for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
+for_window [app_id="org.gnome.Calculator"] floating enable
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px, urgent deny
 for_window [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"] resize set width 980px, urgent deny
 for_window [app_id="authenticator" title="Yubico Authenticator"] floating enable, resize set 980px 980px
