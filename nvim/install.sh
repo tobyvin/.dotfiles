@@ -9,9 +9,8 @@ fi
 
 printf "%s: Installing plugins" "$0"
 
-# TODO: fix newlines in vim.pack.add or output buffering
-nvim --headless -c ':lua vim.pack.update(nil, { target = "lockfile" }) vim.pack.clean()' -c qa 2>&1 | sed -u \
-	-e 's/\([^\n]\)\(vim.pack:\)/\1\n\2/g' -e 's/^$//'
+printf "\n"
+nvim --headless -c ':lua vim.pack.update(nil, { target = "lockfile" }) vim.pack.clean()' -c qa
 printf "\n"
 
 if [ -d "$XDG_DATA_HOME"/nvim/lazy ] || [ -d "$XDG_STATE_HOME"/nvim/lazy ]; then

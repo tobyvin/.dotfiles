@@ -11,11 +11,6 @@ local hooks = function(args)
 	local name, kind = pkg.spec.name, pkg.kind
 	local success, res
 
-	-- HACK: fix for vim.pack not printing newlines when --headless
-	if #vim.api.nvim_list_uis() == 0 then
-		vim.print("\n")
-	end
-
 	if name == "telescope-fzf-native.nvim" and (kind == "install" or kind == "update") then
 		success, res = pcall(vim.system, { "make" }, { cwd = pkg.path })
 		if success and #vim.api.nvim_list_uis() == 0 then
