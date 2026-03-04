@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # shellcheck disable=SC2016
 
 SCRIPT="$(basename "$0")"
@@ -10,9 +10,10 @@ max=9
 delim=' '
 digit=0
 trans='{print $0}'
+interactive=false
 
-long='help,url:,count:,max:,delimiter:,digit::,upper,lower,title'
-short='hu:n:m:d:i::Ult'
+long='help,url:,count:,max:,delimiter:,digit::,upper,lower,title,interactive'
+short='hu:n:m:d:i::UltI'
 
 if ! opts="$(getopt -o $short -l $long -n "$SCRIPT" -- "$@")"; then
 	printf "Try '%s --help' for more information.\n" "$SCRIPT" 1>&2
@@ -47,7 +48,22 @@ help() {
 		    -U, --upper             Convert words to UPPER case.
 		    -l, --lower             Convert words to lower case.
 		    -t, --title             Convert words to Title case.
+		    -I, --interactive       Interactively select or regenerate phrases
 	EOF
+}
+
+generate() {
+	cut -f2 <"$XDG_DATA_HOME"/dict/words_eff |
+		awk 'length($0) <= '"$max" |
+		shuf -n "$count" |
+		awk "$trans" | while read -r word; do
+		printf '%s' "$word"
+		if [ "$digit" != 0 ]; then
+			printf '%d' "$(shuf -i0-9 -n1)"
+			digit=$((digit - 1))
+		fi
+		printf '\n'
+	done | shuf | paste -s -d"$delim"
 }
 
 while true; do
@@ -89,6 +105,9 @@ while true; do
 	-t | --title)
 		trans='{ printf "%s%s\n", toupper(substr($0,1,1)), substr($0,2) }'
 		;;
+	-I | --interactive)
+		interactive=true
+		;;
 	--)
 		shift
 		break
@@ -109,14 +128,19 @@ if [ -z "$1" ] && [ ! -f "$wordlist" ]; then
 	curl -s "$url" >"$XDG_DATA_HOME"/dict/words_eff
 fi
 
-cut -f2 <"$XDG_DATA_HOME"/dict/words_eff |
-	awk 'length($0) <= '"$max" |
-	shuf -n "$count" |
-	awk "$trans" | while read -r word; do
-	printf '%s' "$word"
-	if [ "$digit" != 0 ]; then
-		printf '%d' "$(shuf -i0-9 -n1)"
-		digit=$((digit - 1))
-	fi
-	printf '\n'
-done | shuf | paste -s -d"$delim"
+passwd="$(generate)"
+while $interactive; do
+	printf '%s\n' "$passwd" 1>&2
+	printf 'Press [r] to regenerate' 1>&2
+	read -rsn1 ans
+	case "$ans" in
+	'r' | 'R') passwd="$(generate)" ;;
+	*)
+		printf "\e[2K\e[1A\n" 1>&2
+		break
+		;;
+	esac
+	printf "\e[2K\e[1A\e[2K\e[1A\n" 1>&2
+done
+
+printf '%s\n' "$passwd"
