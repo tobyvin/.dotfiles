@@ -1,0 +1,140 @@
+#!/usr/bin/env python3
+
+import asyncio
+import json
+import subprocess
+
+import requests
+from jeepney import DBusAddress, MatchRule, new_method_call
+from jeepney.io.asyncio import open_dbus_router
+from jeepney.io.blocking import open_dbus_connection
+
+
+class BearerAuth(requests.auth.AuthBase):  # pyright: ignore[reportAttributeAccessIssue]
+    def __init__(self, token):
+        self.token = token
+
+    def __call__(self, r):
+        r.headers["authorization"] = "Bearer " + self.token
+        return r
+
+
+DBUS_ADDRESS = DBusAddress(
+    "/org/freedesktop/Notifications",
+    bus_name="org.freedesktop.Notifications",
+    interface="org.freedesktop.Notifications",
+)
+
+
+# TODO: Update to use async interface
+def notify(
+    summary: str,
+    body: str,
+    actions: list[str],
+    hints: dict[str, str],
+) -> int | None:
+    msg = new_method_call(
+        DBUS_ADDRESS,
+        "Notify",
+        "susssasa{sv}i",
+        (
+            "ntfy-desktop",
+            0,
+            "mail-unread",
+            summary,
+            body,
+            actions,
+            hints,
+            -1,
+        ),
+    )
+    id = open_dbus_connection(bus="SESSION").send_and_get_reply(msg)
+    if isinstance(id, int):
+        return id
+
+
+# TODO: Can I move this to async?
+def ntfy_stream(token: str):
+    topics = (
+        requests.get("https://ntfy.tobyvin.dev/v1/account", auth=BearerAuth(token))
+        .json()
+        .get("subscriptions", [])
+    )
+
+    topic = ",".join([t.get("topic") for t in topics])
+    resp = requests.get(
+        f"https://ntfy.tobyvin.dev/{topic}/json",
+        stream=True,
+        auth=BearerAuth(token),
+    )
+    for line in resp.iter_lines(decode_unicode=True):
+        if line:
+            data = json.loads(line)
+            if data.get("event") == "message":
+                yield data
+
+
+# TODO: Update to use async interfaces
+async def ntfy_listener():
+    token = subprocess.run(
+        ["pass", "show", "ntfy.tobyvin.dev/tobyv/ntfy-desktop"],
+        capture_output=True,
+        check=True,
+        text=True,
+    ).stdout.strip()
+
+    try:
+        for msg in ntfy_stream(token):
+            hints = {}
+            if icon := msg.get("icon"):
+                hints["image-data"] = icon
+
+            notify(
+                msg.get("title", "ntfy/{}".format(msg.get("topic"))),
+                msg.get("message"),
+                msg.get("actions", []),
+                hints,
+            )
+    except KeyboardInterrupt:
+        exit()
+
+
+async def cb_listener():
+    # Start the signal listener
+    rule = MatchRule(
+        type="signal",
+        interface="org.freedesktop.Notifications",
+        member="ActionInvoked",
+    )
+
+    async with open_dbus_router(bus="SESSION") as router:
+        async with router.filter(rule) as queue:
+            while True:
+                try:
+                    msg = await queue.get()
+                    # sender = msg.header.sender
+                    body = msg.body
+
+                    # Extract notification ID and action ID
+                    notification_id = body[0]
+                    action_id = body[1]
+
+                    print(
+                        f"Action '{action_id}' clicked on notification {notification_id}"
+                    )
+                    # TODO: handle various ntfy action types: view, broadcast, http, copy
+                except asyncio.CancelledError:
+                    break
+
+
+async def main():
+    try:
+        async with asyncio.TaskGroup() as task_group:
+            task_group.create_task(cb_listener())
+            task_group.create_task(ntfy_listener())
+    except asyncio.CancelledError:
+        return
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
