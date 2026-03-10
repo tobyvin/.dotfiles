@@ -12,7 +12,7 @@ render() {
 		'(map(select(."all-day" != "True")) | first) // .[0] | if . then
 				try ((.start | strptime("%y/%m/%d %H:%M") | mktime) - (now | localtime | mktime)) catch 3601 as $until |
 				{
-					"full_text": " 󰃭 " + ."start-end-time-style" + .title[0:31] + " ",
+					"full_text": " 󰃭 " + ."start-end-time-style" + " " + .title[0:31] + " ",
 					"short_text": " 󰃭 " + ."start-end-time-style" + " ",
 					"color": if $until <= 3600 then $black else $white end,
 					"background": if $until <= 0 then $aqua elif $until <= 3600 then $yellow else $black end,
