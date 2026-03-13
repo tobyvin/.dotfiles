@@ -1,27 +1,37 @@
 #!/usr/bin/env python3
 
 import os
+import sys
 
 ICON = "\U000f02ca"  # 󰋊
-GB = 1073741824
+UNITS = iter(["Ki", "Mi", "Gi", "Ti", "Pi"])
+GiB = 2**30
+
+
+def fmt_bytes(bytes: float) -> str:
+    unit = ""
+    while (bytes > 1024.0) and (u := next(UNITS)):
+        unit = u
+        bytes /= 1024.0
+    return f"{round(bytes)}{unit}B"
 
 
 def main():
-    statvfs = os.statvfs("/")
-    avail = bytes = statvfs.f_bavail * statvfs.f_frsize
+    if len(sys.argv) > 1:
+        path = sys.argv[1]
+    else:
+        path = "/"
 
-    for unit in ["B", "KB", "MB", "GB", "TB", "PB"]:
-        if avail < 1024.0 or unit == "PB":
-            break
-        avail /= 1024.0
+    statvfs = os.statvfs(path)
+    avail = statvfs.f_bavail * statvfs.f_frsize
 
-    print(f" {ICON} {round(avail)}{unit} \n")
-    if bytes < (20 * GB):
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_08_HEX")}")
-    elif bytes < (10 * GB):
-        print(f"#{os.environ.get("BASE16_COLOR_00_HEX")}")
-        print(f"#{os.environ.get("BASE16_COLOR_0A_HEX")}")
+    print(f" {ICON} {fmt_bytes(avail)} \n")
+    if avail < (20 * GiB):
+        print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
+        print(f"#{os.environ.get('BASE16_COLOR_0A_HEX')}")
+    elif avail < (10 * GiB):
+        print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
+        print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
 
 
 if __name__ == "__main__":
