@@ -21,6 +21,6 @@ else
 		do
 			continue
 		done
-		swaymsg unbindsym Shift+Insert
+		swaymsg unbindsym Shift+Insert >/dev/null
 	done
 fi
