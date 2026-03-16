@@ -31,7 +31,7 @@ vim.api.nvim_create_autocmd("PackChanged", {
 		local pkg = args.data
 		local hook = hooks[pkg.spec.name]
 		local success, res
-		if not hook or vim.list_contains(hook.kind, pkg.kind) then
+		if not hook or not vim.list_contains(hook.kind, pkg.kind) then
 			return
 		elseif type(hook.build) == "table" then
 			success, res = pcall(vim.system, hook.build, { cwd = pkg.path })
