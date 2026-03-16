@@ -13,7 +13,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- TODO: Install just hangs when tree-sitter CLI is not installed
 -- See: https://github.com/nvim-treesitter/nvim-treesitter/issues/8010
-if vim.fn.executable("tree-sitter") == 0 then
+if vim.fn.executable("tree-sitter") == 1 then
 	local install = nvim_treesitter.install({
 		"bash",
 		"cmake",
