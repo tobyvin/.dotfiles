@@ -1,11 +1,11 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "fb7b9034285a5658c746faa12eff8c1c9d9b11b1",
+      "rev": "157fa3f37a3be55ceb375274e2f3ea2d7d2f9ef6",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "cc-tweaked-documentation": {
-      "rev": "a7fe7ad",
+      "rev": "29e405b29fe2b05a5e074e9a8f528ee454492c76",
       "src": "https://gitlab.com/carsakiller/cc-tweaked-documentation.git"
     },
     "cellular-automaton.nvim": {
@@ -36,11 +36,11 @@
       "version": ">=0.0.0"
     },
     "gruvbox.nvim": {
-      "rev": "a472496e1a4465a2dd574389dcf6cdb29af9bf1b",
+      "rev": "334d5fd49fc8033f26408425366c66c6390c57bb",
       "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
     "image.nvim": {
-      "rev": "446a8a5",
+      "rev": "da2be65c153ba15a14a342b05591652a6df70d58",
       "src": "https://github.com/3rd/image.nvim",
       "version": ">=0.0.0"
     },
@@ -50,7 +50,7 @@
       "version": ">=0.0.0"
     },
     "luvit-meta": {
-      "rev": "0ea4ff6",
+      "rev": "cc9b2d412d2fbd30b94a70cfc214c2a3be27a0a2",
       "src": "https://github.com/Bilal2453/luvit-meta"
     },
     "magick.nvim": {
@@ -67,11 +67,11 @@
       "src": "https://github.com/disco0/mpv-types-lua"
     },
     "nvim-jdtls": {
-      "rev": "f73731b543f5971e0da9665eb1d7ceffe1fde71f",
+      "rev": "77ccaeb422f8c81b647605da5ddb4a7f725cda90",
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lint": {
-      "rev": "ca6ea12daf0a4d92dc24c5c9ae22a1f0418ade37",
+      "rev": "606b823a57b027502a9ae00978ebf4f5d5158098",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-texlabconfig": {
@@ -79,12 +79,12 @@
       "src": "https://github.com/f3fora/nvim-texlabconfig"
     },
     "nvim-treesitter": {
-      "rev": "8aada0e3940c573e38b417a226b43bc8675f8958",
+      "rev": "ebc3201290b8372df2b3a1c23b71b9f007d972ff",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "baa6b4ec28c8be5e4a96f9b1b6ae9db85ec422f8",
+      "rev": "4e91b5d0394329a229725b021a8ea217099826ef",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
@@ -126,7 +126,7 @@
       "src": "https://github.com/debugloop/telescope-undo.nvim"
     },
     "telescope.nvim": {
-      "rev": "a8c2223ea6b185701090ccb1ebc7f4e41c4c9784",
+      "rev": "5255aa27c422de944791318024167ad5d40aad20",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "tex-lualatex": {
