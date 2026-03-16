@@ -21,7 +21,12 @@ local hooks = {
 	},
 	["nvim-treesitter"] = {
 		kind = { "update" },
-		build = "TSUpdate",
+		build = function()
+			local success, res = pcall(require("nvim-treesitter").update)
+			if success and #vim.api.nvim_list_uis() == 0 then
+				res:wait(300000)
+			end
+		end,
 	},
 }
 
