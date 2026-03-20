@@ -101,8 +101,10 @@ end
 
 vim.keymap.set("n", "-", oil.open, { desc = "Open parent directory" })
 
+local augroup = vim.api.nvim_create_augroup("user.oil", { clear = true })
+
 vim.api.nvim_create_autocmd("User", {
-	group = vim.api.nvim_create_augroup("user.oil", { clear = true }),
+	group = augroup,
 	pattern = "SessionSavePre",
 	callback = function(args)
 		if vim.bo[args.buf].filetype == "oil" then
@@ -114,4 +116,18 @@ vim.api.nvim_create_autocmd("User", {
 		end
 	end,
 	desc = "close oil buffer on session save",
+})
+
+-- HACK: workaround for https://github.com/stevearc/oil.nvim/issues/47
+vim.api.nvim_create_autocmd("FileType", {
+	group = augroup,
+	pattern = "nginx",
+	callback = function(args)
+		local file = string.gsub(args.file, "oil://(.*)", "%1")
+		local stat = vim.uv.fs_stat(file)
+		if stat and stat.type == "directory" then
+			vim.api.nvim_set_option_value("filetype", "oil", { buf = args.buf })
+		end
+	end,
+	desc = "Override ftplugins that override formatoptions",
 })
