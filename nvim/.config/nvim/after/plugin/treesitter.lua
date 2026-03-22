@@ -29,7 +29,6 @@ if vim.fn.executable("tree-sitter") == 1 then
 		"java",
 		"javascript",
 		"jsdoc",
-		"jsonc",
 		"json",
 		"latex",
 		"make",
