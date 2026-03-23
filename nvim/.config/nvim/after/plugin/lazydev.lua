@@ -7,6 +7,7 @@ require("lazydev").setup({
 		{ path = "tex-lualibs", words = { "tex" } },
 		{ path = "mpv-types-lua/types", mods = { "mp", "mp.msg", "mp.options", "mp.assdraw", "mp.utils" } },
 		{ path = "cc-tweaked-documentation", words = { "cc" } },
+		{ path = "/usr/share/swayimg/swayimg.lua", words = { "swayimg" } },
 	},
 	integrations = {
 		lspconfig = false,
