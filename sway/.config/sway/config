@@ -53,21 +53,41 @@ hide_edge_borders --i3 smart
 
 output * bg ~/.local/share/gruvbox/sway.png fill
 
+# Fullscreen
 for_window [shell=".*"] inhibit_idle fullscreen
-for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
+
+# Floating
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="dialog"] floating enable
+for_window [window_type="dialog"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_type="menu"] floating enable
+for_window [window_role="About"] floating enable
+
+# Context menu
 for_window [app_id="^$" title="^$"] floating enable, move position cursor
-for_window [class="^steam$"] floating enable
-for_window [class="^steam$" title="^Steam$"] floating disable
+
+# Steam
+for_window [class="^steam$" title="^(?!Steam$)"] floating enable
 for_window [class="^steam$" title="^Sign in to Steam$"] move to scratchpad
 for_window [class="^steam_app_252950$" title="^Rocket League.*"] floating disable
 for_window [class="^steam_app_311210$"] urgent deny, focus_on_window_activation urgent
-for_window [app_id="firefox" title="Firefox — Sharing Indicator"] kill
+
+# Firefox
+for_window [app_id="firefox" title="About Mozilla Firefox"] floating enable
+for_window [app_id="firefox" title="Library"] floating enable, border pixel 1, sticky enable
+for_window [app_id="firefox" title="Firefox (—|-) Sharing Indicator"] kill
+
+# Misc
+for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
-for_window [app_id="deno" title="^Peek preview$"] resize set width 980px, urgent deny
-for_window [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"] resize set width 980px, urgent deny
 for_window [app_id="authenticator" title="Yubico Authenticator"] floating enable, resize set 980px 980px
 
+# Split previews
+for_window [app_id="deno" title="^Peek preview$"] resize set width 980px, urgent deny
+for_window [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"] resize set width 980px, urgent deny
 no_focus [app_id="deno" title="^Peek preview$"]
 no_focus [app_id="org.pwmt.zathura" title="^/home/tobyv/.local/src/"]
 
@@ -215,8 +235,8 @@ bindsym $mod+plus scratchpad show
 bindsym $mod+f fullscreen
 bindsym $mod+Shift+f floating toggle
 
-bindsym $mod+backslash split horizontal
-bindsym $mod+Shift+backslash split none
+bindsym $mod+b split horizontal
+bindsym $mod+Shift+b split none
 bindsym $mod+e layout toggle tabbed splitv splith
 
 bindsym $mod+r mode resize
