@@ -12,7 +12,6 @@ vim.opt.completeopt = { "menuone", "noselect", "noinsert", "popup", "preinsert" 
 vim.opt.conceallevel = 2
 vim.opt.cursorline = true
 vim.opt.dictionary = { "spell", "/usr/share/dict/words" }
-vim.opt.diffopt = { "internal", "filler", "closeoff", "hiddenoff" }
 vim.opt.equalalways = false
 vim.opt.expandtab = false
 vim.opt.exrc = true
@@ -40,7 +39,7 @@ vim.opt.sessionoptions = { "buffers", "curdir", "folds", "help", "tabpages", "wi
 vim.opt.shiftround = true
 vim.opt.shiftwidth = 0
 vim.opt.shortmess:append("a")
-vim.opt.showbreak = string.rep(" ", 3)
+vim.opt.showbreak = (" "):rep(3)
 vim.opt.signcolumn = "yes:1"
 vim.opt.smartcase = true
 vim.opt.smartindent = true
@@ -87,10 +86,10 @@ vim.api.nvim_create_autocmd("FileType", {
 vim.api.nvim_create_autocmd("BufWritePost", {
 	group = augroup,
 	pattern = ".nvim.lua",
-	callback = function()
+	callback = function(ev)
 		vim.secure.trust({
 			action = "allow",
-			bufnr = vim.api.nvim_get_current_buf(),
+			path = ev.file,
 		})
 	end,
 	desc = "Trust exrc files after write",

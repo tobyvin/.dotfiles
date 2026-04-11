@@ -21,11 +21,6 @@
       "rev": "275865530d753a205740804f1ce163af2322db57",
       "src": "https://github.com/vxpm/ferris.nvim"
     },
-    "fidget.nvim": {
-      "rev": "b61e8af9b8b68ee0ec7da5fb7a8c203aae854f2e",
-      "src": "https://github.com/j-hui/fidget.nvim",
-      "version": ">=0.0.0"
-    },
     "gcode.vim": {
       "rev": "a3bbe029cac56684866246b821a0c87b23bb35bb",
       "src": "https://github.com/wilriker/gcode.vim"

@@ -76,7 +76,6 @@ vim.pack.add({
 	gh("codethread/qmk.nvim"),
 	gh("mfussenegger/nvim-lint"),
 	{ src = gh("lewis6991/gitsigns.nvim"), version = latest },
-	{ src = gh("j-hui/fidget.nvim"), version = latest },
 	gh("nvim-telescope/telescope.nvim"),
 	gh("nvim-telescope/telescope-live-grep-args.nvim"),
 	gh("debugloop/telescope-undo.nvim"),

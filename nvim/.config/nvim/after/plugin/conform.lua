@@ -136,41 +136,20 @@ do
 	end
 end
 
--- TODO: replace with nvim_echo progress once extui handles progress messages
--- local progress = {
--- 	kind = "progress",
--- 	title = "format",
--- 	status = "running",
--- }
---
--- _G.formatexpr = function(...)
--- 	local bufnr = vim.api.nvim_get_current_buf()
--- 	progress.status = "running"
--- 	progress.id = vim.api.nvim_echo({ { ("buffer - %s"):format(bufnr) } }, true, progress)
--- 	local err = conform.formatexpr(...)
--- 	progress.status = err == 1 and "failed" or "success"
--- 	progress.id = vim.api.nvim_echo({
--- 		{ ("buffer - %s"):format(bufnr), err == 1 and "ErrorMsg" or nil },
--- 	}, true, progress)
--- 	return err
--- end
-
 _G.formatexpr = function(...)
-	local bufnr = vim.api.nvim_get_current_buf()
-	local handle = require("fidget.progress").handle.create({
-		title = "Formatting",
-		message = string.format("buffer: %s", bufnr),
-		lsp_client = { name = "conform" },
-	})
+	local progress = {
+		id = "formatexpr.conform",
+		kind = "progress",
+		source = "vim.lsp",
+		title = "Formatting buffer",
+		status = "running",
+	}
 
+	vim.api.nvim_echo({ { "formatting" } }, false, progress)
 	local err = require("conform").formatexpr(...)
-	if err == 1 then
-		handle.message = "Failed"
-	else
-		handle.message = "Completed"
-	end
+	progress.status = err == 1 and "failed" or "success"
+	vim.api.nvim_echo({ { "done" } }, false, progress)
 
-	handle:finish()
 	return err
 end
 
