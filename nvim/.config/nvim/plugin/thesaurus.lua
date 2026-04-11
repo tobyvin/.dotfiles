@@ -1,6 +1,6 @@
 ---@param findstart 0|1
 ---@param base string
----@return string[]?
+---@return string[] | integer | nil
 function _G.thesaurusfunc(findstart, base)
 	if findstart == 1 then
 		local start = vim.fn.searchpos("\\<", "bnW", vim.fn.line("."))[2] - 1
