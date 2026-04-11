@@ -102,6 +102,31 @@ alias info='info --vi-keys'
 alias untar='tar -zxvf'
 alias userctl='systemctl --user'
 
+function osc7_pwd() {
+	emulate -L zsh # also sets localoptions for us
+	setopt extendedglob
+	local LC_ALL=C
+	printf '\e]7;file://%s%s\e\' $HOST ${PWD//(#m)([^@-Za-z&-;_~])/%${(l:2::0:)$(([##16]#MATCH))}}
+}
+
+function osc7_chpwd() {
+	(( ZSH_SUBSHELL )) || osc7_pwd
+}
+
+function osc133a_precmd () {
+	print -Pn "\e]133;A\e\\"
+}
+
+function osc133c_preexec {
+	print -n "\e]133;C\e\\"
+}
+
+function osc133d_precmd {
+	if ! builtin zle; then
+		print -n "\e]133;D\e\\"
+	fi
+}
+
 function title_precmd () {
 	print -Pn -- '\e]2;%n@%m:%~\a'
 }
@@ -112,6 +137,10 @@ function title_preexec () {
 }
 
 autoload -Uz add-zsh-hook
+add-zsh-hook -Uz chpwd osc7_chpwd
+add-zsh-hook -Uz precmd osc133a_precmd
+add-zsh-hook -Uz preexec osc133c_preexec
+add-zsh-hook -Uz precmd osc133d_precmd
 add-zsh-hook -Uz precmd title_precmd
 add-zsh-hook -Uz preexec title_preexec
 
