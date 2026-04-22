@@ -2,7 +2,6 @@
 
 for arg; do
 	case $arg in
-	-t | --term) term='Terminal\s*=\s*true' ;;
 	*.desktop) glob="$arg" ;;
 	*) exe="Exec=.*$arg.*" ;;
 	esac
@@ -15,6 +14,5 @@ printf '%s\n' "$XDG_DATA_HOME:$XDG_DATA_DIRS" | tr : '\n' |
 			printf '%s/applications\n' "$data_dir"
 		fi
 	done |
-	xargs rg --regexp="${exe:-.}" --glob="$glob" --files-with-matches --null \
-		--type-add='desktop:*.desktop' --type=desktop |
-	xargs --null rg --regexp="${term:-.}" --files-with-matches
+	xargs rg --regexp="${exe:-.}" --glob="$glob" --files-with-matches \
+		--type-add='desktop:*.desktop' --type=desktop
