@@ -7,6 +7,7 @@ require("gruvbox").setup({
 		DiffChange = { link = "GruvboxAqua" },
 		DiffText = { link = "GruvboxYellow" },
 		QuickFixLine = { link = "CursorLine" },
+		FloatBorder = { link = "WinSeparator" },
 	},
 })
 

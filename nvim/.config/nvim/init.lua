@@ -63,7 +63,13 @@ vim.opt.wrap = false
 vim.opt.wrapscan = false
 
 vim.cmd.packadd("nvim.undotree")
-require("vim._core.ui2").enable({})
+require("vim._core.ui2").enable({
+	msg = {
+		targets = {
+			progress = "msg",
+		},
+	},
+})
 
 local augroup = vim.api.nvim_create_augroup("user", { clear = true })
 

@@ -1,3 +1,5 @@
+local ms = vim.lsp.protocol.Methods
+
 ---@type vim.lsp.Config
 return {
 	cmd = { "basedpyright-langserver", "--stdio" },
