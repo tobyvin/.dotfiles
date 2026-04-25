@@ -9,7 +9,7 @@ return {
 		".git",
 	},
 	settings = {},
-	server_capabilities = {
-		hoverProvider = false,
-	},
+	on_attach = function(client)
+		client.server_capabilities.hoverProvider = false
+	end
 }

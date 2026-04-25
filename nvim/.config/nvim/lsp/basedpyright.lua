@@ -28,6 +28,16 @@ return {
 			disableOrganizeImports = true,
 		},
 	},
+	handlers = {
+		---@param progress lsp.ProgressParams
+		---@param ctx lsp.HandlerContext
+		[ms.dollar_progress] = function(_, progress, ctx)
+			if progress.value.title == "" then
+				progress.value["title"] = "Diagnosing buffer"
+			end
+			vim.lsp.handlers[ms.dollar_progress](_, progress, ctx)
+		end
+	},
 	on_attach = function(client, bufnr)
 		vim.api.nvim_buf_create_user_command(0, "PyrightOrganizeImports", function()
 			client:exec_cmd({
