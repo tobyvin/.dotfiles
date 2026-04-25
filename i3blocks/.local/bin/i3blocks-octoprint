@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import signal
 import subprocess
 import sys
 import time
@@ -15,6 +16,8 @@ from typing import Any, Optional, Self
 from jeepney import DBusAddress, new_method_call
 from jeepney.io.blocking import open_dbus_connection
 from paho.mqtt.client import Client, MQTTMessage
+
+logger = logging.getLogger(os.path.basename(sys.argv[0]))
 
 DBUS_ADDRESS = DBusAddress(
     "/org/freedesktop/Notifications",
@@ -246,10 +249,13 @@ class Octoprint:
             ensure_ascii=False,
         )
 
+def signal_handler(sig: int, _frame):
+    print(f'Recieved {signal.strsignal(sig)}', file=sys.stderr)
+    sys.exit(1)
 
 def main():
+    signal.signal(signal.SIGINT, signal_handler)
     logging.basicConfig(level=getattr(logging, os.getenv("LOGLEVEL", "WARNING")))
-    logger = logging.getLogger(os.path.basename(sys.argv[0]))
 
     octoprint = Octoprint()
     mqttc = Client(
@@ -364,21 +370,35 @@ def main():
                     timeout *= 2
 
     timeout = 1
-    passwd = subprocess.run(
-        ["pass", "show", "mqtt.tobyvin.dev/tobyv"],
-        capture_output=True,
-        check=True,
-        text=True,
-    ).stdout.strip()
+    while True:
+        try:
+            passwd = subprocess.run(
+                ["pass", "show", "mqtt.tobyvin.dev/tobyv"],
+                capture_output=True,
+                check=True,
+                text=True,
+            ).stdout.strip()
+            break
+        except subprocess.CalledProcessError as e:
+            logger.error(f"Failed to get MQTT password: {str.strip(e.stderr)}")
+            logger.error(f"Retrying in {timeout}s...")
+            time.sleep(timeout)
+            if timeout < 32:
+                timeout *= 2
+            logger.error("Retrying...")
+
+
     mqttc.username_pw_set(username="tobyv", password=passwd)
     mqttc.reconnect_delay_set()
     mqttc.tls_set()
+
+    timeout = 1
     while True:
         try:
             mqttc.connect(host="mqtt.tobyvin.dev", port=8883)
             break
-        except Exception as err:
-            logger.error(f"Failed to connect to MQTT broker: {err}")
+        except Exception as e:
+            logger.error(f"Failed to connect to MQTT broker: {e}")
             time.sleep(timeout)
             if timeout < 32:
                 timeout *= 2
