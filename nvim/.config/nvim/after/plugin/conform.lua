@@ -136,21 +136,40 @@ do
 	end
 end
 
-_G.formatexpr = function(...)
-	local progress = {
-		id = "formatexpr.conform",
-		kind = "progress",
-		source = "vim.lsp",
-		title = "Formatting buffer",
-		status = "running",
-	}
+local augroup = vim.api.nvim_create_augroup("user.conform", { clear = true })
 
-	vim.api.nvim_echo({ { "formatting" } }, false, progress)
-	local err = require("conform").formatexpr(...)
-	progress.status = err == 1 and "failed" or "success"
-	vim.api.nvim_echo({ { "done" } }, false, progress)
+vim.api.nvim_create_autocmd("User", {
+	group = augroup,
+	pattern = "ConformFormatPre",
+	callback = function(ev)
+		vim.schedule(function()
+			vim.api.nvim_echo({ { ev.data.formatter.name } }, false, {
+				id = ("formatexpr.conform.%s"):format(ev.data.formatter.name),
+				kind = "progress",
+				source = "vim.formatexpr",
+				title = "Formatting",
+				status = "running",
+			})
+		end)
+	end,
+	desc = "Conform progress message",
+})
 
-	return err
-end
+vim.api.nvim_create_autocmd("User", {
+	group = augroup,
+	pattern = "ConformFormatPost",
+	callback = function(ev)
+		vim.schedule(function()
+			vim.api.nvim_echo({ { "done" } }, false, {
+				id = ("formatexpr.conform.%s"):format(ev.data.formatter.name),
+				kind = "progress",
+				source = "vim.formatexpr",
+				title = "Formatting",
+				status = ev.data.err == 1 and "failed" or "success",
+			})
+		end)
+	end,
+	desc = "Conform progress message",
+})
 
-vim.o.formatexpr = "v:lua._G.formatexpr()"
+vim.o.formatexpr = "v:lua.require'conform'.formatexpr()"
