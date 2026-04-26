@@ -249,9 +249,11 @@ class Octoprint:
             ensure_ascii=False,
         )
 
+
 def signal_handler(sig: int, _frame):
-    print(f'Recieved {signal.strsignal(sig)}', file=sys.stderr)
+    print(f"Recieved {signal.strsignal(sig)}", file=sys.stderr)
     sys.exit(1)
+
 
 def main():
     signal.signal(signal.SIGINT, signal_handler)
@@ -386,7 +388,6 @@ def main():
             if timeout < 32:
                 timeout *= 2
             logger.error("Retrying...")
-
 
     mqttc.username_pw_set(username="tobyv", password=passwd)
     mqttc.reconnect_delay_set()
