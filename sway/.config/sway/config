@@ -133,7 +133,7 @@ bindsym shift+XF86Open exec wmenu-run
 bindsym $mod+space exec $launcher
 bindsym $mod+shift+space exec wmenu-run
 
-bindsym $mod+c exec slurp | grim -g - - | tesseract - - | wl-copy
+bindsym $mod+c exec wshot | tesseract - - | wl-copy
 
 bindsym $mod+p exec passmenu | $menu | xargs -r pass show | head -n1 | wl-copy --paste-once
 bindsym $mod+Shift+p exec passmenu | $menu | xargs -r pass show | head -n1 | wtype -

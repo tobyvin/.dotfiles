@@ -2,34 +2,39 @@
 
 # shellcheck disable=2046
 outputs=$(swaymsg -t get_outputs | jq -r '.[].name')
-image=$(mktemp --suffix=.png)
+if [ -t 1 ]; then
+	tmpfile=$(mktemp --suffix=.png)
+fi
 
 cleanup() {
-	rm -f "$image"
+	if [ -n "$tmpfile" ]; then
+		rm -f "$tmpfile"
+	fi
 	for out in $outputs; do
-		swaymsg --quiet [app_id="swayimg_$out"] kill
+		swaymsg -q [app_id="swayimg_$out"] kill
 	done
 }
 
 trap "trap - SIGTERM && cleanup" INT TERM EXIT
 
 for out in $outputs; do
-	swaymsg assign [app_id="swayimg_$out"] output "$out"
-	swaymsg exec -- "grim -o'$out' - | swayimg --class='swayimg_$out' --scale=real --fullscreen -"
+	swaymsg -q assign [app_id="swayimg_$out"] output "$out"
+	sleep 0.25
+	swaymsg -q exec -- "grim -o'$out' - | swayimg --class='swayimg_$out' --fullscreen -e \"swayimg.viewer.set_default_scale('real') swayimg.text.hide()\" -"
 done
 
-if ! slurp | grim -g - "$image" 2>/dev/null; then
+if ! slurp | grim -g - "${tmpfile:--}" 2>/dev/null; then
 	exit 1
 fi
 
-wl-copy --type image/png <"$image"
-
-for out in $outputs; do
-	swaymsg --quiet [app_id="swayimg_$out"] kill
-done
-
-notify-send 'Screenshot captured' \
-	"Screenshot copied to clipboard" \
-	--app-name=wshot \
-	--hint=string:image-path:"file://$image" \
-	--wait
+if [ -n "$tmpfile" ]; then
+	wl-copy --type image/png <"$tmpfile"
+	for out in $outputs; do
+		swaymsg -q [app_id="swayimg_$out"] kill
+	done
+	notify-send 'Screenshot captured' \
+		"Screenshot copied to clipboard" \
+		--app-name=wshot \
+		--hint=string:image-path:"file://$tmpfile" \
+		--wait
+fi
