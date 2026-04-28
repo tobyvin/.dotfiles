@@ -1,14 +1,17 @@
 #!/bin/sh
 
-# shellcheck disable=2046
 outputs=$(swaymsg -t get_outputs | jq -r '.[].name')
-if [ -t 1 ]; then
-	tmpfile=$(mktemp --suffix=.png)
+clipboard=false
+if [ -n "$1" ]; then
+	output="$1"
+else
+	output=$(mktemp --suffix=.png)
+	clipboard=true
 fi
 
 cleanup() {
-	if [ -n "$tmpfile" ]; then
-		rm -f "$tmpfile"
+	if $clipboard; then
+		rm -f "$output"
 	fi
 	for out in $outputs; do
 		swaymsg -q [app_id="swayimg_$out"] kill
@@ -23,18 +26,18 @@ for out in $outputs; do
 	swaymsg -q exec -- "grim -o'$out' - | swayimg --class='swayimg_$out' --fullscreen -e \"swayimg.viewer.set_default_scale('real') swayimg.text.hide()\" -"
 done
 
-if ! slurp | grim -g - "${tmpfile:--}" 2>/dev/null; then
+if ! slurp | grim -g - "${output:--}" 2>/dev/null; then
 	exit 1
 fi
 
-if [ -n "$tmpfile" ]; then
-	wl-copy --type image/png <"$tmpfile"
+if $clipboard; then
+	wl-copy --type image/png <"$output"
 	for out in $outputs; do
 		swaymsg -q [app_id="swayimg_$out"] kill
 	done
 	notify-send 'Screenshot captured' \
 		"Screenshot copied to clipboard" \
 		--app-name=wshot \
-		--hint=string:image-path:"file://$tmpfile" \
+		--hint=string:image-path:"file://$output" \
 		--wait
 fi
