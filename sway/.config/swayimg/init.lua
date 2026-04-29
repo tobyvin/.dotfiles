@@ -20,6 +20,20 @@ local zoom = function(dir)
 	end
 end
 
+local info_shown = false
+local toggle_info = function()
+	if info_shown then
+		swayimg.text.set_timeout(2)
+		swayimg.text.hide()
+	else
+		swayimg.text.set_timeout(0)
+		swayimg.text.show()
+	end
+	info_shown = not info_shown
+end
+
+swayimg.text.hide()
+swayimg.text.set_timeout(2)
 swayimg.text.set_foreground(0xffffffff)
 swayimg.text.set_background(0xee000000)
 swayimg.viewer.set_window_background(0x00000000)
@@ -35,6 +49,8 @@ swayimg.viewer.on_key("l", mv(-0.05, 0))
 swayimg.viewer.on_key("h", mv(0.05, 0))
 swayimg.viewer.on_key("j", mv(0, -0.05))
 swayimg.viewer.on_key("k", mv(0, 0.05))
+swayimg.viewer.on_key("i", swayimg.text.show)
+swayimg.viewer.on_key("Shift+i", toggle_info)
 swayimg.viewer.on_key("Ctrl+l", swayimg.viewer.reset)
 swayimg.viewer.on_mouse("ScrollUp", zoom(1))
 swayimg.viewer.on_mouse("ScrollDown", zoom(-1))
