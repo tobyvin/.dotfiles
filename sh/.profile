@@ -20,7 +20,11 @@ prepend_path() {
 #
 # See: https://wiki.archlinux.org/title/Environment_variables#Per_Wayland_session
 for generator in /usr/lib/systemd/user-environment-generators/*; do
-	export $($generator | xargs)
+	set -a
+	. /dev/fd/0 <<-EOF
+		$($generator)
+	EOF
+	set +a
 done
 
 # Load profiles from $XDG_CONFIG_HOME/profile.d
