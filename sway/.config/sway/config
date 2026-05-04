@@ -84,7 +84,7 @@ for_window [app_id="pavucontrol" title="^Volume Control$"] floating enable
 for_window [app_id="zoom" title="^(About|Settings)$"] floating enable
 for_window [app_id="org.gnome.Calculator"] floating enable
 for_window [app_id="authenticator" title="Yubico Authenticator"] floating enable, resize set 980px 980px
-for_window [app_id="mpv-printcam"] floating enable, resize set 400px 300px, move position 5px 5px
+for_window [app_id="mpv-printcam"] floating enable, sticky enable, resize set 400px 300px, move position 5px 5px
 
 # Split previews
 for_window [app_id="deno" title="^Peek preview$"] resize set width 980px, urgent deny
