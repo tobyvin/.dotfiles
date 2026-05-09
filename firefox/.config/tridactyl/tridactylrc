@@ -63,6 +63,8 @@ autocmd DocStart mail.google.com mode ignore
 autocmd DocStart discordapp.com mode ignore
 autocmd DocStart play.rust-lang.org mode ignore
 autocmd DocStart foundry.tobyvin.dev mode ignore
+autocmd DocStart immich.tobyvin.dev mode ignore
+autocmd DocStart octoprint.tobyvin.dev mode ignore
 autocmd HistoryState https://jellyfin.tobyvin.dev/web/#!/video mode video
 
 fixamo_quiet

@@ -3,6 +3,6 @@ Type=Application
 Name=PrintCam
 Comment=Web stream of 3D printer camera
 Icon=mpv
-Exec=mpv --terminal=no --wayland-app-id=mpv-printcam --autofit-larger=400 https://octoprint.tobyvin.dev/stream/1/
+Exec=printcam
 Terminal=false
 Categories=AudioVideo;Audio;Video;Player;TV;

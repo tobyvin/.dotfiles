@@ -1,0 +1,4 @@
+#!/bin/sh
+
+mpv --load-scripts=no --terminal=no --wayland-app-id=mpv-printcam --autofit-larger=400 "$@" \
+	https://octoprint.tobyvin.dev/stream/1/

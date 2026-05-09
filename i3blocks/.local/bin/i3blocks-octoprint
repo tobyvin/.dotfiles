@@ -151,8 +151,8 @@ class Progress:
                 return f"{timedelta(seconds=r)} ({o})"
 
     def notify(self) -> int | None:
-        notify(
-            "3D Print: status",
+        return notify(
+            "3D Printer: status",
             "\n".join(
                 [
                     f"Name: {self.trunc_name}",
@@ -413,20 +413,24 @@ def main():
     )
     mqttc.loop_start()
 
+    proc: Popen | None = None
     for line in sys.stdin:
         match json.loads(line):
             case {"button": 1}:
+                print(f"action: {octoprint.progress.notify()}", file=sys.stderr)
+            case {"button": 2}:
                 Popen(
-                    ["xdg-open", "https://octoprint.tobyvin.dev"],
+                    ["swaymsg", "exec", "xdg-open", "https://octoprint.tobyvin.dev"],
                     stdin=DEVNULL,
                     stdout=DEVNULL,
                     stderr=DEVNULL,
                 )
-            case {"button": 2}:
-                octoprint.progress.notify()
+            case {"button": 3} if proc and proc.poll() is None:
+                proc.terminate()
+                proc = None
             case {"button": 3}:
-                Popen(
-                    ["mpv", "https://octoprint.tobyvin.dev/stream/1/"],
+                proc = subprocess.Popen(
+                    ["printcam"],
                     stdin=DEVNULL,
                     stdout=DEVNULL,
                     stderr=DEVNULL,
