@@ -1,39 +1,62 @@
 #!/usr/bin/env python3
 
 from enum import Enum
+import json
 import os
 import re
 import subprocess
 import sys
+import time
+from typing import Any, Self
 
 import requests
 
 
 class NFWeather(Enum):
-    Clear = ("", "")
-    Cloudy = ("", "")
-    PartlyCloudy = ("", "")
-    Fog = ("", "")
-    Hail = ("", "")
-    Haze = ("", "")
-    Lightning = ("", "")
-    Rain = ("", "")
-    Showers = ("", "")
-    Sleet = ("", "")
-    Snow = ("", "")
-    Sprinkle = ("", "")
-    Thunderstorm = ("", "")
-    Windy = ("", "")
-    CloudyGusts = ("", "")
-    CloudyHigh = ("", "")
-    CloudyWindy = ("", "")
-    LightWind = ("", "")
-    RainMix = ("", "")
-    RainWind = ("", "")
-    SleetStorm = ("", "")
-    SnowThunderstorm = ("", "")
-    SnowWind = ("", "")
-    StormShowers = ("", "")
+    def __init__(self, day, night):
+        self.is_day: bool = True
+        self.day = day
+        self.night = night
+
+    Clear = "", ""
+    Cloudy = "", ""
+    PartlyCloudy = "", ""
+    Fog = "", ""
+    Hail = "", ""
+    Haze = "", ""
+    Lightning = "", ""
+    Rain = "", ""
+    Showers = "", ""
+    Sleet = "", ""
+    Snow = "", ""
+    Sprinkle = "", ""
+    Thunderstorm = "", ""
+    Windy = "", ""
+    CloudyGusts = "", ""
+    CloudyHigh = "", ""
+    CloudyWindy = "", ""
+    LightWind = "", ""
+    RainMix = "", ""
+    RainWind = "", ""
+    SleetStorm = "", ""
+    SnowThunderstorm = "", ""
+    SnowWind = "", ""
+    StormShowers = "", ""
+
+    @property
+    def icon(self) -> str:
+        if self.is_day:
+            return self.day
+        else:
+            return self.night
+
+    @property
+    def desc(self) -> str:
+        return re.sub("([A-Z][a-z]+)(?=[A-Z])", r"\1 ", self.name)
+
+    def version(self, is_day: bool) -> Self:
+        self.is_day = is_day
+        return self
 
 
 WMO_CODES = {
@@ -69,47 +92,70 @@ WMO_CODES = {
 
 
 class Weather:
-    exception: Exception | None
-    temp: str
-    code: NFWeather
-    icon: str
-    unit: str
+    data: dict[str, Any] | None = None
+    exception: Exception | None = None
+    code: NFWeather = NFWeather.Clear
+    temp: float | None = None
+    unit: str | None = None
 
-    def __init__(self, data, exception=None):
+    def __init__(self, data: dict[str, Any], exception: Exception | None = None):
+        self.data = data
         self.exception = exception
-        if exception is not None:
-            self.temp = "x"
-            self.code = NFWeather.Clear
-            self.icon = NFWeather.Clear.value[0]
-        else:
-            self.temp = "{}{}".format(
-                data["current"]["temperature_2m"],
-                data["current_units"]["temperature_2m"],
-            )
-            self.code = WMO_CODES[data["current"]["weather_code"]]
-            self.icon = self.code.value[data["current"]["is_day"]]
+
+        match self.data:
+            case {
+                "current": {
+                    "temperature_2m": float(temp),
+                    "weather_code": int(code),
+                    "is_day": int(is_day),
+                },
+                "current_units": {"temperature_2m": str(unit)},
+            }:
+                self.code = WMO_CODES[code].version(bool(is_day))
+                self.temp = temp
+                self.unit = unit
 
     def print(self):
-        print(" {} {} ".format(self.icon, self.temp))
-        if self.temp == "x":
-            print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
-            print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
+        if self.data:
+            output = {
+                "full_text": " {} {}{} ".format(self.code.icon, self.temp, self.unit),
+                "data": self.data,
+            }
+        else:
+            output = {"full_text": " {} x ".format(self.code.icon)}
+        if self.exception:
+            output["color"] = f"#{os.environ.get('BASE16_COLOR_00_HEX')}"
+            output["background"] = f"#{os.environ.get('BASE16_COLOR_08_HEX')}"
+
+        print(json.dumps(output, ensure_ascii=False), flush=True)
 
     def notify(self):
-        title = "Current Weather"
-        desc = " ".join(re.findall("[A-Z][^A-Z]*", self.code.name))
+        body = []
+        if self.data:
+            body.extend(
+                [
+                    "Weather: {} {}".format(self.code.icon, self.code.desc),
+                    "Temperature: {}{}".format(self.temp, self.unit),
+                ]
+            )
         if self.exception:
-            body = "Error: {}".format(self.exception)
-        else:
-            body = "Weather: {} {}\nTemperature: {}".format(self.icon, desc, self.temp)
-        subprocess.run(["notify-send", title, body])
+            body.append("Error: {}".format(self.exception))
+        subprocess.run(["notify-send", "Current Weather", "\n".join(body)])
 
 
 BASE_URL = "https://api.open-meteo.com/v1/forecast?current=temperature_2m,weather_code,is_day&timezone=auto&forecast_days=1&latitude={latitude}&longitude={longitude}"
 
 
 def get_weather():
-    (lat, long) = requests.get("https://ipinfo.io").json().get("loc", ",").split(",", 1)
+    timeout = 1
+    while True:
+        resp = requests.get("https://ipinfo.io")
+        if resp.text:
+            break
+        time.sleep(timeout)
+        if timeout < 32:
+            timeout *= 2
+    (lat, long) = resp.json().get("loc", ",").split(",", 1)
     return requests.get(BASE_URL.format(latitude=lat, longitude=long)).json()
 
 
@@ -119,7 +165,8 @@ def main():
     except Exception as e:
         e.add_note("Failed to get weather API")
         print(e, file=sys.stderr)
-        weather = Weather({}, e)
+        weather = Weather(json.loads(os.environ.get("data", "{}")), e)
+        raise e
 
     weather.print()
 

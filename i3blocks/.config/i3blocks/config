@@ -24,6 +24,7 @@ format=json
 [weather]
 command=i3blocks-weather
 interval=600
+format=json
 
 [disk]
 command=i3blocks-disk
