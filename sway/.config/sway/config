@@ -145,6 +145,7 @@ bindsym $mod+Shift+y exec yubikey-oath-dmenu --notify --type --menu-cmd "$menu -
 
 bindsym $mod+t exec twitch-live | column -t -s'	' | $menu -l 10 | cut -f1 | xargs -r swaymsg -- exec streamlink-twitch-gui --launch
 bindsym $mod+m exec sway-mpv | $menu -l 10 | sway-mpv
+bindsym $mod+Shift+m exec wl-paste | sway-mpv
 
 bindsym --locked {
 	XF86MonBrightnessUp exec brightnessctl set +5%
