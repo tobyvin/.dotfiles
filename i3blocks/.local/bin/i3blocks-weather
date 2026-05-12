@@ -80,13 +80,14 @@ class Weather:
         if exception is not None:
             self.temp = "x"
             self.code = NFWeather.Clear
+            self.icon = NFWeather.Clear.value[0]
         else:
             self.temp = "{}{}".format(
                 data["current"]["temperature_2m"],
                 data["current_units"]["temperature_2m"],
             )
             self.code = WMO_CODES[data["current"]["weather_code"]]
-        self.icon = self.code.value[data["current"]["is_day"]]
+            self.icon = self.code.value[data["current"]["is_day"]]
 
     def print(self):
         print(" {} {} ".format(self.icon, self.temp))
