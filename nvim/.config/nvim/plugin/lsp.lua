@@ -15,6 +15,7 @@ vim.lsp.enable({
 	"lua_ls",
 	"mesonlsp",
 	"ocamllsp",
+	"openscad_lsp",
 	"perlnavigator",
 	"ruff",
 	"rust_analyzer",
