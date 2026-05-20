@@ -15,6 +15,7 @@ for arg; do
 	) >/dev/null 2>&1; then
 		executer="terminal"
 	fi
+	arg=$(realpath "$arg")
 	case $arg in
 	"file://$host/"*) arg=file://localhost/"${arg#"file://$host/"}" ;;
 	file:///*) arg=file://localhost/"${arg#"file:///"}" ;;
