@@ -11,11 +11,13 @@ fi
 for arg; do
 	if (
 		command -v handlr && handlr mime --json "$arg" | jq -r '.[] | .mime' |
-			xargs handlr get | xargs desktopfiles -t
+			xargs handlr get | xargs desktopfiles Terminal=true
 	) >/dev/null 2>&1; then
 		executer="terminal"
 	fi
-	arg=$(realpath "$arg")
+	if rpath=$(realpath "$arg"); then
+		arg="$rpath"
+	fi
 	case $arg in
 	"file://$host/"*) arg=file://localhost/"${arg#"file://$host/"}" ;;
 	file:///*) arg=file://localhost/"${arg#"file:///"}" ;;

@@ -18,7 +18,7 @@ cleanup() {
 	done
 }
 
-trap "trap - SIGTERM && cleanup" INT TERM EXIT
+trap "trap - TERM && cleanup" INT TERM EXIT
 
 for out in $outputs; do
 	swaymsg -q -- assign [app_id="swayimg_$out"] output "$out"\; \
