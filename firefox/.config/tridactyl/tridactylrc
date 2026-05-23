@@ -9,6 +9,7 @@ command fixamo_quiet jsb tri.excmds.setpref("privacy.resistFingerprinting.block_
 command fixamo js tri.excmds.setpref("privacy.resistFingerprinting.block_mozAddonManager", "true").then(tri.excmds.setpref("extensions.webextensions.restrictedDomains", '""').then(tri.excmds.fillcmdline_tmp(3000, "Permissions added to user.js. Please restart Firefox to make them take affect.")))
 command bdelete tabclose
 command bd tabclose
+command mkshortcut js tri.excmds.exclaim_quiet(`echo '[Desktop Entry]\nType=Link\nIcon=text-html\nName=${document.title}\nURL=${document.location.href}\n' >"$HOME/Desktop/${document.title}.desktop"`)
 
 set profiledir default
 set homepages [ "https://miniflux.tobyvin.dev/", "https://tobyvin.dev/"]
