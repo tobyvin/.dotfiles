@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "f5df9e70403b5d4c0642702a64534f04f3d71d03",
+      "rev": "19936230448bfb3dfd4314070e8bc499ceb55928",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "cc-tweaked-documentation": {
@@ -31,7 +31,7 @@
       "version": ">=0.0.0"
     },
     "gruvbox.nvim": {
-      "rev": "334d5fd49fc8033f26408425366c66c6390c57bb",
+      "rev": "154eb5ff5b96d0641307113fa385eaf0d36d9796",
       "src": "https://github.com/ellisonleao/gruvbox.nvim"
     },
     "image.nvim": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/kiyoon/magick.nvim"
     },
     "mason.nvim": {
-      "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
+      "rev": "bb639d4bf385a4d89f478b83af4d770be05ab7eb",
       "src": "https://github.com/williamboman/mason.nvim",
       "version": ">=0.0.0"
     },
@@ -62,11 +62,11 @@
       "src": "https://github.com/disco0/mpv-types-lua"
     },
     "nvim-jdtls": {
-      "rev": "77ccaeb422f8c81b647605da5ddb4a7f725cda90",
+      "rev": "6e9d953f0b82bccdb834cfde0e893f3119c22592",
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lint": {
-      "rev": "eab58b48eb11d7745c11c505e0f3057165902461",
+      "rev": "d48f3a76189d03b2239f6df1b2f7e3fa8353743b",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-texlabconfig": {
@@ -84,7 +84,7 @@
       "version": "'main'"
     },
     "oil.nvim": {
-      "rev": "975a77cce3c8cb742bc1b3629f4328f5ca977dad",
+      "rev": "17c0a8faaf48298a0c0cfb0d757c0eaee4ff7a32",
       "src": "https://github.com/stevearc/oil.nvim",
       "version": ">=0.0.0"
     },
@@ -109,7 +109,7 @@
       "src": "https://github.com/codethread/qmk.nvim"
     },
     "telescope-fzf-native.nvim": {
-      "rev": "6fea601bd2b694c6f2ae08a6c6fab14930c60e2c",
+      "rev": "b25b749b9db64d375d782094e2b9dce53ad53a40",
       "src": "https://github.com/nvim-telescope/telescope-fzf-native.nvim"
     },
     "telescope-live-grep-args.nvim": {
@@ -121,7 +121,7 @@
       "src": "https://github.com/debugloop/telescope-undo.nvim"
     },
     "telescope.nvim": {
-      "rev": "f7c673b8e46e8f233ff581d3624a517d33a7e264",
+      "rev": "7d324792b7943e4aa16ad007212e6acc6f9fe335",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "tex-lualatex": {
