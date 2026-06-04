@@ -1,5 +1,5 @@
 #!/bin/sh
-# shellcheck disable=SC2011,SC2012,SC2016
+# shellcheck disable=SC2012
 
 if [ ! -t 0 ]; then
 	set -- "$@" "$(cat)"
@@ -18,5 +18,5 @@ elif [ $# -eq 0 ]; then
 	exit 0
 fi
 
-# shellcheck disable=SC2068
-swaymsg exec -- mpv --msg-level=all=no "${1%: *}"
+url="$(printf '%s\n' "$1" | grep -Po '^.+?(?=\: )')"
+swaymsg exec -- mpv --msg-level=all=no "$url"
