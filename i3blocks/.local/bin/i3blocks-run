@@ -1,0 +1,3 @@
+#!/bin/sh
+
+SCRIPT_DIR=~/.local/lib/i3blocks i3blocks | sed 's/"full_text":" /"full_text":"<span font='\''monospace'\''> <\/span>/g'
