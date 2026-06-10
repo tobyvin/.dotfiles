@@ -33,4 +33,4 @@ for arg; do
 	cat "$tmp2" >"$tmp"
 done
 
-<"$tmp2" xargs -l -0
+<"$tmp2" xargs -l -0 printf '%q\n'
