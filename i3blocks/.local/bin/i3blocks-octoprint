@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import pprint
 import signal
 import subprocess
 import sys
@@ -125,7 +126,7 @@ class Progress:
                 },
                 "job": {"file": {"name": n}},
             }:
-                return cls(float(c), e, r, o, n)
+                return cls(float(c or 0), e, r, o, n)
             case _:
                 return cls()
 
