@@ -1,5 +1,3 @@
-markup=pango
-
 [title]
 command=i3blocks-title
 interval=persist

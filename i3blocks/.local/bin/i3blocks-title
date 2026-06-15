@@ -1,8 +1,8 @@
 #!/bin/sh
 
 into_block='{ 
-	"full_text": ((.name[0:50] // "") | gsub("&";"&amp;")) , 
-	"short_text": ([.app_id, .window_title, .name] | map(select(. != null and . != "")) | (first // "") | .[0:25] | gsub("&";"&amp;")),
+	"full_text": (.name[0:50] // ""), 
+	"short_text": ([.app_id, .window_title, .name] | map(select(. != null and . != "")) | (first // "") | .[0:25]),
 }'
 
 swaymsg -t get_tree | jq -c '.. | select(.focused? == true and .type == "con") | '"$into_block"

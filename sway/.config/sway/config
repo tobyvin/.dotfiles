@@ -257,7 +257,7 @@ mode resize {
 }
 
 bar {
-	status_command i3blocks-run
+	status_command SCRIPT_DIR=~/.local/lib/i3blocks i3blocks
 	height 24
 	font pango:monospace 12
 	position top
