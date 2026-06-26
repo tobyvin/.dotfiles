@@ -64,7 +64,8 @@ backup:
   onlyConstructive: false
 restore:
   path: "<home>/.local/state/ludusavi"
-  ignoredGames: []
+  ignoredGames:
+    - "Haste: Broken Worlds"
   toggledPaths: {}
   toggledRegistry: {}
   sort:
@@ -72,7 +73,7 @@ restore:
     reversed: false
   reverseRedirects: true
 scan:
-  showDeselectedGames: true
+  showDeselectedGames: false
   showUnchangedGames: true
   showUnscannedGames: true
 cloud:
