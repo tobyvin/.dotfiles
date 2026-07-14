@@ -8,25 +8,37 @@ local server_capability_map = vim.lsp.protocol._request_name_to_server_capabilit
 --- Create a in-process LSP server that can be used as `cmd` with |vim.lsp.start|
 --- Example:
 --- ```lua
+--- local my_server = vim.lsp.server({
+--- 	handlers = {
+--- 		---@param params lsp.HoverParams
+--- 		["textDocument/hover"] = function(_, params, callback)
+--- 			local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
+--- 			local lnum = params.position.line
+--- 			local col = params.position.character
+--- 			-- use bufnr/lnum/col to provide actual text
+--- 			callback({
+--- 				contents = {
+--- 					kind = "plaintext",
+--- 					value = "just some dummy text",
+--- 				},
+--- 			})
+--- 		end,
+--- 	},
+--- })
+---
+--- -- Define a config for the server, then enable it...
+--- vim.lsp.config["my-server"] = {
+--- 	cmd = my_server,
+--- 	filetypes = { "lua" },
+--- 	root_markers = { ".git" },
+--- }
+---
+--- vim.lsp.enable("my-server")
+---
+--- -- ..or call start() directly
 --- vim.lsp.start({
----   name = "my-in-process-server",
----   cmd = vim.lsp.server({
----     handlers = {
----       ---@param params lsp.HoverParams
----       ["textDocument/hover"] = function(_, params, callback)
----         local bufnr = vim.uri_to_bufnr(params.textDocument.uri)
----         local lnum = params.position.line
----         local col = params.position.character
----         -- use bufnr/lnum/col to provide actual text
----         callback({
----           contents = {
----             kind = "plaintext",
----             value = "just some dummy text",
----           }
----         })
----       end,
----     },
----   }),
+--- 	name = "my-server",
+--- 	cmd = my_server,
 --- })
 --- ```
 ---
@@ -34,7 +46,17 @@ local server_capability_map = vim.lsp.protocol._request_name_to_server_capabilit
 ---
 --- @param opts nil|lsp.server.opts
 function vim.lsp.server(opts)
-	opts = opts or {}
+	opts = vim.tbl_deep_extend("keep", opts or {}, {
+		on_request = function(_, _) end,
+		on_notify = function(_, _) end,
+		handlers = {},
+	}) --[[@as lsp.server.opts]]
+
+	vim.validate("opts", opts, "table")
+	vim.validate("opts.on_request", opts.on_request, "function")
+	vim.validate("opts.on_notify", opts.on_notify, "function")
+	vim.validate("opts.handlers", opts.handlers, "table")
+
 	local on_request = opts.on_request or function(_, _) end
 	local on_notify = opts.on_notify or function(_, _) end
 	local handlers = opts.handlers or {}
