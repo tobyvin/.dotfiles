@@ -1,4 +1,4 @@
-# tobyvin's [.dotfiles]
+# [tobyvin's .dotfiles]
 
 ## Install
 
@@ -6,36 +6,36 @@
 git clone https://git.tobyvin.dev/.dotfiles && ./.dotfiles/install.sh
 ```
 
-## Getting started
+## Getting Started
 
 The configuration files are managed using GNU [stow] and the dotfiles can be
 installed solely by running `stow */` from the repository's root.
 
-### Install script
+### Install Script
 
-A [install.sh] helper script is provided that will stow packages and run package
+AN [install.sh] helper script is provided that will stow packages and run package
 specific install scripts. It can be run with `./install.sh [package ..]`,
 defaulting to operating on all packages if none are specified.
 
-It stows the packages using the `-R` (restow) option, which will remove any
+It stows the packages using the `-R/--restow` option, which will remove any
 broken or missing symlinks belonging to the repository. Normally this spams the
 output with `UNLINK` and `LINK` for every file in every package, so it's piped
 through a small awk script to filter the output to only non-reverted actions.
 
-#### Package specific install scripts
+#### Package Specific Install Scripts
 
 The install script will run any package specific install scripts that exist in
 the root of a package directory, e.g. `./<pkgname>/install.sh`.
 
-Example usecases:
+Example use cases:
 
-- Creating non-existent directories
+- Creating nonexistent directories
 - Enabling systemd user services
 - Fixing file permissions
 - Running one-time setup commands
 - etc.
 
-##### Example package install script
+##### Example Package Install Script
 
 ```sh
 #!/bin/sh
@@ -60,7 +60,6 @@ More examples: [zsh], [pass], and [nvim]
 I host this repository (and many others) on my local [cgit] instance, but it is
 also mirrored to both [SourceHut] and [GitHub].
 
-[.dotfiles]: https://git.tobyvin.dev/.dotfiles
 [cgit]: https://git.tobyvin.dev
 [github]: https://github.com/tobyvin/.dotfiles
 [install.sh]: ./install.sh
@@ -68,4 +67,5 @@ also mirrored to both [SourceHut] and [GitHub].
 [pass]: ./pass/install.sh
 [sourcehut]: https://git.sr.ht/~tobyvin/.dotfiles
 [stow]: https://www.gnu.org/software/stow/
+[tobyvin's .dotfiles]: https://git.tobyvin.dev/.dotfiles
 [zsh]: ./zsh/install.sh
