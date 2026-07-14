@@ -10,6 +10,7 @@ vim.lsp.enable({
 	"cssls",
 	"dockerls",
 	"gopls",
+	"harper_ls",
 	"html",
 	"lemminx",
 	"lua_ls",
