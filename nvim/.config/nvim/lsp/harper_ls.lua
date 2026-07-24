@@ -15,8 +15,8 @@ return {
 			},
 		},
 	},
-	on_attach = function(client, _)
-		local ns = vim.lsp.diagnostic.get_namespace(client.id)
-		vim.diagnostic.config({ virtual_lines = true }, ns)
-	end,
+	-- on_attach = function(client, _)
+	-- 	local ns = vim.lsp.diagnostic.get_namespace(client.id)
+	-- 	vim.diagnostic.config({ virtual_lines = true }, ns)
+	-- end,
 }
