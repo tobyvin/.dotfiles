@@ -1,7 +1,7 @@
 {
   "plugins": {
     "SchemaStore.nvim": {
-      "rev": "19936230448bfb3dfd4314070e8bc499ceb55928",
+      "rev": "19e40cef03a380bfb578793a08222826118664dd",
       "src": "https://github.com/b0o/SchemaStore.nvim"
     },
     "cc-tweaked-documentation": {
@@ -53,7 +53,7 @@
       "src": "https://github.com/kiyoon/magick.nvim"
     },
     "mason.nvim": {
-      "rev": "bb639d4bf385a4d89f478b83af4d770be05ab7eb",
+      "rev": "2a6940af80375532e5e9e7c1f2fc6319a1b7a69d",
       "src": "https://github.com/williamboman/mason.nvim",
       "version": ">=0.0.0"
     },
@@ -66,7 +66,7 @@
       "src": "https://github.com/mfussenegger/nvim-jdtls"
     },
     "nvim-lint": {
-      "rev": "d48f3a76189d03b2239f6df1b2f7e3fa8353743b",
+      "rev": "a219b2c9e5b4765e5c845aba119dad55806fcaf1",
       "src": "https://github.com/mfussenegger/nvim-lint"
     },
     "nvim-texlabconfig": {
@@ -74,12 +74,12 @@
       "src": "https://github.com/f3fora/nvim-texlabconfig"
     },
     "nvim-treesitter": {
-      "rev": "4916d6592ede8c07973490d9322f187e07dfefac",
+      "rev": "61df84986b4b4ec469ee745a182e433d49f8c27e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
     },
     "nvim-treesitter-textobjects": {
-      "rev": "851e865342e5a4cb1ae23d31caf6e991e1c99f1e",
+      "rev": "898ee307df58f854d11cd7edd06472574d48014e",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter-textobjects",
       "version": "'main'"
     },
@@ -89,7 +89,7 @@
       "version": ">=0.0.0"
     },
     "playtime.nvim": {
-      "rev": "d7427739558c74920f284ab370ba47bacacb8f97",
+      "rev": "5caf1ce150935a316dc84b2f54912a13da406c8d",
       "src": "https://github.com/rktjmp/playtime.nvim"
     },
     "plenary.nvim": {
@@ -101,7 +101,7 @@
       "src": "https://github.com/andweeb/presence.nvim"
     },
     "python-type-stubs": {
-      "rev": "692c37c3969d22612b295ddf7e7af5907204a386",
+      "rev": "d23acef5204a077bd6623c82bf7cc6134879dd4e",
       "src": "https://github.com/microsoft/python-type-stubs"
     },
     "qmk.nvim": {
@@ -121,7 +121,7 @@
       "src": "https://github.com/debugloop/telescope-undo.nvim"
     },
     "telescope.nvim": {
-      "rev": "7d324792b7943e4aa16ad007212e6acc6f9fe335",
+      "rev": "427b576c16792edad01a92b89721d923c19ad60f",
       "src": "https://github.com/nvim-telescope/telescope.nvim"
     },
     "tex-lualatex": {
