@@ -1,0 +1,3 @@
+[gotify]
+url = "wss://gotify.tobyvin.dev"
+token = { command = "pass show gotify.tobyvin.dev/tobyv/gotify-desktop" }
