@@ -17,29 +17,24 @@ def get_count():
 
 
 def main():
-    match int(os.environ.get("BLOCK_BUTTON", "0")):
-        case 1:
-            subprocess.run(
-                ["swaymsg", "exec", "xdg-open", "https://miniflux.tobyvin.dev"],
-                capture_output=True,
-            )
+    if int(os.environ.get("BLOCK_BUTTON", "0")) == 1:
+        subprocess.run(
+            ["swaymsg", "exec", "xdg-open", "https://miniflux.tobyvin.dev"],
+            capture_output=True,
+            check=False,
+        )
 
     try:
-        count = get_count()
-    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError):
-        count = "x"
-
-    match count:
-        case str(c) | int(c) if isinstance(c, str) or c > 10:
-            print(f" {ICON} {count} \n")
-            print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
-            print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
-        case int(c) if c > 0:
+        if (count := get_count()) > 0:
             print(f" {ICON} {count} \n")
             print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
             print(f"#{os.environ.get('BASE16_COLOR_0A_HEX')}")
-        case int(0):
+        else:
             print()
+    except (requests.exceptions.ConnectionError, requests.exceptions.HTTPError):
+        print(f" {ICON} x \n")
+        print(f"#{os.environ.get('BASE16_COLOR_00_HEX')}")
+        print(f"#{os.environ.get('BASE16_COLOR_08_HEX')}")
 
 
 if __name__ == "__main__":
