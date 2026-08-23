@@ -17,7 +17,7 @@ set auconcreatecontainer true
 set modeindicatormodes {"normal":"false","video":"false"}
 set findcase smart
 set smoothscroll true
-set editorcmd alacritty -e nvim %f '+normal!%lGzv%c|'
+set editorcmd $TERMINAL -e nvim %f '+normal!%lGzv%c|'
 set video_seek 5
 set video_volume 0.05
 

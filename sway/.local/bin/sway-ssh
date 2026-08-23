@@ -6,6 +6,8 @@ if [ ! -t 0 ]; then
 		exit 0
 	fi
 	set -- "$@" "$args"
+elif [ -n "$SWAY_SSH_ARGS" ]; then
+	exec ssh "$SWAY_SSH_ARGS"
 elif [ $# -eq 0 ]; then
 	sshr --resolve --port 22 --scan 0.0.0.0/24 --exclude "$XDG_STATE_HOME"/sshr/exclude |
 		sed 's/.local$//'
@@ -13,7 +15,7 @@ elif [ $# -eq 0 ]; then
 fi
 
 if error=$(ssh -f -N -M -o "ControlPersist 30s" "$@" 2>&1); then
-	swaymsg exec "'$TERMINAL' -o 'shell = { program = \"ssh\", args = [\"$1\"] }'"
+	swaymsg exec "env SWAY_SSH_ARGS='$1' SHELL='$0' '$TERMINAL'"
 else
 	notify-send -a sway-ssh -c network.error -i script-error "Error: $(basename "$0")" "$error"
 fi
