@@ -5,6 +5,9 @@ path = $XDG_DATA_HOME/calendars/personal
 [[family]]
 path = $XDG_DATA_HOME/calendars/family
 
+[[bfd]]
+path = $XDG_DATA_HOME/calendars/bfd
+
 [[shows]]
 path = $XDG_DATA_HOME/calendars/shows
 
@@ -27,6 +30,7 @@ default_calendar = personal
 
 [locale]
 default_timezone = Us/Central
+firstweekday = 6
 timeformat = %H:%M
 dateformat = %y/%m/%d
 longdateformat = %Y/%m/%d
