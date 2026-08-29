@@ -1,0 +1,15 @@
+[Unit]
+Description=Radicle Node
+
+[Service]
+ExecStart=/usr/bin/radicle-node
+KillMode=process
+Restart=always
+RestartSec=3
+Environment=RAD_HOME=%D/radicle
+PrivateTmp=true
+; ProtectHome=true
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=default.target
