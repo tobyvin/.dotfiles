@@ -6,7 +6,6 @@ import notmuch2
 from jeepney import DBusAddress, new_method_call
 from jeepney.io.blocking import open_dbus_connection
 
-
 DBUS_ADDRESS = DBusAddress(
     "/org/freedesktop/Notifications",
     bus_name="org.freedesktop.Notifications",
