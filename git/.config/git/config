@@ -9,6 +9,8 @@
 	gpgsign = true
 [init]
 	defaultBranch = main
+[rebase]
+	autoSquash = true
 [revert]
 	reference = true
 [rerere]
